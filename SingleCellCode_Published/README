@@ -1,0 +1,11 @@
+This repository is an implementation of an algorithm for cell polarity based on the manuscript:
+https://www.biorxiv.org/content/10.1101/785709v1.abstract
+
+The code is written and maintained by Calina Copos (copos@cims.nyu.edu).
+
+To run the code, open MATLAB and enter the command:
+>> HybridPoly
+
+The code in its current state will generate an instance of Fig. 3 e--g. 
+By changing the parameters, alpha and beta, and setting both of them to 0.2,
+the code will generate an instance of Fig. 3 a--c. 
