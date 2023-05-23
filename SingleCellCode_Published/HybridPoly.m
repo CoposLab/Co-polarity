@@ -401,6 +401,28 @@ while (ppp<=1)
                 currFrame = getframe(gcf);
                 writeVideo(vidObj,currFrame);
             end
+
+            %Plot on circle
+            figure(11); %Rac
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.96:0.01:1);
+            [X,Y] = pol2cart(th,rad);
+            Z = [a a a a a]';
+            contourf(X,Y,Z,100,'LineStyle','none')
+            axis square
+            col=colorbar;
+            clim([0,max(Z,[],"all")])
+            title('Rac')
+            ylabel(col,'Concentration')
+
+            figure(12); %Rho
+            Z = [b b b b b]';
+            contourf(X,Y,Z,100,'LineStyle','none')
+            axis square
+            col=colorbar;
+            clim([0,max(Z,[],"all")])
+            title('Rho')
+            ylabel(col,'Concentration')
+
         end
     end
 
