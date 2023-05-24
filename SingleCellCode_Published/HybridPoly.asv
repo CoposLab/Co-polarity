@@ -419,7 +419,7 @@ while (ppp<=1)
             axis square
             col=colorbar;
             colormap("gray");
-            clim([0,max(max(a),max(b))])
+            clim([0,max(max(Z1,[],"all"),max(Z2,[],"all"))])
             title('Branched Actin')
             ylabel(col,'Concentration')
             set(gca,'XTick',[], 'YTick', [])
@@ -430,7 +430,7 @@ while (ppp<=1)
             axis square
             col=colorbar;
             colormap(flip(myColors));
-            clim([0,max(max(a),max(b))])
+            clim([0,max(max(Z1,[],"all"),max(Z2,[],"all"))])
             title('Bundled Actin')
             ylabel(col,'Concentration')
             set(gca,'XTick',[], 'YTick', [])
@@ -442,13 +442,12 @@ while (ppp<=1)
             axis square
             col=colorbar;
             colormap(myColors);
-            clim([-max(max(a),max(b)),max(max(a),max(b))])
+            clim([-max(max(Z1,[],"all"),max(Z2,[],"all")),max(max(Z1,[],"all"),max(Z2,[],"all"))])
             title('Combined: Blue=Branched, Red=Bundled')
             ylabel(col,'Concentration Branched - Concentration Bundled')
             set(gca,'XTick',[], 'YTick', [])
 
-            [Ma,Ia] = max(a);
-            [Mb,Ib] = max(b);
+            
 
             hold on;
             plot([1 1]*4.5, ylim, '--k')
