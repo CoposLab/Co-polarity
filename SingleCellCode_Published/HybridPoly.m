@@ -1,4 +1,4 @@
-% Simulate competition for resources for actin filaments 
+% Simulate competition for resources for actin filaments
 % and fully coupled to stochastic biochemistry for polarity proteins
 % on a circular cell membrane (periodic BC, 1.5D)
 %
@@ -13,22 +13,24 @@ close all;
 clc;
 
 vid = 1;
-vidObj = VideoWriter('stronglycoupled.avi');
+vidObj = VideoWriter('stronglycoupled.mp4','MPEG-4');
+vidObjCol = VideoWriter('colorplot.mp4','MPEG-4');
+vidObjRR = VideoWriter('colorplotrr.mp4','MPEG-4');
 
 counter_ppp = 1;
 ppp = 1;
-       
+
 while (ppp<=1)
     counter_ppp = counter_ppp+1;
 
-    clearvars -except counter_ppp vid vidObj ppp
+    clearvars -except counter_ppp vid vidObj ppp vidObjCol vidObjRR
     % Set actin filament parameters
-    % 
+    %
     Da      = 0.5;                  % diffusion coefficient for actin
     m0      = 2.0;                  % competition for actin monomers
 
     % Set polarity protein parameters
-    % 
+    %
     N       = 200;                  % total number of molecules in the cell (conserved)
     ron     = 0.001;                % spontaneous association
     rfb     = 1.0;                  % enhanced association
@@ -40,25 +42,25 @@ while (ppp<=1)
     alpha = 2;
     beta = 2;
 
-    % Set discretization 
+    % Set discretization
     %
     L      = 10.0;                  % cell length
     dt     = 0.01;                  % temporal discretization
     Na     = 101;                   % number of space steps
     dxa    = 5.0/((Na-1)/2);        % spatial discretization
     Xa     = 0:dxa:L;
-    pa     = dt*Da/(dxa^2);  
+    pa     = dt*Da/(dxa^2);
     Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
-    tplot  = 100; 
+    tplot  = 100;
 
     posx = zeros(N,Nt);              % array of positions of X(t)
     posy = zeros(N,Nt);              % array of positions of Y(t)
 
     % Actin reaction term
     %
-    F = @(U,V) -U.*U - m0*U.*V; 
+    F = @(U,V) -U.*U - m0*U.*V;
 
     % Set initial conditions for actin distribution
     %
@@ -80,15 +82,15 @@ while (ppp<=1)
         a   = ones(N,1);
         anew= ones(N,1);
 
-        b   = 0.5*ones(N,1);        
+        b   = 0.5*ones(N,1);
         bnew= 0.5*ones(N,1);
 
-    % (2) random
+        % (2) random
     elseif (ictype==2)
         a = 0.1 + 0.9.*rand(length(Xa),1);
         b = 0.1 + 0.9.*rand(length(Xa),1);
 
-    % (3) arctangent 
+        % (3) arctangent
     elseif (ictype==3)
         steepness = 20;
         a = (tanh(steepness*(X-0.375)) - tanh(steepness*(X-1.125)) + 0.2)/2.2;
@@ -97,19 +99,19 @@ while (ppp<=1)
         %a = (tanh(steepness*(X-0.5)) - tanh(steepness*(X-1.5)) + 0.2)/2.2;
         %b = (2 - tanh(steepness*(X-0.5)) + tanh(steepness*(X-1.5)) +0.2)/2.2;
     elseif (ictype==4)
-    % (4) odd condition #1 (multiple peaks)
+        % (4) odd condition #1 (multiple peaks)
         steepness = 10;
         a = (1-cos(3*Xa*pi/5))/2; a=a';
         b = (tanh(steepness*(Xa-7.5))+1)/2 + (1-tanh(steepness*(Xa-2.5)))/2; b=b';
 
     elseif (ictype==5)
-    % (4) odd condition #2
+        % (4) odd condition #2
         steepness = 10;
         b = (1-cos(Xa*pi/5))/2; b=b';
         a = (tanh(steepness*(Xa-7.5))+1)/2 + (1-tanh(steepness*(Xa-2.5)))/2; a=a';
 
     elseif (ictype==6)
-    % (5) odd condition #3
+        % (5) odd condition #3
         mu = 1.8; sigma = 0.1;
         a = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); a=a';
         mu = 1.9; sigma = 0.1;
@@ -132,7 +134,7 @@ while (ppp<=1)
     ny   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active)
     Tx   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for X(t)
     Ty   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for Y(t)
-    X    = zeros(MAX_OUTPUT_LENGTH,1);       % number of X(t) molecules on the membrane    
+    X    = zeros(MAX_OUTPUT_LENGTH,1);       % number of X(t) molecules on the membrane
     Y    = zeros(MAX_OUTPUT_LENGTH,1);       % number of Y(t) molecules on the membrane
     NNx  = zeros(Nt,1);
     NNy  = zeros(Nt,1);
@@ -145,12 +147,12 @@ while (ppp<=1)
     Y(1)              = 0.1*N;                 % # of particles on membrane
     NNx(1)            = X(1);
     NNy(1)            = Y(1);
-    Tx(1)             = 0.0;                   
+    Tx(1)             = 0.0;
     Ty(1)             = 0.0;
     nx(1:X(1),1)      = 1;                     % activate mem-bound particles
     ny(1:X(1),1)      = 1;
     r = randperm(ceil(L/(0.0102)),X(1)+Y(1))*0.0102;
-    posx(1:X(1),1)=r(1:X(1));                         
+    posx(1:X(1),1)=r(1:X(1));
     posy(1:Y(1),1)=r(X(1)+1:end);
 
     % Sample concentration at actin filament spatial scale
@@ -172,10 +174,18 @@ while (ppp<=1)
         vidObj.FrameRate = 5;
         vidObj.Quality = 75;
         open(vidObj);
+
+        vidObjCol.FrameRate = 5;
+        vidObjCol.Quality = 75;
+        open(vidObjCol);
+
+        vidObjRR.FrameRate = 5;
+        vidObjRR.Quality = 75;
+        open(vidObjRR);
     end
 
     % Plot the initial condition
-    figure(ppp); 
+    figure(ppp);
     plot(Xa,a,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
     plot(Xa,b,'-ok','markerfacecolor','k','linewidth',3);
     plot(s,xC,'-.','color',[0 0.45 0.75],'linewidth',1);
@@ -184,7 +194,7 @@ while (ppp<=1)
     %title('Time = 0');
     set(gca,'fontname','times','fontsize',20); box on;
     lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-    lgd.NumColumns = 2;       
+    lgd.NumColumns = 2;
     set(gcf,'color','w');
     hold off;
     %keyboard
@@ -195,8 +205,86 @@ while (ppp<=1)
         writeVideo(vidObj,currFrame);
     end
 
-    %% Run simulation
+    %Plot on circle
+    %Define colors
+    colorLength = 50;
+    red = [1,0,0];
+    blue = [0,0.5,1];
+    myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
+
+    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.96:0.01:1);
+    [Xcol,Ycol] = pol2cart(th,rad);
+    Z1 = [a a a a a]';
+    Z2 = [b b b b b]';
+
+    % figure(11); %Branched
+    % % subplot(1,2,1);
+    % contourf(Xcol,Ycol,Z1,100,'LineStyle','none')
+    % axis square
+    % col=colorbar;
+    % colormap(myColors);
+    % clim([0,max(max(a),max(b))])
+    % title('Branched Actin')
+    % ylabel(col,'Concentration')
+    % set(gca,'XTick',[], 'YTick', [])
     % 
+    % figure(12); %Bundled
+    % % subplot(1,2,2);
+    % contourf(Xcol,Ycol,Z2,100,'LineStyle','none')
+    % axis square
+    % col=colorbar;
+    % colormap(flip(myColors));
+    % clim([0,max(max(a),max(b))])
+    % title('Bundled Actin')
+    % ylabel(col,'Concentration')
+    % set(gca,'XTick',[], 'YTick', [])
+
+    %Plot both circles together
+    colFrame = figure(13);
+    % subplot(1,3,3);
+    contourf(Xcol,Ycol,Z1-Z2,100,'LineStyle','none')
+    axis square
+    col=colorbar;
+    colormap(myColors);
+    clim([-max(max(a),max(b)),max(max(a),max(b))])
+    title('Combined: Blue=Branched, Red=Bundled')
+    ylabel(col,'Concentration Branched - Concentration Bundled')
+    set(gca,'XTick',[], 'YTick', [])
+
+    [Ma,Ia] = max(a);
+    [Mb,Ib] = max(b);
+
+    hold on;
+    plot([Xcol(3,Ia) Xcol(3,Ib)],[Ycol(3,Ia) Ycol(3,Ib)],"black")
+    plot([0 Xcol(3,Ia)],[0 Ycol(3,Ia)],"black")
+    plot([0 Xcol(3,Ib)],[0 Ycol(3,Ib)],"black")
+    hold off;
+
+    if vid==1
+        currFrame = getframe(colFrame);
+        writeVideo(vidObjCol,currFrame);
+    end
+
+    % Plot Rac and Rho
+    colRRFrame = figure(14);
+    ZRac = [xC xC xC xC xC]';
+    ZRho = [yC yC yC yC yC]';
+    contourf(Xcol,Ycol,ZRac-ZRho,100,'LineStyle','none');
+    axis square
+    col=colorbar;
+    colormap(myColors);
+    clim([-max(max(xC),max(yC)),max(max(xC),max(yC))])
+    title('Combined: Blue=Rac, Red=Rho')
+    ylabel(col,'Concentration Rac - Concentration Rho')
+    set(gca,'XTick',[], 'YTick', [])
+
+    if vid==1
+        currFrame = getframe(colRRFrame);
+        writeVideo(vidObjRR,currFrame);
+    end
+
+    %% Run simulation
+    %
     tic
     quit_cond = 0;
     cond = 0;
@@ -262,7 +350,7 @@ while (ppp<=1)
                 dn(j) = (rr<((kony+kfby*nny/N)*(N/nny-1)/a0))*1.0 + (rr>=((kony+kfby*nny/N)*(N/nny-1)/a0))*(-1.0);
             end
 
-            [mintauy,minidy] = min(tauy(1:j));       % find first chemical rxn      
+            [mintauy,minidy] = min(tauy(1:j));       % find first chemical rxn
             Ty(rxn_count_y+1) = Ty(rxn_count_y) + mintauy;
             Y(rxn_count_y+1) = nny + dn(minidy);
             rxn_count_y = rxn_count_y + 1;
@@ -284,7 +372,7 @@ while (ppp<=1)
 
         % Between reactions, perform Brownian motion with periodic BC
         r = rand(K1,1);    % coin flip
-        nx(1:K1,t+1) = 1;   
+        nx(1:K1,t+1) = 1;
         posx(1:K1,t+1) = posx(1:K1,t) + dx*((r<p)*1.0 + (r>(1-p))*(-1.0));
 
         r = rand(K2,1);    % coin flip
@@ -295,7 +383,7 @@ while (ppp<=1)
         % Resolution strategy: No one advances
         %
         firstcoll = sum(ismembertol(posx(1:K1,t+1),posy(1:K2,t+1),0.005,'DataScale',1));
-        if firstcoll~=0           
+        if firstcoll~=0
             % Get indices of collisions
             aa = ismembertol(posx(1:K1,t+1),posy(1:K2,t+1),0.005,'DataScale',1);
             list_idx = find(aa~=0);
@@ -315,7 +403,7 @@ while (ppp<=1)
         %posy(1:K2,t+1) = posy(1:K2,t+1) + (posy(1:K2,t)-posy(1:K2,t+1)).*(posy(1:K2,t+1)>L) + (posy(1:K2,t)-posy(1:K2,t+1)).*(posy(1:K2,t+1)<0.0);
 
         %% Determine if a biochemical rxn has occured - update positions
-        
+
         % Find spontaneous association location
         ss = sort(posx(1:K1,t));
         [ijk] = find(ss==posx(minidx,t),1);
@@ -343,7 +431,7 @@ while (ppp<=1)
             posx = newpos;
             nx(K1,t+1) = 0;
         elseif(NNx(t+1) > NNx(t))             % association event (on or recruitment)
-            rr = rand(1,1); 
+            rr = rand(1,1);
             posx(K1,t+1) = posx(K1,t)+(rr<ponx)*locx;              % on event
             posx(K1,t+1) = posx(K1,t)+(rr>=ponx)*posx(minidx,t);   % recruitment event
             nx(K1+1,t+1) = 1;
@@ -357,7 +445,7 @@ while (ppp<=1)
             posy = newpos;
             ny(K2,t+1) = 0;
         elseif(NNy(t+1) > NNy(t))             % association event (on or recruitment)
-            rr = rand(1,1); 
+            rr = rand(1,1);
             posy(K2,t+1) = posy(K2,t)+(rr<pony)*locy;               % on event
             posy(K2,t+1) = posy(K2,t)+(rr>=pony)*posy(minidy,t);    % recruitment event
             ny(K2,t+1) = 1;
@@ -376,13 +464,13 @@ while (ppp<=1)
         b = Hs\(diffRHSb+rxnb);
 
         %% Plot the solution(s)
-        % if mod(t,tplot) == 0
-        if t==(Nt-1)
-            figure(ppp); 
-            %titfig = sprintf('D = %.2f, m0 = %.2f, beta = %.2f, alpha = %.2f, k_{on} = %.4f, k_{off} = %.2f, k_{fb} = %.4f',D,m0,beta,alpha,ron,roff,rfb); 
+        if mod(t,tplot) == 0
+            %if t==(Nt-1)
+            figure(ppp);
+            %titfig = sprintf('D = %.2f, m0 = %.2f, beta = %.2f, alpha = %.2f, k_{on} = %.4f, k_{off} = %.2f, k_{fb} = %.4f',D,m0,beta,alpha,ron,roff,rfb);
             %sgtitle(titfig);
             %subplot(5,4,ppp);
-            %figure(ppp); 
+            %figure(ppp);
             plot(Xa,a,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
             plot(Xa,b,'-ok','markerfacecolor','k','linewidth',3);
             plot(s,xC,'-.','color',[0 0.45 0.75],'linewidth',1);
@@ -408,37 +496,38 @@ while (ppp<=1)
             red = [1,0,0];
             blue = [0,0.5,1];
             myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-            
-            figure(11); %Branched
-            subplot(1,3,1);
+
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.96:0.01:1);
-            [X,Y] = pol2cart(th,rad);
+            [Xcol,Ycol] = pol2cart(th,rad);
             Z1 = [a a a a a]';
             Z2 = [b b b b b]';
-            contourf(X,Y,Z1,100,'LineStyle','none')
-            axis square
-            col=colorbar;
-            colormap("gray");
-            clim([0,max(max(a),max(b))])
-            title('Branched Actin')
-            ylabel(col,'Concentration')
-            set(gca,'XTick',[], 'YTick', [])
 
+            % figure(11); %Branched
+            % % subplot(1,2,1);
+            % contourf(Xcol,Ycol,Z1,100,'LineStyle','none')
+            % axis square
+            % col=colorbar;
+            % colormap(myColors);
+            % clim([0,max(max(a),max(b))])
+            % title('Branched Actin')
+            % ylabel(col,'Concentration')
+            % set(gca,'XTick',[], 'YTick', [])
+            % 
             % figure(12); %Bundled
-            subplot(1,3,2);
-            contourf(X,Y,Z2,100,'LineStyle','none')
-            axis square
-            col=colorbar;
-            colormap(flip(myColors));
-            clim([0,max(max(a),max(b))])
-            title('Bundled Actin')
-            ylabel(col,'Concentration')
-            set(gca,'XTick',[], 'YTick', [])
+            % % subplot(1,2,2);
+            % contourf(Xcol,Ycol,Z2,100,'LineStyle','none')
+            % axis square
+            % col=colorbar;
+            % colormap(flip(myColors));
+            % clim([0,max(max(a),max(b))])
+            % title('Bundled Actin')
+            % ylabel(col,'Concentration')
+            % set(gca,'XTick',[], 'YTick', [])
 
             %Plot both circles together
-            % figure(13);
-            subplot(1,3,3);
-            contourf(X,Y,Z1-Z2,100,'LineStyle','none')
+            colFrame = figure(13);
+            % subplot(1,3,3);
+            contourf(Xcol,Ycol,Z1-Z2,100,'LineStyle','none')
             axis square
             col=colorbar;
             colormap(myColors);
@@ -451,17 +540,43 @@ while (ppp<=1)
             [Mb,Ib] = max(b);
 
             hold on;
-            plot([1 1]*4.5, ylim, '--k')
+            plot([Xcol(3,Ia) Xcol(3,Ib)],[Ycol(3,Ia) Ycol(3,Ib)],"black")
+            plot([0 Xcol(3,Ia)],[0 Ycol(3,Ia)],"black")
+            plot([0 Xcol(3,Ib)],[0 Ycol(3,Ib)],"black")
             hold off;
 
+            if vid==1
+                currFrame = getframe(colFrame);
+                writeVideo(vidObjCol,currFrame);
+            end
+
+            % Plot Rac and Rho
+            colRRFrame = figure(14);
+            ZRac = [xC xC xC xC xC]';
+            ZRho = [yC yC yC yC yC]';
+            contourf(Xcol,Ycol,ZRac-ZRho,100,'LineStyle','none');
+            axis square
+            col=colorbar;
+            colormap(myColors);
+            clim([-max(max(xC),max(yC)),max(max(xC),max(yC))])
+            title('Combined: Blue=Rac, Red=Rho')
+            ylabel(col,'Concentration Rac - Concentration Rho')
+            set(gca,'XTick',[], 'YTick', [])
+
+            if vid==1
+                currFrame = getframe(colRRFrame);
+                writeVideo(vidObjRR,currFrame);
+            end
         end
     end
 
     % measure of polarized state (1 if polarized and 0 otherwise)
-    %st = 1*( (abs(a(1)-b(end))<1e-3 || abs(a(end)-b(1))<1e-3 ) && abs(a(1)-a(end))>1e-3 && abs(b(1)-b(end))>1e-3 );     
+    %st = 1*( (abs(a(1)-b(end))<1e-3 || abs(a(end)-b(1))<1e-3 ) && abs(a(1)-a(end))>1e-3 && abs(b(1)-b(end))>1e-3 );
 
-    if vid==1    
+    if vid==1
         close(vidObj);
+        close(vidObjCol);
+        close(vidObjRR);
     end
     sprintf('Simulation %d done',ppp)
     toc
@@ -469,7 +584,7 @@ while (ppp<=1)
         ppp = ppp + 1;
     end
 end
-  
+
 %% Plot all particle trajectories
 ccx = [0 0 255]/256.*ones(Nt,1);     % blue
 ccy = [255 219 88]/256.*ones(Nt,1);  % mustard yellow
