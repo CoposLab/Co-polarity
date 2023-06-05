@@ -7,7 +7,7 @@
 %
 % Last updated: 1/31/2020
 % Calina Copos
-addpath('../../../matlab/freeze_colors')
+addpath('/freeze_colors')
 addpath('../SingleCellCode_Published')
 
 clear;
