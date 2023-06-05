@@ -7,15 +7,16 @@
 %
 % Last updated: 1/31/2020
 % Calina Copos
+addpath('../../../matlab/freeze_colors')
 
 clear;
 close all;
 clc;
 
-vid = 1;
-vidObj = VideoWriter('stronglycoupled.mp4','MPEG-4');
-vidObjCol = VideoWriter('colorplot.mp4','MPEG-4');
-vidObjRR = VideoWriter('colorplotrr.mp4','MPEG-4');
+vid = 0;
+% vidObj = VideoWriter('stronglycoupled.mp4','MPEG-4');
+% vidObjCol = VideoWriter('colorplot.mp4','MPEG-4');
+% vidObjRR = VideoWriter('colorplotrr.mp4','MPEG-4');
 
 counter_ppp = 1;
 ppp = 1;
@@ -208,9 +209,14 @@ while (ppp<=1)
     %Plot on circle
     %Define colors
     colorLength = 50;
+    white = [1,1,1];
     red = [1,0,0];
     blue = [0,0.5,1];
+    whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
+    whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
     myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
+    redblue = abs(whiteblue+whitered)./2;
+    redwhiteblue = [flip(whitered); whiteblue];
 
     [th,rad] = meshgrid((0:3.6:360)*pi/180,0.96:0.01:1);
     [Xcol,Ycol] = pol2cart(th,rad);
@@ -222,7 +228,7 @@ while (ppp<=1)
     % contourf(Xcol,Ycol,Z1,100,'LineStyle','none')
     % axis square
     % col=colorbar;
-    % colormap(myColors);
+    % colormap(whiteblue);
     % clim([0,max(max(a),max(b))])
     % title('Branched Actin')
     % ylabel(col,'Concentration')
@@ -233,7 +239,7 @@ while (ppp<=1)
     % contourf(Xcol,Ycol,Z2,100,'LineStyle','none')
     % axis square
     % col=colorbar;
-    % colormap(flip(myColors));
+    % colormap(whitered);
     % clim([0,max(max(a),max(b))])
     % title('Bundled Actin')
     % ylabel(col,'Concentration')
@@ -245,19 +251,76 @@ while (ppp<=1)
     contourf(Xcol,Ycol,Z1-Z2,100,'LineStyle','none')
     axis square
     col=colorbar;
-    colormap(myColors);
+    colormap(redwhiteblue);
     clim([-max(max(a),max(b)),max(max(a),max(b))])
     title('Combined: Blue=Branched, Red=Bundled')
     ylabel(col,'Concentration Branched - Concentration Bundled')
     set(gca,'XTick',[], 'YTick', [])
 
-    [Ma,Ia] = max(a);
-    [Mb,Ib] = max(b);
+    allred = [linspace(red(1),red(1),colorLength)',linspace(red(2),red(2),colorLength)',linspace(red(3),red(3),colorLength)'];
+    allblue = [linspace(blue(1),blue(1),colorLength)',linspace(blue(2),blue(2),colorLength)',linspace(blue(3),blue(3),colorLength)'];
 
+    figure(15)
+    clf
+    h1=surf(Xcol,Ycol,Z1,'FaceAlpha',0.4);
+    view(2)
+    colormap(whiteblue) % colormap(allblue)
+    freezeColors
+    % freezeColors(colorbar)
+    clim([-max(max(a),max(b)),max(max(a),max(b))])
+    shading interp
+    % h1.AlphaData=gradient(Z1)./2;
+    % h1.FaceAlpha = 'interp';
     hold on;
-    plot([Xcol(3,Ia) Xcol(3,Ib)],[Ycol(3,Ia) Ycol(3,Ib)],"black")
-    plot([0 Xcol(3,Ia)],[0 Ycol(3,Ia)],"black")
-    plot([0 Xcol(3,Ib)],[0 Ycol(3,Ib)],"black")
+    h2=surf(Xcol,Ycol,Z2,'FaceAlpha',0.4);
+    colormap(whitered) % colormap(allred)
+    freezeColors
+    % freezeColors(colorbar)
+    shading interp
+    % h2.AlphaData=gradient(Z2)./2;
+    % h2.FaceAlpha = 'interp';
+    title('Combined: Blue=Branched, Red=Bundled')
+    hold off;
+
+    % [Ma,Ia] = max(a);
+    % [Mb,Ib] = max(b);
+    %
+    % hold on;
+    % plot([Xcol(3,Ia) Xcol(3,Ib)],[Ycol(3,Ia) Ycol(3,Ib)],"black")
+    % plot([0 Xcol(3,Ia)],[0 Ycol(3,Ia)],"black")
+    % plot([0 Xcol(3,Ib)],[0 Ycol(3,Ib)],"black")
+    % hold off;
+
+    % Concentric circles
+    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.76:0.01:0.8);
+    [Xsm,Ysm] = pol2cart(th,rad);
+
+    figure(16)
+    clf
+    ax1=axes;
+    ax2=axes;
+    s1=surf(ax2,Xcol,Ycol,Z1);
+    view(2)
+    colormap(whiteblue);
+    % cb1=colorbar(ax1,'Position',[.88 .11 .0675 .815]);
+    freezeColors
+    freezeColors(colorbar)
+    hold on;
+    s2=surf(ax2,Xsm,Ysm,Z2);
+    colormap(whitered);
+    freezeColors
+    cb2=colorbar(ax1,'Position',[.05 .11 .0675 .815]);
+    clim([0,max(max(a),max(b))])
+    linkaxes([ax1,ax2])
+    ax1.Visible = 'off';
+    ax1.XTick = [];
+    ax1.YTick = [];
+    ax2.XTick = [];
+    ax2.YTick = [];
+    shading interp
+    axis square
+    grid off
+    title('Combined: Blue=Branched, Red=Bundled')
     hold off;
 
     if vid==1
@@ -266,22 +329,22 @@ while (ppp<=1)
     end
 
     % Plot Rac and Rho
-    colRRFrame = figure(14);
-    ZRac = [xC xC xC xC xC]';
-    ZRho = [yC yC yC yC yC]';
-    contourf(Xcol,Ycol,ZRac-ZRho,100,'LineStyle','none');
-    axis square
-    col=colorbar;
-    colormap(myColors);
-    clim([-max(max(xC),max(yC)),max(max(xC),max(yC))])
-    title('Combined: Blue=Rac, Red=Rho')
-    ylabel(col,'Concentration Rac - Concentration Rho')
-    set(gca,'XTick',[], 'YTick', [])
+    % colRRFrame = figure(14);
+    % ZRac = [xC xC xC xC xC]';
+    % ZRho = [yC yC yC yC yC]';
+    % contourf(Xcol,Ycol,ZRac-ZRho,100,'LineStyle','none');
+    % axis square
+    % col=colorbar;
+    % colormap(redwhiteblue);
+    % clim([-max(max(xC),max(yC)),max(max(xC),max(yC))])
+    % title('Combined: Blue=Rac, Red=Rho')
+    % ylabel(col,'Concentration Rac - Concentration Rho')
+    % set(gca,'XTick',[], 'YTick', [])
 
-    if vid==1
-        currFrame = getframe(colRRFrame);
-        writeVideo(vidObjRR,currFrame);
-    end
+    % if vid==1
+    %     currFrame = getframe(colRRFrame);
+    %     writeVideo(vidObjRR,currFrame);
+    % end
 
     %% Run simulation
     %
@@ -493,9 +556,14 @@ while (ppp<=1)
             %Plot on circle
             %Define colors
             colorLength = 50;
+            white = [1,1,1];
             red = [1,0,0];
             blue = [0,0.5,1];
+            whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
+            whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
             myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
+            redblue = abs(whiteblue+whitered)./2;
+            redwhiteblue = [flip(whitered); whiteblue];
 
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.96:0.01:1);
             [Xcol,Ycol] = pol2cart(th,rad);
@@ -507,7 +575,7 @@ while (ppp<=1)
             % contourf(Xcol,Ycol,Z1,100,'LineStyle','none')
             % axis square
             % col=colorbar;
-            % colormap(myColors);
+            % colormap(whiteblue);
             % clim([0,max(max(a),max(b))])
             % title('Branched Actin')
             % ylabel(col,'Concentration')
@@ -518,7 +586,7 @@ while (ppp<=1)
             % contourf(Xcol,Ycol,Z2,100,'LineStyle','none')
             % axis square
             % col=colorbar;
-            % colormap(flip(myColors));
+            % colormap(whitered);
             % clim([0,max(max(a),max(b))])
             % title('Bundled Actin')
             % ylabel(col,'Concentration')
@@ -530,19 +598,76 @@ while (ppp<=1)
             contourf(Xcol,Ycol,Z1-Z2,100,'LineStyle','none')
             axis square
             col=colorbar;
-            colormap(myColors);
+            colormap(redwhiteblue);
             clim([-max(max(a),max(b)),max(max(a),max(b))])
             title('Combined: Blue=Branched, Red=Bundled')
             ylabel(col,'Concentration Branched - Concentration Bundled')
             set(gca,'XTick',[], 'YTick', [])
 
-            [Ma,Ia] = max(a);
-            [Mb,Ib] = max(b);
+            allred = [linspace(red(1),red(1),colorLength)',linspace(red(2),red(2),colorLength)',linspace(red(3),red(3),colorLength)'];
+            allblue = [linspace(blue(1),blue(1),colorLength)',linspace(blue(2),blue(2),colorLength)',linspace(blue(3),blue(3),colorLength)'];
 
+            figure(15)
+            clf
+            h1=surf(Xcol,Ycol,Z1,'FaceAlpha',0.4);
+            view(2)
+            colormap(whiteblue) % colormap(allblue)
+            freezeColors
+            % freezeColors(colorbar)
+            clim([-max(max(a),max(b)),max(max(a),max(b))])
+            shading interp
+            % h1.AlphaData=gradient(Z1)./2;
+            % h1.FaceAlpha = 'interp';
             hold on;
-            plot([Xcol(3,Ia) Xcol(3,Ib)],[Ycol(3,Ia) Ycol(3,Ib)],"black")
-            plot([0 Xcol(3,Ia)],[0 Ycol(3,Ia)],"black")
-            plot([0 Xcol(3,Ib)],[0 Ycol(3,Ib)],"black")
+            h2=surf(Xcol,Ycol,Z2,'FaceAlpha',0.4);
+            colormap(whitered) % colormap(allred)
+            freezeColors
+            % freezeColors(colorbar)
+            shading interp
+            % h2.AlphaData=gradient(Z2)./2;
+            % h2.FaceAlpha = 'interp';
+            title('Combined: Blue=Branched, Red=Bundled')
+            hold off;
+
+            % [Ma,Ia] = max(a);
+            % [Mb,Ib] = max(b);
+            % 
+            % hold on;
+            % plot([Xcol(3,Ia) Xcol(3,Ib)],[Ycol(3,Ia) Ycol(3,Ib)],"black")
+            % plot([0 Xcol(3,Ia)],[0 Ycol(3,Ia)],"black")
+            % plot([0 Xcol(3,Ib)],[0 Ycol(3,Ib)],"black")
+            % hold off;
+
+            % Concentric circles
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.76:0.01:0.8);
+            [Xsm,Ysm] = pol2cart(th,rad);
+
+            figure(16)
+            clf
+            ax1=axes;
+            ax2=axes;
+            s1=surf(ax2,Xcol,Ycol,Z1);
+            view(2)
+            colormap(whiteblue);
+            % cb1=colorbar(ax1,'Position',[.88 .11 .0675 .815]);
+            freezeColors
+            freezeColors(colorbar)
+            hold on;
+            s2=surf(ax2,Xsm,Ysm,Z2);
+            colormap(whitered);
+            freezeColors
+            cb2=colorbar(ax1,'Position',[.05 .11 .0675 .815]);
+            clim([0,max(max(a),max(b))])
+            linkaxes([ax1,ax2])
+            ax1.Visible = 'off';
+            ax1.XTick = [];
+            ax1.YTick = [];
+            ax2.XTick = [];
+            ax2.YTick = [];
+            shading interp
+            axis square
+            grid off
+            title('Combined: Blue=Branched, Red=Bundled')
             hold off;
 
             if vid==1
@@ -550,23 +675,45 @@ while (ppp<=1)
                 writeVideo(vidObjCol,currFrame);
             end
 
-            % Plot Rac and Rho
-            colRRFrame = figure(14);
-            ZRac = [xC xC xC xC xC]';
-            ZRho = [yC yC yC yC yC]';
-            contourf(Xcol,Ycol,ZRac-ZRho,100,'LineStyle','none');
-            axis square
-            col=colorbar;
-            colormap(myColors);
-            clim([-max(max(xC),max(yC)),max(max(xC),max(yC))])
-            title('Combined: Blue=Rac, Red=Rho')
-            ylabel(col,'Concentration Rac - Concentration Rho')
-            set(gca,'XTick',[], 'YTick', [])
+            figure(17)
+            clf
+            h1=surf(Xcol,Ycol,Z1);
+            view(2)
+            colormap(allblue)
+            freezeColors
+            % freezeColors(colorbar)
+            % clim([-max(max(a),max(b)),max(max(a),max(b))])
+            shading interp
+            h1.AlphaData=gradient(Z1);
+            h1.FaceAlpha = 'interp';
+            hold on;
+            h2=surf(Xcol,Ycol,Z2);
+            colormap(allred)
+            freezeColors
+            % freezeColors(colorbar)
+            shading interp
+            h2.AlphaData=gradient(Z2);
+            h2.FaceAlpha = 'interp';
+            title('Combined: Blue=Branched, Red=Bundled')
+            hold off;
 
-            if vid==1
-                currFrame = getframe(colRRFrame);
-                writeVideo(vidObjRR,currFrame);
-            end
+            % Plot Rac and Rho
+            % colRRFrame = figure(14);
+            % ZRac = [xC xC xC xC xC]';
+            % ZRho = [yC yC yC yC yC]';
+            % contourf(Xcol,Ycol,ZRac-ZRho,100,'LineStyle','none');
+            % axis square
+            % col=colorbar;
+            % colormap(myColors);
+            % clim([-max(max(xC),max(yC)),max(max(xC),max(yC))])
+            % title('Combined: Blue=Rac, Red=Rho')
+            % ylabel(col,'Concentration Rac - Concentration Rho')
+            % set(gca,'XTick',[], 'YTick', [])
+            % 
+            % if vid==1
+            %     currFrame = getframe(colRRFrame);
+            %     writeVideo(vidObjRR,currFrame);
+            % end
         end
     end
 
