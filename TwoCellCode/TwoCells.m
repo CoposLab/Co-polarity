@@ -15,12 +15,13 @@ close all;
 clc;
 
 savefigs=1;
-setnum='4';
+setnum='25';
+savelocation='branchedup1/1_1branched';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
-    filenameCells=strcat('rhodown1/10RhoOffCells_',setnum);
-    filenameScatter=strcat('rhodown1/10RhoOffScatter_',setnum);
+    filenameCells=strcat(savelocation,'Cells_',setnum);
+    filenameScatter=strcat(savelocation,'Scatter_',setnum);
 end
 
 vid = 0;
@@ -82,6 +83,11 @@ while (ppp<=1)
     %
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
+
+    branchedConst1 = 1.1;
+    bundledConst1 = 1;
+    branchedConst2 = 1.1;
+    bundledConst2 = 1;
 
     % Set initial conditions for actin distribution
     %
@@ -523,12 +529,17 @@ while (ppp<=1)
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond);
 
         % Set konx and kony
-        % Konx1(boundC1)=Konx1(boundC1)/100;
-        % Konx2(boundC2)=Konx2(boundC2)/100;
+        % Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
+
         % Kony1(boundC1)=Kony1(boundC1)*100;
         % Kony2(boundC2)=Kony2(boundC2)*100;
-        Koffy1(boundC1)=Koffy1(boundC1)*10;
-        Koffy2(boundC2)=Koffy2(boundC2)*10;
+
+        % Koffx1(boundC1)=Koffx1(boundC1)*0.01;
+        % Koffx2(boundC2)=Koffx2(boundC2)*0.01;
+
+        % Koffy1(boundC1)=Koffy1(boundC1)*0.01;
+        % Koffy2(boundC2)=Koffy2(boundC2)*0.01;
 
         %Cell 1
         if((t-1)*dt<Tx1(rxn_count_x1))
@@ -846,11 +857,11 @@ while (ppp<=1)
         diffRHSa2 = Hm2*a2;
         diffRHSb2 = Hm2*b2;
 
-        rxna1 = dt*( F(a1,b1) + a1.*(1+alpha*xC1) - a1.*a1);
-        rxnb1 = dt*( F(b1,a1) + b1.*(1+alpha*yC1) - b1.*b1);
+        rxna1 = dt*( F(a1,b1) + branchedConst1*(a1.*(1+alpha*xC1) - a1.*a1));
+        rxnb1 = dt*( F(b1,a1) + bundledConst1*(b1.*(1+alpha*yC1) - b1.*b1));
 
-        rxna2 = dt*( F(a2,b2) + a2.*(1+alpha*xC2) - a2.*a2);
-        rxnb2 = dt*( F(b2,a2) + b2.*(1+alpha*yC2) - b2.*b2);
+        rxna2 = dt*( F(a2,b2) + branchedConst2*(a2.*(1+alpha*xC2) - a2.*a2));
+        rxnb2 = dt*( F(b2,a2) + bundledConst2*(b2.*(1+alpha*yC2) - b2.*b2));
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
@@ -1055,6 +1066,7 @@ while (ppp<=1)
 
             % Calculate difference in direction angles
             angTolerance=pi/4;
+            strongAngTolerance=pi/5;
             if isempty(dirIndex1) && isempty(dirIndex2)
                 samedirection='2NP';
                 angdiff=NaN;
@@ -1064,10 +1076,10 @@ while (ppp<=1)
             else
                 medang1 = th(1,dirIndex1);
                 medang2 = th(1,dirIndex2);
-                angdiff = min(abs(medang1-medang2),2*pi-abs(medang1-medang2));
+                angdiff = min(abs(medang1-medang2),abs(2*pi-abs(medang1-medang2)));
                 if angdiff < angTolerance
                     samedirection='yes';
-                elseif (abs(medang1-3*pi/2)<angTolerance && abs(medang2-pi/2)<angTolerance)
+                elseif (abs(medang1-3*pi/2)<strongAngTolerance && abs(medang2-pi/2)<strongAngTolerance)
                     samedirection='strong no; collision';
                 else
                     samedirection='no';
