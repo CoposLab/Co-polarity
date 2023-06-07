@@ -16,7 +16,7 @@ clc;
 
 savefigs=1;
 setnum='25';
-savelocation='branchedup1/1_1branched';
+savelocation='rhodown1/100RhoOff';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -78,15 +78,17 @@ while (ppp<=1)
     posx2 = zeros(N,Nt);              % array of positions of X(t) cell 2
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
+    epsilon=0.1; % distance to detect other molecules (finding nearby rac/rho to remove)
+
 
     % Competition for limited resource (actin monomers) term
     %
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 1.1;
+    branchedConst1 = 1;
     bundledConst1 = 1;
-    branchedConst2 = 1.1;
+    branchedConst2 = 1;
     bundledConst2 = 1;
 
     % Set initial conditions for actin distribution
@@ -532,14 +534,15 @@ while (ppp<=1)
         % Konx1(boundC1)=Konx1(boundC1)*100;
         % Konx2(boundC2)=Konx2(boundC2)*100;
 
-        % Kony1(boundC1)=Kony1(boundC1)*100;
-        % Kony2(boundC2)=Kony2(boundC2)*100;
+        % Kony1(boundC1)=Kony1(boundC1)*0.01;
+        % Kony2(boundC2)=Kony2(boundC2)*0.01;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*0.01;
         % Koffx2(boundC2)=Koffx2(boundC2)*0.01;
 
-        % Koffy1(boundC1)=Koffy1(boundC1)*0.01;
-        % Koffy2(boundC2)=Koffy2(boundC2)*0.01;
+        % Koffy1(boundC1)=Koffy1(boundC1)*100;
+        % Koffy2(boundC2)=Koffy2(boundC2)*100;
+
 
         %Cell 1
         if((t-1)*dt<Tx1(rxn_count_x1))
@@ -796,9 +799,16 @@ while (ppp<=1)
             nx1(K1_1,t+1) = 0;
         elseif(NNx1(t+1) > NNx1(t))             % association event (on or recruitment)
             rr = rand(1,1);
-            posx1(K1_1,t+1) = posx1(K1_1,t)+(rr<ponx1)*locx1;              % on event
+            posx1(K1_1,t+1) = posx1(K1_1,t)+(rr<ponx1)*locx1; % on event
             posx1(K1_1,t+1) = posx1(K1_1,t)+(rr>=ponx1)*posx1(minidx1,t);   % recruitment event
             nx1(K1_1+1,t+1) = 1;
+            % Look for nearby rho (posy1), take them off
+            % locx1=location of rac binding (?)
+            
+            locRemovey1 = find(find(posy1(:,1)>locx1-epsilon)<locx1+epsilon,1);
+            if ~isempty(locRemovey1)
+                posy1(locRemovey1)=0;
+            end
         end
 
         %Cell 2
