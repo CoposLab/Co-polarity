@@ -3,7 +3,7 @@
 % Last updated: 1/31/2020
 % Calina Copos
 
-function [Konx,Kony,Kfbx,Kfby,Koffx,Koffy] = spatialrates(kon,kfb,koff,a,b,s,beta,cond)
+function [Konx,Kony,Kfbx,Kfby,Koffx,Koffy] = spatialrates(kon,kfb,koff,a,b,s,beta,cond,bound)
 steepness = 10;
 amax = 10;
 bmax = 10;
@@ -20,8 +20,13 @@ bb = b.*(b<=bmax) + bmax.*(b>bmax);
 switch assoc
     case {'on'}
         if (cond==0)
-            Konx = kon*(1+beta*aa);
-            Kony = kon*(1+beta*bb);
+            % Konx = kon*(1+beta*aa);
+            % Kony = kon*(1+beta*bb);
+            Konx = kon*(1+beta(1)*aa);
+            Konx(bound) = kon*(1+beta(2)*aa(bound));
+
+            Kony = kon*(1+beta(1)*bb);
+            Kony(bound) = kon*(1+beta(2)*bb(bound));
         else
             % periodic
             Konx = kon*(tanh(steepness*(s-1.875)) - tanh(steepness*(s-5.625)) + 0.2)/2.2;
@@ -39,8 +44,13 @@ end
 switch fb
     case {'on'}
         if (cond==0)
-            Kfbx = kfb*(1+beta*aa);
-            Kfby = kfb*(1+beta*bb);
+            % Kfbx = kfb*(1+beta*aa);
+            % Kfby = kfb*(1+beta*bb);
+            Kfbx = kfb*(1+beta(1)*aa);
+            Kfbx(bound) = kfb*(1+beta(2)*aa(bound));
+
+            Kfby = kfb*(1+beta(1)*bb);
+            Kfby(bound) = kfb*(1+beta(2)*bb(bound));
         else
             % periodic
             Kfbx = kfb*(tanh(steepness*(s-1.875)) - tanh(steepness*(s-5.625)) + 0.2)/2.2;

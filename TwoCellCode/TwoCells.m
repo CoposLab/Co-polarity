@@ -15,8 +15,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='25';
-savelocation='rhodown1/100RhoOff';
+setnum='20';
+savelocation='branchedup3/1_1branched';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -25,8 +25,8 @@ if savefigs==1
 end
 
 vid = 0;
-vidObj1 = VideoWriter(strcat('savedgraphs5/uncoupledScatterVid_',setnum,'.mp4'),'MPEG-4');
-vidObjCol1 = VideoWriter(strcat('savedgraphs5/uncoupledColorVid_',setnum,'.mp4'),'MPEG-4');
+vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
+vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
 % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
 % vidObj2 = VideoWriter('lineplot2.mp4','MPEG-4');
 % vidObjCol2 = VideoWriter('colorplot2.mp4','MPEG-4');
@@ -55,7 +55,7 @@ while (ppp<=1)
     % Set feedback (or coupling) strength
     %
     alpha = 2;
-    beta = 2;
+    beta = [2,2]; %first argument is away from overlap, second is on overlap
 
     % Set discretization
     %
@@ -78,7 +78,9 @@ while (ppp<=1)
     posx2 = zeros(N,Nt);              % array of positions of X(t) cell 2
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
-    epsilon=0.1; % distance to detect other molecules (finding nearby rac/rho to remove)
+    epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
+    counter1=0;
+    counter2=0;
 
 
     % Competition for limited resource (actin monomers) term
@@ -86,9 +88,9 @@ while (ppp<=1)
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 1;
+    branchedConst1 = 1.1;
     bundledConst1 = 1;
-    branchedConst2 = 1;
+    branchedConst2 = 1.1;
     bundledConst2 = 1;
 
     % Set initial conditions for actin distribution
@@ -366,125 +368,127 @@ while (ppp<=1)
     ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
     ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
 
-    % % Concentric circles
-    % % Cell 1
-    % % figc1=figure(16);
-    % figcells=figure(16);
-    % subplot(2,1,1)
-    % surf(Xcol,Ycol,ZBranch1);
-    % view(2)
-    % colormap(whitebluenavy)
-    % freezeColors;
-    % freezeColors(colorbar);
-    % clim([0,max(b1)])
-    % shading interp
-    % hold on;
-    % surf(Xmid,Ymid,ZBund1);
-    % colormap(whiteredmaroon)
-    % freezeColors;
-    % freezeColors(jicolorbar);
-    % clim([0,max(a1)])
-    % shading interp
-    % grid off
-    % axis square
-    % set(gca,'XTick',[], 'YTick', [])
-    % title('Cell 1 Combined: Blue=Branched, Red=Bundled')
-    % scatter(Xsm(boundC1),Ysm(boundC1),'black');
-    % hold off;
-    % box on;
-    % box off;
-    % set(gca,'XColor','w')
-    % set(gca,'YColor','w')
-    % set(gcf,'color','w');
-    % 
-    % % [Ma1,Ia1] = max(a1);
-    % % [Mb1,Ib1] = max(b1);
-    % % hold on;
-    % % quiver(0,0,Xsm(1,Ia1),Ysm(1,Ia1),0,'color',[0 0 0])
-    % % hold off;
-    % 
-    % a1New = a1;
-    % a1New(a1New<1)=0;
-    % if (a1New(1)~=0 && a1New(length(a1New))~=0)
-    %     zeroInd1=find(a1New==0,1,'first');
-    %     zeroInd2=find(a1New==0,1,'last');
-    %     dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-    % else
-    %     ind1=find(a1New~=0,1,'first');
-    %     ind2=find(a1New~=0,1,'last');
-    %     dirIndex1=ceil((ind1+ind2)/2);
-    % end
-    % if isempty(dirIndex1)
-    %     dirIndex1=1;
-    % end
-    % if dirIndex1<1
-    %     dirIndex1=dirIndex1+101;
-    % end
-    % hold on;
-    % quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
-    % hold off;
-    % 
-    % % Cell 2
-    % subplot(2,1,2)
-    % surf(Xcol,Ycol,ZBranch2);
-    % view(2)
-    % colormap(whitebluenavy)
-    % freezeColors;
-    % freezeColors(colorbar);
-    % clim([0,max(b2)])
-    % shading interp
-    % hold on;
-    % surf(Xmid,Ymid,ZBund2);
-    % colormap(whiteredmaroon)
-    % freezeColors;
-    % freezeColors(jicolorbar);
-    % clim([0,max(a2)])
-    % shading interp
-    % grid off
-    % axis square
-    % set(gca,'XTick',[], 'YTick', [])
-    % title('Cell 2 Combined: Blue=Branched, Red=Bundled')
-    % scatter(Xsm(boundC2),Ysm(boundC2),'black');
-    % hold off;
-    % box off;
-    % set(gca,'XColor','w')
-    % set(gca,'YColor','w')
-    % set(gcf,'color','w');
-    % 
-    % % [Ma2,Ia2] = max(a2);
-    % % [Mb2,Ib2] = max(b2);
-    % % p1=[0 0];
-    % % p2=[Xsm(1,Ia2) Ysm(1,Ia2)];
-    % % dp=p2-p1;
-    % % hold on;
-    % % quiver(p1(1),p1(2),dp(1),dp(2),0,'color',[0 0 0])
-    % % hold off;
-    % 
-    % a2New = a2;
-    % a2New(a2New<1)=0;
-    % if (a2New(1)~=0 && a2New(length(a2New))~=0)
-    %     zeroInd1=find(a2New==0,1,'first');
-    %     zeroInd2=find(a2New==0,1,'last');
-    %     dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
-    % else
-    %     ind1=find(a2New~=0,1,'first');
-    %     ind2=find(a2New~=0,1,'last');
-    %     dirIndex2=ceil((ind1+ind2)/2);
-    % end
-    % if isempty(dirIndex2)
-    %     dirIndex2=1;
-    % end
-    % if dirIndex2<1
-    %     dirIndex2=dirIndex2+101;
-    % end
-    % hold on;
-    % quiver(0,0,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
-    % hold off;
-    % 
-    % if vid==1
-    %     currframe = getframe(figcells);
-    %     writeVideo(vidObjCol1,currframe);
-    % end
+    if vid==1
+        % Concentric circles
+        % Cell 1
+        % figc1=figure(16);
+        figcells=figure(16);
+        subplot(2,1,1)
+        surf(Xcol,Ycol,ZBranch1);
+        view(2)
+        colormap(whitebluenavy)
+        freezeColors;
+        freezeColors(colorbar);
+        clim([0,max(b1)])
+        shading interp
+        hold on;
+        surf(Xmid,Ymid,ZBund1);
+        colormap(whiteredmaroon)
+        freezeColors;
+        freezeColors(jicolorbar);
+        clim([0,max(a1)])
+        shading interp
+        grid off
+        axis square
+        set(gca,'XTick',[], 'YTick', [])
+        title('Cell 1 Combined: Blue=Branched, Red=Bundled')
+        scatter(Xsm(boundC1),Ysm(boundC1),'black');
+        hold off;
+        box on;
+        box off;
+        set(gca,'XColor','w')
+        set(gca,'YColor','w')
+        set(gcf,'color','w');
+
+        % [Ma1,Ia1] = max(a1);
+        % [Mb1,Ib1] = max(b1);
+        % hold on;
+        % quiver(0,0,Xsm(1,Ia1),Ysm(1,Ia1),0,'color',[0 0 0])
+        % hold off;
+
+        a1New = a1;
+        a1New(a1New<1)=0;
+        if (a1New(1)~=0 && a1New(length(a1New))~=0)
+            zeroInd1=find(a1New==0,1,'first');
+            zeroInd2=find(a1New==0,1,'last');
+            dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a1New~=0,1,'first');
+            ind2=find(a1New~=0,1,'last');
+            dirIndex1=ceil((ind1+ind2)/2);
+        end
+        if isempty(dirIndex1)
+            dirIndex1=1;
+        end
+        if dirIndex1<1
+            dirIndex1=dirIndex1+101;
+        end
+        hold on;
+        quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
+        hold off;
+
+        % Cell 2
+        subplot(2,1,2)
+        surf(Xcol,Ycol,ZBranch2);
+        view(2)
+        colormap(whitebluenavy)
+        freezeColors;
+        freezeColors(colorbar);
+        clim([0,max(b2)])
+        shading interp
+        hold on;
+        surf(Xmid,Ymid,ZBund2);
+        colormap(whiteredmaroon)
+        freezeColors;
+        freezeColors(jicolorbar);
+        clim([0,max(a2)])
+        shading interp
+        grid off
+        axis square
+        set(gca,'XTick',[], 'YTick', [])
+        title('Cell 2 Combined: Blue=Branched, Red=Bundled')
+        scatter(Xsm(boundC2),Ysm(boundC2),'black');
+        hold off;
+        box off;
+        set(gca,'XColor','w')
+        set(gca,'YColor','w')
+        set(gcf,'color','w');
+
+        % [Ma2,Ia2] = max(a2);
+        % [Mb2,Ib2] = max(b2);
+        % p1=[0 0];
+        % p2=[Xsm(1,Ia2) Ysm(1,Ia2)];
+        % dp=p2-p1;
+        % hold on;
+        % quiver(p1(1),p1(2),dp(1),dp(2),0,'color',[0 0 0])
+        % hold off;
+
+        a2New = a2;
+        a2New(a2New<1)=0;
+        if (a2New(1)~=0 && a2New(length(a2New))~=0)
+            zeroInd1=find(a2New==0,1,'first');
+            zeroInd2=find(a2New==0,1,'last');
+            dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a2New~=0,1,'first');
+            ind2=find(a2New~=0,1,'last');
+            dirIndex2=ceil((ind1+ind2)/2);
+        end
+        if isempty(dirIndex2)
+            dirIndex2=1;
+        end
+        if dirIndex2<1
+            dirIndex2=dirIndex2+101;
+        end
+        hold on;
+        quiver(0,0,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
+        hold off;
+
+        if vid==1
+            currframe = getframe(figcells);
+            writeVideo(vidObjCol1,currframe);
+        end
+    end
 
     % Plot Rac and Rho
     % figure(14);
@@ -527,14 +531,14 @@ while (ppp<=1)
     for t=1:(Nt-1)
 
         %% Run biochemisty
-        [Konx1,Kony1,Kfbx1,Kfby1,Koffx1,Koffy1] = spatialrates(ron,rfb,roff,a1,b1,s1,beta,cond); % set rates
-        [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond);
+        [Konx1,Kony1,Kfbx1,Kfby1,Koffx1,Koffy1] = spatialrates(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1); % set rates
+        [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
         % Set konx and kony
         % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*1000;
 
-        % Kony1(boundC1)=Kony1(boundC1)*0.01;
+        % Kony1(boundC1)=Kony1(boundC1)*100;
         % Kony2(boundC2)=Kony2(boundC2)*0.01;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*0.01;
@@ -542,6 +546,12 @@ while (ppp<=1)
 
         % Koffy1(boundC1)=Koffy1(boundC1)*100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
+
+        % Kfbx1(boundC1)=Kfbx1(boundC1)*100;
+        % Kfbx2(boundC2)=Kfbx2(boundC2)*100;
+
+        % Kfby1(boundC1)=Kfby1(boundC1)*10;
+        % Kfby2(boundC2)=Kfby2(boundC2)*10;
 
 
         %Cell 1
@@ -791,24 +801,31 @@ while (ppp<=1)
 
         %Cell 1
         if(NNx1(t+1) < NNx1(t))                % diassociation event (particle off)
-            oldcol = posx1(minidx1,1:end);
-            othercols = posx1([1:minidx1-1,minidx1+1:K1_1],1:end);
-            otherothercols = posx1(K1_1+1:end,1:end);
-            newpos = [othercols;oldcol;otherothercols];
+            oldcol = posx1(minidx1,1:end); % Find the particle to be removed
+            othercols = posx1([1:minidx1-1,minidx1+1:K1_1],1:end); % Gather other "on" particles
+            otherothercols = posx1(K1_1+1:end,1:end); % Gather "off" particles
+            newpos = [othercols;oldcol;otherothercols]; % Put removed particle at the end of "on" particles
             posx1 = newpos;
-            nx1(K1_1,t+1) = 0;
+            nx1(K1_1,t+1) = 0; % Set the removed particle to inactive
         elseif(NNx1(t+1) > NNx1(t))             % association event (on or recruitment)
             rr = rand(1,1);
             posx1(K1_1,t+1) = posx1(K1_1,t)+(rr<ponx1)*locx1; % on event
             posx1(K1_1,t+1) = posx1(K1_1,t)+(rr>=ponx1)*posx1(minidx1,t);   % recruitment event
-            nx1(K1_1+1,t+1) = 1;
+            nx1(K1_1,t+1) = 1;
             % Look for nearby rho (posy1), take them off
-            % locx1=location of rac binding (?)
-            
-            locRemovey1 = find(find(posy1(:,1)>locx1-epsilon)<locx1+epsilon,1);
-            if ~isempty(locRemovey1)
-                posy1(locRemovey1)=0;
-            end
+            % posx1(K1_1,t+1)=location of rac binding
+            % boundC1Scaled=(L*boundC1/Na);
+            % locRemovey1 = find(abs(posy1(:,t+1)-posx1(K1_1,t+1))<epsilon,1);
+            % if ~isempty(locRemovey1) && boundC1Scaled(1)<=posx1(K1_1,t+1) && boundC1Scaled(end)>=posx1(K1_1,t+1)
+            %     % posy1(locRemovey1,t+1)=0;
+            %     oldcol = posy1(locRemovey1,1:end); % Find the particle to be removed
+            %     othercols = posy1([1:locRemovey1-1,locRemovey1+1:K2_1],1:end); % Gather other "on" particles
+            %     otherothercols = posy1(K2_1+1:end,1:end); % Gather "off" particles
+            %     newpos = [othercols;oldcol;otherothercols]; % Put removed particle at the end of "on" particles
+            %     posy1 = newpos;
+            %     ny1(K2_1,t+1) = 0;
+            %     counter1=counter1+1;
+            % end
         end
 
         %Cell 2
@@ -823,7 +840,15 @@ while (ppp<=1)
             rr = rand(1,1);
             posx2(K1_2,t+1) = posx2(K1_2,t)+(rr<ponx2)*locx2;              % on event
             posx2(K1_2,t+1) = posx2(K1_2,t)+(rr>=ponx2)*posx2(minidx2,t);   % recruitment event
-            nx2(K1_2+1,t+1) = 1;
+            nx2(K1_2,t+1) = 1;
+            % Look for nearby rho (posy2), take them off
+            % locx2=location of rac binding
+            % boundC2Scaled=(L*boundC2/Na);
+            % locRemovey2 = find(abs(posy2(:,t+1)-locx2)<epsilon,1);
+            % if ~isempty(locRemovey2) && boundC2Scaled(1)<locx2 && boundC2Scaled(end)>locx2
+            %     posy2(locRemovey2,t+1)=0;
+            %     counter2=counter2+1;
+            % end
         end
 
         %Cell 1
