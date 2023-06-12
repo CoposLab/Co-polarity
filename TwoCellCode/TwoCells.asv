@@ -15,7 +15,7 @@ close all;
 clc;
 
 savefigs=0;
-setnum='25';
+setnum='1';
 savelocation='alphabetaup1/4alpha4beta';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
@@ -54,8 +54,8 @@ while (ppp<=1)
 
     % Set feedback (or coupling) strength
     %
-    alpha = [2,2];
-    beta = [2,2]; %first argument is away from overlap, second is on overlap
+    alpha = [2,4];
+    beta = [2,4]; %first argument is away from overlap, second is on overlap
 
     % Set discretization
     %
@@ -904,14 +904,11 @@ while (ppp<=1)
         rxna1 = dt*( F(a1,b1) + branchedConst1*(a1.*(1+alpha(1)*xC1) - a1.*a1)); %Cell 1 branched
         rxna1(boundC1) = dt*( F(a1(boundC1),b1(boundC1)) + branchedConst1*(a1(boundC1).*(1+alpha(2)*xC1(boundC1)) - a1(boundC1).*a1(boundC1))); %Cell 1 branched on overlap
 
-        rxnb1 = dt*( F(b1,a1) + bundledConst1*(b1.*(1+alpha(1)*yC1) - b1.*b1)); %Cell 1 bundled
-        rxnb1(boundC1) = dt*( F(b1(boundC1),a1(boundC1)) + bundledConst1*(b1(boundC1).*(1+alpha(2)*yC1(boundC1)) - b1(boundC1).*b1(boundC1))); %Cell 1 bundled on overlap
+        rxnb1 = dt*( F(b1,a1) + bundledConst1*(b1.*(1+alpha*yC1) - b1.*b1)); %Cell 1 bundled
+        rxnb1(boundC1)(b1,a1) + bundledConst1*(b1.*(1+alpha*yC1) - b1.*b1)); %Cell 1 bundled on overlap
 
-        rxna2 = dt*( F(a2,b2) + branchedConst2*(a2.*(1+alpha(1)*xC2) - a2.*a2)); %Cell 2 branched
-        rxna2(boundC2) = dt*( F(a2(boundC2),b2(boundC2)) + branchedConst2*(a2(boundC2).*(1+alpha(2)*xC2(boundC2)) - a2(boundC2).*a2(boundC2))); %Cell 2 branched on overlap
-
-        rxnb2 = dt*( F(b2,a2) + bundledConst2*(b2.*(1+alpha(1)*yC2) - b2.*b2)); %Cell 2 bundled
-        rxnb2(boundC2) = dt*( F(b2(boundC2),a2(boundC2)) + bundledConst2*(b2(boundC2).*(1+alpha(2)*yC2(boundC2)) - b2(boundC2).*b2(boundC2))); %Cell 2 bundled = dt*( F(b2,a2) + bundledConst2*(b2.*(1+alpha*yC2) - b2.*b2)); %Cell 2 bundled on overlap
+        rxna2 = dt*( F(a2,b2) + branchedConst2*(a2.*(1+alpha*xC2) - a2.*a2));
+        rxnb2 = dt*( F(b2,a2) + bundledConst2*(b2.*(1+alpha*yC2) - b2.*b2));
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
