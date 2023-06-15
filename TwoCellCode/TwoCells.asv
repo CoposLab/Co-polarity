@@ -15,7 +15,7 @@ close all;
 clc;
 
 savefigs=1;
-setnum='200';
+setnum='101';
 savelocation='rhodown1/1000thRhoOn';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
@@ -539,8 +539,8 @@ while (ppp<=1)
         % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
 
-        Kony1(boundC1)=Kony1(boundC1)/1000;
-        Kony2(boundC2)=Kony2(boundC2)/1000;
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
+        % Kony2(boundC2)=Kony2(boundC2)*1000;
 
         % Koffx1(boundC1)=Koffx1(boundC1)/100;
         % Koffx2(boundC2)=Koffx2(boundC2)/100;
@@ -551,8 +551,8 @@ while (ppp<=1)
         % Kfbx1(boundC1)=Kfbx1(boundC1)*100;
         % Kfbx2(boundC2)=Kfbx2(boundC2)*100;
 
-        % Kfby1(boundC1)=Kfby1(boundC1)*10;
-        % Kfby2(boundC2)=Kfby2(boundC2)*10;
+        Kfby1(boundC1)=Kfby1(boundC1)*10;
+        Kfby2(boundC2)=Kfby2(boundC2)*10;
 
 
         %Cell 1
