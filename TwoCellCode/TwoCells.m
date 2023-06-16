@@ -15,8 +15,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='200';
-savelocation='rhodown1/1000thRhoOn';
+setnum='50';
+savelocation='branchedup1/1_5branched';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -89,9 +89,9 @@ while (ppp<=1)
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 1;
+    branchedConst1 = 1.5;
     bundledConst1 = 1;
-    branchedConst2 = 1;
+    branchedConst2 = 1.5;
     bundledConst2 = 1;
 
     % Set initial conditions for actin distribution
@@ -539,8 +539,8 @@ while (ppp<=1)
         % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
 
-        Kony1(boundC1)=Kony1(boundC1)/1000;
-        Kony2(boundC2)=Kony2(boundC2)/1000;
+        % Kony1(boundC1)=Kony1(boundC1)/1000;
+        % Kony2(boundC2)=Kony2(boundC2)/1000;
 
         % Koffx1(boundC1)=Koffx1(boundC1)/100;
         % Koffx2(boundC2)=Koffx2(boundC2)/100;
