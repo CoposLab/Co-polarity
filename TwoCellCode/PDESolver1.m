@@ -4,6 +4,7 @@ Nt = 1/dt; % number of time steps
 Na = 101; % number of space steps
 dxa = 5.0/((Na-1)/2);
 
+m0 = 2.0;
 Da = 0.5; % diffusion coefficient
 pa = dt*Da/(dxa^2);
 
@@ -33,8 +34,8 @@ for i=1:Nt
     diffRHSb1 = Hm1*b1;
 
 
-    rxna1 = dt*(F(a1,b1) + K*(a1 - a1.*a1));
-    rxnb1 = dt*(F(b1,a1) + K*(b1 - b1.*b1));
+    rxna1 = dt*(F(a1,b1) + Ka*(a1 - a1.*a1));
+    rxnb1 = dt*(F(b1,a1) + Kb*(b1 - b1.*b1));
 
 
     a1 = Hs1\(diffRHSa1+rxna1);

@@ -7,14 +7,14 @@
 %
 % Last updated: 1/31/2020
 % Calina Copos
-addpath('./freeze_colors')
+addpath('../TwoCellCode/freeze_colors')
 
 clear;
 close all;
 clc;
 
 savefigs = 1;
-setnum='50';
+setnum='100';
 savelocation='singlecellresults/';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
