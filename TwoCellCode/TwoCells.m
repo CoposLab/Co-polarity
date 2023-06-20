@@ -15,8 +15,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='50';
-savelocation='inc_antagonism3/0_1epsilon10RhoRemoved';
+setnum='3';
+savelocation='movies1/uncoupled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -24,7 +24,7 @@ if savefigs==1
     filenameScatter=strcat(savelocation,'Scatter_',setnum);
 end
 
-vid = 0;
+vid = 1;
 vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
 vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
 % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
@@ -78,8 +78,8 @@ while (ppp<=1)
     posx2 = zeros(N,Nt);              % array of positions of X(t) cell 2
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
-    epsilon=0.1; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=10;
+    epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
+    numToRemove=0;
     counter1=0;
     counter2=0;
 
@@ -539,8 +539,8 @@ while (ppp<=1)
         % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
 
-        % Kony1(boundC1)=Kony1(boundC1)/1000;
-        % Kony2(boundC2)=Kony2(boundC2)/1000;
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
+        % Kony2(boundC2)=Kony2(boundC2)*1000;
 
         % Koffx1(boundC1)=Koffx1(boundC1)/100;
         % Koffx2(boundC2)=Koffx2(boundC2)/100;
@@ -815,18 +815,20 @@ while (ppp<=1)
             nx1(K1_1,t+1) = 1;
             % Look for nearby rho (posy1), take them off
             % posx1(K1_1,t+1)=location of rac binding
-            boundC1Scaled=(L*boundC1/Na);
-            locRemovey1 = find(abs(posy1(:,t+1)-posx1(K1_1,t+1))<epsilon,numToRemove);
-            numFound = length(locRemovey1);
-            if ~isempty(locRemovey1) && boundC1Scaled(1)<=posx1(K1_1,t+1) && boundC1Scaled(end)>=posx1(K1_1,t+1)
-                % posy1(locRemovey1,t+1)=0;
-                oldcol = posy1(locRemovey1,1:end); % Find the particle(s) to be removed
-                othercols = posy1(setdiff(1:K2_1,locRemovey1),1:end); % Gather other "on" particles
-                otherothercols = posy1(K2_1+1:end,1:end); % Gather "off" particles
-                newpos = [othercols;oldcol;otherothercols]; % Put removed particle at the end of "on" particles
-                posy1 = newpos;
-                ny1(K2_1-numFound+1:K2_1,t+1) = 0;
-                counter1=counter1+numFound;
+            if numToRemove>0
+                boundC1Scaled=(L*boundC1/Na);
+                locRemovey1 = find(abs(posy1(:,t+1)-posx1(K1_1,t+1))<epsilon,numToRemove);
+                numFound = length(locRemovey1);
+                if ~isempty(locRemovey1) && boundC1Scaled(1)<=posx1(K1_1,t+1) && boundC1Scaled(end)>=posx1(K1_1,t+1)
+                    % posy1(locRemovey1,t+1)=0;
+                    oldcol = posy1(locRemovey1,1:end); % Find the particle(s) to be removed
+                    othercols = posy1(setdiff(1:K2_1,locRemovey1),1:end); % Gather other "on" particles
+                    otherothercols = posy1(K2_1+1:end,1:end); % Gather "off" particles
+                    newpos = [othercols;oldcol;otherothercols]; % Put removed particle at the end of "on" particles
+                    posy1 = newpos;
+                    ny1(K2_1-numFound+1:K2_1,t+1) = 0;
+                    counter1=counter1+numFound;
+                end
             end
         end
 
@@ -845,18 +847,20 @@ while (ppp<=1)
             nx2(K1_2,t+1) = 1;
             % Look for nearby rho (posy2), take them off
             % locx2=location of rac binding
-            boundC2Scaled=(L*boundC2/Na);
-            locRemovey2 = find(abs(posy2(:,t+1)-posx2(K1_2,t+1))<epsilon,numToRemove);
-            numFound = length(locRemovey2);
-            if ~isempty(locRemovey2) && boundC2Scaled(1)<=posx2(K1_2,t+1) && boundC2Scaled(end)>=posx2(K1_2,t+1)
-                % posy2(locRemovey2,t+1)=0;
-                oldcol = posy2(locRemovey2,1:end); % Find the particle to be removed
-                othercols = posy2(setdiff(1:K2_2,locRemovey2),1:end); % Gather other "on" particles
-                otherothercols = posy2(K2_2+1:end,1:end); % Gather "off" particles
-                newpos = [othercols;oldcol;otherothercols]; % Put removed particle at the end of "on" particles
-                posy2 = newpos;
-                ny2(K2_2-numFound+1:K2_2,t+1) = 0;
-                counter2=counter2+numFound;
+            if numToRemove>0
+                boundC2Scaled=(L*boundC2/Na);
+                locRemovey2 = find(abs(posy2(:,t+1)-posx2(K1_2,t+1))<epsilon,numToRemove);
+                numFound = length(locRemovey2);
+                if ~isempty(locRemovey2) && boundC2Scaled(1)<=posx2(K1_2,t+1) && boundC2Scaled(end)>=posx2(K1_2,t+1)
+                    % posy2(locRemovey2,t+1)=0;
+                    oldcol = posy2(locRemovey2,1:end); % Find the particle to be removed
+                    othercols = posy2(setdiff(1:K2_2,locRemovey2),1:end); % Gather other "on" particles
+                    otherothercols = posy2(K2_2+1:end,1:end); % Gather "off" particles
+                    newpos = [othercols;oldcol;otherothercols]; % Put removed particle at the end of "on" particles
+                    posy2 = newpos;
+                    ny2(K2_2-numFound+1:K2_2,t+1) = 0;
+                    counter2=counter2+numFound;
+                end
             end
         end
 
@@ -920,8 +924,8 @@ while (ppp<=1)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-        % if mod(t,tplot) == 0
-        if t==(Nt-1)
+        if mod(t,tplot) == 0
+        % if t==(Nt-1)
             scatplot=figure(ppp);
             subplot(1,2,1); %Cell 1
             plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
