@@ -15,8 +15,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='77';
-savelocation='inc_antagonism3/0_1epsilon10RhoRemoved';
+setnum='50';
+savelocation='1rhoup1racup1/100RhoOn100RacOn';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -78,8 +78,8 @@ while (ppp<=1)
     posx2 = zeros(N,Nt);              % array of positions of X(t) cell 2
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
-    epsilon=0.1; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=10;
+    epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
+    numToRemove=0;
     counter1=0;
     counter2=0;
 
@@ -537,9 +537,9 @@ while (ppp<=1)
 
         % Set konx and kony
         % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
+        Konx2(boundC2)=Konx2(boundC2)*100;
 
-        % Kony1(boundC1)=Kony1(boundC1)*100;
+        Kony1(boundC1)=Kony1(boundC1)*100;
         % Kony2(boundC2)=Kony2(boundC2)*100;
 
         % Koffx1(boundC1)=Koffx1(boundC1)/100;
