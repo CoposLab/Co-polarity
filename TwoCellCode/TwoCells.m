@@ -15,8 +15,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='3';
-savelocation='movies1/uncoupled';
+setnum='100';
+savelocation='inc_antagonism2/0_1epsilon1RhoRemoved';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -24,7 +24,7 @@ if savefigs==1
     filenameScatter=strcat(savelocation,'Scatter_',setnum);
 end
 
-vid = 1;
+vid = 0;
 vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
 vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
 % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
@@ -78,8 +78,8 @@ while (ppp<=1)
     posx2 = zeros(N,Nt);              % array of positions of X(t) cell 2
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
-    epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=0;
+    epsilon=0.1; % distance to detect other molecules (finding nearby rac/rho to remove)
+    numToRemove=1;
     counter1=0;
     counter2=0;
 
@@ -536,11 +536,11 @@ while (ppp<=1)
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
         % Set konx and kony
-        % Konx1(boundC1)=Konx1(boundC1)*1000;
-        % Konx2(boundC2)=Konx2(boundC2)*1000;
+        % Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
 
-        % Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Kony2(boundC2)=Kony2(boundC2)*1000;
+        % Kony1(boundC1)=Kony1(boundC1)*100;
+        % Kony2(boundC2)=Kony2(boundC2)*100;
 
         % Koffx1(boundC1)=Koffx1(boundC1)/100;
         % Koffx2(boundC2)=Koffx2(boundC2)/100;
@@ -924,8 +924,8 @@ while (ppp<=1)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-        if mod(t,tplot) == 0
-        % if t==(Nt-1)
+        % if mod(t,tplot) == 0
+        if t==(Nt-1)
             scatplot=figure(ppp);
             subplot(1,2,1); %Cell 1
             plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;

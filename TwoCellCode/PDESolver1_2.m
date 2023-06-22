@@ -16,10 +16,10 @@ Xb      = 0:dxa:L;
 Da = 0.5; % diffusion coefficient
 pa = dt*Da/(dxa^2);
 
-Ka = 1.5; % branched coeff on overlap
+Ka = 1.1; % branched coeff on overlap
 Kb = 1.0; % bundled coeff on overlap
 KaElse = 1.0; % branched coeff away from overlap
-KbElse = 1.1; % bundled coeff away from overlap
+KbElse = 1.0; % bundled coeff away from overlap
 alpha = 2;
 
 F = @(U,V) -m0*U.*V;
@@ -36,7 +36,7 @@ bound = (floor(Na/2)-floor(blen/2)):(floor(Na/2)+floor(blen/2));
 vid = 0;
 vidObj = VideoWriter('PDESolver1','MPEG-4');
 
-method = 'crank-nicolsona';
+method = 'crank-nicolson';
 
 switch method
     case{'crank-nicolson'}
@@ -88,7 +88,7 @@ switch method
         options=odeset('RelTol',reltol,'AbsTol',abstol);
         U0 = [a1,b1].';
         
-        params = [Da,Ka,Kb,m0,Na,dxa];
+        params = [Da,Ka,Kb,KaElse,KbElse,m0,Na,dxa,bound];
 
         [teval,U] = ode15s(@(t,U) lvs_1D(t,U,params),[0,Tend],U0);
         U = U.';
@@ -140,8 +140,9 @@ end
 
 
 function dUdt = lvs_1D(~,U,params)
-    Da = params(1); Ka = params(2); Kb = params(3); m0 = params(4);
-    Na = params(5); dxa = params(6);
+    Da = params(1); Ka = params(2); Kb = params(3); 
+    KaElse = params(4); KbElse = params(5); m0 = params(6);
+    Na = params(7); dxa = params(8); bound = params(9);
      
     dadt = zeros(Na,1);
     dbdt = zeros(Na,1);
@@ -150,15 +151,18 @@ function dUdt = lvs_1D(~,U,params)
     b(1:Na) = U(Na+1:2*Na);
 
     for i=1:Na
-        if i==1 
-            dadt(1) = Ka*(a(1)-a(1)^2) - m0*a(1)*b(1) + Da*(a(2)-2.*a(1)+a(Na))./(dxa^2);
-            dbdt(1) = Ka*(b(1)-b(1)^2) - m0*a(1)*b(1) + Da*(b(2)-2.*b(1)+b(Na))./(dxa^2);            
+        if i >= bound(1) && i <= bound(end)
+            dadt(i) = Ka*(a(i)-a(i)^2) - m0*a(i)*b(i) + Da*(a(i+1)-2.*a(i)+a(i-1))./(dxa^2);
+            dbdt(i) = Kb*(b(i)-b(i)^2) - m0*a(i)*b(i) + Da*(b(i+1)-2.*b(i)+b(i-1))./(dxa^2);
+        elseif i==1
+            dadt(1) = KaElse*(a(1)-a(1)^2) - m0*a(1)*b(1) + Da*(a(2)-2.*a(1)+a(Na))./(dxa^2);
+            dbdt(1) = KbElse*(b(1)-b(1)^2) - m0*a(1)*b(1) + Da*(b(2)-2.*b(1)+b(Na))./(dxa^2);            
         elseif i==Na 
-            dadt(Na) = Ka*(a(Na)-a(Na)^2) - m0*a(Na)*b(Na) + Da*(a(1)-2.*a(Na)+a(Na-1))./(dxa^2);
-            dbdt(Na) = Ka*(b(Na)-b(Na)^2) - m0*a(Na)*b(Na) + Da*(b(1)-2.*b(Na)+b(Na-1))./(dxa^2);
+            dadt(Na) = KaElse*(a(Na)-a(Na)^2) - m0*a(Na)*b(Na) + Da*(a(1)-2.*a(Na)+a(Na-1))./(dxa^2);
+            dbdt(Na) = KbElse*(b(Na)-b(Na)^2) - m0*a(Na)*b(Na) + Da*(b(1)-2.*b(Na)+b(Na-1))./(dxa^2);
         else 
-            dadt(i) = Ka*(a(i)-a(i)^2) - m0*a(i)*b(i) + Da*(a(i+1)-2.*a(i)+a(i-1))./(dxa^2); 
-            dbdt(i) = Ka*(b(i)-b(i)^2) - m0*a(i)*b(i) + Da*(b(i+1)-2.*b(i)+b(i-1))./(dxa^2);  
+            dadt(i) = KaElse*(a(i)-a(i)^2) - m0*a(i)*b(i) + Da*(a(i+1)-2.*a(i)+a(i-1))./(dxa^2); 
+            dbdt(i) = KbElse*(b(i)-b(i)^2) - m0*a(i)*b(i) + Da*(b(i+1)-2.*b(i)+b(i-1))./(dxa^2);  
         end
         
     end
