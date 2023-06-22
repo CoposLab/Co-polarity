@@ -15,8 +15,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='100';
-savelocation='inc_antagonism2/0_1epsilon1RhoRemoved';
+setnum='77';
+savelocation='inc_antagonism3/0_1epsilon10RhoRemoved';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -79,7 +79,7 @@ while (ppp<=1)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.1; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=1;
+    numToRemove=10;
     counter1=0;
     counter2=0;
 

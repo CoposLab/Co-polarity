@@ -16,7 +16,7 @@ Xb      = 0:dxa:L;
 Da = 0.5; % diffusion coefficient
 pa = dt*Da/(dxa^2);
 
-Ka = 1.1; % branched coeff on overlap
+Ka = 1.0; % branched coeff on overlap
 Kb = 1.0; % bundled coeff on overlap
 KaElse = 1.0; % branched coeff away from overlap
 KbElse = 1.0; % bundled coeff away from overlap
@@ -24,9 +24,9 @@ alpha = 2;
 
 F = @(U,V) -m0*U.*V;
 
-rng(11)
+rng(123)
 a1 = 0.1 + 0.9.*rand(Na,1);
-rng(10)
+rng(2)
 b1 = 0.1 + 0.9.*rand(Na,1);
 
 bper=0.25;
@@ -99,6 +99,11 @@ switch method
         figure(1)
         plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
         plot(Xa,b1,'-ok','markerfacecolor','k','linewidth',3);
+        set(gca,'fontname','times','fontsize',20); box on;
+        set(gcf,'color','w');
+        legend('branched','bundled');
+        ylim([-1 1])
+        hold off
 end
 
 
