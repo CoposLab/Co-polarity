@@ -20,8 +20,8 @@ pa = dt*Da/(dxa^2);
 
 Ka = ones(Na,1); % branched coeff on overlap
 Kb = ones(Na,1); % bundled coeff on overlap
-KaElse = 1.0; % branched coeff away from overlap
-KbElse = 1.0; % bundled coeff away from overlap
+% KaElse = 1.0; % branched coeff away from overlap
+% KbElse = 1.0; % bundled coeff away from overlap
 alpha = 2;
 
 F = @(U,V) -m0*U.*V;
@@ -37,12 +37,15 @@ bper=0.25;
 blen=floor(bper*Na);
 bound = (floor(Na/2)-floor(blen/2)):(floor(Na/2)+floor(blen/2));
 
-Ka(bound) = 2*Ka(bound);
+Ka(bound) = 1.5*Ka(bound);
+Kb(bound) = 1.0*Kb(bound);
+Ka(setdiff(1:length(Ka),bound)) = 1.0*Ka(setdiff(1:length(Ka),bound));
+Kb(setdiff(1:length(Kb),bound)) = 1.5*Kb(setdiff(1:length(Kb),bound));
 
 vid = 0;
 vidObj = VideoWriter('PDESolver1','MPEG-4');
 
-method = 'crank-nicolsona';
+method = 'crank-nicolson';
 
 switch method
     case{'crank-nicolson'}
@@ -102,7 +105,7 @@ switch method
         U = U.';
 
         %keyboard();
-        % for i=1:length(teval)
+        for i=1:length(teval)
             a1 = U(1:Na,i);
             b1 = U(Na+1:2*Na,i);
             figure(1)
@@ -114,7 +117,7 @@ switch method
             ylim([-1 1])
             hold off;
             currframe = getframe(gcf);
-        % end
+        end
 end
 
 
