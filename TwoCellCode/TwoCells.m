@@ -15,8 +15,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='50';
-savelocation='1rhoup1racup1/100RhoOn100RacOn';
+setnum='100';
+savelocation='racuprhodown/10RacOn1000thRhoOn';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -536,11 +536,11 @@ while (ppp<=1)
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
         % Set konx and kony
-        % Konx1(boundC1)=Konx1(boundC1)*100;
-        Konx2(boundC2)=Konx2(boundC2)*100;
+        Konx1(boundC1)=Konx1(boundC1)*10;
+        Konx2(boundC2)=Konx2(boundC2)*10;
 
-        Kony1(boundC1)=Kony1(boundC1)*100;
-        % Kony2(boundC2)=Kony2(boundC2)*100;
+        Kony1(boundC1)=Kony1(boundC1)/1000;
+        Kony2(boundC2)=Kony2(boundC2)/1000;
 
         % Koffx1(boundC1)=Koffx1(boundC1)/100;
         % Koffx2(boundC2)=Koffx2(boundC2)/100;
