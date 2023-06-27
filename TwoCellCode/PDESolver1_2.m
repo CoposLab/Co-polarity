@@ -6,7 +6,7 @@ Da      = 0.5;                  % diffusion coefficient for actin
 m0      = 2.0;                  % competition for actin monomers
 K       = 1.0;  
 
-Tend    = 25.0;
+Tend    = 40.0;
 dt      = 0.1; %0.05
 Nt      = Tend/dt; % number of time steps
 Na      = 101; % number of space steps
@@ -26,10 +26,10 @@ alpha = 2;
 
 F = @(U,V) -m0*U.*V;
 
-rng(11)
+% rng(11)
 a10 = 0.1 + 0.9.*rand(Na,1);
 a1=a10;
-rng(10)
+% rng(10)
 b10 = 0.1 + 0.9.*rand(Na,1);
 b1=b10;
 
@@ -37,15 +37,15 @@ bper=0.25;
 blen=floor(bper*Na);
 bound = (floor(Na/2)-floor(blen/2)):(floor(Na/2)+floor(blen/2));
 
-Ka(bound) = 1.5*Ka(bound);
-Kb(bound) = 1.0*Kb(bound);
-Ka(setdiff(1:length(Ka),bound)) = 1.0*Ka(setdiff(1:length(Ka),bound));
-Kb(setdiff(1:length(Kb),bound)) = 1.5*Kb(setdiff(1:length(Kb),bound));
+Ka(bound) = Ka(bound)*5; % branched
+Ka(setdiff(1:length(Ka),bound)) = Ka(setdiff(1:length(Ka),bound))*1.0;
+Kb(bound) = Kb(bound)*1.0; % bundled
+Kb(setdiff(1:length(Kb),bound)) = Kb(setdiff(1:length(Kb),bound))*4;
 
 vid = 0;
 vidObj = VideoWriter('PDESolver1','MPEG-4');
 
-method = 'crank-nicolson';
+method = 'crank-nicolsona';
 
 switch method
     case{'crank-nicolson'}
@@ -105,9 +105,9 @@ switch method
         U = U.';
 
         %keyboard();
-        for i=1:length(teval)
-            a1 = U(1:Na,i);
-            b1 = U(Na+1:2*Na,i);
+        % for i=1:length(teval)
+            a1 = U(1:Na,end);
+            b1 = U(Na+1:2*Na,end);
             figure(1)
             plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
             plot(Xa,b1,'-ok','markerfacecolor','k','linewidth',3);
@@ -117,7 +117,7 @@ switch method
             ylim([-1 1])
             hold off;
             currframe = getframe(gcf);
-        end
+        % end
 end
 
 
