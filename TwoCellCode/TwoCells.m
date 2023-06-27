@@ -16,7 +16,7 @@ clc;
 
 savefigs=1;
 setnum='50';
-savelocation='ant_rhodown1/0_5epsilon50RhoRemoved1000thRhoOn';
+savelocation='./results/bundledup1/1_1bundled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -79,9 +79,14 @@ while (ppp<=1)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=50;
+    numToRemove=0;
     counter1=0;
     counter2=0;
+
+    % Boundary between cells
+    blen = floor(bper * L); % length of overlap between cell membranes
+    boundC1 = (floor(3*Na/4 - ((Na-1)*bper)/2)):((floor(3*Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 1
+    boundC2 = (floor(Na/4 - ((Na-1)*bper)/2)):((floor(Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 2
 
 
     % Competition for limited resource (actin monomers) term
@@ -89,10 +94,20 @@ while (ppp<=1)
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 1;
-    bundledConst1 = 1;
-    branchedConst2 = 1;
-    bundledConst2 = 1;
+    branchedConst1 = 1.0;
+    bundledConst1 = 1.1;
+    branchedConst2 = 1.0;
+    bundledConst2 = 1.1;
+
+    Ka1=ones(Na,1);
+    Kb1=ones(Na,1);
+    Ka2=ones(Na,1);
+    Kb2=ones(Na,1);
+
+    Ka1(boundC1) = branchedConst1*Ka1(boundC1);
+    Kb1(boundC1) = bundledConst1*Kb1(boundC1);
+    Ka2(boundC2) = branchedConst2*Ka2(boundC2);
+    Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
     % Set initial conditions for actin distribution
     %
@@ -255,12 +270,7 @@ while (ppp<=1)
     aic2 = a2;
     bic2 = b2;
 
-    % Boundary between cells
-    blen = floor(bper * L); % length of overlap between cell membranes
-    boundC1 = (floor(3*Na/4 - ((Na-1)*bper)/2)):((floor(3*Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 1
-    boundC2 = (floor(Na/4 - ((Na-1)*bper)/2)):((floor(Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 2
-
-
+    
     % Setup convergence checks for actin quantities
     %
     conv1_1 = zeros(Nt,2);
@@ -539,8 +549,8 @@ while (ppp<=1)
         % Konx1(boundC1)=Konx1(boundC1)*10;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
 
-        Kony1(boundC1)=Kony1(boundC1)/1000;
-        Kony2(boundC2)=Kony2(boundC2)/1000;
+        % Kony1(boundC1)=Kony1(boundC1)/1000;
+        % Kony2(boundC2)=Kony2(boundC2)/1000;
 
         % Koffx1(boundC1)=Koffx1(boundC1)/100;
         % Koffx2(boundC2)=Koffx2(boundC2)/100;
@@ -905,16 +915,16 @@ while (ppp<=1)
         diffRHSa2 = Hm2*a2;
         diffRHSb2 = Hm2*b2;
 
-        rxna1 = dt*( F(a1,b1) + branchedConst1*(a1.*(1+alpha(1)*xC1) - a1.*a1)); %Cell 1 branched
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1) - a1.*a1)); %Cell 1 branched
         % rxna1(boundC1) = dt*( F(a1(boundC1),b1(boundC1)) + branchedConst1*(a1(boundC1).*(1+alpha(2)*xC1(boundC1)) - a1(boundC1).*a1(boundC1))); %Cell 1 branched on overlap
 
-        rxnb1 = dt*( F(b1,a1) + bundledConst1*(b1.*(1+alpha(1)*yC1) - b1.*b1)); %Cell 1 bundled
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1) - b1.*b1)); %Cell 1 bundled
         % rxnb1(boundC1) = dt*( F(b1(boundC1),a1(boundC1)) + bundledConst1*(b1(boundC1).*(1+alpha(2)*yC1(boundC1)) - b1(boundC1).*b1(boundC1))); %Cell 1 bundled on overlap
 
-        rxna2 = dt*( F(a2,b2) + branchedConst2*(a2.*(1+alpha(1)*xC2) - a2.*a2)); %Cell 2 branched
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2) - a2.*a2)); %Cell 2 branched
         % rxna2(boundC2) = dt*( F(a2(boundC2),b2(boundC2)) + branchedConst2*(a2(boundC2).*(1+alpha(2)*xC2(boundC2)) - a2(boundC2).*a2(boundC2))); %Cell 2 branched on overlap
 
-        rxnb2 = dt*( F(b2,a2) + bundledConst2*(b2.*(1+alpha(1)*yC2) - b2.*b2)); %Cell 2 bundled
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2) - b2.*b2)); %Cell 2 bundled
         % rxnb2(boundC2) = dt*( F(b2(boundC2),a2(boundC2)) + bundledConst2*(b2(boundC2).*(1+alpha(2)*yC2(boundC2)) - b2(boundC2).*b2(boundC2))); %Cell 2 bundled = dt*( F(b2,a2) + bundledConst2*(b2.*(1+alpha*yC2) - b2.*b2)); %Cell 2 bundled on overlap
 
         a1 = Hs1\(diffRHSa1+rxna1);
