@@ -15,7 +15,7 @@ close all;
 clc;
 
 savefigs=1;
-setnum='30';
+setnum='19';
 savelocation='./results/racdownprop/0_1epsilon100sumRacOn';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);

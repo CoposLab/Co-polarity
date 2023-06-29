@@ -30,7 +30,7 @@ ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
 ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
 ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
 ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
-[th,rad] = meshgrid((0:3.6:360)*pi/180,1);
+[th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
 [Xsm,Ysm] = pol2cart(th,rad);
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
 [Xmid,Ymid] = pol2cart(th,rad);
@@ -86,7 +86,8 @@ allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
 flipc2 = flip(boundC2);
 for i=1:length(boundC1)
-    plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
+    plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
+    % plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
 end
 
 hold off;
