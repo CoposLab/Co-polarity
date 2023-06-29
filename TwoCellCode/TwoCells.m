@@ -14,7 +14,7 @@ clear;
 close all;
 clc;
 
-savefigs=1;
+savefigs=0;
 setnum='8';
 savelocation='./results/racrhoracrho/1000all';
 if savefigs==1
@@ -67,7 +67,7 @@ while (ppp<=1)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 25.0;                  % total simulation time
+    Tend   = 5.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 100;
@@ -85,7 +85,7 @@ while (ppp<=1)
 
     % Boundary between cells
     blen = floor(bper * L); % length of overlap between cell membranes
-    boundC1 = (floor(3*Na/4 - ((Na-1)*bper)/2)):((floor(3*Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 1
+    boundC1 = (ceil(3*Na/4 - ((Na-1)*bper)/2)):((ceil(3*Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 1
     boundC2 = (floor(Na/4 - ((Na-1)*bper)/2)):((floor(Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 2
 
 
