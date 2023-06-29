@@ -16,7 +16,7 @@ clc;
 
 savefigs=1;
 setnum='50';
-savelocation='./results/bundledup1/1_1bundled';
+savelocation='./results/1racup2racdown1/1000RacOn100RacOff';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -95,9 +95,9 @@ while (ppp<=1)
     F = @(U,V) -m0*U.*V;
 
     branchedConst1 = 1.0;
-    bundledConst1 = 1.1;
+    bundledConst1 = 1.0;
     branchedConst2 = 1.0;
-    bundledConst2 = 1.1;
+    bundledConst2 = 1.0;
 
     Ka1=ones(Na,1);
     Kb1=ones(Na,1);
@@ -501,39 +501,6 @@ while (ppp<=1)
         end
     end
 
-    % Plot Rac and Rho
-    % figure(14);
-    % colRRFrame = subplot(1,2,1);
-    % ZRac1 = [xC1 xC1 xC1 xC1 xC1]';
-    % ZRho1 = [yC1 yC1 yC1 yC1 yC1]';
-    % contourf(Xcol,Ycol,ZRac1-ZRho1,100,'LineStyle','none');
-    % axis square
-    % col=colorbar;
-    % colormap(redwhiteblue);
-    % clim([-max(max(xC1),max(yC1)),max(max(xC1),max(yC1))])
-    % title('Cell 1 Combined: Blue=Rac, Red=Rho')
-    % ylabel(col,'Concentration Rac - Concentration Rho')
-    % set(gca,'XTick',[], 'YTick', [])
-    %
-    % if vid==1
-    %     currFrame = getframe(colRRFrame);
-    %     writeVideo(vidObjRR1,currFrame);
-    % end
-    %
-    % colRRFrame = subplot(1,2,2);
-    % ZRac2 = [xC2 xC2 xC2 xC2 xC2]';
-    % ZRho2 = [yC2 yC2 yC2 yC2 yC2]';
-    % contourf(Xcol,Ycol,ZRac2-ZRho2,100,'LineStyle','none');
-    % axis square
-    % col=colorbar;
-    % colormap(redwhiteblue);
-    % clim([-max(max(xC2),max(yC2)),max(max(xC2),max(yC2))])
-    % title('Cell 2 Combined: Blue=Rac, Red=Rho')
-    % ylabel(col,'Concentration Rac - Concentration Rho')
-    % set(gca,'XTick',[], 'YTick', [])
-
-    
-
     %% Run simulation
     %
     tic
@@ -546,14 +513,14 @@ while (ppp<=1)
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
         % Set konx and kony
-        % Konx1(boundC1)=Konx1(boundC1)*10;
-        % Konx2(boundC2)=Konx2(boundC2)*1000;
+        Konx1(boundC1)=Konx1(boundC1)*1000;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
 
-        % Kony1(boundC1)=Kony1(boundC1)/1000;
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
         % Kony2(boundC2)=Kony2(boundC2)/1000;
 
         % Koffx1(boundC1)=Koffx1(boundC1)/100;
-        % Koffx2(boundC2)=Koffx2(boundC2)/100;
+        Koffx2(boundC2)=Koffx2(boundC2)*100;
 
         % Koffy1(boundC1)=Koffy1(boundC1)/100;
         % Koffy2(boundC2)=Koffy2(boundC2)/100;
