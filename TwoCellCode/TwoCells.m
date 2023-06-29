@@ -15,8 +15,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='50';
-savelocation='./results/1racup2racdown1/1000RacOn100RacOff';
+setnum='8';
+savelocation='./results/racrhoracrho/1000all';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -513,14 +513,14 @@ while (ppp<=1)
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
         % Set konx and kony
-        Konx1(boundC1)=Konx1(boundC1)*1000;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
+        % Konx1(boundC1)=Konx1(boundC1)/1000;
+        Konx2(boundC2)=Konx2(boundC2)*1000;
 
-        % Kony1(boundC1)=Kony1(boundC1)*1000;
+        Kony1(boundC1)=Kony1(boundC1)*1000;
         % Kony2(boundC2)=Kony2(boundC2)/1000;
 
         % Koffx1(boundC1)=Koffx1(boundC1)/100;
-        Koffx2(boundC2)=Koffx2(boundC2)*100;
+        % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
         % Koffy1(boundC1)=Koffy1(boundC1)/100;
         % Koffy2(boundC2)=Koffy2(boundC2)/100;
@@ -530,6 +530,9 @@ while (ppp<=1)
 
         % Kfby1(boundC1)=Kfby1(boundC1)*100;
         % Kfby2(boundC2)=Kfby2(boundC2)*100;
+
+        Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
+        Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*1000;
 
 
         %Cell 1

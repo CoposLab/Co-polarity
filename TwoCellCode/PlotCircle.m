@@ -38,7 +38,6 @@ ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
 
 % Concentric circles
 % Cell 1
-% figc1=figure(16);
 figcells=figure(16);
 surf(Xcol,Ycol,ZBranch1);
 view(2)
@@ -55,11 +54,8 @@ freezeColors;
 freezeColors(jicolorbar);
 shading interp
 grid off
-% axis square
 set(gca,'XTick',[], 'YTick', [])
-% title('Cell 1 Combined: Blue=Branched, Red=Bundled')
 % scatter(Xsm(boundC1),Ysm(boundC1),'black');
-% hold off;
 set(gca,'XColor','w')
 set(gca,'YColor','w')
 set(gcf,'color','w');
