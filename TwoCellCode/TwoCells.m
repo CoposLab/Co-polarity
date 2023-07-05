@@ -5,7 +5,8 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 1/31/2020
+% Last updated: 7/5/2023
+% Katie Levandosky
 % Calina Copos
 addpath('./freeze_colors')
 addpath('../SingleCellCode_Published')
@@ -15,8 +16,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='100';
-savelocation='./results/1racup2racdown1/1000RacOn100RacOff';
+setnum='15';
+savelocation='./results/branchedpromotesbundled/3abundled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -516,14 +517,14 @@ while (ppp<=1)
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
         % Set konx and kony
-        Konx1(boundC1)=Konx1(boundC1)*1000;
+        % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*100;
 
         % Kony1(boundC1)=Kony1(boundC1)*100;
         % Kony2(boundC2)=Kony2(boundC2)*100;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*100;
-        Koffx2(boundC2)=Koffx2(boundC2)*100;
+        % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
         % Koffy1(boundC1)=Koffy1(boundC1)/100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
@@ -548,22 +549,33 @@ while (ppp<=1)
         %     sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
         %     sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
         %     if sumx1>0
-        %         % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx1*100);
-        %         Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*10);
+        %         Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*100);
+        %         % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*10);
         %     end
         %     if sumx2>0
-        %         % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx2*100);
-        %         Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*10);
+        %         Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*100);
+        %         % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*10);
         %     end
         %     if sumy1>0
-        %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
-        %         Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*10);
+        %         Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
+        %         % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*10);
         %     end
         %     if sumy2>0
-        %         % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy2*100);
-        %         Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*10);
+        %         Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy2*100);
+        %         % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*10);
         %     end
         % end
+
+        if max(a2)>0
+            Kb1(boundC1) = 3*a2(flipc2)/max(a2)+1; % change bundled coeff in cell 1 proportionally to branched in cell 2
+        end
+        if max(a1)>0
+            Kb2(flipc2) = 3*a1(boundC1)/max(a1)+1; % change bundled coeff in cell 2 proportionally to branched in cell 1
+        end
+
+        Kb1(Kb1==0)=1;
+        Kb2(Kb2==0)=1;
+
 
         %Cell 1
         if((t-1)*dt<Tx1(rxn_count_x1))
