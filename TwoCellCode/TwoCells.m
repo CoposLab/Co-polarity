@@ -15,9 +15,9 @@ clear;
 close all;
 clc;
 
-savefigs=0;
-setnum='50';
-savelocation='./results/racpromotesrho/0_1epsilon100sumRhoOn';
+savefigs=1;
+setnum='37';
+savelocation='./results/branchedbundledpromotion/2branched2bundled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -91,13 +91,6 @@ while (ppp<=1)
 
     boundC1 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
-
-
-    % Staples: each (possible) boundary point is either on (1) or off (0)
-    staplesC1 = zeros(1,length(boundC1));
-    staplesC2 = zeros(1,length(boundC2));
-    staplesC1(randperm(length(staplesC1),10)) = 1; % set 10 random points on
-    staplesC2(randperm(length(staplesC2),10)) = 1; % set 10 random points on
 
 
     % Competition for limited resource (actin monomers) term
@@ -510,8 +503,8 @@ while (ppp<=1)
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
         % Set konx and kony
-        % Konx1(boundC1)=Konx1(boundC1)*1000;
-        % Konx2(boundC2)=Konx2(boundC2)*10;
+        % Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
 
         % Kony1(boundC1)=Kony1(boundC1)*100;
         % Kony2(boundC2)=Kony2(boundC2)*100;
@@ -536,56 +529,56 @@ while (ppp<=1)
         flipc2=flip(boundC2);
         scaledC1 = (L*boundC1/Na);
         scaledC2 = L*flipc2/Na;
-        for i=1:length(boundC1)
-            sumx1 = sum(abs(posx1(:,t)-scaledC1(i))<=epsilon1);
-            sumx2 = sum(abs(posx2(:,t)-scaledC2(i))<=epsilon1);
-            sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
-            sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
-            if sumx1>0
-                % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*100);
-                % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*10);
-                % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
-                % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
-                Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
-            end
-            if sumx2>0
-                % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*100);
-                % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*10);
-                % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
-                % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
-                Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
-            end
-            if sumy1>0
-                % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
-                % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*10);
-                % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
-                % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
-            end
-            if sumy2>0
-                % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy2*100);
-                % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*10);
-                % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
-                % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
-            end
+        % for i=1:length(boundC1)
+        %     sumx1 = sum(abs(posx1(:,t)-scaledC1(i))<=epsilon1);
+        %     sumx2 = sum(abs(posx2(:,t)-scaledC2(i))<=epsilon1);
+        %     sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
+        %     sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
+        %     if sumx1>0
+        %         % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*100);
+        %         % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*10);
+        %         % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
+        %         % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
+        %         Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
+        %     end
+        %     if sumx2>0
+        %         % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*100);
+        %         % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*10);
+        %         % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
+        %         % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
+        %         Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
+        %     end
+        %     if sumy1>0
+        %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
+        %         % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*10);
+        %         % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
+        %         % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
+        %     end
+        %     if sumy2>0
+        %         % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy2*100);
+        %         % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*10);
+        %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
+        %         % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
+        %     end
+        % end
+
+        if max(a2)>0
+            Kb1(boundC1) = 2*a2(flipc2)/max(a2)+1; % change bundled coeff in cell 1 proportionally to branched in cell 2
+        end
+        if max(a1)>0
+            Kb2(flipc2) = 2*a1(boundC1)/max(a1)+1; % change bundled coeff in cell 2 proportionally to branched in cell 1
+        end
+        if max(b2)>0
+            Ka1(boundC1) = 2*b2(flipc2)/max(b2)+1; % change branched coeff in cell 1 proportionally to bundled in cell 2
+        end
+        if max(b1)>0
+            Ka2(flipc2) = 2*b1(boundC1)/max(b1)+1; % change branched coeff in cell 2 proportionally to bundled in cell 1
         end
 
-        % if max(a2)>0
-        %     Kb1(boundC1) = 3*a2(flipc2)/max(a2)+1; % change bundled coeff in cell 1 proportionally to branched in cell 2
-        % end
-        % if max(a1)>0
-        %     Kb2(flipc2) = 3*a1(boundC1)/max(a1)+1; % change bundled coeff in cell 2 proportionally to branched in cell 1
-        % end
-        % 
-        % Kb1(Kb1==0)=1;
-        % Kb2(Kb2==0)=1;
-
-
-        % Turn staples on/off
-        pswitch = 0.5;
-        r1 = rand(length(staplesC1),1)';
-        r2 = rand(length(staplesC2),1)';
-        staplesC1 = mod(staplesC1 + (r1<pswitch)*1, 2);
-        staplesC2 = mod(staplesC2 + (r2<pswitch)*1, 2);
+        Ka1(Ka1==0)=1;
+        Ka2(Ka2==0)=1;
+        Kb1(Kb1==0)=1;
+        Kb2(Kb2==0)=1;
 
 
         %Cell 1
