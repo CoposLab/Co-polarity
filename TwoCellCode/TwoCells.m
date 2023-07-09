@@ -16,8 +16,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='37';
-savelocation='./results/branchedbundledpromotion/2branched2bundled';
+setnum='50';
+savelocation='./results/bundledpromotesbranched/3bbranched';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -506,11 +506,11 @@ while (ppp<=1)
         % Konx1(boundC1)=Konx1(boundC1)*100;
         % Konx2(boundC2)=Konx2(boundC2)*100;
 
-        % Kony1(boundC1)=Kony1(boundC1)*100;
-        % Kony2(boundC2)=Kony2(boundC2)*100;
+        % Kony1(boundC1)=Kony1(boundC1)*10;
+        % Kony2(boundC2)=Kony2(boundC2)*10;
 
-        % Koffx1(boundC1)=Koffx1(boundC1)*100;
-        % Koffx2(boundC2)=Koffx2(boundC2)*100;
+        % Koffx1(boundC1)=Koffx1(boundC1)*10;
+        % Koffx2(boundC2)=Koffx2(boundC2)*10;
 
         % Koffy1(boundC1)=Koffy1(boundC1)/100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
@@ -539,14 +539,16 @@ while (ppp<=1)
         %         % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*10);
         %         % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
         %         % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
-        %         Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
+        %         % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
+        %         Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
         %     end
         %     if sumx2>0
         %         % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*100);
         %         % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*10);
         %         % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
         %         % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
-        %         Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
+        %         % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
+        %         Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
         %     end
         %     if sumy1>0
         %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
@@ -562,17 +564,17 @@ while (ppp<=1)
         %     end
         % end
 
-        if max(a2)>0
-            Kb1(boundC1) = 2*a2(flipc2)/max(a2)+1; % change bundled coeff in cell 1 proportionally to branched in cell 2
-        end
-        if max(a1)>0
-            Kb2(flipc2) = 2*a1(boundC1)/max(a1)+1; % change bundled coeff in cell 2 proportionally to branched in cell 1
-        end
+        % if max(a2)>0
+        %     Kb1(boundC1) = 2*a2(flipc2)/max(a2)+1; % change bundled coeff in cell 1 proportionally to branched in cell 2
+        % end
+        % if max(a1)>0
+        %     Kb2(flipc2) = 2*a1(boundC1)/max(a1)+1; % change bundled coeff in cell 2 proportionally to branched in cell 1
+        % end
         if max(b2)>0
-            Ka1(boundC1) = 2*b2(flipc2)/max(b2)+1; % change branched coeff in cell 1 proportionally to bundled in cell 2
+            Ka1(boundC1) = 3*b2(flipc2)/max(b2)+1; % change branched coeff in cell 1 proportionally to bundled in cell 2
         end
         if max(b1)>0
-            Ka2(flipc2) = 2*b1(boundC1)/max(b1)+1; % change branched coeff in cell 2 proportionally to bundled in cell 1
+            Ka2(flipc2) = 3*b1(boundC1)/max(b1)+1; % change branched coeff in cell 2 proportionally to bundled in cell 1
         end
 
         Ka1(Ka1==0)=1;

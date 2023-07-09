@@ -13,7 +13,7 @@ clear;
 close all;
 clc;
 
-savefigs = 1;
+savefigs = 0;
 setnum='100';
 savelocation='singlecellresults/';
 if savefigs==1
@@ -571,9 +571,11 @@ while (ppp<=1)
             colorLength = 50;
             white = [1,1,1];
             red = [1,0,0];
-            blue = [0,0.5,1];
+            blue = [143/256,177/256,221/256];
             maroon = [0.4,0,0];
-            navy = [0,0,0.3];
+            navy = [33/256,81/256,127/256];
+            yellow = [1,0.9,0];
+            darkyellow = [227/256,180/256,76/256];
             whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
             redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
             whiteredmaroon = [whitered;redmaroon];
@@ -583,6 +585,9 @@ while (ppp<=1)
             myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
             redblue = abs(whiteblue+whitered)./2;
             redwhiteblue = [flip(whitered); whiteblue];
+            whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
+            yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
+            whitedarkyellow = [whiteyellow;yellowdarkyellow];
 
             % Define circles
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
@@ -594,9 +599,9 @@ while (ppp<=1)
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
             [Xmid,Ymid] = pol2cart(th,rad);
 
+
             % Concentric circles
             % Cell 1
-            % figc1=figure(16);
             figcells=figure(16);
             surf(Xcol,Ycol,ZBranch1);
             view(2)
@@ -607,21 +612,22 @@ while (ppp<=1)
             shading interp
             hold on;
             surf(Xmid,Ymid,ZBund1);
-            colormap(whiteredmaroon)
+            colormap(whitedarkyellow)
             freezeColors;
             freezeColors(jicolorbar);
             clim([0,max(a)])
             shading interp
             grid off
-            axis square
             set(gca,'XTick',[], 'YTick', [])
-            title('Cell 1 Combined: Blue=Branched, Red=Bundled')
+            % scatter(Xsm(boundC1),Ysm(boundC1),'black');
             hold off;
-            box on;
             box off;
             set(gca,'XColor','w')
             set(gca,'YColor','w')
             set(gcf,'color','w');
+            axis square
+
+
 
             % Find median for cell 1
             a1New = a;
@@ -644,7 +650,7 @@ while (ppp<=1)
                 hold off;
             end
 
-            
+
         end
     end
 
