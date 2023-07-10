@@ -16,11 +16,9 @@ close all;
 clc;
 
 savefigs=0;
-setnum='10';
-savelocation='./movies2/uncoupled';
+setnum='1';
+savelocation='./';
 if savefigs==1
-    % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
-    % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
     filenameCells=strcat(savelocation,'Cells_',setnum);
     filenameScatter=strcat(savelocation,'Scatter_',setnum);
 end
@@ -28,10 +26,6 @@ end
 vid = 0;
 vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
 vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
-% vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
-% vidObj2 = VideoWriter('lineplot2.mp4','MPEG-4');
-% vidObjCol2 = VideoWriter('colorplot2.mp4','MPEG-4');
-% vidObjRR2 = VideoWriter('colorplotrr2.mp4','MPEG-4');
 
 counter_ppp = 1;
 ppp = 1;
@@ -73,11 +67,13 @@ while (ppp<=1)
     dx     = sqrt(2*D*dt);
     tplot  = 100;
 
-    posx1 = zeros(N,Nt);              % array of positions of X(t) cell 1
-    posy1 = zeros(N,Nt);              % array of positions of Y(t) cell 1
+    posx1 = zeros(N,Nt);              % array of positions of X(t) cell 1 (rac)
+    posy1 = zeros(N,Nt);              % array of positions of Y(t) cell 1 (rho)
+    posz1 = zeros(N,Nt);              % array of positions of Z(t) cell 1 (cadherins)
 
-    posx2 = zeros(N,Nt);              % array of positions of X(t) cell 2
-    posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
+    posx2 = zeros(N,Nt);              % array of positions of X(t) cell 2 (rac)
+    posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2 (rho)
+    posz2 = zeros(N,Nt);              % array of positions of Z(t) cell 2 (cadherins)
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
     numToRemove=0;
@@ -86,8 +82,6 @@ while (ppp<=1)
 
     % Boundary between cells
     blen = floor(bper * L); % length of overlap between cell membranes
-    % boundC1 = (ceil(3*Na/4 - ((Na-1)*bper)/2)):((ceil(3*Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 1
-    % boundC2 = (floor(Na/4 - ((Na-1)*bper)/2)):((floor(Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 2
 
     boundC1 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
@@ -213,55 +207,75 @@ while (ppp<=1)
     % Setup polarity concentrations
     %
     MAX_OUTPUT_LENGTH = 10000;
-    nx1   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active)
-    ny1   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active)
-    Tx1   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for X(t)
-    Ty1   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for Y(t)
-    X1    = zeros(MAX_OUTPUT_LENGTH,1);       % number of X(t) molecules on the membrane
-    Y1    = zeros(MAX_OUTPUT_LENGTH,1);       % number of Y(t) molecules on the membrane
+    nx1   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active) (rac)
+    ny1   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active) (rho)
+    nz1   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active) (cadherins)
+    Tx1   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for X(t) (rac)
+    Ty1   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for Y(t) (rho)
+    Tz1   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for Z(t) (cadherins)
+    X1    = zeros(MAX_OUTPUT_LENGTH,1);       % number of X(t) molecules on the membrane (rac)
+    Y1    = zeros(MAX_OUTPUT_LENGTH,1);       % number of Y(t) molecules on the membrane (rho)
+    Z1    = zeros(MAX_OUTPUT_LENGTH,1);       % number of Z(t) molecules on the membrane (cadherins)
     NNx1  = zeros(Nt,1);
     NNy1  = zeros(Nt,1);
+    NNz1  = zeros(Nt,1);
 
-    nx2   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active)
-    ny2   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active)
-    Tx2   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for X(t)
-    Ty2   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for Y(t)
-    X2    = zeros(MAX_OUTPUT_LENGTH,1);       % number of X(t) molecules on the membrane
-    Y2    = zeros(MAX_OUTPUT_LENGTH,1);       % number of Y(t) molecules on the membrane
+    nx2   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active) (rac)
+    ny2   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active) (rho)
+    nz2   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active) (cadherins)
+    Tx2   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for X(t) (rac)
+    Ty2   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for Y(t) (rho)
+    Tz2   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for Z(t) (cadherins)
+    X2    = zeros(MAX_OUTPUT_LENGTH,1);       % number of X(t) molecules on the membrane (rac)
+    Y2    = zeros(MAX_OUTPUT_LENGTH,1);       % number of Y(t) molecules on the membrane (rho)
+    Z2    = zeros(MAX_OUTPUT_LENGTH,1);       % number of Z(t) molecules on the membrane (cadherins)
     NNx2  = zeros(Nt,1);
     NNy2  = zeros(Nt,1);
+    NNz2  = zeros(Nt,1);
 
     % Set initial conditions for polarity molecules distribution
     %
     rxn_count_x1       = 1;
     rxn_count_y1       = 1;
+    rxn_count_z1       = 1;
 
     rxn_count_x2       = 1;
     rxn_count_y2       = 1;
+    rxn_count_z2       = 1;
 
-    X1(1)              = 0.1*N;                 % # of particles on membrane
-    Y1(1)              = 0.1*N;                 % # of particles on membrane
+    X1(1)              = 0.1*N;                 % # of particles on membrane (rac)
+    Y1(1)              = 0.1*N;                 % # of particles on membrane (rho)
+    Z1(1)              = 0.1*N;                 % # of particles on membrane (cadherins)
     NNx1(1)            = X1(1);
     NNy1(1)            = Y1(1);
+    NNz1(1)            = Y1(1);
     Tx1(1)             = 0.0;
     Ty1(1)             = 0.0;
+    Tz1(1)             = 0.0;
     nx1(1:X1(1),1)      = 1;                     % activate mem-bound particles
-    ny1(1:X1(1),1)      = 1;
-    r1 = randperm(ceil(L/(0.0102)),X1(1)+Y1(1))*0.0102;
+    ny1(1:Y1(1),1)      = 1;
+    nz1(1:Z1(1),1)      = 1;
+    r1 = randperm(ceil(L/(0.0102)),X1(1)+Y1(1)+Z1(1))*0.0102;
     posx1(1:X1(1),1)=r1(1:X1(1));
-    posy1(1:Y1(1),1)=r1(X1(1)+1:end);
+    posy1(1:Y1(1),1)=r1(X1(1)+1:X1(1)+Y1(1));
+    posz1(1:Z1(1),1)=r1(X1(1)+Y1(1)+1:end);
 
-    X2(1)              = 0.1*N;                 % # of particles on membrane
-    Y2(1)              = 0.1*N;                 % # of particles on membrane
+    X2(1)              = 0.1*N;                 % # of particles on membrane (rac)
+    Y2(1)              = 0.1*N;                 % # of particles on membrane (rho)
+    Z2(1)              = 0.1*N;                 % # of particles on membrane (cadherins)
     NNx2(1)            = X2(1);
     NNy2(1)            = Y2(1);
+    NNz2(1)            = Z2(1);
     Tx2(1)             = 0.0;
     Ty2(1)             = 0.0;
+    Tz2(1)             = 0.0;
     nx2(1:X2(1),1)      = 1;                     % activate mem-bound particles
-    ny2(1:X2(1),1)      = 1;
-    r2 = randperm(ceil(L/(0.0102)),X2(1)+Y2(1))*0.0102;
+    ny2(1:Y2(1),1)      = 1;
+    nz2(1:Z2(1),1)      = 1;
+    r2 = randperm(ceil(L/(0.0102)),X2(1)+Y2(1)+Z2(1))*0.0102;
     posx2(1:X2(1),1)=r2(1:X2(1));
-    posy2(1:Y2(1),1)=r2(X2(1)+1:end);
+    posy2(1:Y2(1),1)=r2(X2(1)+1:X2(1)+Y2(1));
+    posz2(1:Z2(1),1)=r2(X2(1)+Y2(1)+1:end);
 
     % Sample concentration at actin filament spatial scale
     %
@@ -295,22 +309,6 @@ while (ppp<=1)
         vidObjCol1.FrameRate = 5;
         vidObjCol1.Quality = 75;
         open(vidObjCol1);
-
-        % vidObjRR1.FrameRate = 5;
-        % vidObjRR1.Quality = 75;
-        % open(vidObjRR1);
-        %
-        % vidObj2.FrameRate = 5;
-        % vidObj2.Quality = 75;
-        % open(vidObj2);
-        %
-        % vidObjCol2.FrameRate = 5;
-        % vidObjCol2.Quality = 75;
-        % open(vidObjCol2);
-        %
-        % vidObjRR2.FrameRate = 5;
-        % vidObjRR2.Quality = 75;
-        % open(vidObjRR2);
     end
 
     % Plot the initial condition
@@ -352,144 +350,6 @@ while (ppp<=1)
         currframe = getframe(scatterFrame);
         writeVideo(vidObj1,currframe);
     end
-
-    % %Plot on circle
-    % %Define colors
-    % colorLength = 50;
-    % white = [1,1,1];
-    % red = [1,0,0];
-    % blue = [0,0.5,1];
-    % maroon = [0.4,0,0];
-    % navy = [0,0,0.3];
-    % whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-    % redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
-    % whiteredmaroon = [whitered;redmaroon];
-    % whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-    % bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
-    % whitebluenavy = [whiteblue; bluenavy];
-    % myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-    % redblue = abs(whiteblue+whitered)./2;
-    % redwhiteblue = [flip(whitered); whiteblue];
-    %
-    % % Define circles
-    % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
-    % [Xcol,Ycol] = pol2cart(th,rad);
-    % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-    % [Xsm,Ysm] = pol2cart(th,rad);
-    % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
-    % [Xmid,Ymid] = pol2cart(th,rad);
-    % ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
-    % ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
-    % ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
-    % ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
-    %
-    % if vid==1
-    %     % Concentric circles
-    %     % Cell 1
-    %     % figc1=figure(16);
-    %     figcells=figure(16);
-    %     subplot(2,1,1)
-    %     surf(Xcol,Ycol,ZBranch1);
-    %     view(2)
-    %     colormap(whitebluenavy)
-    %     freezeColors;
-    %     freezeColors(colorbar);
-    %     clim([0,max(b1)])
-    %     shading interp
-    %     hold on;
-    %     surf(Xmid,Ymid,ZBund1);
-    %     colormap(whiteredmaroon)
-    %     freezeColors;
-    %     freezeColors(jicolorbar);
-    %     clim([0,max(a1)])
-    %     shading interp
-    %     grid off
-    %     axis square
-    %     set(gca,'XTick',[], 'YTick', [])
-    %     title('Cell 1 Combined: Blue=Branched, Red=Bundled')
-    %     scatter(Xsm(boundC1),Ysm(boundC1),'black');
-    %     hold off;
-    %     box on;
-    %     box off;
-    %     set(gca,'XColor','w')
-    %     set(gca,'YColor','w')
-    %     set(gcf,'color','w');
-    %
-    %
-    %     a1New = a1;
-    %     a1New(a1New<1)=0;
-    %     if (a1New(1)~=0 && a1New(length(a1New))~=0)
-    %         zeroInd1=find(a1New==0,1,'first');
-    %         zeroInd2=find(a1New==0,1,'last');
-    %         dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-    %     else
-    %         ind1=find(a1New~=0,1,'first');
-    %         ind2=find(a1New~=0,1,'last');
-    %         dirIndex1=ceil((ind1+ind2)/2);
-    %     end
-    %     if isempty(dirIndex1)
-    %         dirIndex1=1;
-    %     end
-    %     if dirIndex1<1
-    %         dirIndex1=dirIndex1+101;
-    %     end
-    %     hold on;
-    %     quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
-    %     hold off;
-    %
-    %     % Cell 2
-    %     subplot(2,1,2)
-    %     surf(Xcol,Ycol,ZBranch2);
-    %     view(2)
-    %     colormap(whitebluenavy)
-    %     freezeColors;
-    %     freezeColors(colorbar);
-    %     clim([0,max(b2)])
-    %     shading interp
-    %     hold on;
-    %     surf(Xmid,Ymid,ZBund2);
-    %     colormap(whiteredmaroon)
-    %     freezeColors;
-    %     freezeColors(jicolorbar);
-    %     clim([0,max(a2)])
-    %     shading interp
-    %     grid off
-    %     axis square
-    %     set(gca,'XTick',[], 'YTick', [])
-    %     title('Cell 2 Combined: Blue=Branched, Red=Bundled')
-    %     scatter(Xsm(boundC2),Ysm(boundC2),'black');
-    %     hold off;
-    %     box off;
-    %     set(gca,'XColor','w')
-    %     set(gca,'YColor','w')
-    %     set(gcf,'color','w');
-    %
-    %     a2New = a2;
-    %     a2New(a2New<1)=0;
-    %     if (a2New(1)~=0 && a2New(length(a2New))~=0)
-    %         zeroInd1=find(a2New==0,1,'first');
-    %         zeroInd2=find(a2New==0,1,'last');
-    %         dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
-    %     else
-    %         ind1=find(a2New~=0,1,'first');
-    %         ind2=find(a2New~=0,1,'last');
-    %         dirIndex2=ceil((ind1+ind2)/2);
-    %     end
-    %     if isempty(dirIndex2)
-    %         dirIndex2=1;
-    %     end
-    %     if dirIndex2<1
-    %         dirIndex2=dirIndex2+101;
-    %     end
-    %     hold on;
-    %     quiver(0,0,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
-    %     hold off;
-    %
-    %     if vid==1
-    %         currframe = getframe(figcells);
-    %         writeVideo(vidObjCol1,currframe);
-    %     end
-    % end
 
     %Define colors
     colorLength = 50;
@@ -578,7 +438,6 @@ while (ppp<=1)
         flipc2 = flip(boundC2);
         for i=1:length(boundC1)
             plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-            % plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
         end
 
         hold off;
@@ -610,8 +469,6 @@ while (ppp<=1)
             hold off;
         end
 
-
-
         % Find median for cell 2
         a2New = a2;
         a2New(a2New<1)=0;
@@ -633,10 +490,8 @@ while (ppp<=1)
             hold off;
         end
 
-        if vid==1
-            currframe = getframe(figcells);
-            writeVideo(vidObjCol1,currframe);
-        end
+        currframe = getframe(figcells);
+        writeVideo(vidObjCol1,currframe);
 
     end
 
@@ -874,11 +729,13 @@ while (ppp<=1)
         p  = 0.5;                  % probability of hoping left or right
 
         % Fetch the number of particles at this time
-        K1_1 = NNx1(t+1);
-        K2_1 = NNy1(t+1);
+        K1_1 = NNx1(t+1); % rac
+        K2_1 = NNy1(t+1); % rho
+        K3_1 = NNz1(t+1); % cadherins
 
-        K1_2 = NNx2(t+1);
-        K2_2 = NNy2(t+1);
+        K1_2 = NNx2(t+1); % rac
+        K2_2 = NNy2(t+1); % rho
+        K3_2 = NNz2(t+1); % cadherins
 
         % Between reactions, perform Brownian motion with periodic BC
         r1 = rand(K1_1,1);    % coin flip
@@ -1141,173 +998,6 @@ while (ppp<=1)
                 writeVideo(vidObj1,currframe);
             end
 
-            % %Plot on circle
-            % %Define colors
-            % colorLength = 50;
-            % white = [1,1,1];
-            % red = [1,0,0];
-            % blue = [0,0.5,1];
-            % maroon = [0.4,0,0];
-            % navy = [0,0,0.3];
-            % whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-            % redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
-            % whiteredmaroon = [whitered;redmaroon];
-            % whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-            % bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
-            % whitebluenavy = [whiteblue; bluenavy];
-            % myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-            % redblue = abs(whiteblue+whitered)./2;
-            % redwhiteblue = [flip(whitered); whiteblue];
-
-            % % Define circles
-            % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
-            % [Xcol,Ycol] = pol2cart(th,rad);
-            % ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
-            % ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
-            % ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
-            % ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
-            % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-            % [Xsm,Ysm] = pol2cart(th,rad);
-            % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
-            % [Xmid,Ymid] = pol2cart(th,rad);
-
-            % % Concentric circles
-            % % Cell 1
-            % % figc1=figure(16);
-            % figcells=figure(16);
-            % subplot(2,1,1)
-            % surf(Xcol,Ycol,ZBranch1);
-            % view(2)
-            % colormap(whitebluenavy)
-            % freezeColors;
-            % freezeColors(colorbar);
-            % clim([0,max(b1)])
-            % shading interp
-            % hold on;
-            % surf(Xmid,Ymid,ZBund1);
-            % colormap(whiteredmaroon)
-            % freezeColors;
-            % freezeColors(jicolorbar);
-            % clim([0,max(a1)])
-            % shading interp
-            % grid off
-            % axis square
-            % set(gca,'XTick',[], 'YTick', [])
-            % title('Cell 1 Combined: Blue=Branched, Red=Bundled')
-            % scatter(Xsm(boundC1),Ysm(boundC1),'black');
-            % hold off;
-            % box on;
-            % box off;
-            % set(gca,'XColor','w')
-            % set(gca,'YColor','w')
-            % set(gcf,'color','w');
-            %
-            %
-            % % Find median for cell 1
-            % a1New = a1;
-            % a1New(a1New<1)=0;
-            % if (a1New(1)~=0 && a1New(length(a1New))~=0)
-            %     zeroInd1=find(a1New==0,1,'first');
-            %     zeroInd2=find(a1New==0,1,'last');
-            %     dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-            % else
-            %     ind1=find(a1New~=0,1,'first');
-            %     ind2=find(a1New~=0,1,'last');
-            %     dirIndex1=ceil((ind1+ind2)/2);
-            % end
-            % if dirIndex1<1
-            %     dirIndex1=dirIndex1+101;
-            % end
-            % if ~isempty(dirIndex1)
-            %     hold on;
-            %     quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
-            %     hold off;
-            % end
-            %
-            % % Cell 2
-            % subplot(2,1,2)
-            % surf(Xcol,Ycol,ZBranch2);
-            % view(2)
-            % colormap(whitebluenavy)
-            % freezeColors;
-            % freezeColors(colorbar);
-            % clim([0,max(b2)])
-            % shading interp
-            % hold on;
-            % surf(Xmid,Ymid,ZBund2);
-            % colormap(whiteredmaroon)
-            % freezeColors;
-            % freezeColors(jicolorbar);
-            % clim([0,max(a2)])
-            % shading interp
-            % grid off
-            % axis square
-            % set(gca,'XTick',[], 'YTick', [])
-            % title('Cell 2 Combined: Blue=Branched, Red=Bundled')
-            % scatter(Xsm(boundC2),Ysm(boundC2),'black');
-            % hold off;
-            % box off;
-            % set(gca,'XColor','w')
-            % set(gca,'YColor','w')
-            % set(gcf,'color','w');
-            %
-            %
-            % % Find median for cell 2
-            % a2New = a2;
-            % a2New(a2New<1)=0;
-            % if (a2New(1)~=0 && a2New(length(a2New))~=0)
-            %     zeroInd1=find(a2New==0,1,'first');
-            %     zeroInd2=find(a2New==0,1,'last');
-            %     dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
-            % else
-            %     ind1=find(a2New~=0,1,'first');
-            %     ind2=find(a2New~=0,1,'last');
-            %     dirIndex2=ceil((ind1+ind2)/2);
-            % end
-            % if dirIndex2<1
-            %     dirIndex2=dirIndex2+101;
-            % end
-            % if ~isempty(dirIndex2)
-            %     hold on;
-            %     quiver(0,0,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
-            %     hold off;
-            % end
-
-            %Define colors
-            colorLength = 50;
-            white = [1,1,1];
-            red = [1,0,0];
-            blue = [143/256,177/256,221/256];
-            maroon = [0.4,0,0];
-            navy = [33/256,81/256,127/256];
-            yellow = [1,0.9,0];
-            darkyellow = [227/256,180/256,76/256];
-            whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-            redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
-            whiteredmaroon = [whitered;redmaroon];
-            whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-            bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
-            whitebluenavy = [whiteblue; bluenavy];
-            myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-            redblue = abs(whiteblue+whitered)./2;
-            redwhiteblue = [flip(whitered); whiteblue];
-            whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
-            yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
-            whitedarkyellow = [whiteyellow;yellowdarkyellow];
-
-            % Define circles
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
-            [Xcol,Ycol] = pol2cart(th,rad);
-            ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
-            ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
-            ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
-            ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-            [Xsm,Ysm] = pol2cart(th,rad);
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
-            [Xmid,Ymid] = pol2cart(th,rad);
-
-
             
             % Concentric circles
             % Cell 1
@@ -1335,7 +1025,6 @@ while (ppp<=1)
             set(gcf,'color','w')
 
 
-
             % Cell 2
             surf(Xcol,Ycol-2,ZBranch2);
             view(2)
@@ -1361,7 +1050,6 @@ while (ppp<=1)
             flipc2 = flip(boundC2);
             for i=1:length(boundC1)
                 plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-                % plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
             end
 
             hold off;
@@ -1454,11 +1142,6 @@ while (ppp<=1)
     if vid==1
         close(vidObj1);
         close(vidObjCol1);
-        % close(vidObjRR1);
-        %
-        % close(vidObj2);
-        % close(vidObjCol2);
-        % close(vidObjRR2);
     end
     sprintf('Simulation %d done',ppp)
     toc

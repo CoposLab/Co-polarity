@@ -1,11 +1,4 @@
-% Gaussian smear of discretely located particles
-% Input: molecule distribution
-% Output: molecule concentration at spatial intervals dxa
-%
-% Last updated: 1/31/2020
-% Calina Copos
-
-function [x,xConcentration,yConcentration] = resamplePolarityMolecules(posxxx,posyyy,K1,K2,L,Na)
+function [x,xConcentration,yConcentration,zConcentration] = resamplePolarityMoleculesCad(posxxx,posyyy,poszzz,K1,K2,K3,L,Na)
 
 % Gaussian smear the molecules
 epsilon=0.01;                     % variance squared (default)
@@ -22,11 +15,18 @@ for i=1:K2
     ysmear(:,i) = exp(-(x-posyyy(i)).^2/(2*epsilon))./(sqrt(2*pi*epsilon));
 end
 
+zsmear=zeros(length(x),K3);
+for i=1:K3
+    zsmear(:,i) = exp(-(x-poszzz(i)).^2/(2*epsilon))./(sqrt(2*pi*epsilon));
+end
+
 % normalize
 xsmear = xsmear/a0;
 ysmear = ysmear/a0;
+zsmear = zsmear/a0;
 
 xConcentration = sum(xsmear,2);
 yConcentration = sum(ysmear,2);
+zConcentration = sum(zsmear,2);
 
 end
