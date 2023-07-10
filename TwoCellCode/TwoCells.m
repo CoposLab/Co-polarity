@@ -17,7 +17,7 @@ clc;
 
 savefigs=1;
 setnum='50';
-savelocation='./results/bundledpromotesbranched/3bbranched';
+savelocation='./results/bundledup1/2_5bundled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -99,9 +99,9 @@ while (ppp<=1)
     F = @(U,V) -m0*U.*V;
 
     branchedConst1 = 1.0;
-    bundledConst1 = 1.0;
+    bundledConst1 = 2.5;
     branchedConst2 = 1.0;
-    bundledConst2 = 1.0;
+    bundledConst2 = 2.5;
 
     Ka1=ones(Na,1);
     Kb1=ones(Na,1);
@@ -570,17 +570,17 @@ while (ppp<=1)
         % if max(a1)>0
         %     Kb2(flipc2) = 2*a1(boundC1)/max(a1)+1; % change bundled coeff in cell 2 proportionally to branched in cell 1
         % end
-        if max(b2)>0
-            Ka1(boundC1) = 3*b2(flipc2)/max(b2)+1; % change branched coeff in cell 1 proportionally to bundled in cell 2
-        end
-        if max(b1)>0
-            Ka2(flipc2) = 3*b1(boundC1)/max(b1)+1; % change branched coeff in cell 2 proportionally to bundled in cell 1
-        end
-
-        Ka1(Ka1==0)=1;
-        Ka2(Ka2==0)=1;
-        Kb1(Kb1==0)=1;
-        Kb2(Kb2==0)=1;
+        % if max(b2)>0
+        %     Ka1(boundC1) = 3*b2(flipc2)/max(b2)+1; % change branched coeff in cell 1 proportionally to bundled in cell 2
+        % end
+        % if max(b1)>0
+        %     Ka2(flipc2) = 3*b1(boundC1)/max(b1)+1; % change branched coeff in cell 2 proportionally to bundled in cell 1
+        % end
+        % 
+        % Ka1(Ka1==0)=1;
+        % Ka2(Ka2==0)=1;
+        % Kb1(Kb1==0)=1;
+        % Kb2(Kb2==0)=1;
 
 
         %Cell 1
