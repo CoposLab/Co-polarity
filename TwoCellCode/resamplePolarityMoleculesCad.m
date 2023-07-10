@@ -1,3 +1,10 @@
+% Gaussian smear of discretely located particles
+% Input: molecule distribution
+% Output: molecule concentration at spatial intervals dxa
+%
+% Last updated: 7/10/2023
+% Katie Levandosky
+
 function [x,xConcentration,yConcentration,zConcentration] = resamplePolarityMoleculesCad(posxxx,posyyy,poszzz,K1,K2,K3,L,Na)
 
 % Gaussian smear the molecules

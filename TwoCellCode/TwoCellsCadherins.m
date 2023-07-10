@@ -86,6 +86,9 @@ while (ppp<=1)
     boundC1 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
+    boundzC1 = 51:101;
+    boundzC2 = 1:51;
+
 
     % Competition for limited resource (actin monomers) term
     %
@@ -259,6 +262,7 @@ while (ppp<=1)
     posx1(1:X1(1),1)=r1(1:X1(1));
     posy1(1:Y1(1),1)=r1(X1(1)+1:X1(1)+Y1(1));
     posz1(1:Z1(1),1)=r1(X1(1)+Y1(1)+1:end);
+    % posz1(posz1*Na/L<boundzC1(1) | posz1*Na/L>boundzC1(end)) = 0;
 
     X2(1)              = 0.1*N;                 % # of particles on membrane (rac)
     Y2(1)              = 0.1*N;                 % # of particles on membrane (rho)
@@ -276,6 +280,7 @@ while (ppp<=1)
     posx2(1:X2(1),1)=r2(1:X2(1));
     posy2(1:Y2(1),1)=r2(X2(1)+1:X2(1)+Y2(1));
     posz2(1:Z2(1),1)=r2(X2(1)+Y2(1)+1:end);
+    % posz2(posz2*Na/L<boundzC2(1) | posz2*Na/L>boundzC2(end)) = 0;
 
     % Sample concentration at actin filament spatial scale
     %
@@ -506,8 +511,10 @@ while (ppp<=1)
     for t=1:(Nt-1)
 
         %% Run biochemistry
-        [Konx1,Kony1,Kfbx1,Kfby1,Koffx1,Koffy1] = spatialrates(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1); % set rates
-        [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
+        % [Konx1,Kony1,Kfbx1,Kfby1,Koffx1,Koffy1] = spatialrates(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1); % set rates
+        % [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
+        [Konx1,Kony1,Konz1,Kfbx1,Kfby1,Kfbz1,Koffx1,Koffy1,Koffz1] = spatialratesCad(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1,boundzC1); % set rates
+        [Konx2,Kony2,Konz2,Kfbx2,Kfby2,Kfbz2,Koffx2,Koffy2,Koffz2] = spatialratesCad(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2,boundzC2);
 
         % Set konx and kony
         % Konx1(boundC1)=Konx1(boundC1)*100;
@@ -590,7 +597,7 @@ while (ppp<=1)
         % Kb2(Kb2==0)=1;
 
 
-        %Cell 1
+        %Cell 1 rac
         if((t-1)*dt<Tx1(rxn_count_x1))
             NNx1(t+1) = X1(rxn_count_x1-1);
         else
@@ -623,7 +630,7 @@ while (ppp<=1)
             NNx1(t+1) = X1(rxn_count_x1-1);
         end
 
-        %Cell 2
+        %Cell 2 rac
         if((t-1)*dt<Tx2(rxn_count_x2))
             NNx2(t+1) = X2(rxn_count_x2-1);
         else
@@ -656,7 +663,7 @@ while (ppp<=1)
             NNx2(t+1) = X2(rxn_count_x2-1);
         end
 
-        %Cell 1
+        %Cell 1 rho
         if((t-1)*dt<Ty1(rxn_count_y1))
             NNy1(t+1) = Y1(rxn_count_y1-1);
         else
@@ -689,7 +696,7 @@ while (ppp<=1)
             NNy1(t+1) = Y1(rxn_count_y1-1);
         end
 
-        %Cell 2
+        %Cell 2 rho
         if((t-1)*dt<Ty2(rxn_count_y2))
             NNy2(t+1) = Y2(rxn_count_y2-1);
         else
@@ -720,6 +727,72 @@ while (ppp<=1)
             Y2(rxn_count_y2+1) = nny + dn(minidy2);
             rxn_count_y2 = rxn_count_y2 + 1;
             NNy2(t+1) = Y2(rxn_count_y2-1);
+        end
+
+        %Cell 1 cadherins
+        if((t-1)*dt<Tz1(rxn_count_z1))
+            NNz1(t+1) = Z1(rxn_count_z1-1);
+        else
+            nnz = Z1(rxn_count_z1);
+            tauz = zeros(nnz,1);
+            dn = zeros(nnz,1);
+            r1 = rand(nnz,1);
+
+            if(nnz==0)
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
+
+            for j=1:nnz          % all agents
+                konz1 = interp1(s1,Konz1,posz1(j,t));
+                koffz1 = interp1(s1,Koffz1,posz1(j,t));
+                kfbz1 = interp1(s1,Kfbz1,posz1(j,t));
+                % Sample earliest time-to-fire (tau)
+                a0 = koffz1 + (konz1+kfbz1*nnz/N)*(N/nnz-1);
+                tauz(j) = -log(r1(j))/a0;
+                rr = rand(1,1);
+                dn(j) = (rr<((konz1+kfbz1*nnz/N)*(N/nnz-1)/a0))*1.0 + (rr>=((konz1+kfbz1*nnz/N)*(N/nnz-1)/a0))*(-1.0);
+            end
+
+            [mintauz1,minidz1] = min(tauz(1:j));       % find first chemical rxn
+            Tz1(rxn_count_z1+1) = Tz1(rxn_count_z1) + mintauz1;
+            Z1(rxn_count_z1+1) = nnz + dn(minidz1);
+            rxn_count_z1 = rxn_count_z1 + 1;
+            NNz1(t+1) = Z1(rxn_count_z1-1);
+        end
+
+        %Cell 2 cadherins
+        if((t-1)*dt<Tz2(rxn_count_z2))
+            NNz2(t+1) = Z2(rxn_count_z2-1);
+        else
+            nnz = Z2(rxn_count_z2);
+            tauz = zeros(nnz,1);
+            dn = zeros(nnz,1);
+            r2 = rand(nnz,1);
+
+            if(nnz==0)
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
+
+            for j=1:nnz          % all agents
+                konz2 = interp1(s2,Konz2,posz2(j,t));
+                koffz2 = interp1(s2,Koffz2,posz2(j,t));
+                kfbz2 = interp1(s2,Kfbz2,posz2(j,t));
+                % Sample earliest time-to-fire (tau)
+                a0 = koffz2 + (konz2+kfbz2*nnz/N)*(N/nnz-1);
+                tauz(j) = -log(r2(j))/a0;
+                rr = rand(1,1);
+                dn(j) = (rr<((konz2+kfbz2*nnz/N)*(N/nnz-1)/a0))*1.0 + (rr>=((konz2+kfbz2*nnz/N)*(N/nnz-1)/a0))*(-1.0);
+            end
+
+            [mintauz2,minidz2] = min(tauz(1:j));       % find first chemical rxn
+            Tz2(rxn_count_z2+1) = Tz2(rxn_count_z2) + mintauz2;
+            Z2(rxn_count_z2+1) = nnz + dn(minidz2);
+            rxn_count_z2 = rxn_count_z2 + 1;
+            NNz2(t+1) = Z2(rxn_count_z2-1);
         end
 
         if (quit_cond==1)
@@ -769,7 +842,7 @@ while (ppp<=1)
         % Resolution strategy: No one advances
         %
         % Cell 1
-        firstcoll = sum(ismembertol(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),0.005,'DataScale',1));
+        firstcoll = sum(ismembertol(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),0.005,'DataScale',1)); % collisions between rac and rho
         if firstcoll~=0
             % Get indices of collisions
             aa = ismembertol(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),0.005,'DataScale',1);
@@ -780,9 +853,31 @@ while (ppp<=1)
             posx1(list_idx,t+1) = posx1(list_idx,t);
             posy1(list_idy,t+1) = posy1(list_idy,t);
         end
+        firstcoll = sum(ismembertol(posx1(1:K1_1,t+1),posz1(1:K3_1,t+1),0.005,'DataScale',1)); % collisions between rac and cadherins
+        if firstcoll~=0
+            % Get indices of collisions
+            aa = ismembertol(posx1(1:K1_1,t+1),posz1(1:K3_1,t+1),0.005,'DataScale',1);
+            list_idx = find(aa~=0);
+            bb = ismembertol(posz1(1:K3_1,t+1),posx1(1:K1_1,t+1),0.005,'DataScale',1);
+            list_idz = find(bb~=0);
+
+            posx1(list_idx,t+1) = posx1(list_idx,t);
+            posz1(list_idz,t+1) = posz1(list_idz,t);
+        end
+        firstcoll = sum(ismembertol(posy1(1:K2_1,t+1),posz1(1:K3_1,t+1),0.005,'DataScale',1)); % collisions between rho and cadherins
+        if firstcoll~=0
+            % Get indices of collisions
+            aa = ismembertol(posy1(1:K2_1,t+1),posz1(1:K3_1,t+1),0.005,'DataScale',1);
+            list_idy = find(aa~=0);
+            bb = ismembertol(posz1(1:K3_1,t+1),posy1(1:K2_1,t+1),0.005,'DataScale',1);
+            list_idz = find(bb~=0);
+
+            posy1(list_idy,t+1) = posy1(list_idy,t);
+            posz1(list_idz,t+1) = posz1(list_idz,t);
+        end
 
         % Cell 2
-        firstcoll = sum(ismembertol(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),0.005,'DataScale',1));
+        firstcoll = sum(ismembertol(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),0.005,'DataScale',1)); % collisions between rac and rho
         if firstcoll~=0
             % Get indices of collisions
             aa = ismembertol(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),0.005,'DataScale',1);
@@ -792,6 +887,28 @@ while (ppp<=1)
 
             posx2(list_idx,t+1) = posx2(list_idx,t);
             posy2(list_idy,t+1) = posy2(list_idy,t);
+        end
+        firstcoll = sum(ismembertol(posx2(1:K1_2,t+1),posz2(1:K3_2,t+1),0.005,'DataScale',1)); % collisions between rac and cadherins
+        if firstcoll~=0
+            % Get indices of collisions
+            aa = ismembertol(posx2(1:K1_2,t+1),posz2(1:K3_2,t+1),0.005,'DataScale',1);
+            list_idx = find(aa~=0);
+            bb = ismembertol(posz2(1:K3_2,t+1),posx2(1:K1_2,t+1),0.005,'DataScale',1);
+            list_idz = find(bb~=0);
+
+            posx2(list_idx,t+1) = posx2(list_idx,t);
+            posz2(list_idz,t+1) = posz2(list_idz,t);
+        end
+        firstcoll = sum(ismembertol(posy2(1:K2_2,t+1),posz2(1:K3_2,t+1),0.005,'DataScale',1)); % collisions between rho and cadherins
+        if firstcoll~=0
+            % Get indices of collisions
+            aa = ismembertol(posy2(1:K2_2,t+1),posz2(1:K3_2,t+1),0.005,'DataScale',1);
+            list_idy = find(aa~=0);
+            bb = ismembertol(posz2(1:K3_2,t+1),posy2(1:K2_2,t+1),0.005,'DataScale',1);
+            list_idz = find(bb~=0);
+
+            posy2(list_idy,t+1) = posy2(list_idy,t);
+            posz2(list_idz,t+1) = posz2(list_idz,t);
         end
 
         % Enforce periodic boundary conditions
@@ -810,14 +927,15 @@ while (ppp<=1)
         %% Determine if a biochemical rxn has occured - update positions
 
         % Find spontaneous association location cell 1
-        ss1 = sort(posx1(1:K1_1,t));
+        ss1 = sort(posx1(1:K1_1,t)); % rac
         [ijk1] = find(ss1==posx1(minidx1,t),1);
         prevind1 = (ijk1-1)*(ijk1>1) + (K1_1)*(ijk1==1);
         nextind1 = (ijk1+1)*(ijk1<K1_1) + 1*(ijk1==K1_1);
         x2 = posx1(minidx1,t)+(ss1(prevind1)-posx1(minidx1,t))/2;
         x1 = posx1(minidx1,t)+(ss1(nextind1)-posx1(minidx1,t))/2;
         locx1 = (x2-x1).*rand(1,1) + x1; % random location halfway between the closest left/right particles
-        ss1 = sort(posy1(1:K2_1,t));
+        
+        ss1 = sort(posy1(1:K2_1,t)); % rho
         [ijk1] = find(ss1==posy1(minidy1,t),1);
         prevind1 = (ijk1-1)*(ijk1>1) + (K2_1)*(ijk1==1);
         nextind1 = (ijk1+1)*(ijk1<K2_1) + 1*(ijk1==K2_1);
@@ -825,18 +943,28 @@ while (ppp<=1)
         y1 = posy1(minidy1,t)+(ss1(nextind1)-posy1(minidy1,t))/2;
         locy1 = (y2-y1).*rand(1,1) + y1; % random location halfway between the closest left/right particles
 
+        ss1 = sort(posz1(1:K3_1,t)); % cadherins
+        [ijk1] = find(ss1==posz1(minidz1,t),1);
+        prevind1 = (ijk1-1)*(ijk1>1) + (K3_1)*(ijk1==1);
+        nextind1 = (ijk1+1)*(ijk1<K3_1) + 1*(ijk1==K3_1);
+        z2 = posz1(minidz1,t)+(ss1(prevind1)-posz1(minidz1,t))/2;
+        z1 = posz1(minidz1,t)+(ss1(nextind1)-posz1(minidz1,t))/2;
+        locz1 = (z2-z1).*rand(1,1) + z1; % random location halfway between the closest left/right particles
+
         ponx1 = ron/(ron+rfb*(N-K1_1));
         pony1 = ron/(ron+rfb*(N-K2_1));
+        ponz1 = ron/(ron+rfb*(N-K3_1));
 
         % Find spontaneous association location cell 2
-        ss2 = sort(posx2(1:K1_2,t));
+        ss2 = sort(posx2(1:K1_2,t)); % rac
         [ijk2] = find(ss2==posx2(minidx2,t),1);
         prevind2 = (ijk2-1)*(ijk2>1) + (K1_2)*(ijk2==1);
         nextind2 = (ijk2+1)*(ijk2<K1_2) + 1*(ijk2==K1_2);
         x2 = posx2(minidx2,t)+(ss2(prevind2)-posx2(minidx2,t))/2;
         x1 = posx2(minidx2,t)+(ss2(nextind2)-posx2(minidx2,t))/2;
         locx2 = (x2-x1).*rand(1,1) + x1; % random location halfway between the closest left/right particles
-        ss2 = sort(posy2(1:K2_2,t));
+
+        ss2 = sort(posy2(1:K2_2,t)); % rho
         [ijk2] = find(ss2==posy2(minidy2,t),1);
         prevind2 = (ijk2-1)*(ijk2>1) + (K2_2)*(ijk2==1);
         nextind2 = (ijk2+1)*(ijk2<K2_2) + 1*(ijk2==K2_2);
@@ -844,10 +972,19 @@ while (ppp<=1)
         y1 = posy2(minidy2,t)+(ss2(nextind2)-posy2(minidy2,t))/2;
         locy2 = (y2-y1).*rand(1,1) + y1; % random location halfway between the closest left/right particles
 
+        ss2 = sort(posz2(1:K3_2,t)); % cadherins
+        [ijk2] = find(ss2==posz2(minidz2,t),1);
+        prevind2 = (ijk2-1)*(ijk2>1) + (K3_2)*(ijk2==1);
+        nextind2 = (ijk2+1)*(ijk2<K3_2) + 1*(ijk2==K3_2);
+        z2 = posz2(minidz2,t)+(ss2(prevind2)-posz2(minidz2,t))/2;
+        z1 = posz2(minidz2,t)+(ss2(nextind2)-posz2(minidz2,t))/2;
+        locz2 = (z2-z1).*rand(1,1) + z1; % random location halfway between the closest left/right particles
+
         ponx2 = ron/(ron+rfb*(N-K1_2));
         pony2 = ron/(ron+rfb*(N-K2_2));
+        ponz2 = ron/(ron+rfb*(N-K3_2));
 
-        %Cell 1
+        %Cell 1 rac
         if(NNx1(t+1) < NNx1(t))                % diassociation event (particle off)
             oldcol = posx1(minidx1,1:end); % Find the particle to be removed
             othercols = posx1([1:minidx1-1,minidx1+1:K1_1],1:end); % Gather other "on" particles
@@ -879,7 +1016,7 @@ while (ppp<=1)
             end
         end
 
-        %Cell 2
+        %Cell 2 rac
         if(NNx2(t+1) < NNx2(t))                % diassociation event (particle off)
             oldcol = posx2(minidx2,1:end);
             othercols = posx2([1:minidx2-1,minidx2+1:K1_2],1:end);
@@ -911,7 +1048,7 @@ while (ppp<=1)
             end
         end
 
-        %Cell 1
+        %Cell 1 rho
         if (NNy1(t+1) < NNy1(t))                % diassociation event (particle off)
             oldcol = posy1(minidy1,1:end);
             othercols = posy1([1:minidy1-1,minidy1+1:K2_1],1:end);
@@ -926,7 +1063,7 @@ while (ppp<=1)
             ny1(K2_1,t+1) = 1;
         end
 
-        %Cell 2
+        %Cell 2 rho
         if (NNy2(t+1) < NNy2(t))                % diassociation event (particle off)
             oldcol = posy2(minidy2,1:end);
             othercols = posy2([1:minidy2-1,minidy2+1:K2_2],1:end);
@@ -941,9 +1078,40 @@ while (ppp<=1)
             ny2(K2_2,t+1) = 1;
         end
 
-        [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),K1_1,K2_1,L,Na);
+        %Cell 1 cadherins
+        if (NNz1(t+1) < NNz1(t))                % diassociation event (particle off)
+            oldcol = posz1(minidz1,1:end);
+            othercols = posz1([1:minidz1-1,minidz1+1:K3_1],1:end);
+            otherothercols = posz1(K3_1+1:end,1:end);
+            newpos = [othercols;oldcol;otherothercols];
+            posz1 = newpos;
+            nz1(K3_1,t+1) = 0;
+        elseif(NNz1(t+1) > NNz1(t))             % association event (on or recruitment)
+            rr = rand(1,1);
+            posz1(K3_1,t+1) = posz1(K3_1,t)+(rr<ponz1)*locz1;               % on event
+            posz1(K3_1,t+1) = posz1(K3_1,t)+(rr>=ponz1)*posz1(minidz1,t);    % recruitment event
+            nz1(K3_1,t+1) = 1;
+        end
 
-        [s2,xC2,yC2] = resamplePolarityMolecules(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),K1_2,K2_2,L,Na);
+        %Cell 2 cadherins
+        if (NNz2(t+1) < NNz2(t))                % diassociation event (particle off)
+            oldcol = posz2(minidz2,1:end);
+            othercols = posz2([1:minidz2-1,minidz2+1:K3_2],1:end);
+            otherothercols = posz2(K3_2+1:end,1:end);
+            newpos = [othercols;oldcol;otherothercols];
+            posz2 = newpos;
+            nz2(K3_2,t+1) = 0;
+        elseif(NNz2(t+1) > NNz2(t))             % association event (on or recruitment)
+            rr = rand(1,1);
+            posz2(K3_2,t+1) = posz2(K3_2,t)+(rr<ponz2)*locz2;               % on event
+            posz2(K3_2,t+1) = posz2(K3_2,t)+(rr>=ponz2)*posz2(minidz2,t);    % recruitment event
+            nz2(K3_2,t+1) = 1;
+        end
+
+        % [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),K1_1,K2_1,L,Na);
+        % [s2,xC2,yC2] = resamplePolarityMolecules(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),K1_2,K2_2,L,Na);
+        [s1,xC1,yC1,zC1] = resamplePolarityMoleculesCad(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),posz1(1:K3_1,t+1),K1_1,K2_1,K3_1,L,Na);
+        [s2,xC2,yC2,zC2] = resamplePolarityMoleculesCad(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),posz2(1:K3_2,t+1),K1_2,K2_2,K3_2,L,Na);
 
         %% Update actin filaments
         diffRHSa1 = Hm1*a1;
@@ -1011,11 +1179,45 @@ while (ppp<=1)
                 writeVideo(vidObj1,currframe);
             end
 
+
+            %Define colors
+            colorLength = 50;
+            white = [1,1,1];
+            red = [1,0,0];
+            blue = [143/256,177/256,221/256];
+            maroon = [0.4,0,0];
+            navy = [33/256,81/256,127/256];
+            yellow = [1,0.9,0];
+            darkyellow = [227/256,180/256,76/256];
+            whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
+            redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
+            whiteredmaroon = [whitered;redmaroon];
+            whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
+            bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
+            whitebluenavy = [whiteblue; bluenavy];
+            myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
+            redblue = abs(whiteblue+whitered)./2;
+            redwhiteblue = [flip(whitered); whiteblue];
+            whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
+            yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
+            whitedarkyellow = [whiteyellow;yellowdarkyellow];
+
+            % Define circles
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
+            [Xcol,Ycol] = pol2cart(th,rad);
+            ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
+            ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
+            ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
+            ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
+            [Xsm,Ysm] = pol2cart(th,rad);
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
+            [Xmid,Ymid] = pol2cart(th,rad);
             
             % Concentric circles
             % Cell 1
             figcells=figure(16);
-            clf
+            % clf
             surf(Xcol,Ycol,ZBranch1);
             view(2)
             colormap(whitebluenavy)
@@ -1145,6 +1347,21 @@ while (ppp<=1)
                 end
             end
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
+
+
+
+
+            % Plot cadherins
+            Zcads1 = [zC1 zC1 zC1 zC1 zC1 zC1 zC1 zC1]';
+            figure(2)
+            surf(Xcol,Ycol,Zcads1)
+            view(2)
+            colormap(whitebluenavy)
+            shading interp
+            set(gca,'XColor','w')
+            set(gca,'YColor','w')
+            set(gcf,'color','w')
+            axis square
 
         end
     end
