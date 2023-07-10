@@ -16,8 +16,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='10';
-savelocation='./movies2/uncoupled';
+setnum='1';
+savelocation='./results/movies2/uncoupled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -274,7 +274,7 @@ while (ppp<=1)
     aic2 = a2;
     bic2 = b2;
 
-
+    
     % Setup convergence checks for actin quantities
     %
     conv1_1 = zeros(Nt,2);
@@ -370,7 +370,7 @@ while (ppp<=1)
     % myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
     % redblue = abs(whiteblue+whitered)./2;
     % redwhiteblue = [flip(whitered); whiteblue];
-    %
+    % 
     % % Define circles
     % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
     % [Xcol,Ycol] = pol2cart(th,rad);
@@ -382,7 +382,7 @@ while (ppp<=1)
     % ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
     % ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
     % ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
-    %
+    % 
     % if vid==1
     %     % Concentric circles
     %     % Cell 1
@@ -414,8 +414,8 @@ while (ppp<=1)
     %     set(gca,'XColor','w')
     %     set(gca,'YColor','w')
     %     set(gcf,'color','w');
-    %
-    %
+    % 
+    % 
     %     a1New = a1;
     %     a1New(a1New<1)=0;
     %     if (a1New(1)~=0 && a1New(length(a1New))~=0)
@@ -436,7 +436,7 @@ while (ppp<=1)
     %     hold on;
     %     quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
     %     hold off;
-    %
+    % 
     %     % Cell 2
     %     subplot(2,1,2)
     %     surf(Xcol,Ycol,ZBranch2);
@@ -463,7 +463,7 @@ while (ppp<=1)
     %     set(gca,'XColor','w')
     %     set(gca,'YColor','w')
     %     set(gcf,'color','w');
-    %
+    % 
     %     a2New = a2;
     %     a2New(a2New<1)=0;
     %     if (a2New(1)~=0 && a2New(length(a2New))~=0)
@@ -484,161 +484,14 @@ while (ppp<=1)
     %     hold on;
     %     quiver(0,0,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
     %     hold off;
-    %
+    % 
     %     if vid==1
     %         currframe = getframe(figcells);
     %         writeVideo(vidObjCol1,currframe);
     %     end
     % end
 
-    %Define colors
-    colorLength = 50;
-    white = [1,1,1];
-    red = [1,0,0];
-    blue = [143/256,177/256,221/256];
-    maroon = [0.4,0,0];
-    navy = [33/256,81/256,127/256];
-    yellow = [1,0.9,0];
-    darkyellow = [227/256,180/256,76/256];
-    whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-    redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
-    whiteredmaroon = [whitered;redmaroon];
-    whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-    bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
-    whitebluenavy = [whiteblue; bluenavy];
-    myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-    redblue = abs(whiteblue+whitered)./2;
-    redwhiteblue = [flip(whitered); whiteblue];
-    whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
-    yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
-    whitedarkyellow = [whiteyellow;yellowdarkyellow];
-
-    % Define circles
-    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
-    [Xcol,Ycol] = pol2cart(th,rad);
-    ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
-    ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
-    ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
-    ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
-    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-    [Xsm,Ysm] = pol2cart(th,rad);
-    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
-    [Xmid,Ymid] = pol2cart(th,rad);
-
-
-    if vid == 1
-        % Concentric circles
-        % Cell 1
-        figcells=figure(16);
-        surf(Xcol,Ycol,ZBranch1);
-        view(2)
-        colormap(whitebluenavy)
-        freezeColors;
-        freezeColors(colorbar('Location','westoutside'));
-        clim([0,max(max(b1),max(b2))])
-        shading interp
-        hold on;
-        surf(Xmid,Ymid,ZBund1);
-        colormap(whitedarkyellow)
-        clim([0,max(max(a1),max(a2))])
-        freezeColors;
-        freezeColors(jicolorbar);
-        shading interp
-        grid off
-        set(gca,'XTick',[], 'YTick', [])
-        % scatter(Xsm(boundC1),Ysm(boundC1),'black');
-        set(gca,'XColor','w')
-        set(gca,'YColor','w')
-        set(gcf,'color','w');
-
-
-
-        % Cell 2
-        surf(Xcol,Ycol-2,ZBranch2);
-        view(2)
-        colormap(whitebluenavy)
-        freezeColors;
-        freezeColors(colorbar('Location','westoutside'));
-        clim([0,max(max(b1),max(b2))])
-        shading interp
-        surf(Xmid,Ymid-2,ZBund2);
-        colormap(whitedarkyellow)
-        freezeColors;
-        freezeColors(jicolorbar);
-        clim([0,max(max(a1),max(a2))])
-        shading interp
-        grid off
-        axis equal
-        set(gca,'XTick',[], 'YTick', [])
-        title('Blue=Branched, Yellow=Bundled')
-        % scatter(Xsm(boundC2),Ysm(boundC2)-2,'black');
-
-        allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
-
-        flipc2 = flip(boundC2);
-        for i=1:length(boundC1)
-            plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-            % plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
-        end
-
-        hold off;
-        box off;
-        set(gca,'XColor','w')
-        set(gca,'YColor','w')
-        set(gcf,'color','w')
-
-
-
-        % Find median for cell 1
-        a1New = a1;
-        a1New(a1New<1)=0;
-        if (a1New(1)~=0 && a1New(length(a1New))~=0)
-            zeroInd1=find(a1New==0,1,'first');
-            zeroInd2=find(a1New==0,1,'last');
-            dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-        else
-            ind1=find(a1New~=0,1,'first');
-            ind2=find(a1New~=0,1,'last');
-            dirIndex1=ceil((ind1+ind2)/2);
-        end
-        if dirIndex1<1
-            dirIndex1=dirIndex1+101;
-        end
-        if ~isempty(dirIndex1)
-            hold on;
-            quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
-            hold off;
-        end
-
-
-
-        % Find median for cell 2
-        a2New = a2;
-        a2New(a2New<1)=0;
-        if (a2New(1)~=0 && a2New(length(a2New))~=0)
-            zeroInd1=find(a2New==0,1,'first');
-            zeroInd2=find(a2New==0,1,'last');
-            dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
-        else
-            ind1=find(a2New~=0,1,'first');
-            ind2=find(a2New~=0,1,'last');
-            dirIndex2=ceil((ind1+ind2)/2);
-        end
-        if dirIndex2<1
-            dirIndex2=dirIndex2+101;
-        end
-        if ~isempty(dirIndex2)
-            hold on;
-            quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
-            hold off;
-        end
-
-        if vid==1
-            currframe = getframe(figcells);
-            writeVideo(vidObjCol1,currframe);
-        end
-
-    end
+    PlotCircle
 
     %% Run simulation
     %
@@ -725,7 +578,7 @@ while (ppp<=1)
         % if max(b1)>0
         %     Ka2(flipc2) = 3*b1(boundC1)/max(b1)+1; % change branched coeff in cell 2 proportionally to bundled in cell 1
         % end
-        %
+        % 
         % Ka1(Ka1==0)=1;
         % Ka2(Ka2==0)=1;
         % Kb1(Kb1==0)=1;
@@ -1101,8 +954,8 @@ while (ppp<=1)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-        if mod(t,tplot) == 0
-        % if t==(Nt-1)
+        % if mod(t,tplot) == 0
+        if t==(Nt-1)
             scatplot=figure(ppp);
             subplot(1,2,1); %Cell 1
             plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
@@ -1201,8 +1054,8 @@ while (ppp<=1)
             % set(gca,'XColor','w')
             % set(gca,'YColor','w')
             % set(gcf,'color','w');
-            %
-            %
+            % 
+            % 
             % % Find median for cell 1
             % a1New = a1;
             % a1New(a1New<1)=0;
@@ -1223,7 +1076,7 @@ while (ppp<=1)
             %     quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
             %     hold off;
             % end
-            %
+            % 
             % % Cell 2
             % subplot(2,1,2)
             % surf(Xcol,Ycol,ZBranch2);
@@ -1250,8 +1103,8 @@ while (ppp<=1)
             % set(gca,'XColor','w')
             % set(gca,'YColor','w')
             % set(gcf,'color','w');
-            %
-            %
+            % 
+            % 
             % % Find median for cell 2
             % a2New = a2;
             % a2New(a2New<1)=0;
@@ -1274,147 +1127,145 @@ while (ppp<=1)
             % end
 
             %Define colors
-            colorLength = 50;
-            white = [1,1,1];
-            red = [1,0,0];
-            blue = [143/256,177/256,221/256];
-            maroon = [0.4,0,0];
-            navy = [33/256,81/256,127/256];
-            yellow = [1,0.9,0];
-            darkyellow = [227/256,180/256,76/256];
-            whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-            redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
-            whiteredmaroon = [whitered;redmaroon];
-            whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-            bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
-            whitebluenavy = [whiteblue; bluenavy];
-            myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-            redblue = abs(whiteblue+whitered)./2;
-            redwhiteblue = [flip(whitered); whiteblue];
-            whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
-            yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
-            whitedarkyellow = [whiteyellow;yellowdarkyellow];
+colorLength = 50;
+white = [1,1,1];
+red = [1,0,0];
+blue = [143/256,177/256,221/256];
+maroon = [0.4,0,0];
+navy = [33/256,81/256,127/256];
+yellow = [1,0.9,0];
+darkyellow = [227/256,180/256,76/256];
+whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
+redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
+whiteredmaroon = [whitered;redmaroon];
+whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
+bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
+whitebluenavy = [whiteblue; bluenavy];
+myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
+redblue = abs(whiteblue+whitered)./2;
+redwhiteblue = [flip(whitered); whiteblue];
+whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
+yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
+whitedarkyellow = [whiteyellow;yellowdarkyellow];
 
-            % Define circles
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
-            [Xcol,Ycol] = pol2cart(th,rad);
-            ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
-            ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
-            ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
-            ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-            [Xsm,Ysm] = pol2cart(th,rad);
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
-            [Xmid,Ymid] = pol2cart(th,rad);
+% Define circles
+[th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
+[Xcol,Ycol] = pol2cart(th,rad);
+ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
+ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
+ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
+ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
+[th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
+[Xsm,Ysm] = pol2cart(th,rad);
+[th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
+[Xmid,Ymid] = pol2cart(th,rad);
 
 
-            
-            % Concentric circles
-            % Cell 1
-            figcells=figure(16);
-            clf
-            surf(Xcol,Ycol,ZBranch1);
-            view(2)
-            colormap(whitebluenavy)
-            freezeColors;
-            freezeColors(colorbar('Location','westoutside'));
-            clim([0,max(max(b1),max(b2))])
-            shading interp
-            hold on;
-            surf(Xmid,Ymid,ZBund1);
-            colormap(whitedarkyellow)
-            clim([0,max(max(a1),max(a2))])
-            freezeColors;
-            freezeColors(jicolorbar);
-            shading interp
-            grid off
-            set(gca,'XTick',[], 'YTick', [])
-            % scatter(Xsm(boundC1),Ysm(boundC1),'black');
-            set(gca,'XColor','w')
-            set(gca,'YColor','w')
-            set(gcf,'color','w')
+% Concentric circles
+% Cell 1
+figcells=figure(16);
+surf(Xcol,Ycol,ZBranch1);
+view(2)
+colormap(whitebluenavy)
+freezeColors;
+freezeColors(colorbar);
+clim([0,max(max(b1),max(b2))])
+shading interp
+hold on;
+surf(Xmid,Ymid,ZBund1);
+colormap(whitedarkyellow)
+clim([0,max(max(a1),max(a2))])
+freezeColors;
+freezeColors(jicolorbar);
+shading interp
+grid off
+set(gca,'XTick',[], 'YTick', [])
+% scatter(Xsm(boundC1),Ysm(boundC1),'black');
+set(gca,'XColor','w')
+set(gca,'YColor','w')
+set(gcf,'color','w');
 
 
 
-            % Cell 2
-            surf(Xcol,Ycol-2,ZBranch2);
-            view(2)
-            colormap(whitebluenavy)
-            freezeColors;
-            freezeColors(colorbar('Location','westoutside'));
-            clim([0,max(max(b1),max(b2))])
-            shading interp
-            surf(Xmid,Ymid-2,ZBund2);
-            colormap(whitedarkyellow)
-            freezeColors;
-            freezeColors(jicolorbar);
-            clim([0,max(max(a1),max(a2))])
-            shading interp
-            grid off
-            axis equal
-            set(gca,'XTick',[], 'YTick', [])
-            title('Blue=Branched, Yellow=Bundled')
-            % scatter(Xsm(boundC2),Ysm(boundC2)-2,'black');
+% Cell 2
+surf(Xcol,Ycol-2,ZBranch2);
+view(2)
+colormap(whitebluenavy)
+freezeColors;
+freezeColors(colorbar);
+clim([0,max(max(b1),max(b2))])
+shading interp
+surf(Xmid,Ymid-2,ZBund2);
+colormap(whitedarkyellow)
+freezeColors;
+freezeColors(jicolorbar);
+clim([0,max(max(a1),max(a2))])
+shading interp
+grid off
+axis equal
+set(gca,'XTick',[], 'YTick', [])
+title('Blue=Branched, Yellow=Bundled')
+% scatter(Xsm(boundC2),Ysm(boundC2)-2,'black');
 
-            allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
+allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
-            flipc2 = flip(boundC2);
-            for i=1:length(boundC1)
-                plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-                % plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
-            end
+flipc2 = flip(boundC2);
+for i=1:length(boundC1)
+    plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
+    % plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
+end
 
-            hold off;
-            box off;
-            set(gca,'XColor','w')
-            set(gca,'YColor','w')
-            set(gcf,'color','w')
-
-
-
-            % Find median for cell 1
-            a1New = a1;
-            a1New(a1New<1)=0;
-            if (a1New(1)~=0 && a1New(length(a1New))~=0)
-                zeroInd1=find(a1New==0,1,'first');
-                zeroInd2=find(a1New==0,1,'last');
-                dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-            else
-                ind1=find(a1New~=0,1,'first');
-                ind2=find(a1New~=0,1,'last');
-                dirIndex1=ceil((ind1+ind2)/2);
-            end
-            if dirIndex1<1
-                dirIndex1=dirIndex1+101;
-            end
-            if ~isempty(dirIndex1)
-                hold on;
-                quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
-                hold off;
-            end
+hold off;
+box off;
+set(gca,'XColor','w')
+set(gca,'YColor','w')
+set(gcf,'color','w');
 
 
 
-            % Find median for cell 2
-            a2New = a2;
-            a2New(a2New<1)=0;
-            if (a2New(1)~=0 && a2New(length(a2New))~=0)
-                zeroInd1=find(a2New==0,1,'first');
-                zeroInd2=find(a2New==0,1,'last');
-                dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
-            else
-                ind1=find(a2New~=0,1,'first');
-                ind2=find(a2New~=0,1,'last');
-                dirIndex2=ceil((ind1+ind2)/2);
-            end
-            if dirIndex2<1
-                dirIndex2=dirIndex2+101;
-            end
-            if ~isempty(dirIndex2)
-                hold on;
-                quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
-                hold off;
-            end
+% Find median for cell 1
+a1New = a1;
+a1New(a1New<1)=0;
+if (a1New(1)~=0 && a1New(length(a1New))~=0)
+    zeroInd1=find(a1New==0,1,'first');
+    zeroInd2=find(a1New==0,1,'last');
+    dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
+else
+    ind1=find(a1New~=0,1,'first');
+    ind2=find(a1New~=0,1,'last');
+    dirIndex1=ceil((ind1+ind2)/2);
+end
+if dirIndex1<1
+    dirIndex1=dirIndex1+101;
+end
+if ~isempty(dirIndex1)
+    hold on;
+    quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
+    hold off;
+end
+
+
+
+% Find median for cell 2
+a2New = a2;
+a2New(a2New<1)=0;
+if (a2New(1)~=0 && a2New(length(a2New))~=0)
+    zeroInd1=find(a2New==0,1,'first');
+    zeroInd2=find(a2New==0,1,'last');
+    dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
+else
+    ind1=find(a2New~=0,1,'first');
+    ind2=find(a2New~=0,1,'last');
+    dirIndex2=ceil((ind1+ind2)/2);
+end
+if dirIndex2<1
+    dirIndex2=dirIndex2+101;
+end
+if ~isempty(dirIndex2)
+    hold on;
+    quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
+    hold off;
+end
 
             % Add frame to video
             if vid==1

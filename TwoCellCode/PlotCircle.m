@@ -43,7 +43,7 @@ surf(Xcol,Ycol,ZBranch1);
 view(2)
 colormap(whitebluenavy)
 freezeColors;
-freezeColors(colorbar);
+freezeColors(colorbar('Location','westoutside'));
 clim([0,max(max(b1),max(b2))])
 shading interp
 hold on;
@@ -67,7 +67,7 @@ surf(Xcol,Ycol-2,ZBranch2);
 view(2)
 colormap(whitebluenavy)
 freezeColors;
-freezeColors(colorbar);
+freezeColors(colorbar('Location','westoutside'));
 clim([0,max(max(b1),max(b2))])
 shading interp
 surf(Xmid,Ymid-2,ZBund2);
