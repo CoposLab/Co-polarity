@@ -15,17 +15,19 @@ clear;
 close all;
 clc;
 
-savefigs=0;
-setnum='1';
-savelocation='./';
+savefigs=1;
+setnum='6';
+savelocation='./results2/movies1/firstCadherinImpl';
 if savefigs==1
     filenameCells=strcat(savelocation,'Cells_',setnum);
     filenameScatter=strcat(savelocation,'Scatter_',setnum);
+    filenameCads=strcat(savelocation,'Cadherins_',setnum);
 end
 
-vid = 0;
+vid = 1;
 vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
 vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
+vidObjCads = VideoWriter(strcat(savelocation, 'CadherinsVid_',setnum,'.mp4'),'MPEG-4');
 
 counter_ppp = 1;
 ppp = 1;
@@ -33,7 +35,7 @@ ppp = 1;
 while (ppp<=1)
     counter_ppp = counter_ppp+1;
 
-    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells
+    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 savefigs filenameScatter filenameCells vidObjCads filenameCads
     % Set actin filament parameters
     %
     Da      = 0.5;                  % diffusion coefficient for actin
@@ -263,6 +265,7 @@ while (ppp<=1)
     posy1(1:Y1(1),1)=r1(X1(1)+1:X1(1)+Y1(1));
     posz1(1:Z1(1),1)=r1(X1(1)+Y1(1)+1:end);
     % posz1(posz1*Na/L<boundzC1(1) | posz1*Na/L>boundzC1(end)) = 0;
+    z_stable_idx1 = zeros(length(posz1),1); % 1 means stable, 0 means unstable; corresponds to indices of posz1
 
     X2(1)              = 0.1*N;                 % # of particles on membrane (rac)
     Y2(1)              = 0.1*N;                 % # of particles on membrane (rho)
@@ -281,6 +284,8 @@ while (ppp<=1)
     posy2(1:Y2(1),1)=r2(X2(1)+1:X2(1)+Y2(1));
     posz2(1:Z2(1),1)=r2(X2(1)+Y2(1)+1:end);
     % posz2(posz2*Na/L<boundzC2(1) | posz2*Na/L>boundzC2(end)) = 0;
+    z_stable_idx2 = zeros(length(posz2),1); % 1 means stable, 0 means unstable; corresponds to indices of posz1
+
 
     % Sample concentration at actin filament spatial scale
     %
@@ -289,6 +294,13 @@ while (ppp<=1)
 
     [s1,xC1,yC1,zC1] = resamplePolarityMoleculesCad(posx1(1:NNx1(1),1),posy1(1:NNy1(1),1),posz1(1:NNz1(1),1),NNx1(1),NNy1(1),NNz1(1),L,Na);
     [s2,xC2,yC2,zC2] = resamplePolarityMoleculesCad(posx2(1:NNx2(1),1),posy2(1:NNy2(1),1),posz2(1:NNz2(1),1),NNx2(1),NNy2(1),NNz2(1),L,Na);
+
+    % Check for stable cadherins
+    epsilon2 = 0.1;
+    for i=1:NNz1
+        find(abs(posz1(i,1)-posz2(1:NNz2,1))<=epsilon2);
+    end
+
 
     aic1 = a1;
     bic1 = b1;
@@ -317,6 +329,10 @@ while (ppp<=1)
         vidObjCol1.FrameRate = 5;
         vidObjCol1.Quality = 75;
         open(vidObjCol1);
+
+        vidObjCads.FrameRate = 5;
+        vidObjCads.Quality = 75;
+        open(vidObjCads);
     end
 
     % Plot the initial condition
@@ -502,6 +518,65 @@ while (ppp<=1)
         writeVideo(vidObjCol1,currframe);
 
     end
+
+    % Plot cadherins
+    zC1s = zeros(length(zC1),1);
+    zC2s = zeros(length(zC2),1);
+    boundzC2flip = flip(boundzC2);
+    for i=1:length(boundzC1)
+        if zC1(boundzC1(i))>0.0001 && zC2(boundzC2flip(i))>0.0001
+            zC1s(boundzC1(i))=zC1(boundzC1(i));
+            zC2s(boundzC2flip(i))=zC2(boundzC2flip(i));
+            counter1=counter1+1;
+        else
+            counter2=counter2+1;
+        end
+    end
+
+    Zcads1 = [zC1 zC1 zC1 zC1 zC1 zC1 zC1 zC1]';
+    Zcads2 = [zC2 zC2 zC2 zC2 zC2 zC2 zC2 zC2]';
+    Zcads1s = [zC1s zC1s zC1s zC1s zC1s zC1s zC1s zC1s]';
+    Zcads2s = [zC2s zC2s zC2s zC2s zC2s zC2s zC2s zC2s]';
+    figcads=figure(2);
+    clf
+    hold on;
+    surf(Xcol,Ycol,Zcads1s)
+    surf(Xcol,Ycol-2,Zcads2s)
+    colormap(whitedarkyellow)
+    freezeColors;
+    freezeColors(colorbar('Location','westoutside'));
+    clim([0,max(max(max(zC1),max(zC2)),0.1)]);
+    shading interp
+    surf(Xmid,Ymid,Zcads1)
+    surf(Xmid,Ymid-2,Zcads2)
+    colormap(whitebluenavy)
+    freezeColors;
+    freezeColors(jicolorbar);
+    clim([0,max(max(max(zC1s),max(zC2s)),0.1)]);
+    hold off;
+    view(2)
+    shading interp
+    set(gca,'XColor','w')
+    set(gca,'YColor','w')
+    set(gcf,'color','w')
+    axis equal
+
+    if vid==1
+        currframe = getframe(figcads);
+        writeVideo(vidObjCads,currframe);
+    end
+
+    figure(3)
+    subplot(1,2,1)
+    plot(s1,zC1)
+    hold on
+    scatter(posz1(:,1),ones(length(posz1(:,1)),1))
+    hold off
+    subplot(1,2,2)
+    plot(s2,zC2)
+    hold on
+    scatter(posz2(:,1),ones(length(posz2(:,1)),1))
+    hold off
 
     %% Run simulation
     %
@@ -741,6 +816,7 @@ while (ppp<=1)
             if(nnz==0)
                 counter_ppp = ppp;
                 quit_cond = 1;
+                sprintf('here 1')
                 break
             end
 
@@ -774,6 +850,7 @@ while (ppp<=1)
             if(nnz==0)
                 counter_ppp = ppp;
                 quit_cond = 1;
+                sprintf('here 2')
                 break
             end
 
@@ -1113,6 +1190,7 @@ while (ppp<=1)
         [s1,xC1,yC1,zC1] = resamplePolarityMoleculesCad(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),posz1(1:K3_1,t+1),K1_1,K2_1,K3_1,L,Na);
         [s2,xC2,yC2,zC2] = resamplePolarityMoleculesCad(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),posz2(1:K3_2,t+1),K1_2,K2_2,K3_2,L,Na);
 
+
         %% Update actin filaments
         diffRHSa1 = Hm1*a1;
         diffRHSb1 = Hm1*b1;
@@ -1139,8 +1217,8 @@ while (ppp<=1)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-        % if mod(t,tplot) == 0
-        if t==(Nt-1)
+        if mod(t,tplot) == 0
+        % if t==(Nt-1)
             scatplot=figure(ppp);
             subplot(1,2,1); %Cell 1
             plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
@@ -1217,7 +1295,7 @@ while (ppp<=1)
             % Concentric circles
             % Cell 1
             figcells=figure(16);
-            % clf
+            clf
             surf(Xcol,Ycol,ZBranch1);
             view(2)
             colormap(whitebluenavy)
@@ -1348,21 +1426,74 @@ while (ppp<=1)
             end
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
-
-
-
             % Plot cadherins
+            zC1s = zeros(length(zC1),1);
+            zC2s = zeros(length(zC2),1);
+            boundzC2flip = flip(boundzC2);
+            for i=1:length(boundzC1)
+                if zC1(boundzC1(i))>0.0001 && zC2(boundzC2flip(i))>0.0001
+                    zC1s(boundzC1(i))=zC1(boundzC1(i));
+                    zC2s(boundzC2flip(i))=zC2(boundzC2flip(i));
+                    counter1=counter1+1;
+                else
+                    counter2=counter2+1;
+                end
+            end
+
             Zcads1 = [zC1 zC1 zC1 zC1 zC1 zC1 zC1 zC1]';
-            figure(2)
-            surf(Xcol,Ycol,Zcads1)
-            view(2)
+            Zcads2 = [zC2 zC2 zC2 zC2 zC2 zC2 zC2 zC2]';
+            Zcads1s = [zC1s zC1s zC1s zC1s zC1s zC1s zC1s zC1s]';
+            Zcads2s = [zC2s zC2s zC2s zC2s zC2s zC2s zC2s zC2s]';
+            figcads=figure(2);
+            clf
+            hold on;
+            surf(Xcol,Ycol,Zcads1s)
+            surf(Xcol,Ycol-2,Zcads2s)
+            hold off;
+            colormap(whitedarkyellow)
+            freezeColors;
+            freezeColors(colorbar('Location','westoutside'));
+            clim([0,max(max(max(zC1),max(zC2)),1)]);
+            shading interp
+            hold on;
+            surf(Xmid,Ymid,Zcads1)
+            surf(Xmid,Ymid-2,Zcads2)
+            hold off;
             colormap(whitebluenavy)
+            freezeColors;
+            freezeColors(jicolorbar);
+            clim([0,max(max(max(zC1s),max(zC2s)),1)]);
+            view(2)
             shading interp
             set(gca,'XColor','w')
             set(gca,'YColor','w')
             set(gcf,'color','w')
-            axis square
+            axis equal
 
+            % flipc2 = flip(boundzC2);
+            % for i=1:length(boundzC1)
+            %     hold on
+            %     plot3([Xcol(end,boundzC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundzC1(i)) Ycol(end,flipc2(i))-2],[1 1],'black')
+            %     hold off
+            % end
+
+            if vid==1
+                currframe = getframe(figcads);
+                writeVideo(vidObjCads,currframe);
+            end
+
+
+            figure(3)
+            subplot(1,2,1)
+            plot(s1,zC1)
+            hold on
+            scatter(posz1(:,t),ones(length(posz1(:,t)),1))
+            hold off
+            subplot(1,2,2)
+            plot(s2,zC2)
+            hold on
+            scatter(posz2(:,t),ones(length(posz2(:,t)),1))
+            hold off
         end
     end
 
@@ -1372,8 +1503,10 @@ while (ppp<=1)
     if vid==1
         close(vidObj1);
         close(vidObjCol1);
+        close(vidObjCads)
     end
     sprintf('Simulation %d done',ppp)
+    sprintf('%d',quit_cond)
     toc
     if(quit_cond==0)
         ppp = ppp + 1;
@@ -1385,6 +1518,7 @@ if savefigs==1
     % savefig(figc2,filenameC2);
     savefig(figcells,filenameCells);
     savefig(scatplot,filenameScatter);
+    savefig(figcads,filenameCads);
 end
 
 %% Plot all particle trajectories
