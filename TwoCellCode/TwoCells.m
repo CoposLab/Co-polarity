@@ -55,7 +55,7 @@ while (ppp<=1)
 
     % Set feedback (or coupling) strength
     %
-    alpha = [2,2];
+    alpha = [1,1];
     beta = [2,2]; %first argument is away from overlap, second is on overlap
 
     % Set discretization
@@ -1083,18 +1083,18 @@ while (ppp<=1)
         diffRHSb2 = Hm2*b2;
 
         ka1=zeros(length(b2),1);
-        ka1(boundC1)=2*ones(length(boundC1),1);
+        ka1(boundC1)=1*ones(length(boundC1),1);
         kb1=zeros(length(a2),1);
-        kb1(boundC1)=2*ones(length(boundC1),1);
+        kb1(boundC1)=1*ones(length(boundC1),1);
         ka2=zeros(length(b1),1);
-        ka2(boundC2)=2*ones(length(boundC2),1);
+        ka2(boundC2)=1*ones(length(boundC2),1);
         kb2=zeros(length(a1),1);
-        kb2(boundC2)=2*ones(length(boundC2),1);
+        kb2(boundC2)=1*ones(length(boundC2),1);
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)/max(b2)) - a1.*a1)); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)/max(a2)) - b1.*b1)); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.*flip(b1)/max(b1)) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.*flip(a1)/max(a1)) - b2.*b2)); %Cell 2 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.*flip(b1)) - a2.*a2)); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.*flip(a1)) - b2.*b2)); %Cell 2 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
