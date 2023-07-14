@@ -15,9 +15,9 @@ clear;
 close all;
 clc;
 
-savefigs=0;
-setnum='10';
-savelocation='./movies2/uncoupled';
+savefigs=1;
+setnum='5';
+savelocation='./results/branchedbundledpromotion2/1ka3kb';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -725,7 +725,7 @@ while (ppp<=1)
         % if max(b1)>0
         %     Ka2(flipc2) = 3*b1(boundC1)/max(b1)+1; % change branched coeff in cell 2 proportionally to bundled in cell 1
         % end
-        %
+        % 
         % Ka1(Ka1==0)=1;
         % Ka2(Ka2==0)=1;
         % Kb1(Kb1==0)=1;
@@ -1082,17 +1082,19 @@ while (ppp<=1)
         diffRHSa2 = Hm2*a2;
         diffRHSb2 = Hm2*b2;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1) - a1.*a1)); %Cell 1 branched
-        % rxna1(boundC1) = dt*( F(a1(boundC1),b1(boundC1)) + branchedConst1*(a1(boundC1).*(1+alpha(2)*xC1(boundC1)) - a1(boundC1).*a1(boundC1))); %Cell 1 branched on overlap
+        ka1=zeros(length(b2),1);
+        ka1(boundC1)=1*ones(length(boundC1),1);
+        kb1=zeros(length(a2),1);
+        kb1(boundC1)=3*ones(length(boundC1),1);
+        ka2=zeros(length(b1),1);
+        ka2(boundC2)=1*ones(length(boundC2),1);
+        kb2=zeros(length(a1),1);
+        kb2(boundC2)=3*ones(length(boundC2),1);
 
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1) - b1.*b1)); %Cell 1 bundled
-        % rxnb1(boundC1) = dt*( F(b1(boundC1),a1(boundC1)) + bundledConst1*(b1(boundC1).*(1+alpha(2)*yC1(boundC1)) - b1(boundC1).*b1(boundC1))); %Cell 1 bundled on overlap
-
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2) - a2.*a2)); %Cell 2 branched
-        % rxna2(boundC2) = dt*( F(a2(boundC2),b2(boundC2)) + branchedConst2*(a2(boundC2).*(1+alpha(2)*xC2(boundC2)) - a2(boundC2).*a2(boundC2))); %Cell 2 branched on overlap
-
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2) - b2.*b2)); %Cell 2 bundled
-        % rxnb2(boundC2) = dt*( F(b2(boundC2),a2(boundC2)) + bundledConst2*(b2(boundC2).*(1+alpha(2)*yC2(boundC2)) - b2(boundC2).*b2(boundC2))); %Cell 2 bundled = dt*( F(b2,a2) + bundledConst2*(b2.*(1+alpha*yC2) - b2.*b2)); %Cell 2 bundled on overlap
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)/max(b2)) - a1.*a1)); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)/max(a2)) - b1.*b1)); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.*flip(b1)/max(b1)) - a2.*a2)); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.*flip(a1)/max(a1)) - b2.*b2)); %Cell 2 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);

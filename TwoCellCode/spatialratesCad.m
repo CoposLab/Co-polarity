@@ -29,10 +29,10 @@ switch assoc
             Kony = kon*(1+beta(1)*bb);
             Kony(bound) = kon*(1+beta(2)*bb(bound));
 
-            Konz = zeros(length(s),1);
-            Konz(boundz) = kon*ones(length(boundz),1);
+            % Konz = zeros(length(s),1);
+            % Konz(boundz) = kon*ones(length(boundz),1);
             % Konz(boundz) = kon*(1+beta(2)*aa(boundz));
-            % Konz = kon*ones(length(s),1);
+            Konz = kon*ones(length(s),1);
             % Konz = kon*(1+beta(2)*aa);
         else
             % periodic
@@ -94,17 +94,17 @@ switch disassoc
             Koffx = koff*ones(length(s),1);
             Koffy = koff*ones(length(s),1);
 
-            Koffz = zeros(length(s),1);
-            Koffz(boundz) = koff*ones(length(boundz),1);
-            % Koffz = koff*ones(length(s),1);
+            % Koffz = zeros(length(s),1);
+            % Koffz(boundz) = koff*ones(length(boundz),1);
+            Koffz = koff*ones(length(s),1);
         else
             % periodic
             Koffx = koff*(2 - tanh(steepness*(s-1.875)) + tanh(steepness*(s-5.625)) + 0.2)/2.2;
             Koffy = koff*(tanh(steepness*(s-1.875)) - tanh(steepness*(s-5.625)) + 0.2)/2.2;
 
-            Koffz = zeros(length(s),1);
-            Koffz(boundz) = koff*ones(length(boundz),1);
-            % Koffz = koff*ones(length(s),1);
+            % Koffz = zeros(length(s),1);
+            % Koffz(boundz) = koff*ones(length(boundz),1);
+            Koffz = koff*ones(length(s),1);
 
             % no flux
             %Koffx = koff*((tanh(steepness*(s-5))+1)/2 + 0.1)/1.1;
@@ -114,9 +114,9 @@ switch disassoc
         Koffx = koff*ones(length(s),1);
         Koffy = koff*ones(length(s),1);
 
-        Koffz = zeros(length(s),1);
-        Koffz(boundz) = koff*ones(length(boundz),1);
-        % Koffz = koff*ones(length(s),1);
+        % Koffz = zeros(length(s),1);
+        % Koffz(boundz) = koff*ones(length(boundz),1);
+        Koffz = koff*ones(length(s),1);
 end
 end
 

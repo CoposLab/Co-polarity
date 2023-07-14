@@ -16,8 +16,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='2';
-savelocation='./results2/movies1/0_3epsilon';
+setnum='5';
+savelocation='./results2/stablenodiffusion0koff/0_1epsilon';
 if savefigs==1
     filenameCells=strcat(savelocation,'Cells_',setnum);
     filenameScatter=strcat(savelocation,'Scatter_',setnum);
@@ -314,6 +314,10 @@ while (ppp<=1)
         end
     end
 
+    for i=boundzC1(1):boundzC1(end)
+
+    end
+
 
     aic1 = a1;
     bic1 = b1;
@@ -553,44 +557,39 @@ while (ppp<=1)
     [s11,xC11,yC11,zC1s] = resamplePolarityMoleculesCad(posx1(1:NNx1(1),1),posy1(1:NNy1(1),1),posz11(z_stable_idx11==1),NNx1(1),NNy1(1),length(posz11(z_stable_idx11==1)),L,Na);
     [s22,xC22,yC22,zC2s] = resamplePolarityMoleculesCad(posx2(1:NNx2(1),1),posy2(1:NNy2(1),1),posz22(z_stable_idx22==1),NNx2(1),NNy2(1),length(posz22(z_stable_idx22==1)),L,Na);
 
-    Zcads1 = [zC1 zC1 zC1 zC1 zC1 zC1 zC1 zC1]';
-    Zcads2 = [zC2 zC2 zC2 zC2 zC2 zC2 zC2 zC2]';
-    Zcads1s = [zC1s zC1s zC1s zC1s zC1s zC1s zC1s zC1s]';
-    Zcads2s = [zC2s zC2s zC2s zC2s zC2s zC2s zC2s zC2s]';
-    Zcads1(Zcads1==0)=NaN;
-    Zcads2(Zcads2==0)=NaN;
-    Zcads1s(Zcads1s==0)=NaN;
-    Zcads2s(Zcads2s==0)=NaN;
-    figcads=figure(2);
-    clf
-    hold on;
-    surf(Xcol,Ycol,Zcads1s)
-    surf(Xcol,Ycol-2,Zcads2s)
-    hold off;
-    colormap(whitedarkyellow)
-    freezeColors;
-    freezeColors(colorbar('Location','westoutside'));
-    clim([0,max(max(max(zC1),max(zC2)),1)]);
-    shading interp
-    hold on;
-    surf(Xmid,Ymid,Zcads1)
-    surf(Xmid,Ymid-2,Zcads2)
-    hold off;
-    colormap(whitebluenavy)
-    freezeColors;
-    freezeColors(jicolorbar);
-    clim([0,max(max(max(zC1s),max(zC2s)),1)]);
-    view(2)
-    shading interp
-    set(gca,'XColor','w')
-    set(gca,'YColor','w')
-    set(gcf,'color','w')
-    axis equal
-
-    if vid==1
-        currframe = getframe(figcads);
-        writeVideo(vidObjCads,currframe);
-    end
+    % Zcads1 = [zC1 zC1 zC1 zC1 zC1 zC1 zC1 zC1]';
+    % Zcads2 = [zC2 zC2 zC2 zC2 zC2 zC2 zC2 zC2]';
+    % Zcads1s = [zC1s zC1s zC1s zC1s zC1s zC1s zC1s zC1s]';
+    % Zcads2s = [zC2s zC2s zC2s zC2s zC2s zC2s zC2s zC2s]';
+    % Zcads1(Zcads1==0)=NaN;
+    % Zcads2(Zcads2==0)=NaN;
+    % Zcads1s(Zcads1s==0)=NaN;
+    % Zcads2s(Zcads2s==0)=NaN;
+    % figcads=figure(2);
+    % clf
+    % hold on;
+    % surf(Xcol,Ycol,Zcads1s)
+    % surf(Xcol,Ycol-2,Zcads2s)
+    % hold off;
+    % colormap(whitedarkyellow)
+    % freezeColors;
+    % freezeColors(colorbar('Location','westoutside'));
+    % clim([0,max(max(max(zC1),max(zC2)),1)]);
+    % shading interp
+    % hold on;
+    % surf(Xmid,Ymid,Zcads1)
+    % surf(Xmid,Ymid-2,Zcads2)
+    % hold off;
+    % colormap(whitebluenavy)
+    % freezeColors;
+    % freezeColors(jicolorbar);
+    % clim([0,max(max(max(zC1s),max(zC2s)),1)]);
+    % view(2)
+    % shading interp
+    % set(gca,'XColor','w')
+    % set(gca,'YColor','w')
+    % set(gcf,'color','w')
+    % axis equal
 
     % figure(3)
     % subplot(1,2,1)
@@ -604,6 +603,28 @@ while (ppp<=1)
     % scatter(posz2(:,1),ones(length(posz2(:,1)),1))
     % hold off
 
+    figcads=figure(4);
+    clf
+    hold on;
+    th = (0:3.6:360)*pi/180;
+    plot(cos(th),sin(th),'black')
+    plot(cos(th),sin(th)-2,'black')
+    scatter(cos(posz1(1:NNz1(1),1)*2*pi/L),sin(posz1(1:NNz1(1),1)*2*pi/L),'blue','filled')
+    scatter(cos(posz2(1:NNz2(1),1)*2*pi/L),sin(posz2(1:NNz2(1),1)*2*pi/L)-2,'blue','filled')
+    scatter(cos(posz11(z_stable_idx11==1)*2*pi/L),sin(posz11(z_stable_idx11==1)*2*pi/L),'magenta','filled')
+    scatter(cos(posz22(z_stable_idx22==1)*2*pi/L),sin(posz22(z_stable_idx22==1)*2*pi/L)-2,'magenta','filled')
+    hold off;
+    set(gca,'XColor','w')
+    set(gca,'YColor','w')
+    set(gcf,'color','w')
+    axis([-1 1 -3 1])
+    axis equal
+
+    if vid==1
+        currframe = getframe(figcads);
+        writeVideo(vidObjCads,currframe);
+    end
+
     %% Run simulation
     %
     tic
@@ -616,6 +637,8 @@ while (ppp<=1)
         % [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
         [Konx1,Kony1,Konz1,Kfbx1,Kfby1,Kfbz1,Koffx1,Koffy1,Koffz1] = spatialratesCad(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1,boundzC1); % set rates
         [Konx2,Kony2,Konz2,Kfbx2,Kfby2,Kfbz2,Koffx2,Koffy2,Koffz2] = spatialratesCad(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2,boundzC2);
+
+
 
         % Set konx and kony
         % Konx1(boundC1)=Konx1(boundC1)*100;
@@ -848,7 +871,7 @@ while (ppp<=1)
 
             for j=1:nnz          % all agents
                 konz1 = interp1(s1,Konz1,posz1(j,t));
-                koffz1 = interp1(s1,Koffz1,posz1(j,t));
+                koffz1 = interp1(s1,Koffz1,posz1(j,t)) * (1-z_stable_idx1(j,t)); % if stable, set koffz=0
                 kfbz1 = interp1(s1,Kfbz1,posz1(j,t));
                 % Sample earliest time-to-fire (tau)
                 a0 = koffz1 + (konz1+kfbz1*nnz/N)*(N/nnz-1);
@@ -882,7 +905,7 @@ while (ppp<=1)
 
             for j=1:nnz          % all agents
                 konz2 = interp1(s2,Konz2,posz2(j,t));
-                koffz2 = interp1(s2,Koffz2,posz2(j,t));
+                koffz2 = interp1(s2,Koffz2,posz2(j,t)) * (1-z_stable_idx2(j,t)); % if stable, set koffz=0s
                 kfbz2 = interp1(s2,Kfbz2,posz2(j,t));
                 % Sample earliest time-to-fire (tau)
                 a0 = koffz2 + (konz2+kfbz2*nnz/N)*(N/nnz-1);
@@ -935,11 +958,13 @@ while (ppp<=1)
 
         r1 = rand(K3_1,1);    % coin flip cadherins c1
         nz1(1:K3_1,t+1) = 1;
-        posz1(1:K3_1,t+1) = posz1(1:K3_1,t) + dx*((r1<p)*1.0 + (r1>(1-p))*(-1.0));
+        % posz1(1:K3_1,t+1) = posz1(1:K3_1,t) + dx*((r1<p)*1.0 + (r1>(1-p))*(-1.0));
+        posz1(1:K3_1,t+1) = posz1(1:K3_1,t) + (dx*((r1<p)*1.0 + (r1>(1-p))*(-1.0))) .* (1-z_stable_idx1(1:K3_1,t));
 
         r2 = rand(K3_2,1);    % coin flip cadherins c2
         nz2(1:K3_2,t+1) = 1;
-        posz2(1:K3_2,t+1) = posz2(1:K3_2,t) + dx*((r2<p)*1.0 + (r2>(1-p))*(-1.0));
+        % posz2(1:K3_2,t+1) = posz2(1:K3_2,t) + dx*((r2<p)*1.0 + (r2>(1-p))*(-1.0));
+        posz2(1:K3_2,t+1) = posz2(1:K3_2,t) + (dx*((r2<p)*1.0 + (r2>(1-p))*(-1.0))) .* (1-z_stable_idx2(1:K3_2,t));
 
         % Check for collision(s) and resolve any collisions
         % Resolution strategy: No one advances
@@ -956,28 +981,6 @@ while (ppp<=1)
             posx1(list_idx,t+1) = posx1(list_idx,t);
             posy1(list_idy,t+1) = posy1(list_idy,t);
         end
-        firstcoll = sum(ismembertol(posx1(1:K1_1,t+1),posz1(1:K3_1,t+1),0.005,'DataScale',1)); % collisions between rac and cadherins
-        if firstcoll~=0
-            % Get indices of collisions
-            aa = ismembertol(posx1(1:K1_1,t+1),posz1(1:K3_1,t+1),0.005,'DataScale',1);
-            list_idx = find(aa~=0);
-            bb = ismembertol(posz1(1:K3_1,t+1),posx1(1:K1_1,t+1),0.005,'DataScale',1);
-            list_idz = find(bb~=0);
-
-            posx1(list_idx,t+1) = posx1(list_idx,t);
-            posz1(list_idz,t+1) = posz1(list_idz,t);
-        end
-        firstcoll = sum(ismembertol(posy1(1:K2_1,t+1),posz1(1:K3_1,t+1),0.005,'DataScale',1)); % collisions between rho and cadherins
-        if firstcoll~=0
-            % Get indices of collisions
-            aa = ismembertol(posy1(1:K2_1,t+1),posz1(1:K3_1,t+1),0.005,'DataScale',1);
-            list_idy = find(aa~=0);
-            bb = ismembertol(posz1(1:K3_1,t+1),posy1(1:K2_1,t+1),0.005,'DataScale',1);
-            list_idz = find(bb~=0);
-
-            posy1(list_idy,t+1) = posy1(list_idy,t);
-            posz1(list_idz,t+1) = posz1(list_idz,t);
-        end
 
         % Cell 2
         firstcoll = sum(ismembertol(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),0.005,'DataScale',1)); % collisions between rac and rho
@@ -990,28 +993,6 @@ while (ppp<=1)
 
             posx2(list_idx,t+1) = posx2(list_idx,t);
             posy2(list_idy,t+1) = posy2(list_idy,t);
-        end
-        firstcoll = sum(ismembertol(posx2(1:K1_2,t+1),posz2(1:K3_2,t+1),0.005,'DataScale',1)); % collisions between rac and cadherins
-        if firstcoll~=0
-            % Get indices of collisions
-            aa = ismembertol(posx2(1:K1_2,t+1),posz2(1:K3_2,t+1),0.005,'DataScale',1);
-            list_idx = find(aa~=0);
-            bb = ismembertol(posz2(1:K3_2,t+1),posx2(1:K1_2,t+1),0.005,'DataScale',1);
-            list_idz = find(bb~=0);
-
-            posx2(list_idx,t+1) = posx2(list_idx,t);
-            posz2(list_idz,t+1) = posz2(list_idz,t);
-        end
-        firstcoll = sum(ismembertol(posy2(1:K2_2,t+1),posz2(1:K3_2,t+1),0.005,'DataScale',1)); % collisions between rho and cadherins
-        if firstcoll~=0
-            % Get indices of collisions
-            aa = ismembertol(posy2(1:K2_2,t+1),posz2(1:K3_2,t+1),0.005,'DataScale',1);
-            list_idy = find(aa~=0);
-            bb = ismembertol(posz2(1:K3_2,t+1),posy2(1:K2_2,t+1),0.005,'DataScale',1);
-            list_idz = find(bb~=0);
-
-            posy2(list_idy,t+1) = posy2(list_idy,t);
-            posz2(list_idz,t+1) = posz2(list_idz,t);
         end
 
         % Enforce periodic boundary conditions
@@ -1502,39 +1483,39 @@ while (ppp<=1)
             [s11,xC11,yC11,zC1s] = resamplePolarityMoleculesCad(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),posz11(z_stable_idx11==1),K1_1,K2_1,length(posz11(z_stable_idx11==1)),L,Na);
             [s22,xC22,yC22,zC2s] = resamplePolarityMoleculesCad(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),posz22(z_stable_idx22==1),K1_2,K2_2,length(posz22(z_stable_idx22==1)),L,Na);
 
-            Zcads1 = [zC1 zC1 zC1 zC1 zC1 zC1 zC1 zC1]';
-            Zcads2 = [zC2 zC2 zC2 zC2 zC2 zC2 zC2 zC2]';
-            Zcads1s = [zC1s zC1s zC1s zC1s zC1s zC1s zC1s zC1s]';
-            Zcads2s = [zC2s zC2s zC2s zC2s zC2s zC2s zC2s zC2s]';
-            Zcads1(Zcads1==0)=NaN;
-            Zcads2(Zcads2==0)=NaN;
-            Zcads1s(Zcads1s==0)=NaN;
-            Zcads2s(Zcads2s==0)=NaN;
-            figcads=figure(2);
-            clf
-            hold on;
-            surf(Xcol,Ycol,Zcads1s)
-            surf(Xcol,Ycol-2,Zcads2s)
-            hold off;
-            colormap(whitedarkyellow)
-            freezeColors;
-            freezeColors(colorbar('Location','westoutside'));
-            clim([0,max(max(max(zC1),max(zC2)),1)]);
-            shading interp
-            hold on;
-            surf(Xmid,Ymid,Zcads1)
-            surf(Xmid,Ymid-2,Zcads2)
-            hold off;
-            colormap(whitebluenavy)
-            freezeColors;
-            freezeColors(jicolorbar);
-            clim([0,max(max(max(zC1s),max(zC2s)),1)]);
-            view(2)
-            shading interp
-            set(gca,'XColor','w')
-            set(gca,'YColor','w')
-            set(gcf,'color','w')
-            axis equal
+            % Zcads1 = [zC1 zC1 zC1 zC1 zC1 zC1 zC1 zC1]';
+            % Zcads2 = [zC2 zC2 zC2 zC2 zC2 zC2 zC2 zC2]';
+            % Zcads1s = [zC1s zC1s zC1s zC1s zC1s zC1s zC1s zC1s]';
+            % Zcads2s = [zC2s zC2s zC2s zC2s zC2s zC2s zC2s zC2s]';
+            % Zcads1(Zcads1==0)=NaN;
+            % Zcads2(Zcads2==0)=NaN;
+            % Zcads1s(Zcads1s==0)=NaN;
+            % Zcads2s(Zcads2s==0)=NaN;
+            % figure(2);
+            % clf
+            % hold on;
+            % surf(Xcol,Ycol,Zcads1s)
+            % surf(Xcol,Ycol-2,Zcads2s)
+            % hold off;
+            % colormap(whitedarkyellow)
+            % freezeColors;
+            % freezeColors(colorbar('Location','westoutside'));
+            % clim([0,max(max(max(zC1),max(zC2)),1)]);
+            % shading interp
+            % hold on;
+            % surf(Xmid,Ymid,Zcads1)
+            % surf(Xmid,Ymid-2,Zcads2)
+            % hold off;
+            % colormap(whitebluenavy)
+            % freezeColors;
+            % freezeColors(jicolorbar);
+            % clim([0,max(max(max(zC1s),max(zC2s)),1)]);
+            % view(2)
+            % shading interp
+            % set(gca,'XColor','w')
+            % set(gca,'YColor','w')
+            % set(gcf,'color','w')
+            % axis equal
 
             % flipc2 = flip(boundzC2);
             % for i=1:length(boundzC1)
@@ -1543,12 +1524,7 @@ while (ppp<=1)
             %     hold off
             % end
 
-            if vid==1
-                currframe = getframe(figcads);
-                writeVideo(vidObjCads,currframe);
-            end
-
-
+            
             % figure(3)
             % subplot(1,2,1)
             % plot(s1,zC1)
@@ -1560,6 +1536,30 @@ while (ppp<=1)
             % hold on
             % scatter(posz2(:,t),ones(length(posz2(:,t)),1))
             % hold off
+
+
+            figcads=figure(4);
+            clf
+            hold on;
+            th = (0:3.6:360)*pi/180;
+            plot(cos(th),sin(th),'black')
+            plot(cos(th),sin(th)-2,'black')
+            scatter(cos(posz1(1:K3_1,t+1)*2*pi/L),sin(posz1(1:K3_1,t+1)*2*pi/L),'blue','filled')
+            scatter(cos(posz2(1:K3_2,t+1)*2*pi/L),sin(posz2(1:K3_2,t+1)*2*pi/L)-2,'blue','filled')
+            scatter(cos(posz11(z_stable_idx11==1)*2*pi/L),sin(posz11(z_stable_idx11==1)*2*pi/L),'magenta', 'filled')
+            scatter(cos(posz22(z_stable_idx22==1)*2*pi/L),sin(posz22(z_stable_idx22==1)*2*pi/L)-2,'magenta','filled')
+            hold off;
+            set(gca,'XColor','w')
+            set(gca,'YColor','w')
+            set(gcf,'color','w')
+            axis([-1 1 -3 1])
+            axis equal
+
+
+            if vid==1
+                currframe = getframe(figcads);
+                writeVideo(vidObjCads,currframe);
+            end
         end
     end
 
