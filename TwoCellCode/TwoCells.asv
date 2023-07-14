@@ -16,8 +16,8 @@ close all;
 clc;
 
 savefigs=0;
-setnum='50';
-savelocation='./results/branchedbundledpromotion2/2ka2kb';
+setnum='1';
+savelocation='./results/branchedbundledpromotion3/1ka1kb';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -55,7 +55,7 @@ while (ppp<=1)
 
     % Set feedback (or coupling) strength
     %
-    alpha = [1];
+    alpha = [2,2];
     beta = [2,2]; %first argument is away from overlap, second is on overlap
 
     % Set discretization
