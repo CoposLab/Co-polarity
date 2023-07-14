@@ -15,9 +15,9 @@ clear;
 close all;
 clc;
 
-savefigs=1;
-setnum='5';
-savelocation='./results/branchedbundledpromotion2/1ka3kb';
+savefigs=0;
+setnum='50';
+savelocation='./results/branchedbundledpromotion2/2ka2kb';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -1083,13 +1083,13 @@ while (ppp<=1)
         diffRHSb2 = Hm2*b2;
 
         ka1=zeros(length(b2),1);
-        ka1(boundC1)=1*ones(length(boundC1),1);
+        ka1(boundC1)=2*ones(length(boundC1),1);
         kb1=zeros(length(a2),1);
-        kb1(boundC1)=3*ones(length(boundC1),1);
+        kb1(boundC1)=2*ones(length(boundC1),1);
         ka2=zeros(length(b1),1);
-        ka2(boundC2)=1*ones(length(boundC2),1);
+        ka2(boundC2)=2*ones(length(boundC2),1);
         kb2=zeros(length(a1),1);
-        kb2(boundC2)=3*ones(length(boundC2),1);
+        kb2(boundC2)=2*ones(length(boundC2),1);
 
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)/max(b2)) - a1.*a1)); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)/max(a2)) - b1.*b1)); %Cell 1 bundled

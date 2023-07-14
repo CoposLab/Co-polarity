@@ -16,7 +16,7 @@ close all;
 clc;
 
 savefigs=1;
-setnum='5';
+setnum='3';
 savelocation='./results2/stablenodiffusion0koff/0_5epsilon';
 if savefigs==1
     filenameCells=strcat(savelocation,'Cells_',setnum);
