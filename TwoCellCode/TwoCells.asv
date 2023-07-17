@@ -15,9 +15,9 @@ clear;
 close all;
 clc;
 
-savefigs=0;
+savefigs=1;
 setnum='1';
-savelocation='./results/branchedbundledpromotion3/1ka1kb';
+savelocation='./results/branchedbundledgrowth/5branched5bundled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -731,6 +731,12 @@ while (ppp<=1)
         % Kb1(Kb1==0)=1;
         % Kb2(Kb2==0)=1;
 
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
+        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
+
+        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
+        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
+
 
         %Cell 1
         if((t-1)*dt<Tx1(rxn_count_x1))
@@ -1090,11 +1096,23 @@ while (ppp<=1)
         ka2(boundC2)=1*ones(length(boundC2),1);
         kb2=zeros(length(a1),1);
         kb2(boundC2)=1*ones(length(boundC2),1);
+        abmax=100;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.*flip(b1)) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.*flip(a1)) - b2.*b2)); %Cell 2 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 5*ka1) - a1.*a1)); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1) - b1.*b1)); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2) - a2.*a2)); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 5*kb2) - b2.*b2)); %Cell 2 bundled
+
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.*flip(b1)) - a2.*a2)); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.*flip(a1)) - b2.*b2)); %Cell 2 bundled
+
+        % Growth term maxes out version
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
