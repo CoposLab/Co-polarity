@@ -5,7 +5,8 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 1/31/2020
+% Last updated: 7/21/2023
+% Katie Levandosky
 % Calina Copos
 addpath('../TwoCellCode/freeze_colors')
 

@@ -15,9 +15,9 @@ clear;
 close all;
 clc;
 
-savefigs=1;
-setnum='11';
-savelocation='./results/branchedbundledgrowth/5branched5bundled';
+savefigs=0;
+setnum='82';
+savelocation='./results/inc_antagonism3/0_5epsilon10RhoRemoved';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -80,7 +80,7 @@ while (ppp<=1)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=0;
+    numToRemove=10;
     counter1=0;
     counter2=0;
 
@@ -652,11 +652,11 @@ while (ppp<=1)
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
         % Set konx and kony
-        % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
+        % Konx1(boundC1)=Konx1(boundC1)*1000;
+        % Konx2(boundC2)=Konx2(boundC2)/1000;
 
-        % Kony1(boundC1)=Kony1(boundC1)*10;
-        % Kony2(boundC2)=Kony2(boundC2)*10;
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
+        % Kony2(boundC2)=Kony2(boundC2)/1000;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2)=Koffx2(boundC2)*10;
@@ -733,7 +733,7 @@ while (ppp<=1)
 
         % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
-
+        % 
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
         % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
 
@@ -1096,12 +1096,12 @@ while (ppp<=1)
         ka2(boundC2)=1*ones(length(boundC2),1);
         kb2=zeros(length(a1),1);
         kb2(boundC2)=1*ones(length(boundC2),1);
-        abmax=100;
+        abmax=50;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 5*ka1) - a1.*a1)); %Cell 1 branched
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1) - a1.*a1)); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1) - b1.*b1)); %Cell 1 bundled
         rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 5*kb2) - b2.*b2)); %Cell 2 bundled
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2) - b2.*b2)); %Cell 2 bundled
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled

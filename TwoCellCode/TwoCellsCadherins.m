@@ -16,7 +16,7 @@ close all;
 clc;
 
 savefigs=1;
-setnum='5';
+setnum='7';
 savelocation='./results2/stablenodiffusion0koff/0_5epsilon';
 if savefigs==1
     filenameCells=strcat(savelocation,'Cells_',setnum);
@@ -67,7 +67,7 @@ while (ppp<=1)
     Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
-    tplot  = 100;
+    tplot  = 50;
 
     posx1 = zeros(N,Nt);              % array of positions of X(t) cell 1 (rac)
     posy1 = zeros(N,Nt);              % array of positions of Y(t) cell 1 (rho)
@@ -901,7 +901,7 @@ while (ppp<=1)
 
             for j=1:nnz          % all agents
                 konz2 = interp1(s2,Konz2,posz2(j,t));
-                koffz2 = interp1(s2,Koffz2,posz2(j,t)) * (1-z_stable_idx2(j,t)); % if stable, set koffz=0s
+                koffz2 = interp1(s2,Koffz2,posz2(j,t)) * (1-z_stable_idx2(j,t)); % if stable, set koffz=0
                 kfbz2 = interp1(s2,Kfbz2,posz2(j,t));
                 % Sample earliest time-to-fire (tau)
                 a0 = koffz2 + (konz2+kfbz2*nnz/N)*(N/nnz-1);
