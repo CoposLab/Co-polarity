@@ -16,7 +16,7 @@ close all;
 clc;
 
 savefigs=1;
-setnum='50';
+setnum='13';
 savelocation='./results3/uncoupled2/uncoupled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
