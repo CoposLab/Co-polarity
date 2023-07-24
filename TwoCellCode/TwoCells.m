@@ -15,9 +15,9 @@ clear;
 close all;
 clc;
 
-savefigs=0;
-setnum='82';
-savelocation='./results/inc_antagonism3/0_5epsilon10RhoRemoved';
+savefigs=1;
+setnum='50';
+savelocation='./results3/uncoupled/uncoupled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -80,7 +80,7 @@ while (ppp<=1)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=10;
+    numToRemove=0;
     counter1=0;
     counter2=0;
 
@@ -651,7 +651,20 @@ while (ppp<=1)
         [Konx1,Kony1,Kfbx1,Kfby1,Koffx1,Koffy1] = spatialrates(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1); % set rates
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
-        % Set konx and kony
+
+        % Add external signal for cell 1
+        sigper=0.25;
+        sigBound = (floor((Na-1)*1/4 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*sigper/2)))+1;
+        Konx1(sigBound) = Konx1(sigBound)*100;
+        Koffx1(sigBound) = Koffx1(sigBound)/100;
+        Konx1(setdiff(1:length(Konx1),sigBound)) = Konx1(setdiff(1:length(Konx1),sigBound))/100;
+        Koffx1(setdiff(1:length(Koffx1),sigBound)) = Koffx1(setdiff(1:length(Koffx1),sigBound))*100;
+        Kony1(sigBound) = Kony1(sigBound)/100;
+        Koffy1(sigBound) = Koffy1(sigBound)*100;
+        Kony1(setdiff(1:length(Kony1),sigBound)) = Kony1(setdiff(1:length(Kony1),sigBound))*100;
+        Koffy1(setdiff(1:length(Koffy1),sigBound)) = Koffy1(setdiff(1:length(Koffy1),sigBound))/100;
+
+        % Set konx and kony in contact region
         % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)/1000;
 
@@ -670,14 +683,17 @@ while (ppp<=1)
         % Kfby1(boundC1)=Kfby1(boundC1)*100;
         % Kfby2(boundC2)=Kfby2(boundC2)*100;
 
+        % Set konx and kony away from contact region
         % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
         % Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*1000;
 
 
-        epsilon1 = 0.1;
-        flipc2=flip(boundC2);
-        scaledC1 = (L*boundC1/Na);
-        scaledC2 = L*flipc2/Na;
+        % Set konx and kony depending on rac/rho concentrations in contact
+        % region
+        % epsilon1 = 0.1;
+        % flipc2=flip(boundC2);
+        % scaledC1 = (L*boundC1/Na);
+        % scaledC2 = L*flipc2/Na;
         % for i=1:length(boundC1)
         %     sumx1 = sum(abs(posx1(:,t)-scaledC1(i))<=epsilon1);
         %     sumx2 = sum(abs(posx2(:,t)-scaledC2(i))<=epsilon1);
