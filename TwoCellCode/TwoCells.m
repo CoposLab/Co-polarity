@@ -16,8 +16,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='50';
-savelocation='./results3/uncoupled2/uncoupled';
+setnum='31';
+savelocation='./results3/branchedupgrowth/5branched';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -373,6 +373,8 @@ while (ppp<=1)
 
 
     if vid == 1
+        allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
+
         % Concentric circles
         % Cell 1
         figcells=figure(16);
@@ -381,12 +383,12 @@ while (ppp<=1)
         colormap(whitebluenavy)
         freezeColors;
         freezeColors(colorbar('Location','westoutside'));
-        clim([0,max(max(b1),max(b2))])
+        clim([0,allmax])
         shading interp
         hold on;
         surf(Xmid,Ymid,ZBund1);
         colormap(whitedarkyellow)
-        clim([0,max(max(a1),max(a2))])
+        clim([0,allmax])
         freezeColors;
         freezeColors(jicolorbar);
         shading interp
@@ -405,21 +407,19 @@ while (ppp<=1)
         colormap(whitebluenavy)
         freezeColors;
         freezeColors(colorbar('Location','westoutside'));
-        clim([0,max(max(b1),max(b2))])
+        clim([0,allmax])
         shading interp
         surf(Xmid,Ymid-2,ZBund2);
         colormap(whitedarkyellow)
         freezeColors;
         freezeColors(jicolorbar);
-        clim([0,max(max(a1),max(a2))])
+        clim([0,allmax])
         shading interp
         grid off
         axis equal
         set(gca,'XTick',[], 'YTick', [])
         title('Blue=Branched, Yellow=Bundled')
         % scatter(Xsm(boundC2),Ysm(boundC2)-2,'black');
-
-        allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
         flipc2 = flip(boundC2);
         for i=1:length(boundC1)
@@ -452,7 +452,7 @@ while (ppp<=1)
         end
         if ~isempty(dirIndex1)
             hold on;
-            quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
+            quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2)
             hold off;
         end
 
@@ -475,7 +475,7 @@ while (ppp<=1)
         end
         if ~isempty(dirIndex2)
             hold on;
-            quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
+            quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2)
             hold off;
         end
 
@@ -517,14 +517,14 @@ while (ppp<=1)
         % Koffy1(sigBound) = roff*(tanh(steepness*(s1(sigBound)-0.875)) - tanh(steepness*(s1(sigBound)-1.625)) + 0.2)/1.1;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*1000;
-        % Konx2(boundC2)=Konx2(boundC2)/1000;
+        % Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
 
-        % Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Kony2(boundC2)=Kony2(boundC2)/1000;
+        % Kony1(boundC1)=Kony1(boundC1)/100;
+        % Kony2(boundC2)=Kony2(boundC2)/100;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        % Koffx2(boundC2)=Koffx2(boundC2)*10;
+        % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
         % Koffy1(boundC1)=Koffy1(boundC1)/100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
@@ -966,9 +966,9 @@ while (ppp<=1)
         kb2(boundC2)=1*ones(length(boundC2),1);
         abmax=50;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1) - a1.*a1)); %Cell 1 branched
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 5*ka1) - a1.*a1)); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1) - b1.*b1)); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2) - a2.*a2)); %Cell 2 branched
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 5*ka2) - a2.*a2)); %Cell 2 branched
         rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2) - b2.*b2)); %Cell 2 bundled
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
@@ -1066,6 +1066,8 @@ while (ppp<=1)
             [Xmid,Ymid] = pol2cart(th,rad);
 
 
+
+            allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
             
             % Concentric circles
             % Cell 1
@@ -1076,12 +1078,12 @@ while (ppp<=1)
             colormap(whitebluenavy)
             freezeColors;
             freezeColors(colorbar('Location','westoutside'));
-            clim([0,max(max(b1),max(b2))])
+            clim([0,allmax])
             shading interp
             hold on;
             surf(Xmid,Ymid,ZBund1);
             colormap(whitedarkyellow)
-            clim([0,max(max(a1),max(a2))])
+            clim([0,allmax])
             freezeColors;
             freezeColors(jicolorbar);
             shading interp
@@ -1100,21 +1102,19 @@ while (ppp<=1)
             colormap(whitebluenavy)
             freezeColors;
             freezeColors(colorbar('Location','westoutside'));
-            clim([0,max(max(b1),max(b2))])
+            clim([0,allmax])
             shading interp
             surf(Xmid,Ymid-2,ZBund2);
             colormap(whitedarkyellow)
             freezeColors;
             freezeColors(jicolorbar);
-            clim([0,max(max(a1),max(a2))])
+            clim([0,allmax])
             shading interp
             grid off
             axis equal
             set(gca,'XTick',[], 'YTick', [])
             title('Blue=Branched, Yellow=Bundled')
             % scatter(Xsm(boundC2),Ysm(boundC2)-2,'black');
-
-            allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
             flipc2 = flip(boundC2);
             for i=1:length(boundC1)
@@ -1147,7 +1147,7 @@ while (ppp<=1)
             end
             if ~isempty(dirIndex1)
                 hold on;
-                quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
+                quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2)
                 hold off;
             end
 
@@ -1170,7 +1170,7 @@ while (ppp<=1)
             end
             if ~isempty(dirIndex2)
                 hold on;
-                quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
+                quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2)
                 hold off;
             end
 

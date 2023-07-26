@@ -10,6 +10,11 @@ maroon = [0.4,0,0];
 navy = [33/256,81/256,127/256];
 yellow = [1,0.9,0];
 darkyellow = [227/256,180/256,76/256];
+yellow2 = [254/256,254/256,98/256];
+pink = [211/256,95/256,183/256];
+darkpink = [141/256,45/256,113/256];
+
+
 whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
 redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
 whiteredmaroon = [whitered;redmaroon];
@@ -22,6 +27,13 @@ redwhiteblue = [flip(whitered); whiteblue];
 whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
 yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
 whitedarkyellow = [whiteyellow;yellowdarkyellow];
+whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+whitedarkpink = [whitepink;pinkdarkpink];
+
 
 % Define circles
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
@@ -32,8 +44,10 @@ ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
 ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
 [Xsm,Ysm] = pol2cart(th,rad);
-[th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
+[th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
 [Xmid,Ymid] = pol2cart(th,rad);
+
+allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
 
 % Concentric circles
@@ -41,15 +55,15 @@ ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
 figcells=figure(16);
 surf(Xcol,Ycol,ZBranch1);
 view(2)
-colormap(whitebluenavy)
+colormap(whitedarkpink)
 freezeColors;
 freezeColors(colorbar('Location','westoutside'));
-clim([0,max(max(b1),max(b2))])
+clim([0,allmax])
 shading interp
 hold on;
 surf(Xmid,Ymid,ZBund1);
-colormap(whitedarkyellow)
-clim([0,max(max(a1),max(a2))])
+colormap(whitedarkyellow2)
+clim([0,allmax])
 freezeColors;
 freezeColors(jicolorbar);
 shading interp
@@ -60,29 +74,25 @@ set(gca,'XColor','w')
 set(gca,'YColor','w')
 set(gcf,'color','w');
 
-
-
 % Cell 2
 surf(Xcol,Ycol-2,ZBranch2);
 view(2)
-colormap(whitebluenavy)
+colormap(whitedarkpink)
 freezeColors;
 freezeColors(colorbar('Location','westoutside'));
-clim([0,max(max(b1),max(b2))])
+clim([0,allmax])
 shading interp
 surf(Xmid,Ymid-2,ZBund2);
-colormap(whitedarkyellow)
+colormap(whitedarkyellow2)
 freezeColors;
 freezeColors(jicolorbar);
-clim([0,max(max(a1),max(a2))])
+clim([0,allmax])
 shading interp
 grid off
 axis equal
 set(gca,'XTick',[], 'YTick', [])
-title('Blue=Branched, Yellow=Bundled')
+title('Pink=Branched, Yellow=Bundled')
 % scatter(Xsm(boundC2),Ysm(boundC2)-2,'black');
-
-allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
 flipc2 = flip(boundC2);
 for i=1:length(boundC1)
@@ -95,6 +105,7 @@ box off;
 set(gca,'XColor','w')
 set(gca,'YColor','w')
 set(gcf,'color','w');
+% set(gca,'Fontsize',20)
 
 
 
@@ -115,7 +126,7 @@ if dirIndex1<1
 end
 if ~isempty(dirIndex1)
     hold on;
-    quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
+    quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2);
     hold off;
 end
 
@@ -138,6 +149,6 @@ if dirIndex2<1
 end
 if ~isempty(dirIndex2)
     hold on;
-    quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0])
+    quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2)
     hold off;
 end
