@@ -507,20 +507,28 @@ while (ppp<=1)
         % Koffy1(sigBound) = Koffy1(sigBound)*10;
         % Kfbx1(sigBound) = Kfbx1(sigBound)*10;
         % Kfby1(sigBound) = Kfby1(sigBound)/10;
-        %Konx1(sigBound) = ron*10;
-        %Kony1(sigBound) = ron/10;
-        %Koffx1(sigBound) = roff/10;
-        %Koffy1(sigBound) = roff*10;
-        %Kfbx1(sigBound) = rfb*10;
-        %Kfby1(sigBound) = rfb/10;
+
+        Konx1=ones(Na,1)*ron/10;
+        Kony1=ones(Na,1)*ron;
+        Koffx1=ones(Na,1)*roff;
+        Koffy1=ones(Na,1)*roff/10;
+        Kfbx1=ones(Na,1)*rfb/10;
+        Kfby1=ones(Na,1)*rfb;
+
+        Konx1(sigBound) = ron;
+        Kony1(sigBound) = ron/10;
+        Koffx1(sigBound) = roff/10;
+        Koffy1(sigBound) = roff;
+        Kfbx1(sigBound) = rfb;
+        Kfby1(sigBound) = rfb/10;
         
-         steepness = 20;
-         Konx1 = ron*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
-         Kony1 = ron*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
-         Kfbx1 = rfb*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
-         Kfby1 = rfb*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
-         Koffx1 = roff*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
-         Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         % steepness = 20;
+         % Konx1 = ron*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         % Kony1 = ron*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         % Kfbx1 = rfb*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         % Kfby1 = rfb*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         % Koffx1 = roff*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
         % Konx1(boundC1)=Konx1(boundC1)*100;
@@ -996,8 +1004,8 @@ while (ppp<=1)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-         if mod(t,tplot) == 0
-        %if t==(Nt-1)
+         % if mod(t,tplot) == 0
+        if t==(Nt-1)
             scatplot=figure(ppp);
             subplot(1,2,1); %Cell 1
             plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;

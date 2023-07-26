@@ -5,12 +5,13 @@ maxnum=50;
 
 angle=pi/8;
 
-counterpy=0;
+counterlf=0;
 counteryes=0;
 countersn=0;
 counterno=0;
 counter1np=0;
 counter2np=0;
+counterlf2=0;
 tic
 for i=1:maxnum
     close all
@@ -103,12 +104,18 @@ for i=1:maxnum
         end
 
         if xor(abs(medang1-3*pi/2)<angle, abs(medang2-pi/2)<angle)
-            counterpy=counterpy+1;
+            counterlf=counterlf+1;
         end
+    end
+
+    if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1 && abs(medang2-pi/2)>angle
+        counterlf2=counterlf2+1;
+    end
+    if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1 && abs(medang1-3*pi/2)>angle
+        counterlf2=counterlf2+1;
     end
     % sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
 end
 toc
-sprintf('Number partial yesses: %d',counterpy)
-sprintf('Number of yesses: %d',counteryes)
+sprintf('Number leader/follower: %d',counterlf)
