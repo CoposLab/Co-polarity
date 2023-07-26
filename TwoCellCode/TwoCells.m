@@ -15,7 +15,7 @@ clear;
 close all;
 clc;
 
-savefigs=1;
+savefigs=0;
 setnum='37';
 savelocation='./results3/branchedbundledgrowth/0_8ka0_8kb';
 if savefigs==1
@@ -501,20 +501,26 @@ while (ppp<=1)
         % Add external signal for cell 1
         sigper=0.10;
         sigBound = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
-        Konx1(sigBound) = Konx1(sigBound)*10;
-        Kony1(sigBound) = Kony1(sigBound)/10;
-        Koffx1(sigBound) = Koffx1(sigBound)/10;
-        Koffy1(sigBound) = Koffy1(sigBound)*10;
-        Kfbx1(sigBound) = Kfbx1(sigBound)*10;
-        Kfby1(sigBound) = Kfby1(sigBound)/10;
+        % Konx1(sigBound) = Konx1(sigBound)*10;
+        % Kony1(sigBound) = Kony1(sigBound)/10;
+        % Koffx1(sigBound) = Koffx1(sigBound)/10;
+        % Koffy1(sigBound) = Koffy1(sigBound)*10;
+        % Kfbx1(sigBound) = Kfbx1(sigBound)*10;
+        % Kfby1(sigBound) = Kfby1(sigBound)/10;
+        %Konx1(sigBound) = ron*10;
+        %Kony1(sigBound) = ron/10;
+        %Koffx1(sigBound) = roff/10;
+        %Koffy1(sigBound) = roff*10;
+        %Kfbx1(sigBound) = rfb*10;
+        %Kfby1(sigBound) = rfb/10;
         
-        % steepness = 20;
-        % Konx1(sigBound) = ron*(tanh(steepness*(s1(sigBound)-0.875)) - tanh(steepness*(s1(sigBound)-1.625)) + 0.2)/1.1;
-        % Kony1(sigBound) = ron*(2 - tanh(steepness*(s1(sigBound)-0.875)) + tanh(steepness*(s1(sigBound)-1.625)) + 0.2)/1.1;
-        % Kfbx1(sigBound) = rfb*(tanh(steepness*(s1(sigBound)-0.875)) - tanh(steepness*(s1(sigBound)-1.625)) + 0.2)/1.1;
-        % Kfby1(sigBound) = rfb*(2 - tanh(steepness*(s1(sigBound)-0.875)) + tanh(steepness*(s1(sigBound)-1.625)) + 0.2)/1.1;
-        % Koffx1(sigBound) = roff*(2 - tanh(steepness*(s1(sigBound)-0.875)) + tanh(steepness*(s1(sigBound)-1.625)) + 0.2)/1.1;
-        % Koffy1(sigBound) = roff*(tanh(steepness*(s1(sigBound)-0.875)) - tanh(steepness*(s1(sigBound)-1.625)) + 0.2)/1.1;
+         steepness = 20;
+         Konx1 = ron*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         Kony1 = ron*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         Kfbx1 = rfb*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         Kfby1 = rfb*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         Koffx1 = roff*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
+         Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
         % Konx1(boundC1)=Konx1(boundC1)*100;
@@ -958,7 +964,7 @@ while (ppp<=1)
         diffRHSb2 = Hm2*b2;
 
         ka1=zeros(length(b2),1);
-        ka1(boundC1)=0.8*ones(length(boundC1),1);
+        ka1(boundC1)=1*ones(length(boundC1),1);
         kb1=zeros(length(a2),1);
         kb1(boundC1)=0.8*ones(length(boundC1),1);
         ka2=zeros(length(b1),1);
@@ -967,10 +973,10 @@ while (ppp<=1)
         kb2(boundC2)=0.8*ones(length(boundC2),1);
         abmax=50;
 
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1) - a1.*a1)); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1) - b1.*b1)); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2) - a2.*a2)); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2) - b2.*b2)); %Cell 2 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1) - a1.*a1)); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1) - b1.*b1)); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2) - a2.*a2)); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2) - b2.*b2)); %Cell 2 bundled
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled
@@ -978,10 +984,10 @@ while (ppp<=1)
         % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.*flip(a1)) - b2.*b2)); %Cell 2 bundled
 
         % Growth term maxes out version
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
@@ -990,8 +996,8 @@ while (ppp<=1)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-        % if mod(t,tplot) == 0
-        if t==(Nt-1)
+         if mod(t,tplot) == 0
+        %if t==(Nt-1)
             scatplot=figure(ppp);
             subplot(1,2,1); %Cell 1
             plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
