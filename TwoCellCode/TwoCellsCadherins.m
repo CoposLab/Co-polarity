@@ -15,7 +15,7 @@ clear;
 close all;
 clc;
 
-savefigs=1;
+savefigs=0;
 setnum='7';
 savelocation='./results2/stablenodiffusion0koff/0_5epsilon';
 if savefigs==1

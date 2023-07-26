@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/branchedbundledpromotion2/3kakb';
+filename = './results3/bundledracbranchedrho/100aRho100bRac';
 maxnum=50;
 
 angle=pi/8;
