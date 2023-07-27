@@ -15,9 +15,9 @@ clear;
 close all;
 clc;
 
-savefigs=0;
-setnum='37';
-savelocation='./results3/branchedbundledgrowth/0_8ka0_8kb';
+savefigs=1;
+setnum='20';
+savelocation='./results/branchedupnotsquared/3branched';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -92,15 +92,19 @@ while (ppp<=1)
     boundC1 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
+    % Signal
+    signal=0;
+    sigper=0.25;
+    sigBound = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
     % Competition for limited resource (actin monomers) term
     %
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 1.0;
+    branchedConst1 = 3.0;
     bundledConst1 = 1.0;
-    branchedConst2 = 1.0;
+    branchedConst2 = 3.0;
     bundledConst2 = 1.0;
 
     Ka1=ones(Na,1);
@@ -346,6 +350,17 @@ while (ppp<=1)
     navy = [33/256,81/256,127/256];
     yellow = [1,0.9,0];
     darkyellow = [227/256,180/256,76/256];
+    yellow2 = [254/256,254/256,98/256];
+    pink = [211/256,95/256,183/256];
+    darkpink = [141/256,45/256,113/256];
+    green = [26,255,26]/256;
+    darkgreen = [16,150,16]/256;
+    purple = [150,65,240]/256;
+    darkpurple = [65,0,136]/256;
+    orange = [230,97,0]/256;
+    darkorange = [170,27,0]/256;
+
+
     whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
     redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
     whiteredmaroon = [whitered;redmaroon];
@@ -358,6 +373,27 @@ while (ppp<=1)
     whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
     yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
     whitedarkyellow = [whiteyellow;yellowdarkyellow];
+    whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+    yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+    whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+    whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+    pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+    whitedarkpink = [whitepink;pinkdarkpink];
+    whitegreen = [linspace(white(1),green(1),colorLength)',linspace(white(2),green(2),colorLength)',linspace(white(3),green(3),colorLength)'];
+    greendarkgreen = [linspace(green(1),darkgreen(1),colorLength)',linspace(green(2),darkgreen(2),colorLength)',linspace(green(3),darkgreen(3),colorLength)'];
+    whitedarkgreen = [whitegreen;greendarkgreen];
+    whitepurple = [linspace(white(1),purple(1),colorLength)',linspace(white(2),purple(2),colorLength)',linspace(white(3),purple(3),colorLength)'];
+    purpledarkpurple = [linspace(purple(1),darkpurple(1),colorLength)',linspace(purple(2),darkpurple(2),colorLength)',linspace(purple(3),darkpurple(3),colorLength)'];
+    whitedarkpurple = [whitepurple;purpledarkpurple];
+    whiteorange = [linspace(white(1),orange(1),colorLength)',linspace(white(2),orange(2),colorLength)',linspace(white(3),orange(3),colorLength)'];
+    orangedarkorange = [linspace(orange(1),darkorange(1),colorLength)',linspace(orange(2),darkorange(2),colorLength)',linspace(orange(3),darkorange(3),colorLength)'];
+    whitedarkorange = [whiteorange;orangedarkorange];
+
+
+    branchedColor = whitedarkpink;
+    bundledColor = whitedarkyellow2;
+    branchedColName = 'Pink';
+    bundledColName = 'Yellow';
 
     % Define circles
     [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
@@ -371,46 +407,40 @@ while (ppp<=1)
     [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
     [Xmid,Ymid] = pol2cart(th,rad);
 
+    allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
     if vid == 1
-        allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
         % Concentric circles
         % Cell 1
         figcells=figure(16);
-        surf(Xcol,Ycol,ZBranch1);
+        surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
         view(2)
-        colormap(whitebluenavy)
+        colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','westoutside'));
         clim([0,allmax])
         shading interp
         hold on;
-        surf(Xmid,Ymid,ZBund1);
-        colormap(whitedarkyellow)
+        surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
+        colormap(bundledColor)
         clim([0,allmax])
         freezeColors;
         freezeColors(jicolorbar);
         shading interp
         grid off
         set(gca,'XTick',[], 'YTick', [])
-        % scatter(Xsm(boundC1),Ysm(boundC1),'black');
-        set(gca,'XColor','w')
-        set(gca,'YColor','w')
-        set(gcf,'color','w');
-
-
 
         % Cell 2
-        surf(Xcol,Ycol-2,ZBranch2);
+        surf(Xcol,Ycol-2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
         view(2)
-        colormap(whitebluenavy)
+        colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','westoutside'));
         clim([0,allmax])
         shading interp
-        surf(Xmid,Ymid-2,ZBund2);
-        colormap(whitedarkyellow)
+        surf(Xcol,Ycol-2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
+        colormap(bundledColor)
         freezeColors;
         freezeColors(jicolorbar);
         clim([0,allmax])
@@ -418,20 +448,18 @@ while (ppp<=1)
         grid off
         axis equal
         set(gca,'XTick',[], 'YTick', [])
-        title('Blue=Branched, Yellow=Bundled')
-        % scatter(Xsm(boundC2),Ysm(boundC2)-2,'black');
+        title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
         flipc2 = flip(boundC2);
         for i=1:length(boundC1)
             plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-            % plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
         end
 
         hold off;
         box off;
         set(gca,'XColor','w')
         set(gca,'YColor','w')
-        set(gcf,'color','w')
+        set(gcf,'color','w');
 
 
 
@@ -452,7 +480,7 @@ while (ppp<=1)
         end
         if ~isempty(dirIndex1)
             hold on;
-            quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2)
+            quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
             hold off;
         end
 
@@ -475,9 +503,24 @@ while (ppp<=1)
         end
         if ~isempty(dirIndex2)
             hold on;
-            quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2)
+            quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
             hold off;
         end
+
+        % Plot signal
+        if signal==1
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+            [Xsig,Ysig] = pol2cart(th,rad);
+            hold on;
+            scatter(Xsig(sigBound),Ysig(sigBound)-2,'black','.')
+            hold off;
+        end
+
+        ohf = findobj(gcf);
+        figaxes = findobj(ohf(1), 'Type', 'axes');
+        set(figaxes(1),'Fontsize',15)
+        set(figaxes(2),'Fontsize',14)
+        camroll(90)
 
         if vid==1
             currframe = getframe(figcells);
@@ -499,29 +542,30 @@ while (ppp<=1)
 
 
         % Add external signal for cell 1
-        sigper=0.10;
-        sigBound = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
-        % Konx1(sigBound) = Konx1(sigBound)*10;
-        % Kony1(sigBound) = Kony1(sigBound)/10;
-        % Koffx1(sigBound) = Koffx1(sigBound)/10;
-        % Koffy1(sigBound) = Koffy1(sigBound)*10;
-        % Kfbx1(sigBound) = Kfbx1(sigBound)*10;
-        % Kfby1(sigBound) = Kfby1(sigBound)/10;
+        % Konx2=ones(Na,1)*ron/8;
+        % Kony2=ones(Na,1)*ron;
+        % Koffx2=ones(Na,1)*roff;
+        % Koffy2=ones(Na,1)*roff/8;
+        % Kfbx2=ones(Na,1)*rfb/8;
+        % Kfby2=ones(Na,1)*rfb;
+        % 
+        % Konx2(sigBound) = ron;
+        % Kony2(sigBound) = ron/8;
+        % Koffx2(sigBound) = roff/8;
+        % Koffy2(sigBound) = roff;
+        % Kfbx2(sigBound) = rfb;
+        % Kfby2(sigBound) = rfb/8;
 
-        Konx1=ones(Na,1)*ron/10;
-        Kony1=ones(Na,1)*ron;
-        Koffx1=ones(Na,1)*roff;
-        Koffy1=ones(Na,1)*roff/10;
-        Kfbx1=ones(Na,1)*rfb/10;
-        Kfby1=ones(Na,1)*rfb;
+        if signal==1
+            steepness = 20;
+            Konx2 = ron*(tanh(steepness*(s1-s1(sigBound(1)))) - tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
+            Kony2 = ron*(2 - tanh(steepness*(s1-s1(sigBound(1)))) + tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
+            Kfbx2 = rfb*(tanh(steepness*(s1-s1(sigBound(1)))) - tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
+            Kfby2 = rfb*(2 - tanh(steepness*(s1-s1(sigBound(1)))) + tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
+            Koffx2 = roff*(2 - tanh(steepness*(s1-s1(sigBound(1)))) + tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
+            Koffy2 = roff*(tanh(steepness*(s1-s1(sigBound(1)))) - tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
+        end
 
-        Konx1(sigBound) = ron;
-        Kony1(sigBound) = ron/10;
-        Koffx1(sigBound) = roff/10;
-        Koffy1(sigBound) = roff;
-        Kfbx1(sigBound) = rfb;
-        Kfby1(sigBound) = rfb/10;
-        
          % steepness = 20;
          % Konx1 = ron*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
          % Kony1 = ron*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
@@ -625,31 +669,32 @@ while (ppp<=1)
         if((t-1)*dt<Tx1(rxn_count_x1))
             NNx1(t+1) = X1(rxn_count_x1-1);
         else
-            nnx = X1(rxn_count_x1);
-            taux = zeros(nnx,1);
-            dn = zeros(nnx,1);
-            r1 = rand(nnx,1);
+            nnx1 = X1(rxn_count_x1);
+            taux1 = zeros(nnx1,1);
+            dn1 = zeros(nnx1,1);
+            r1 = rand(nnx1,1);
 
-            if(nnx==0)
+            if(nnx1==0)
+                sprintf('here 1rac')
                 counter_ppp = ppp;
                 quit_cond = 1;
                 break
             end
 
-            for j=1:nnx          % all agents
+            for j=1:nnx1          % all agents
                 konx1 = interp1(s1,Konx1,posx1(j,t));
                 koffx1 = interp1(s1,Koffx1,posx1(j,t));
                 kfbx1 = interp1(s1,Kfbx1,posx1(j,t));
                 % Sample earliest time-to-fire (tau)
-                a0 = koffx1 + (konx1+kfbx1*nnx/N)*(N/nnx-1);
-                taux(j) = -log(r1(j))/a0;
+                a0 = koffx1 + (konx1+kfbx1*nnx1/N)*(N/nnx1-1);
+                taux1(j) = -log(r1(j))/a0;
                 rr = rand(1,1);
-                dn(j) = (rr<((konx1+kfbx1*nnx/N)*(N/nnx-1)/a0))*1.0 + (rr>=((konx1+kfbx1*nnx/N)*(N/nnx-1)/a0))*(-1.0);
+                dn1(j) = (rr<((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0))*1.0 + (rr>=((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0))*(-1.0);
             end
 
-            [mintaux1,minidx1] = min(taux(1:j));       % find first chemical rxn
+            [mintaux1,minidx1] = min(taux1(1:j));       % find first chemical rxn
             Tx1(rxn_count_x1+1) = Tx1(rxn_count_x1) + mintaux1;
-            X1(rxn_count_x1+1) = nnx + dn(minidx1);
+            X1(rxn_count_x1+1) = nnx1 + dn1(minidx1);
             rxn_count_x1 = rxn_count_x1 + 1;
             NNx1(t+1) = X1(rxn_count_x1-1);
         end
@@ -658,31 +703,32 @@ while (ppp<=1)
         if((t-1)*dt<Tx2(rxn_count_x2))
             NNx2(t+1) = X2(rxn_count_x2-1);
         else
-            nnx = X2(rxn_count_x2);
-            taux = zeros(nnx,1);
-            dn = zeros(nnx,1);
-            r2 = rand(nnx,1);
+            nnx2 = X2(rxn_count_x2);
+            taux2 = zeros(nnx2,1);
+            dn2 = zeros(nnx2,1);
+            r2 = rand(nnx2,1);
 
-            if(nnx==0)
+            if(nnx2==0)
+                sprintf('here 2rac')
                 counter_ppp = ppp;
                 quit_cond = 1;
                 break
             end
 
-            for j=1:nnx          % all agents
+            for j=1:nnx2          % all agents
                 konx2 = interp1(s2,Konx2,posx2(j,t));
                 koffx2 = interp1(s2,Koffx2,posx2(j,t));
                 kfbx2 = interp1(s2,Kfbx2,posx2(j,t));
                 % Sample earliest time-to-fire (tau)
-                a0 = koffx2 + (konx2+kfbx2*nnx/N)*(N/nnx-1);
-                taux(j) = -log(r2(j))/a0;
+                a0 = koffx2 + (konx2+kfbx2*nnx2/N)*(N/nnx2-1);
+                taux2(j) = -log(r2(j))/a0;
                 rr = rand(1,1);
-                dn(j) = (rr<((konx2+kfbx1*nnx/N)*(N/nnx-1)/a0))*1.0 + (rr>=((konx2+kfbx2*nnx/N)*(N/nnx-1)/a0))*(-1.0);
+                dn2(j) = (rr<((konx2+kfbx1*nnx2/N)*(N/nnx2-1)/a0))*1.0 + (rr>=((konx2+kfbx2*nnx2/N)*(N/nnx2-1)/a0))*(-1.0);
             end
 
-            [mintaux2,minidx2] = min(taux(1:j));       % find first chemical rxn
+            [mintaux2,minidx2] = min(taux2(1:j));       % find first chemical rxn
             Tx2(rxn_count_x2+1) = Tx2(rxn_count_x2) + mintaux2;
-            X2(rxn_count_x2+1) = nnx + dn(minidx2);
+            X2(rxn_count_x2+1) = nnx2 + dn2(minidx2);
             rxn_count_x2 = rxn_count_x2 + 1;
             NNx2(t+1) = X2(rxn_count_x2-1);
         end
@@ -691,31 +737,32 @@ while (ppp<=1)
         if((t-1)*dt<Ty1(rxn_count_y1))
             NNy1(t+1) = Y1(rxn_count_y1-1);
         else
-            nny = Y1(rxn_count_y1);
-            tauy = zeros(nny,1);
-            dn = zeros(nny,1);
-            r1 = rand(nny,1);
+            nny1 = Y1(rxn_count_y1);
+            tauy1 = zeros(nny1,1);
+            dn1 = zeros(nny1,1);
+            r1 = rand(nny1,1);
 
-            if(nny==0)
+            if(nny1==0)
+                sprintf('here 1rho')
                 counter_ppp = ppp;
                 quit_cond = 1;
                 break
             end
 
-            for j=1:nny          % all agents
+            for j=1:nny1          % all agents
                 kony1 = interp1(s1,Kony1,posy1(j,t));
                 koffy1 = interp1(s1,Koffy1,posy1(j,t));
                 kfby1 = interp1(s1,Kfby1,posy1(j,t));
                 % Sample earliest time-to-fire (tau)
-                a0 = koffy1 + (kony1+kfby1*nny/N)*(N/nny-1);
-                tauy(j) = -log(r1(j))/a0;
+                a0 = koffy1 + (kony1+kfby1*nny1/N)*(N/nny1-1);
+                tauy1(j) = -log(r1(j))/a0;
                 rr = rand(1,1);
-                dn(j) = (rr<((kony1+kfby1*nny/N)*(N/nny-1)/a0))*1.0 + (rr>=((kony1+kfby1*nny/N)*(N/nny-1)/a0))*(-1.0);
+                dn1(j) = (rr<((kony1+kfby1*nny1/N)*(N/nny1-1)/a0))*1.0 + (rr>=((kony1+kfby1*nny1/N)*(N/nny1-1)/a0))*(-1.0);
             end
 
-            [mintauy1,minidy1] = min(tauy(1:j));       % find first chemical rxn
+            [mintauy1,minidy1] = min(tauy1(1:j));       % find first chemical rxn
             Ty1(rxn_count_y1+1) = Ty1(rxn_count_y1) + mintauy1;
-            Y1(rxn_count_y1+1) = nny + dn(minidy1);
+            Y1(rxn_count_y1+1) = nny1 + dn1(minidy1);
             rxn_count_y1 = rxn_count_y1 + 1;
             NNy1(t+1) = Y1(rxn_count_y1-1);
         end
@@ -724,31 +771,32 @@ while (ppp<=1)
         if((t-1)*dt<Ty2(rxn_count_y2))
             NNy2(t+1) = Y2(rxn_count_y2-1);
         else
-            nny = Y2(rxn_count_y2);
-            tauy = zeros(nny,1);
-            dn = zeros(nny,1);
-            r2 = rand(nny,1);
+            nny2 = Y2(rxn_count_y2);
+            tauy2 = zeros(nny2,1);
+            dn2 = zeros(nny2,1);
+            r2 = rand(nny2,1);
 
-            if(nny==0)
+            if(nny2==0)
+                sprintf('here 2rac')
                 counter_ppp = ppp;
                 quit_cond = 1;
                 break
             end
 
-            for j=1:nny          % all agents
+            for j=1:nny2          % all agents
                 kony2 = interp1(s2,Kony2,posy2(j,t));
                 koffy2 = interp1(s2,Koffy2,posy2(j,t));
                 kfby2 = interp1(s2,Kfby2,posy2(j,t));
                 % Sample earliest time-to-fire (tau)
-                a0 = koffy2 + (kony2+kfby2*nny/N)*(N/nny-1);
-                tauy(j) = -log(r2(j))/a0;
+                a0 = koffy2 + (kony2+kfby2*nny2/N)*(N/nny2-1);
+                tauy2(j) = -log(r2(j))/a0;
                 rr = rand(1,1);
-                dn(j) = (rr<((kony2+kfby2*nny/N)*(N/nny-1)/a0))*1.0 + (rr>=((kony2+kfby2*nny/N)*(N/nny-1)/a0))*(-1.0);
+                dn2(j) = (rr<((kony2+kfby2*nny2/N)*(N/nny2-1)/a0))*1.0 + (rr>=((kony2+kfby2*nny2/N)*(N/nny2-1)/a0))*(-1.0);
             end
 
-            [mintauy2,minidy2] = min(tauy(1:j));       % find first chemical rxn
+            [mintauy2,minidy2] = min(tauy2(1:j));       % find first chemical rxn
             Ty2(rxn_count_y2+1) = Ty2(rxn_count_y2) + mintauy2;
-            Y2(rxn_count_y2+1) = nny + dn(minidy2);
+            Y2(rxn_count_y2+1) = nny2 + dn2(minidy2);
             rxn_count_y2 = rxn_count_y2 + 1;
             NNy2(t+1) = Y2(rxn_count_y2-1);
         end
@@ -770,21 +818,21 @@ while (ppp<=1)
         K2_2 = NNy2(t+1);
 
         % Between reactions, perform Brownian motion with periodic BC
-        r1 = rand(K1_1,1);    % coin flip
+        r1_1 = rand(K1_1,1);    % coin flip
         nx1(1:K1_1,t+1) = 1;
-        posx1(1:K1_1,t+1) = posx1(1:K1_1,t) + dx*((r1<p)*1.0 + (r1>(1-p))*(-1.0));
+        posx1(1:K1_1,t+1) = posx1(1:K1_1,t) + dx*((r1_1<p)*1.0 + (r1_1>(1-p))*(-1.0));
 
-        r2 = rand(K1_2,1);    % coin flip
+        r2_1 = rand(K1_2,1);    % coin flip
         nx2(1:K1_2,t+1) = 1;
-        posx2(1:K1_2,t+1) = posx2(1:K1_2,t) + dx*((r2<p)*1.0 + (r2>(1-p))*(-1.0));
+        posx2(1:K1_2,t+1) = posx2(1:K1_2,t) + dx*((r2_1<p)*1.0 + (r2_1>(1-p))*(-1.0));
 
-        r1 = rand(K2_1,1);    % coin flip
+        r1_2 = rand(K2_1,1);    % coin flip
         ny1(1:K2_1,t+1) = 1;
-        posy1(1:K2_1,t+1) = posy1(1:K2_1,t) + dx*((r1<p)*1.0 + (r1>(1-p))*(-1.0));
+        posy1(1:K2_1,t+1) = posy1(1:K2_1,t) + dx*((r1_2<p)*1.0 + (r1_2>(1-p))*(-1.0));
 
-        r2 = rand(K2_2,1);    % coin flip
+        r2_2 = rand(K2_2,1);    % coin flip
         ny2(1:K2_2,t+1) = 1;
-        posy2(1:K2_2,t+1) = posy2(1:K2_2,t) + dx*((r2<p)*1.0 + (r2>(1-p))*(-1.0));
+        posy2(1:K2_2,t+1) = posy2(1:K2_2,t) + dx*((r2_2<p)*1.0 + (r2_2>(1-p))*(-1.0));
 
         % Check for collision(s) and resolve any collisions
         % Resolution strategy: No one advances
@@ -793,26 +841,26 @@ while (ppp<=1)
         firstcoll = sum(ismembertol(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),0.005,'DataScale',1));
         if firstcoll~=0
             % Get indices of collisions
-            aa = ismembertol(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),0.005,'DataScale',1);
-            list_idx = find(aa~=0);
-            bb = ismembertol(posy1(1:K2_1,t+1),posx1(1:K1_1,t+1),0.005,'DataScale',1);
-            list_idy = find(bb~=0);
+            aa1 = ismembertol(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),0.005,'DataScale',1);
+            list_idx1 = find(aa1~=0);
+            bb1 = ismembertol(posy1(1:K2_1,t+1),posx1(1:K1_1,t+1),0.005,'DataScale',1);
+            list_idy1 = find(bb1~=0);
 
-            posx1(list_idx,t+1) = posx1(list_idx,t);
-            posy1(list_idy,t+1) = posy1(list_idy,t);
+            posx1(list_idx1,t+1) = posx1(list_idx1,t);
+            posy1(list_idy1,t+1) = posy1(list_idy1,t);
         end
 
         % Cell 2
         firstcoll = sum(ismembertol(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),0.005,'DataScale',1));
         if firstcoll~=0
             % Get indices of collisions
-            aa = ismembertol(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),0.005,'DataScale',1);
-            list_idx = find(aa~=0);
-            bb = ismembertol(posy2(1:K2_2,t+1),posx2(1:K1_2,t+1),0.005,'DataScale',1);
-            list_idy = find(bb~=0);
+            aa2 = ismembertol(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),0.005,'DataScale',1);
+            list_idx2 = find(aa2~=0);
+            bb2 = ismembertol(posy2(1:K2_2,t+1),posx2(1:K1_2,t+1),0.005,'DataScale',1);
+            list_idy2 = find(bb2~=0);
 
-            posx2(list_idx,t+1) = posx2(list_idx,t);
-            posy2(list_idy,t+1) = posy2(list_idy,t);
+            posx2(list_idx2,t+1) = posx2(list_idx2,t);
+            posy2(list_idy2,t+1) = posy2(list_idy2,t);
         end
 
         % Enforce periodic boundary conditions
@@ -833,16 +881,16 @@ while (ppp<=1)
         [ijk1] = find(ss1==posx1(minidx1,t),1);
         prevind1 = (ijk1-1)*(ijk1>1) + (K1_1)*(ijk1==1);
         nextind1 = (ijk1+1)*(ijk1<K1_1) + 1*(ijk1==K1_1);
-        x2 = posx1(minidx1,t)+(ss1(prevind1)-posx1(minidx1,t))/2;
-        x1 = posx1(minidx1,t)+(ss1(nextind1)-posx1(minidx1,t))/2;
-        locx1 = (x2-x1).*rand(1,1) + x1; % random location halfway between the closest left/right particles
+        x2_1 = posx1(minidx1,t)+(ss1(prevind1)-posx1(minidx1,t))/2;
+        x1_1 = posx1(minidx1,t)+(ss1(nextind1)-posx1(minidx1,t))/2;
+        locx1 = (x2_1-x1_1).*rand(1,1) + x1_1; % random location halfway between the closest left/right particles
         ss1 = sort(posy1(1:K2_1,t));
         [ijk1] = find(ss1==posy1(minidy1,t),1);
         prevind1 = (ijk1-1)*(ijk1>1) + (K2_1)*(ijk1==1);
         nextind1 = (ijk1+1)*(ijk1<K2_1) + 1*(ijk1==K2_1);
-        y2 = posy1(minidy1,t)+(ss1(prevind1)-posy1(minidy1,t))/2;
-        y1 = posy1(minidy1,t)+(ss1(nextind1)-posy1(minidy1,t))/2;
-        locy1 = (y2-y1).*rand(1,1) + y1; % random location halfway between the closest left/right particles
+        y2_1 = posy1(minidy1,t)+(ss1(prevind1)-posy1(minidy1,t))/2;
+        y1_1 = posy1(minidy1,t)+(ss1(nextind1)-posy1(minidy1,t))/2;
+        locy1 = (y2_1-y1_1).*rand(1,1) + y1_1; % random location halfway between the closest left/right particles
 
         ponx1 = ron/(ron+rfb*(N-K1_1));
         pony1 = ron/(ron+rfb*(N-K2_1));
@@ -852,16 +900,16 @@ while (ppp<=1)
         [ijk2] = find(ss2==posx2(minidx2,t),1);
         prevind2 = (ijk2-1)*(ijk2>1) + (K1_2)*(ijk2==1);
         nextind2 = (ijk2+1)*(ijk2<K1_2) + 1*(ijk2==K1_2);
-        x2 = posx2(minidx2,t)+(ss2(prevind2)-posx2(minidx2,t))/2;
-        x1 = posx2(minidx2,t)+(ss2(nextind2)-posx2(minidx2,t))/2;
-        locx2 = (x2-x1).*rand(1,1) + x1; % random location halfway between the closest left/right particles
+        x2_2 = posx2(minidx2,t)+(ss2(prevind2)-posx2(minidx2,t))/2;
+        x1_2 = posx2(minidx2,t)+(ss2(nextind2)-posx2(minidx2,t))/2;
+        locx2 = (x2_2-x1_2).*rand(1,1) + x1_2; % random location halfway between the closest left/right particles
         ss2 = sort(posy2(1:K2_2,t));
         [ijk2] = find(ss2==posy2(minidy2,t),1);
         prevind2 = (ijk2-1)*(ijk2>1) + (K2_2)*(ijk2==1);
         nextind2 = (ijk2+1)*(ijk2<K2_2) + 1*(ijk2==K2_2);
-        y2 = posy2(minidy2,t)+(ss2(prevind2)-posy2(minidy2,t))/2;
-        y1 = posy2(minidy2,t)+(ss2(nextind2)-posy2(minidy2,t))/2;
-        locy2 = (y2-y1).*rand(1,1) + y1; % random location halfway between the closest left/right particles
+        y2_2 = posy2(minidy2,t)+(ss2(prevind2)-posy2(minidy2,t))/2;
+        y1_2 = posy2(minidy2,t)+(ss2(nextind2)-posy2(minidy2,t))/2;
+        locy2 = (y2_2-y1_2).*rand(1,1) + y1_2; % random location halfway between the closest left/right particles
 
         ponx2 = ron/(ron+rfb*(N-K1_2));
         pony2 = ron/(ron+rfb*(N-K2_2));
@@ -974,17 +1022,17 @@ while (ppp<=1)
         ka1=zeros(length(b2),1);
         ka1(boundC1)=1*ones(length(boundC1),1);
         kb1=zeros(length(a2),1);
-        kb1(boundC1)=0.8*ones(length(boundC1),1);
+        kb1(boundC1)=1*ones(length(boundC1),1);
         ka2=zeros(length(b1),1);
-        ka2(boundC2)=0.8*ones(length(boundC2),1);
+        ka2(boundC2)=1*ones(length(boundC2),1);
         kb2=zeros(length(a1),1);
-        kb2(boundC2)=0.8*ones(length(boundC2),1);
+        kb2(boundC2)=1*ones(length(boundC2),1);
         abmax=50;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1) - a1.*a1)); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1) - b1.*b1)); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2) - b2.*b2)); %Cell 2 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled
@@ -1044,7 +1092,7 @@ while (ppp<=1)
                 writeVideo(vidObj1,currframe);
             end
 
-            
+
 
             %Define colors
             colorLength = 50;
@@ -1055,6 +1103,17 @@ while (ppp<=1)
             navy = [33/256,81/256,127/256];
             yellow = [1,0.9,0];
             darkyellow = [227/256,180/256,76/256];
+            yellow2 = [254/256,254/256,98/256];
+            pink = [211/256,95/256,183/256];
+            darkpink = [141/256,45/256,113/256];
+            green = [26,255,26]/256;
+            darkgreen = [16,150,16]/256;
+            purple = [150,65,240]/256;
+            darkpurple = [65,0,136]/256;
+            orange = [230,97,0]/256;
+            darkorange = [170,27,0]/256;
+
+
             whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
             redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
             whiteredmaroon = [whitered;redmaroon];
@@ -1067,6 +1126,27 @@ while (ppp<=1)
             whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
             yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
             whitedarkyellow = [whiteyellow;yellowdarkyellow];
+            whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+            yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+            whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+            whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+            pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+            whitedarkpink = [whitepink;pinkdarkpink];
+            whitegreen = [linspace(white(1),green(1),colorLength)',linspace(white(2),green(2),colorLength)',linspace(white(3),green(3),colorLength)'];
+            greendarkgreen = [linspace(green(1),darkgreen(1),colorLength)',linspace(green(2),darkgreen(2),colorLength)',linspace(green(3),darkgreen(3),colorLength)'];
+            whitedarkgreen = [whitegreen;greendarkgreen];
+            whitepurple = [linspace(white(1),purple(1),colorLength)',linspace(white(2),purple(2),colorLength)',linspace(white(3),purple(3),colorLength)'];
+            purpledarkpurple = [linspace(purple(1),darkpurple(1),colorLength)',linspace(purple(2),darkpurple(2),colorLength)',linspace(purple(3),darkpurple(3),colorLength)'];
+            whitedarkpurple = [whitepurple;purpledarkpurple];
+            whiteorange = [linspace(white(1),orange(1),colorLength)',linspace(white(2),orange(2),colorLength)',linspace(white(3),orange(3),colorLength)'];
+            orangedarkorange = [linspace(orange(1),darkorange(1),colorLength)',linspace(orange(2),darkorange(2),colorLength)',linspace(orange(3),darkorange(3),colorLength)'];
+            whitedarkorange = [whiteorange;orangedarkorange];
+
+
+            branchedColor = whitedarkpink;
+            bundledColor = whitedarkyellow2;
+            branchedColName = 'Pink';
+            bundledColName = 'Yellow';
 
             % Define circles
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
@@ -1080,47 +1160,38 @@ while (ppp<=1)
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
             [Xmid,Ymid] = pol2cart(th,rad);
 
-
-
             allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
-            
+
             % Concentric circles
             % Cell 1
             figcells=figure(16);
-            clf
-            surf(Xcol,Ycol,ZBranch1);
+            surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
             view(2)
-            colormap(whitebluenavy)
+            colormap(branchedColor)
             freezeColors;
             freezeColors(colorbar('Location','westoutside'));
             clim([0,allmax])
             shading interp
             hold on;
-            surf(Xmid,Ymid,ZBund1);
-            colormap(whitedarkyellow)
+            surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
+            colormap(bundledColor)
             clim([0,allmax])
             freezeColors;
             freezeColors(jicolorbar);
             shading interp
             grid off
             set(gca,'XTick',[], 'YTick', [])
-            % scatter(Xsm(boundC1),Ysm(boundC1),'black');
-            set(gca,'XColor','w')
-            set(gca,'YColor','w')
-            set(gcf,'color','w')
-
-
 
             % Cell 2
-            surf(Xcol,Ycol-2,ZBranch2);
+            surf(Xcol,Ycol-2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
             view(2)
-            colormap(whitebluenavy)
+            colormap(branchedColor)
             freezeColors;
             freezeColors(colorbar('Location','westoutside'));
             clim([0,allmax])
             shading interp
-            surf(Xmid,Ymid-2,ZBund2);
-            colormap(whitedarkyellow)
+            surf(Xcol,Ycol-2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
+            colormap(bundledColor)
             freezeColors;
             freezeColors(jicolorbar);
             clim([0,allmax])
@@ -1128,20 +1199,18 @@ while (ppp<=1)
             grid off
             axis equal
             set(gca,'XTick',[], 'YTick', [])
-            title('Blue=Branched, Yellow=Bundled')
-            % scatter(Xsm(boundC2),Ysm(boundC2)-2,'black');
+            title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
             flipc2 = flip(boundC2);
             for i=1:length(boundC1)
                 plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-                % plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
             end
 
             hold off;
             box off;
             set(gca,'XColor','w')
             set(gca,'YColor','w')
-            set(gcf,'color','w')
+            set(gcf,'color','w');
 
 
 
@@ -1162,7 +1231,7 @@ while (ppp<=1)
             end
             if ~isempty(dirIndex1)
                 hold on;
-                quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2)
+                quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
                 hold off;
             end
 
@@ -1185,9 +1254,25 @@ while (ppp<=1)
             end
             if ~isempty(dirIndex2)
                 hold on;
-                quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2)
+                quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
                 hold off;
             end
+
+            % Plot signal
+            if signal==1
+                [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+                [Xsig,Ysig] = pol2cart(th,rad);
+                hold on;
+                scatter(Xsig(sigBound),Ysig(sigBound)-2,'black','.')
+                hold off;
+            end
+
+            ohf = findobj(gcf);
+            figaxes = findobj(ohf(1), 'Type', 'axes');
+            set(figaxes(1),'Fontsize',15)
+            set(figaxes(2),'Fontsize',14)
+            camroll(90)
+
 
             % Add frame to video
             if vid==1

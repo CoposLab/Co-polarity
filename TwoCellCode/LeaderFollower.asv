@@ -1,9 +1,9 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/bundledracbranchedrho/100aRho100bRac';
-maxnum=50;
+filename = './results/racrhodownprop/0_1epsilon100sumRacOffRhoOff';
+maxnum=100;
 
-angle=pi/8;
+angle=pi/4;
 
 counterlf=0;
 counteryes=0;
@@ -42,6 +42,11 @@ for i=1:maxnum
     % plot(xBundled2,yBundled2)
     % plot(xBranched2,yBranched2)
     % hold off
+
+    a1=yBranched1;
+    b1=yBundled1;
+    a2=yBranched2;
+    b2=yBundled2;
 
     [th,rad] = meshgrid((0:3.6:360)*pi/180,1);
 
@@ -108,10 +113,19 @@ for i=1:maxnum
         end
     end
 
-    if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1 && abs(medang2-pi/2)>angle
-        counterlf2=counterlf2+1;
+    if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1
+        medang2 = th(1,dirIndex2);
+        if abs(medang2-pi/2)>angle
+            counterlf2=counterlf2+1;
+        end
     end
-    if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1 && abs(medang1-3*pi/2)>angle
+    if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1
+        medang1 = th(1,dirIndex1);
+        if abs(medang1-3*pi/2)>angle
+            counterlf2=counterlf2+1;
+        end
+    end
+    if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
         counterlf2=counterlf2+1;
     end
     % sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
@@ -119,3 +133,4 @@ for i=1:maxnum
 end
 toc
 sprintf('Number leader/follower: %d',counterlf)
+sprintf('Number leader/follower np: %d', counterlf2)

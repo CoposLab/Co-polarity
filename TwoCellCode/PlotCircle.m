@@ -50,8 +50,10 @@ orangedarkorange = [linspace(orange(1),darkorange(1),colorLength)',linspace(oran
 whitedarkorange = [whiteorange;orangedarkorange];
 
 
-branchedColor = whitedarkpurple;
-bundledColor = whitedarkgreen;
+branchedColor = whitedarkpink;
+bundledColor = whitedarkyellow2;
+branchedColName = 'Pink';
+bundledColName = 'Yellow';
 
 % Define circles
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
@@ -67,11 +69,15 @@ ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
 
 allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
+mbr1 = max(max(ZBranch1));
+mbun1 = max(max(ZBund1));
+mbr2 = max(max(ZBranch2));
+mbun2 = max(max(ZBund2));
 
 % Concentric circles
 % Cell 1
 figcells=figure(16);
-surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
+surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
 freezeColors;
@@ -79,7 +85,7 @@ freezeColors(colorbar('Location','westoutside'));
 clim([0,allmax])
 shading interp
 hold on;
-surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1,'FaceAlpha','interp','FaceColor','interp');
+surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
 clim([0,allmax])
 freezeColors;
@@ -87,20 +93,16 @@ freezeColors(jicolorbar);
 shading interp
 grid off
 set(gca,'XTick',[], 'YTick', [])
-% scatter(Xsm(boundC1),Ysm(boundC1),'black');
-set(gca,'XColor','w')
-set(gca,'YColor','w')
-set(gcf,'color','w');
 
 % Cell 2
-surf(Xcol,Ycol-2,ZBranch2,'AlphaData',ZBranch2,'FaceAlpha','interp','FaceColor','interp');
+surf(Xcol,Ycol-2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
 freezeColors;
 freezeColors(colorbar('Location','westoutside'));
 clim([0,allmax])
 shading interp
-surf(Xcol,Ycol-2,ZBund2,'AlphaData',ZBund2,'FaceAlpha','interp','FaceColor','interp');
+surf(Xcol,Ycol-2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
 freezeColors;
 freezeColors(jicolorbar);
@@ -109,13 +111,11 @@ shading interp
 grid off
 axis equal
 set(gca,'XTick',[], 'YTick', [])
-title('Purple=Branched, Green=Bundled')
-% scatter(Xsm(boundC2),Ysm(boundC2)-2,'black');
+title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
 flipc2 = flip(boundC2);
 for i=1:length(boundC1)
     plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-    % plot3([Xsm(boundC1(i)) Xsm(flipc2(i))], [Ysm(boundC1(i)) Ysm(flipc2(i))-2],[allmax+1,allmax+1],'black')
 end
 
 hold off;
@@ -123,7 +123,6 @@ box off;
 set(gca,'XColor','w')
 set(gca,'YColor','w')
 set(gcf,'color','w');
-% set(gca,'Fontsize',20)
 
 
 
@@ -144,7 +143,7 @@ if dirIndex1<1
 end
 if ~isempty(dirIndex1)
     hold on;
-    quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2);
+    quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
     hold off;
 end
 
@@ -167,6 +166,19 @@ if dirIndex2<1
 end
 if ~isempty(dirIndex2)
     hold on;
-    quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2)
+    quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
     hold off;
 end
+
+% Plot signal
+[th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+[Xsig,Ysig] = pol2cart(th,rad);
+hold on;
+scatter(Xsig(sigBound),Ysig(sigBound)-2,'black','.')
+hold off;
+
+ohf = findobj(gcf);
+figaxes = findobj(ohf(1), 'Type', 'axes');
+set(figaxes(1),'Fontsize',15)
+set(figaxes(2),'Fontsize',14)
+camroll(90)

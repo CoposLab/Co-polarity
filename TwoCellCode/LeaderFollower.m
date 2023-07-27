@@ -1,9 +1,9 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/bundledracbranchedrho/100aRho100bRac';
+filename = './results/cil1/100RacOff100RhoOn';
 maxnum=50;
 
-angle=pi/8;
+angle=pi/4;
 
 counterlf=0;
 counteryes=0;
@@ -42,6 +42,11 @@ for i=1:maxnum
     % plot(xBundled2,yBundled2)
     % plot(xBranched2,yBranched2)
     % hold off
+
+    a1=yBranched1;
+    b1=yBundled1;
+    a2=yBranched2;
+    b2=yBundled2;
 
     [th,rad] = meshgrid((0:3.6:360)*pi/180,1);
 
@@ -128,3 +133,4 @@ for i=1:maxnum
 end
 toc
 sprintf('Number leader/follower: %d',counterlf)
+sprintf('Number leader/follower np: %d', counterlf2)

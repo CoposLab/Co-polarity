@@ -368,7 +368,24 @@ while (ppp<=1)
     for t=1:(Nt-1)
 
         %% Run biochemisty
-        [Konx,Kony,Kfbx,Kfby,Koffx,Koffy] = spatialrates(ron,rfb,roff,a,b,s,beta,cond,[]); % set rates
+        % [Konx,Kony,Kfbx,Kfby,Koffx,Koffy] = spatialrates(ron,rfb,roff,a,b,s,beta,cond,[]); % set rates
+
+        sigper=0.25;
+        sigBound = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
+        
+        Konx=ones(Na,1)*ron/10;
+        Kony=ones(Na,1)*ron;
+        Koffx=ones(Na,1)*roff;
+        Koffy=ones(Na,1)*roff/10;
+        Kfbx=ones(Na,1)*rfb/10;
+        Kfby=ones(Na,1)*rfb;
+
+        Konx(sigBound) = ron;
+        Kony(sigBound) = ron/10;
+        Koffx(sigBound) = roff/10;
+        Koffy(sigBound) = roff;
+        Kfbx(sigBound) = rfb;
+        Kfby(sigBound) = rfb/10;
 
         if((t-1)*dt<Tx(rxn_count_x))
             NNx(t+1) = X(rxn_count_x-1);
