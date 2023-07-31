@@ -16,8 +16,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='20';
-savelocation='./results/branchedupnotsquared/3branched';
+setnum='98';
+savelocation='./results3/uncoupled3/uncoupled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -40,6 +40,9 @@ while (ppp<=1)
     counter_ppp = counter_ppp+1;
 
     clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells
+    
+    rng('shuffle');
+
     % Set actin filament parameters
     %
     Da      = 0.5;                  % diffusion coefficient for actin
@@ -93,7 +96,7 @@ while (ppp<=1)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.25;
     sigBound = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
@@ -102,9 +105,9 @@ while (ppp<=1)
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 3.0;
+    branchedConst1 = 1.0;
     bundledConst1 = 1.0;
-    branchedConst2 = 3.0;
+    branchedConst2 = 1.0;
     bundledConst2 = 1.0;
 
     Ka1=ones(Na,1);
@@ -575,14 +578,14 @@ while (ppp<=1)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
+        % Konx1(boundC1)=Konx1(boundC1)*10;
+        % Konx2(boundC2)=Konx2(boundC2)*10;
 
-        % Kony1(boundC1)=Kony1(boundC1)/100;
-        % Kony2(boundC2)=Kony2(boundC2)/100;
+        % Kony1(boundC1)=Kony1(boundC1)*10;
+        % Kony2(boundC2)=Kony2(boundC2)*10;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        % Koffx2(boundC2)=Koffx2(boundC2)*100;
+        % Koffx2(boundC2)=Koffx2(boundC2)*10;
 
         % Koffy1(boundC1)=Koffy1(boundC1)/100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;

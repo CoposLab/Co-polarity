@@ -1,7 +1,7 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/cil1/100RacOff100RhoOn';
-maxnum=50;
+filename = './results3/uncoupled3/uncoupled';
+maxnum=100;
 
 angle=pi/4;
 
@@ -132,5 +132,8 @@ for i=1:maxnum
 
 end
 toc
-sprintf('Number leader/follower: %d',counterlf)
-sprintf('Number leader/follower np: %d', counterlf2)
+sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber leader/follower np: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterlf2)
+% sprintf('Number leader/follower: %d',counterlf)
+% sprintf('Number leader/follower np: %d', counterlf2)
+
+
