@@ -1,7 +1,7 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/uncoupled3/uncoupled';
-maxnum=100;
+filename = './results3/bundledracbranchedrho2/100bRac100aRho';
+maxnum=50;
 
 angle=pi/4;
 
@@ -12,6 +12,7 @@ counterno=0;
 counter1np=0;
 counter2np=0;
 counterlf2=0;
+signal_polarized = 0;
 tic
 for i=1:maxnum
     close all
@@ -130,10 +131,15 @@ for i=1:maxnum
     end
     % sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
+    if ~isempty(dirIndex2)
+        medang2 = th(1,dirIndex2);
+        if abs(medang2 - 5*pi/4)<pi/4
+            signal_polarized=signal_polarized+1;
+        end
+    end
+
 end
 toc
-sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber leader/follower np: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterlf2)
+sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber leader/follower np: %d\nPolarized: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterlf2,signal_polarized)
 % sprintf('Number leader/follower: %d',counterlf)
 % sprintf('Number leader/follower np: %d', counterlf2)
-
-

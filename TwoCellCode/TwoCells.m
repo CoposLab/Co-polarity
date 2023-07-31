@@ -15,9 +15,9 @@ clear;
 close all;
 clc;
 
-savefigs=0;
-setnum='1';
-savelocation='./results3/uncoupled3/uncoupled';
+savefigs=1;
+setnum='50';
+savelocation='./results3/bundledracbranchedrho2/100bRac100aRho';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -562,12 +562,12 @@ while (ppp<=1)
         % this works
         if signal==1
             steepness = 20;
-            Konx2 = ron*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
-            Kony2 = ron*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
-            Kfbx2 = rfb*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
-            Kfby2 = rfb*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
-            Koffx2 = roff*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
-            Koffy2 = roff*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
+            Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
+            Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
+            Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
+            Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
+            Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
+            Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
         end
 
         % if signal==1
@@ -591,11 +591,11 @@ while (ppp<=1)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*10;
-        % Konx2(boundC2)=Konx2(boundC2)*10;
+        % Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
 
-        % Kony1(boundC1)=Kony1(boundC1)*10;
-        % Kony2(boundC2)=Kony2(boundC2)*10;
+        % Kony1(boundC1)=Kony1(boundC1)/100;
+        % Kony2(boundC2)=Kony2(boundC2)/100;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2)=Koffx2(boundC2)*10;
@@ -674,11 +674,11 @@ while (ppp<=1)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
-        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
-        % 
-        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
-        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
+        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
+        Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
+
+        Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
+        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
 
 
         %Cell 1
