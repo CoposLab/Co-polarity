@@ -15,8 +15,8 @@ clear;
 close all;
 clc;
 
-savefigs=1;
-setnum='98';
+savefigs=0;
+setnum='1';
 savelocation='./results3/uncoupled3/uncoupled';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
@@ -559,15 +559,28 @@ while (ppp<=1)
         % Kfbx2(sigBound) = rfb;
         % Kfby2(sigBound) = rfb/8;
 
+        % this works
         if signal==1
             steepness = 20;
-            Konx2 = ron*(tanh(steepness*(s1-s1(sigBound(1)))) - tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
-            Kony2 = ron*(2 - tanh(steepness*(s1-s1(sigBound(1)))) + tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
-            Kfbx2 = rfb*(tanh(steepness*(s1-s1(sigBound(1)))) - tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
-            Kfby2 = rfb*(2 - tanh(steepness*(s1-s1(sigBound(1)))) + tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
-            Koffx2 = roff*(2 - tanh(steepness*(s1-s1(sigBound(1)))) + tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
-            Koffy2 = roff*(tanh(steepness*(s1-s1(sigBound(1)))) - tanh(steepness*(s1-s1(sigBound(end)))) + 0.2)/2.2;
+            Konx2 = ron*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
+            Kony2 = ron*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
+            Kfbx2 = rfb*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
+            Kfby2 = rfb*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
+            Koffx2 = roff*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
+            Koffy2 = roff*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2;
         end
+
+        % if signal==1
+        %     steepness = 20;
+        %     fx1=tanh(steepness*(s2-s2(sigBound(1))));
+        %     fx2=tanh(steepness*(s2-s2(sigBound(end))));
+        %     Konx2 = ron*ones(length(s2),1); %(ron*fx1+ron)/2 + (-fx2*ron+ron)/2;
+        %     Kony2 = ((ron*(-fx1)+ron)/2 + (fx2*ron+ron)/2 + ron)/2;
+        %     Kfbx2 = (rfb*fx1+rfb)/2 + (-fx2*rfb+rfb)/2;
+        %     Kfby2 = ((rfb*(-fx1)+rfb)/2 + (fx2*rfb+rfb)/2 + rfb)/2;
+        %     Koffx2 = ((roff*(-fx1)+roff)/2 + (fx2*roff+roff)/2 + roff)/2;
+        %     Koffy2 = (roff*fx1+roff)/2 + (-fx2*roff+roff)/2;
+        % end
 
          % steepness = 20;
          % Konx1 = ron*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
@@ -780,7 +793,7 @@ while (ppp<=1)
             r2 = rand(nny2,1);
 
             if(nny2==0)
-                sprintf('here 2rac')
+                sprintf('here 2rho')
                 counter_ppp = ppp;
                 quit_cond = 1;
                 break
