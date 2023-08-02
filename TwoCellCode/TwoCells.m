@@ -12,31 +12,33 @@ addpath('./freeze_colors')
 addpath('../SingleCellCode_Published')
 
 clear;
+
 close all;
 clc;
-
-savefigs=1;
-setnum='36';
-savelocation='./results3/antagonismrhodown/0_5epsilon1RhoRemoved100thRhoOn';
-if savefigs==1
-    % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
-    % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
-    filenameCells=strcat(savelocation,'Cells_',setnum);
-    filenameScatter=strcat(savelocation,'Scatter_',setnum);
-end
-
-vid = 0;
-vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
-vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
-% vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
-% vidObj2 = VideoWriter('lineplot2.mp4','MPEG-4');
-% vidObjCol2 = VideoWriter('colorplot2.mp4','MPEG-4');
-% vidObjRR2 = VideoWriter('colorplotrr2.mp4','MPEG-4');
 
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=10)
+    close all;
+    savefigs=1;
+    setnum=int2str(ppp);
+    savelocation='./results3/uncoupled4/uncoupled';
+    if savefigs==1
+        % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
+        % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
+        filenameCells=strcat(savelocation,'Cells_',setnum);
+        filenameScatter=strcat(savelocation,'Scatter_',setnum);
+    end
+    
+    vid = 0;
+    vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
+    vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
+    % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
+    % vidObj2 = VideoWriter('lineplot2.mp4','MPEG-4');
+    % vidObjCol2 = VideoWriter('colorplot2.mp4','MPEG-4');
+    % vidObjRR2 = VideoWriter('colorplotrr2.mp4','MPEG-4');
+
     counter_ppp = counter_ppp+1;
 
     clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells
@@ -83,7 +85,7 @@ while (ppp<=1)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=1;
+    numToRemove=0;
     counter1=0;
     counter2=0;
 
@@ -97,7 +99,7 @@ while (ppp<=1)
 
     % Signal
     signal=1;
-    sigper=0.25;
+    sigper=0.40;
     sigBound = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
     % Competition for limited resource (actin monomers) term
@@ -594,8 +596,8 @@ while (ppp<=1)
         % Konx1(boundC1)=Konx1(boundC1)*100;
         % Konx2(boundC2)=Konx2(boundC2)*100;
 
-        Kony1(boundC1)=Kony1(boundC1)/100;
-        Kony2(boundC2)=Kony2(boundC2)/100;
+        % Kony1(boundC1)=Kony1(boundC1)/100;
+        % Kony2(boundC2)=Kony2(boundC2)/100;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2)=Koffx2(boundC2)*10;
@@ -1339,14 +1341,15 @@ while (ppp<=1)
     if(quit_cond==0)
         ppp = ppp + 1;
     end
+
+    if savefigs==1
+        % savefig(figc1,filenameC1);
+        % savefig(figc2,filenameC2);
+        savefig(figcells,filenameCells);
+        savefig(scatplot,filenameScatter);
+    end
 end
 
-if savefigs==1
-    % savefig(figc1,filenameC1);
-    % savefig(figc2,filenameC2);
-    savefig(figcells,filenameCells);
-    savefig(scatplot,filenameScatter);
-end
 
 %% Plot all particle trajectories
 % ccx = [0 0 255]/256.*ones(Nt,1);     % blue
@@ -1386,3 +1389,5 @@ end
 %     %yticks([0 0.5 1 1.5 2]);
 %     %yticklabels({'0','0.25','0.5','0.75','1'});
 % end
+
+%end
