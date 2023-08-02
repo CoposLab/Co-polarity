@@ -1,7 +1,7 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/branchedup2/3branched';
-maxnum=50;
+filename = './results3/uncoupled4/uncoupled';
+maxnum=10;
 
 angle=pi/4;
 
@@ -131,15 +131,18 @@ for i=1:maxnum
     end
     % sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
+    siglocation = 5*pi/4;
+    sigper = 0.4;
+
     if ~isempty(dirIndex2)
         medang2 = th(1,dirIndex2);
-        if abs(medang2 - 5*pi/8)<pi/4
+        if abs(medang2 - siglocation)<2*pi/5
             signal_polarized=signal_polarized+1;
         end
     end
 
 end
 toc
-sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber leader/follower np: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterlf2)
+sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber leader/follower np: %d\nPolarized: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterlf2,signal_polarized)
 % sprintf('Number leader/follower: %d',counterlf)
 % sprintf('Number leader/follower np: %d', counterlf2)

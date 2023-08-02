@@ -1,9 +1,12 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/uncoupled4/uncoupled';
-maxnum=10;
+filename = './results3/antagonismrhodown2/0_5epsilon1RhoRemoved100thRhoOn';
+maxnum=50;
 
 angle=pi/4;
+
+siglocation = 5*pi/4;
+sigper = 0.4;
 
 counterlf=0;
 counteryes=0;
@@ -133,7 +136,7 @@ for i=1:maxnum
 
     if ~isempty(dirIndex2)
         medang2 = th(1,dirIndex2);
-        if abs(medang2 - 5*pi/4)<pi/4
+        if abs(medang2 - siglocation)<(sigper*2*pi)/2
             signal_polarized=signal_polarized+1;
         end
     end

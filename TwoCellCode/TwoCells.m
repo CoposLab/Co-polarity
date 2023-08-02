@@ -19,11 +19,11 @@ clc;
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=10)
+while (ppp<=50)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results3/uncoupled4/uncoupled';
+    savelocation='./results3/antagonismrhodown2/0_5epsilon1RhoRemoved100thRhoOn';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -85,7 +85,7 @@ while (ppp<=10)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=0;
+    numToRemove=1;
     counter1=0;
     counter2=0;
 
@@ -419,6 +419,7 @@ while (ppp<=10)
         % Concentric circles
         % Cell 1
         figcells=figure(16);
+        clf
         surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
@@ -595,10 +596,10 @@ while (ppp<=10)
         % Set konx and kony in contact region
         % Konx1(boundC1)=Konx1(boundC1)*100;
         % Konx2(boundC2)=Konx2(boundC2)*100;
-
-        % Kony1(boundC1)=Kony1(boundC1)/100;
-        % Kony2(boundC2)=Kony2(boundC2)/100;
-
+        
+        Kony1(boundC1)=Kony1(boundC1)/100;
+        Kony2(boundC2)=Kony2(boundC2)/100;
+        
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2)=Koffx2(boundC2)*10;
 
@@ -1182,7 +1183,7 @@ while (ppp<=10)
 
             % Concentric circles
             % Cell 1
-            figcells=figure(16);
+            figcells=figure(ppp+1);
             surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
             view(2)
             colormap(branchedColor)
@@ -1339,15 +1340,16 @@ while (ppp<=10)
     sprintf('Simulation %d done',ppp)
     toc
     if(quit_cond==0)
+        if savefigs==1
+            % savefig(figc1,filenameC1);
+            % savefig(figc2,filenameC2);
+            savefig(figcells,filenameCells);
+            savefig(scatplot,filenameScatter);
+        end
         ppp = ppp + 1;
     end
 
-    if savefigs==1
-        % savefig(figc1,filenameC1);
-        % savefig(figc2,filenameC2);
-        savefig(figcells,filenameCells);
-        savefig(scatplot,filenameScatter);
-    end
+    
 end
 
 
