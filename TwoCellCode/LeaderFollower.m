@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/bundledracbranchedrho2/100bRac100aRho';
+filename = './results3/rhoup/100RhoOn';
 maxnum=50;
 
 angle=pi/4;

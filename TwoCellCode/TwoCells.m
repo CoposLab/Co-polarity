@@ -16,8 +16,8 @@ close all;
 clc;
 
 savefigs=1;
-setnum='50';
-savelocation='./results3/bundledracbranchedrho2/100bRac100aRho';
+setnum='14';
+savelocation='./results3/rhoup/100RhoOn';
 if savefigs==1
     % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
     % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -591,11 +591,11 @@ while (ppp<=1)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
+        % Konx1(boundC1)=Konx1(boundC1)/100;
+        % Konx2(boundC2)=Konx2(boundC2)/100;
 
-        % Kony1(boundC1)=Kony1(boundC1)/100;
-        % Kony2(boundC2)=Kony2(boundC2)/100;
+        Kony1(boundC1)=Kony1(boundC1)*100;
+        Kony2(boundC2)=Kony2(boundC2)*100;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2)=Koffx2(boundC2)*10;
@@ -674,11 +674,11 @@ while (ppp<=1)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
-        Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
-
-        Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
-        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
+        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
+        % 
+        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
+        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
 
 
         %Cell 1
