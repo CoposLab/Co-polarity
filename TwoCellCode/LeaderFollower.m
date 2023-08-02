@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/rhoup/100RhoOn';
+filename = './results3/antagonismrhodown/0_5epsilon1RhoRemoved100thRhoOn';
 maxnum=50;
 
 angle=pi/4;
