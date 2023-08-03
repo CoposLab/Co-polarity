@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/antagonismrhodown2/0_5epsilon1RhoRemoved100thRhoOn';
+filename = './results/bundledpromotesbranched2/0_8ka';
 maxnum=50;
 
 angle=pi/4;
