@@ -1,7 +1,7 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/antagonism2/0_5epsilon10RhoRemoved';
-maxnum=50;
+filename = './results3/bundledrac/100bRac';
+maxnum=100;
 
 angle=pi/4;
 

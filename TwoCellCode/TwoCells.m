@@ -23,7 +23,7 @@ while (ppp<=50)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results3/antagonism2/0_5epsilon10RhoRemoved';
+    savelocation='./results3/racrhoracrho/100all';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -85,7 +85,7 @@ while (ppp<=50)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=10;
+    numToRemove=0;
     counter1=0;
     counter2=0;
 
@@ -594,16 +594,16 @@ while (ppp<=50)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*100;
+        Konx1(boundC1)=Konx1(boundC1)*100;
         % Konx2(boundC2)=Konx2(boundC2)*100;
         
-        % Kony1(boundC1)=Kony1(boundC1)/100;
-        % Kony2(boundC2)=Kony2(boundC2)/100;
+        Kony1(boundC1)=Kony1(boundC1)*10;
+        % Kony2(boundC2)=Kony2(boundC2)*100;
         
-        % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        % Koffx2(boundC2)=Koffx2(boundC2)*10;
+        % Koffx1(boundC1)=Koffx1(boundC1)*100;
+        % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
-        % Koffy1(boundC1)=Koffy1(boundC1)/100;
+        % Koffy1(boundC1)=Koffy1(boundC1)*100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)*100;
@@ -615,6 +615,8 @@ while (ppp<=50)
         % Set konx and kony away from contact region
         % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
         % Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*1000;
+        Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*100;
+        Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*100;
 
 
         % Set konx and kony depending on rac/rho concentrations in contact
@@ -634,7 +636,7 @@ while (ppp<=50)
         %         % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
         %         % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
         %         % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
-        %         Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
+        %         % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
         %     end
         %     if sumx2>0
         %         % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*100);
@@ -642,19 +644,21 @@ while (ppp<=50)
         %         % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
         %         % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
         %         % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
-        %         Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
+        %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
         %     end
         %     if sumy1>0
         %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
         %         % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*10);
         %         % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
         %         % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
+        %         Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*100);
         %     end
         %     if sumy2>0
         %         % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy2*100);
         %         % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*10);
         %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
         %         % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
+        %         Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*100);
         %     end
         % end
 
@@ -677,8 +681,8 @@ while (ppp<=50)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
-        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
+        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
+        Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
         % 
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
         % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
@@ -1039,13 +1043,13 @@ while (ppp<=50)
         diffRHSb2 = Hm2*b2;
 
         ka1=zeros(length(b2),1);
-        ka1(boundC1)=0.8*ones(length(boundC1),1);
+        ka1(boundC1)=1*ones(length(boundC1),1);
         kb1=zeros(length(a2),1);
-        kb1(boundC1)=0*ones(length(boundC1),1);
+        kb1(boundC1)=1*ones(length(boundC1),1);
         ka2=zeros(length(b1),1);
-        ka2(boundC2)=0.8*ones(length(boundC2),1);
+        ka2(boundC2)=1*ones(length(boundC2),1);
         kb2=zeros(length(a1),1);
-        kb2(boundC2)=0*ones(length(boundC2),1);
+        kb2(boundC2)=1*ones(length(boundC2),1);
         abmax=50;
 
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
