@@ -17,13 +17,13 @@ close all;
 clc;
 
 counter_ppp = 1;
-ppp = 51;
+ppp = 1;
 
-while (ppp<=100)
+while (ppp<=1)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results/racrhoracrho/1000all';
+    savelocation='./movies3/signalUncoupled';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -31,7 +31,7 @@ while (ppp<=100)
         filenameScatter=strcat(savelocation,'Scatter_',setnum);
     end
     
-    vid = 0;
+    vid = 1;
     vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
     vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
     % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
@@ -594,11 +594,11 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
         % 
         % Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Kony2(boundC2)=Kony2(boundC2)*100;
+        % Kony2(boundC2)=Kony2(boundC2)*1000;
         % 
         % Koffx1(boundC1)=Koffx1(boundC1)*100;
         % Koffx2(boundC2)=Koffx2(boundC2)*100;
@@ -1075,8 +1075,8 @@ while (ppp<=100)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-         % if mod(t,tplot) == 0
-        if t==(Nt-1)
+         if mod(t,tplot) == 0
+        % if t==(Nt-1)
             scatplot=figure(ppp);
             subplot(1,2,1); %Cell 1
             plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
@@ -1188,6 +1188,7 @@ while (ppp<=100)
             % Concentric circles
             % Cell 1
             figcells=figure(ppp+1);
+            clf
             surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
             view(2)
             colormap(branchedColor)
