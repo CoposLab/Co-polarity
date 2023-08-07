@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/cilcoa2/100RacOff10RhoOn100RacOn';
+filename = './results/racrhoracrho/1000all';
 maxnum=100;
 
 angle=pi/4;

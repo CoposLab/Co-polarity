@@ -21,9 +21,9 @@ ppp = 51;
 
 while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results3/antagonismbranchedup/0_5epsilon1Removed1_2branched';
+    savelocation='./results/racrhoracrho/1000all';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -85,7 +85,7 @@ while (ppp<=100)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=1;
+    numToRemove=0;
     counter1=0;
     counter2=0;
 
@@ -107,9 +107,9 @@ while (ppp<=100)
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 1.2;
+    branchedConst1 = 1.0;
     bundledConst1 = 1.0;
-    branchedConst2 = 1.2;
+    branchedConst2 = 1.0;
     bundledConst2 = 1.0;
 
     Ka1=ones(Na,1);
@@ -595,9 +595,9 @@ while (ppp<=100)
 
         % Set konx and kony in contact region
         % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*1000;
         % 
-        % Kony1(boundC1)=Kony1(boundC1)*10;
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
         % Kony2(boundC2)=Kony2(boundC2)*100;
         % 
         % Koffx1(boundC1)=Koffx1(boundC1)*100;
@@ -621,46 +621,46 @@ while (ppp<=100)
 
         % Set konx and kony depending on rac/rho concentrations in contact
         % region
-        % epsilon1 = 0.1;
-        % flipc2=flip(boundC2);
-        % scaledC1 = (L*boundC1/Na);
-        % scaledC2 = L*flipc2/Na;
-        % for i=1:length(boundC1)
-        %     sumx1 = sum(abs(posx1(:,t)-scaledC1(i))<=epsilon1);
-        %     sumx2 = sum(abs(posx2(:,t)-scaledC2(i))<=epsilon1);
-        %     sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
-        %     sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
-        %     if sumx1>0
-        %         % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*100);
-        %         % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*10);
-        %         % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
-        %         % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
-        %         % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
-        %         % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
-        %     end
-        %     if sumx2>0
-        %         % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*100);
-        %         % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*10);
-        %         % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
-        %         % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
-        %         % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
-        %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
-        %     end
-        %     if sumy1>0
-        %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
-        %         % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*10);
-        %         % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
-        %         % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
-        %         Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*100);
-        %     end
-        %     if sumy2>0
-        %         % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy2*100);
-        %         % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*10);
-        %         % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
-        %         % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
-        %         Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*100);
-        %     end
-        % end
+        epsilon1 = 0.1;
+        flipc2=flip(boundC2);
+        scaledC1 = (L*boundC1/Na);
+        scaledC2 = L*flipc2/Na;
+        for i=1:length(boundC1)
+            sumx1 = sum(abs(posx1(:,t)-scaledC1(i))<=epsilon1);
+            sumx2 = sum(abs(posx2(:,t)-scaledC2(i))<=epsilon1);
+            sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
+            sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
+            if sumx1>0
+                % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*100);
+                % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*10);
+                % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
+                % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
+                % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
+                % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
+            end
+            if sumx2>0
+                % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*100);
+                % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*10);
+                % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
+                % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
+                % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
+                % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
+            end
+            if sumy1>0
+                % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
+                % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*10);
+                % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
+                % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
+                % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*100);
+            end
+            if sumy2>0
+                % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy2*100);
+                % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*10);
+                % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
+                % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
+                % Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*100);
+            end
+        end
 
         % if max(a2)>0
         %     Kb1(boundC1) = 2*a2(flipc2)/max(a2)+1; % change bundled coeff in cell 1 proportionally to branched in cell 2

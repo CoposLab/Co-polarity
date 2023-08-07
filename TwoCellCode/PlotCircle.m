@@ -169,11 +169,17 @@ end
 N=length(a1);
 smoothed=ones(1,N);
 for i=1:N
-    smoothed(i) = (1/5)*(a1((i-2)*(i>2)+(i-2+N)*(i<=2))+a1((i-1)*(i>1)+(N)*(i==1))+a1(i)+a1((i+1)*(i<N)+(1)*(i==N))+a1((i+2)*(i<N-1)+(i+2-N)*(i>=N-1)));
+    smoothed(i) = (1/7)*(a1((i-3)*(i>3)+(i-3+N)*(i<=3)) ...
+        +a1((i-2)*(i>2)+(i-2+N)*(i<=2)) ...
+        +a1((i-1)*(i>1)+(N)*(i==1)) ...
+        +a1(i) ...
+        +a1((i+1)*(i<N)+(1)*(i==N)) ...
+        +a1((i+2)*(i<N-1)+(i+2-N)*(i>=N-1)) ...
+        +a1((i+3)*(i<N-2)+(i+3-N)*(i>=N-2)));
 end
 
 baseline=0.1;
-peakIndices=[];
+peakIndices1=[];
 peakIndex=0;
 peakValue=0;
 for i=1:N
@@ -183,17 +189,17 @@ for i=1:N
             peakValue=smoothed(i);
         end
     elseif smoothed(i)<baseline && peakIndex~=0
-        peakIndices=[peakIndices,peakIndex];
+        peakIndices1=[peakIndices1,peakIndex];
         peakIndex=0;
         peakValue=0;
     end
 end
 if peakIndex~=0
-    peakIndices=[peakIndices,peakIndex];
+    peakIndices1=[peakIndices1,peakIndex];
 end
 
-[maxval,maxind] = max(smoothed(peakIndices));
-peakInd1 = peakIndices(maxind);
+[maxval,maxind] = max(smoothed(peakIndices1));
+peakInd1 = peakIndices1(maxind);
 figure(16)
 hold on
 quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
@@ -206,7 +212,7 @@ for i=1:N
     smoothed(i) = (1/5)*(a2((i-2)*(i>2)+(i-2+N)*(i<=2))+a2((i-1)*(i>1)+(N)*(i==1))+a2(i)+a2((i+1)*(i<N)+(1)*(i==N))+a2((i+2)*(i<N-1)+(i+2-N)*(i>=N-1)));
 end
 baseline=0.1;
-peakIndices=[];
+peakIndices2=[];
 peakIndex=0;
 peakValue=0;
 for i=1:N
@@ -216,16 +222,16 @@ for i=1:N
             peakValue=smoothed(i);
         end
     elseif smoothed(i)<baseline && peakIndex~=0
-        peakIndices=[peakIndices,peakIndex];
+        peakIndices2=[peakIndices2,peakIndex];
         peakIndex=0;
         peakValue=0;
     end
 end
 if peakIndex~=0
-    peakIndices=[peakIndices,peakIndex];
+    peakIndices2=[peakIndices2,peakIndex];
 end
-[maxval,maxind] = max(smoothed(peakIndices));
-peakInd2 = peakIndices(maxind);
+[maxval,maxind] = max(smoothed(peakIndices2));
+peakInd2 = peakIndices2(maxind);
 figure(16)
 hold on
 quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
@@ -251,7 +257,7 @@ subplot(1,2,1)
 hold on
 plot(Xa,a1,'markerfacecolor',[159 219 229]/255,'linewidth',2); hold on;
 plot(Xa,b1,'markerfacecolor','k','linewidth',2);
-scatter(Xa(peakInd1),a1(peakInd1),'filled')
+scatter(Xa(peakIndices1),a1(peakIndices1),'filled')
 lgd = legend('Branched','Bundled','Location','northeast');
 lgd.NumColumns = 1;
 hold off
@@ -259,7 +265,7 @@ subplot(1,2,2)
 hold on
 plot(Xa,a2,'markerfacecolor',[159 219 229]/255,'linewidth',2); hold on;
 plot(Xa,b2,'markerfacecolor','k','linewidth',2);
-scatter(Xa(peakInd2),a2(peakInd2),'filled')
+scatter(Xa(peakIndices2),a2(peakIndices2),'filled')
 lgd = legend('Branched','Bundled','Location','northeast');
 lgd.NumColumns = 1;
 hold off
