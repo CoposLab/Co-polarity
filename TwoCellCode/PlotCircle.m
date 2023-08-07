@@ -179,14 +179,15 @@ N=length(a1);
 % end
 
 epsilon=0.01;                     % variance squared (default)
-x=linspace(0,L,Na);
+x=linspace(0,L,N);
 a0=sqrt(pi)/(sqrt(2*pi*epsilon)); % area of normal distribution
-smoothed=zeros(N,1);
-for i=1:N
-    smoothed(i) = exp(-(x-a1(i)).^2/(2*epsilon))./(sqrt(2*pi*epsilon));
-end
+% smoothed=zeros(length(x),N);
+% for i=1:N
+%     smoothed(:,i) = exp(-(x-a1(i)).^2/(2*epsilon))./(sqrt(2*pi*epsilon));
+% end
+smoothed=exp(-(a1.^2)/(2*epsilon^2))./(sqrt(2*pi*epsilon));
 smoothed=smoothed/a0;
-% smoothed=sum(smoothed,2);
+smoothed=sum(smoothed,2);
 
 baseline=0.1;
 peakIndices1=[];

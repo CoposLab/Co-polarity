@@ -17,13 +17,13 @@ close all;
 clc;
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 51;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./movies3/signalUncoupled';
+    savelocation='./results/racrhodownpropself/0_1epsilon100RacOff100RhoOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -31,7 +31,7 @@ while (ppp<=1)
         filenameScatter=strcat(savelocation,'Scatter_',setnum);
     end
     
-    vid = 1;
+    vid = 0;
     vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
     vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
     % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
@@ -98,7 +98,7 @@ while (ppp<=1)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
@@ -595,7 +595,7 @@ while (ppp<=1)
 
         % Set konx and kony in contact region
         % Konx1(boundC1)=Konx1(boundC1)*1000;
-        % Konx2(boundC2)=Konx2(boundC2)*1000;
+        % Konx2(boundC2)=Konx2(boundC2)*10;
         % 
         % Kony1(boundC1)=Kony1(boundC1)*1000;
         % Kony2(boundC2)=Kony2(boundC2)*1000;
@@ -634,7 +634,7 @@ while (ppp<=1)
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*100);
                 % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*10);
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
-                % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
+                Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
             end
@@ -642,7 +642,7 @@ while (ppp<=1)
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*100);
                 % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*10);
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
-                % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
+                Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
             end
@@ -650,14 +650,14 @@ while (ppp<=1)
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
                 % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*10);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
-                % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
+                Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*100);
             end
             if sumy2>0
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy2*100);
                 % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*10);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
-                % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
+                Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
                 % Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*100);
             end
         end
