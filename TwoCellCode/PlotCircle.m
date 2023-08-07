@@ -1,4 +1,4 @@
-
+set(0,'DefaultFigureVisible','on')
 close all;
 
 %Define colors
@@ -68,11 +68,6 @@ ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
 [Xmid,Ymid] = pol2cart(th,rad);
 
 allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
-
-mbr1 = max(max(ZBranch1));
-mbun1 = max(max(ZBund1));
-mbr2 = max(max(ZBranch2));
-mbun2 = max(max(ZBund2));
 
 % Concentric circles
 % Cell 1
@@ -170,7 +165,74 @@ if ~isempty(dirIndex2)
     hold off;
 end
 
+% Find peak for cell 1
+N=length(a1);
+smoothed=ones(1,N);
+for i=1:N
+    smoothed(i) = (1/5)*(a1((i-2)*(i>2)+(i-2+N)*(i<=2))+a1((i-1)*(i>1)+(N)*(i==1))+a1(i)+a1((i+1)*(i<N)+(1)*(i==N))+a1((i+2)*(i<N-1)+(i+2-N)*(i>=N-1)));
+end
+
+baseline=0.1;
+peakIndices=[];
+peakIndex=0;
+peakValue=0;
+for i=1:N
+    if smoothed(i)>baseline
+        if peakValue==0 || smoothed(i)>peakValue
+            peakIndex=i;
+            peakValue=smoothed(i);
+        end
+    elseif smoothed(i)<baseline && peakIndex~=0
+        peakIndices=[peakIndices,peakIndex];
+        peakIndex=0;
+        peakValue=0;
+    end
+end
+if peakIndex~=0
+    peakIndices=[peakIndices,peakIndex];
+end
+
+[maxval,maxind] = max(smoothed(peakIndices));
+peakInd1 = peakIndices(maxind);
+figure(16)
+hold on
+quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+hold off;
+
+% Find peak for cell 2
+N=length(a2);
+smoothed=ones(1,N);
+for i=1:N
+    smoothed(i) = (1/5)*(a2((i-2)*(i>2)+(i-2+N)*(i<=2))+a2((i-1)*(i>1)+(N)*(i==1))+a2(i)+a2((i+1)*(i<N)+(1)*(i==N))+a2((i+2)*(i<N-1)+(i+2-N)*(i>=N-1)));
+end
+baseline=0.1;
+peakIndices=[];
+peakIndex=0;
+peakValue=0;
+for i=1:N
+    if smoothed(i)>baseline
+        if peakValue==0 || smoothed(i)>peakValue
+            peakIndex=i;
+            peakValue=smoothed(i);
+        end
+    elseif smoothed(i)<baseline && peakIndex~=0
+        peakIndices=[peakIndices,peakIndex];
+        peakIndex=0;
+        peakValue=0;
+    end
+end
+if peakIndex~=0
+    peakIndices=[peakIndices,peakIndex];
+end
+[maxval,maxind] = max(smoothed(peakIndices));
+peakInd2 = peakIndices(maxind);
+figure(16)
+hold on
+quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+hold off;
+
 % Plot signal
+figure(16)
 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
 [Xsig,Ysig] = pol2cart(th,rad);
 hold on;
@@ -182,3 +244,22 @@ figaxes = findobj(ohf(1), 'Type', 'axes');
 set(figaxes(1),'Fontsize',15)
 set(figaxes(2),'Fontsize',14)
 camroll(90)
+
+
+figure(2)
+subplot(1,2,1)
+hold on
+plot(Xa,a1,'markerfacecolor',[159 219 229]/255,'linewidth',2); hold on;
+plot(Xa,b1,'markerfacecolor','k','linewidth',2);
+scatter(Xa(peakInd1),a1(peakInd1),'filled')
+lgd = legend('Branched','Bundled','Location','northeast');
+lgd.NumColumns = 1;
+hold off
+subplot(1,2,2)
+hold on
+plot(Xa,a2,'markerfacecolor',[159 219 229]/255,'linewidth',2); hold on;
+plot(Xa,b2,'markerfacecolor','k','linewidth',2);
+scatter(Xa(peakInd2),a2(peakInd2),'filled')
+lgd = legend('Branched','Bundled','Location','northeast');
+lgd.NumColumns = 1;
+hold off

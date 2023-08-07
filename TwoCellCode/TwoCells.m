@@ -17,13 +17,13 @@ close all;
 clc;
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 51;
 
-while (ppp<=50)
+while (ppp<=100)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./results3/racrhoracrho/100all';
+    savelocation='./results3/antagonismbranchedup/0_5epsilon1Removed1_2branched';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -85,7 +85,7 @@ while (ppp<=50)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=0;
+    numToRemove=1;
     counter1=0;
     counter2=0;
 
@@ -107,9 +107,9 @@ while (ppp<=50)
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 1.0;
+    branchedConst1 = 1.2;
     bundledConst1 = 1.0;
-    branchedConst2 = 1.0;
+    branchedConst2 = 1.2;
     bundledConst2 = 1.0;
 
     Ka1=ones(Na,1);
@@ -594,12 +594,12 @@ while (ppp<=50)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx1(boundC1)=Konx1(boundC1)*100;
         % Konx2(boundC2)=Konx2(boundC2)*100;
-        
-        Kony1(boundC1)=Kony1(boundC1)*10;
+        % 
+        % Kony1(boundC1)=Kony1(boundC1)*10;
         % Kony2(boundC2)=Kony2(boundC2)*100;
-        
+        % 
         % Koffx1(boundC1)=Koffx1(boundC1)*100;
         % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
@@ -615,8 +615,8 @@ while (ppp<=50)
         % Set konx and kony away from contact region
         % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
         % Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*1000;
-        Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*100;
-        Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*100;
+        % Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*100;
+        % Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*100;
 
 
         % Set konx and kony depending on rac/rho concentrations in contact
@@ -681,8 +681,8 @@ while (ppp<=50)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
-        Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
+        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
         % 
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
         % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
