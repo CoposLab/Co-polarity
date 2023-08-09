@@ -21,9 +21,9 @@ ppp = 1;
 
 while (ppp<=100)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./results3/cil2/10RacOff10RhoOn';
+    savelocation='./results/rhodownc1_racdownc2/1000RhoOff1000RacOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -595,16 +595,16 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*10;
+        % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*10;
-        % 
-        Kony1(boundC1)=Kony1(boundC1)*10;
-        Kony2(boundC2)=Kony2(boundC2)*10;
 
-        Koffx1(boundC1)=Koffx1(boundC1)*10;
-        Koffx2(boundC2)=Koffx2(boundC2)*10;
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
+        % Kony2(boundC2)=Kony2(boundC2)*10;
 
-        % Koffy1(boundC1)=Koffy1(boundC1)*100;
+        % Koffx1(boundC1)=Koffx1(boundC1)*10;
+        % Koffx2(boundC2)=Koffx2(boundC2)*1000;
+
+        % Koffy1(boundC1)=Koffy1(boundC1)*1000;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
@@ -1053,9 +1053,9 @@ while (ppp<=100)
         kb2(boundC2)=1*ones(length(boundC2),1);
         abmax=50;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 10*ka1)) - a1.*a1); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 10*ka2)) - a2.*a2); %Cell 2 branched
         rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched

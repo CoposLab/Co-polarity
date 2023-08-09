@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/cil2/10RacOff10RhoOn';
+filename = './results/rhodownc1_racdownc2/1000RhoOff1000RacOff';
 maxnum=100;
 
 angle=pi/4;
@@ -143,6 +143,6 @@ for i=1:maxnum
 
 end
 toc
-sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber leader/follower np: %d\nPolarized: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterlf2,signal_polarized)
+sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber dist. effort: %d\nPolarized: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterlf2,signal_polarized)
 % sprintf('Number leader/follower: %d',counterlf)
 % sprintf('Number leader/follower np: %d', counterlf2)
