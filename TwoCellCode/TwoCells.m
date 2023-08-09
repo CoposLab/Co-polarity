@@ -17,13 +17,13 @@ close all;
 clc;
 
 counter_ppp = 1;
-ppp = 51;
+ppp = 1;
 
 while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results/racrhodownpropself/0_1epsilon100RacOff100RhoOff';
+    savelocation='./results3/cil2/10RacOff10RhoOn';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -44,6 +44,7 @@ while (ppp<=100)
     clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells
     
     rng('shuffle');
+    set(0,'DefaultFigureVisible','on')
 
     % Set actin filament parameters
     %
@@ -84,7 +85,7 @@ while (ppp<=100)
     posx2 = zeros(N,Nt);              % array of positions of X(t) cell 2
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
-    epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
+    epsilon=0.1; % distance to detect other molecules (finding nearby rac/rho to remove)
     numToRemove=0;
     counter1=0;
     counter2=0;
@@ -98,7 +99,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
@@ -594,23 +595,23 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*1000;
+        % Konx1(boundC1)=Konx1(boundC1)*10;
         % Konx2(boundC2)=Konx2(boundC2)*10;
         % 
-        % Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Kony2(boundC2)=Kony2(boundC2)*1000;
-        % 
-        % Koffx1(boundC1)=Koffx1(boundC1)*100;
-        % Koffx2(boundC2)=Koffx2(boundC2)*100;
+        Kony1(boundC1)=Kony1(boundC1)*10;
+        Kony2(boundC2)=Kony2(boundC2)*10;
+
+        Koffx1(boundC1)=Koffx1(boundC1)*10;
+        Koffx2(boundC2)=Koffx2(boundC2)*10;
 
         % Koffy1(boundC1)=Koffy1(boundC1)*100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
-        % Kfbx1(boundC1)=Kfbx1(boundC1)*100;
-        % Kfbx2(boundC2)=Kfbx2(boundC2)*100;
+        % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
+        % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
 
-        % Kfby1(boundC1)=Kfby1(boundC1)*100;
-        % Kfby2(boundC2)=Kfby2(boundC2)*100;
+        % Kfby1(boundC1)=Kfby1(boundC1)/10;
+        % Kfby2(boundC2)=Kfby2(boundC2)/10;
 
         % Set konx and kony away from contact region
         % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
@@ -634,7 +635,7 @@ while (ppp<=100)
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*100);
                 % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*10);
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
-                Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
+                % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
             end
@@ -642,7 +643,7 @@ while (ppp<=100)
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*100);
                 % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*10);
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
-                Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
+                % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
             end
@@ -650,14 +651,14 @@ while (ppp<=100)
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy1*100);
                 % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*10);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
-                Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
+                % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*100);
             end
             if sumy2>0
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy2*100);
                 % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*10);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
-                Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
+                % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
                 % Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*100);
             end
         end
@@ -1075,8 +1076,8 @@ while (ppp<=100)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-         if mod(t,tplot) == 0
-        % if t==(Nt-1)
+         % if mod(t,tplot) == 0
+        if t==(Nt-1)
             scatplot=figure(ppp);
             subplot(1,2,1); %Cell 1
             plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;

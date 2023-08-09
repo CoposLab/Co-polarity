@@ -71,7 +71,7 @@ allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
 % Concentric circles
 % Cell 1
-figcells=figure(16);
+figcells=figure(1);
 surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
@@ -165,40 +165,55 @@ if ~isempty(dirIndex2)
     hold off;
 end
 
+% Plot signal
+figure(1)
+[th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+[Xsig,Ysig] = pol2cart(th,rad);
+hold on;
+scatter(Xsig(sigBound),Ysig(sigBound)-2,'black','.')
+hold off;
+
 % Find peak for cell 1
 N=length(a1);
-% smoothed=ones(1,N);
-% for i=1:N
-%     smoothed(i) = (1/7)*(a1((i-3)*(i>3)+(i-3+N)*(i<=3)) ...
-%         +a1((i-2)*(i>2)+(i-2+N)*(i<=2)) ...
-%         +a1((i-1)*(i>1)+(N)*(i==1)) ...
-%         +a1(i) ...
-%         +a1((i+1)*(i<N)+(1)*(i==N)) ...
-%         +a1((i+2)*(i<N-1)+(i+2-N)*(i>=N-1)) ...
-%         +a1((i+3)*(i<N-2)+(i+3-N)*(i>=N-2)));
-% end
-
-epsilon=0.01;                     % variance squared (default)
-x=linspace(0,L,N);
-a0=sqrt(pi)/(sqrt(2*pi*epsilon)); % area of normal distribution
-smoothed=zeros(length(x),N);
+smoothed1=zeros(1,N);
+smoothAmount=20;
+region=-smoothAmount:smoothAmount;
 for i=1:N
-    smoothed(:,i) = exp(-(x-a1(i)).^2/(2*epsilon))./(sqrt(2*pi*epsilon));
+    b=i-region;
+    smoothed1(i) = sum(a1(b.*(b>0 & b<=N)+(b+N).*(b<=0)+(b-N).*(b>N)))/(2*smoothAmount+1);
 end
-smoothed=smoothed/a0;
-smoothed=sum(smoothed,2);
+
+% epsilon=0.01;                     % variance squared (default)
+% x=linspace(0,L,N);
+% a0=sqrt(pi)/(sqrt(2*pi*epsilon)); % area of normal distribution
+% smoothed=zeros(length(x),N);
+% for i=1:N
+%     smoothed(:,i) = exp(-(x-a1(i)).^2/(2*epsilon))./(sqrt(2*pi*epsilon));
+% end
+% smoothed=exp(-(a1.^2)/(2*epsilon^2))./(sqrt(2*pi*epsilon));
+% smoothed=smoothed/a0;
+% smoothed=sum(smoothed,2);
+
+% t = 0:.001:1-0.001;
+% Fs = 1e3;
+% a1New = detrend(a1,0);
+% xdft = fft(a1);
+% freq = 0:Fs/length(a1):Fs/2;
+% xdft = xdft(1:length(a1)/2+1);
+% plot(freq,abs(xdft));
+% [~,I] = max(abs(xdft));
 
 baseline=0.1;
 peakIndices1=[];
 peakIndex=0;
 peakValue=0;
 for i=1:N
-    if smoothed(i)>baseline
-        if peakValue==0 || smoothed(i)>peakValue
+    if smoothed1(i)>baseline
+        if peakValue==0 || smoothed1(i)>peakValue
             peakIndex=i;
-            peakValue=smoothed(i);
+            peakValue=smoothed1(i);
         end
-    elseif smoothed(i)<baseline && peakIndex~=0
+    elseif smoothed1(i)<baseline && peakIndex~=0
         peakIndices1=[peakIndices1,peakIndex];
         peakIndex=0;
         peakValue=0;
@@ -208,30 +223,35 @@ if peakIndex~=0
     peakIndices1=[peakIndices1,peakIndex];
 end
 
-[maxval,maxind] = max(smoothed(peakIndices1));
+[˜,maxind] = max(smoothed1(peakIndices1));
 peakInd1 = peakIndices1(maxind);
-figure(16)
-hold on
-quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
-hold off;
+if ~isempty(peakInd1)
+    figure(1)
+    hold on
+    quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    hold off;
+end
 
 % Find peak for cell 2
 N=length(a2);
-smoothed=ones(1,N);
+smoothed2=zeros(1,N);
+region=-smoothAmount:smoothAmount;
 for i=1:N
-    smoothed(i) = (1/5)*(a2((i-2)*(i>2)+(i-2+N)*(i<=2))+a2((i-1)*(i>1)+(N)*(i==1))+a2(i)+a2((i+1)*(i<N)+(1)*(i==N))+a2((i+2)*(i<N-1)+(i+2-N)*(i>=N-1)));
+    b=i-region;
+    smoothed2(i) = sum(a2(b.*(b>0 & b<=N)+(b+N).*(b<=0)+(b-N).*(b>N)))/(2*smoothAmount+1);
 end
+
 baseline=0.1;
 peakIndices2=[];
 peakIndex=0;
 peakValue=0;
 for i=1:N
-    if smoothed(i)>baseline
-        if peakValue==0 || smoothed(i)>peakValue
+    if smoothed2(i)>baseline
+        if peakValue==0 || smoothed2(i)>peakValue
             peakIndex=i;
-            peakValue=smoothed(i);
+            peakValue=smoothed2(i);
         end
-    elseif smoothed(i)<baseline && peakIndex~=0
+    elseif smoothed2(i)<baseline && peakIndex~=0
         peakIndices2=[peakIndices2,peakIndex];
         peakIndex=0;
         peakValue=0;
@@ -240,21 +260,16 @@ end
 if peakIndex~=0
     peakIndices2=[peakIndices2,peakIndex];
 end
-[maxval,maxind] = max(smoothed(peakIndices2));
+[maxval,maxind] = max(smoothed2(peakIndices2));
 peakInd2 = peakIndices2(maxind);
-figure(16)
-hold on
-quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
-hold off;
+if ~isempty(peakInd2)
+    figure(1)
+    hold on
+    quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    hold off;
+end
 
-% Plot signal
-figure(16)
-[th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
-[Xsig,Ysig] = pol2cart(th,rad);
-hold on;
-scatter(Xsig(sigBound),Ysig(sigBound)-2,'black','.')
-hold off;
-
+figure(1)
 ohf = findobj(gcf);
 figaxes = findobj(ohf(1), 'Type', 'axes');
 set(figaxes(1),'Fontsize',15)
@@ -279,3 +294,5 @@ scatter(Xa(peakIndices2),a2(peakIndices2),'filled')
 lgd = legend('Branched','Bundled','Location','northeast');
 lgd.NumColumns = 1;
 hold off
+
+figure(3)
