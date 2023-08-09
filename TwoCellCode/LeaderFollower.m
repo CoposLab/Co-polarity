@@ -1,13 +1,15 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/rhodownc1_racdownc2/1000RhoOff1000RacOff';
-maxnum=100;
+filename = './results/rhodown1/1000thRhoOn';
+maxnum=200;
 
 angle=pi/4;
 
 siglocation = 5*pi/4;
 sigper = 0.4;
 
+countbund1=0;
+countbund2=0;
 counterlf=0;
 counteryes=0;
 countersn=0;
@@ -132,7 +134,6 @@ for i=1:maxnum
     if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
         counterlf2=counterlf2+1;
     end
-    % sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
     if ~isempty(dirIndex2)
         medang2 = th(1,dirIndex2);
@@ -141,8 +142,18 @@ for i=1:maxnum
         end
     end
 
+    if isempty(dirIndex1) && max(b1)>1 %bundled takes over cell 1
+        countbund1=countbund1+1;
+    end
+    if isempty(dirIndex2) && max(b2)>1 %bundled takes over cell 2
+        countbund2=countbund2+1;
+    end
+
 end
 toc
 sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber dist. effort: %d\nPolarized: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterlf2,signal_polarized)
+
+sprintf('Number where bundled took over cell 1: %d\nNumber where bundled took over cell 2: %d', countbund1, countbund2)
+
 % sprintf('Number leader/follower: %d',counterlf)
 % sprintf('Number leader/follower np: %d', counterlf2)
