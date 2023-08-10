@@ -12,19 +12,27 @@ addpath('./freeze_colors')
 addpath('../SingleCellCode_Published')
 
 clear;
-
 close all;
 clc;
 
+c1_vals = [1,10,100,1000];
+c2_vals = [1,10,100,1000];
+
+all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
+
+% for c1_ind=1:length(c1_vals)
+%     for c2_ind=1:length(c2_vals)
+
+res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
+
 counter_ppp = 1;
 ppp = 1;
-res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results3/rhodownc1/10RhoOff';
+    savelocation='./results3/rhodownc1_rhoupc2/1000RhoOff100RhoOn';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -42,7 +50,7 @@ while (ppp<=100)
 
     counter_ppp = counter_ppp+1;
 
-    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells res_counters
+    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells res_counters c1_vals c2_vals c1_ind c2_ind all_results_matrix
     
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
@@ -598,16 +606,16 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*10;
+        % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*10;
-
-        % Kony1(boundC1)=Kony1(boundC1)*10;
-        % Kony2(boundC2)=Kony2(boundC2)*10;
-
+        % 
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
+        Kony2(boundC2)=Kony2(boundC2)*100;
+        % 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        % Koffx2(boundC2)=Koffx2(boundC2)*10;
+        % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
-        Koffy1(boundC1)=Koffy1(boundC1)*10;
+        Koffy1(boundC1)=Koffy1(boundC1)*1000;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
@@ -1316,29 +1324,22 @@ while (ppp<=100)
             if isempty(dirIndex1) && isempty(dirIndex2)
                 samedirection='2NP';
                 angdiff=NaN;
-                counter_add_ind=4;
             elseif isempty(dirIndex1) || isempty(dirIndex2)
                 samedirection='1NP';
                 angdiff=NaN;
-                counter_add_ind=3;
             else
                 medang1 = th(1,dirIndex1);
                 medang2 = th(1,dirIndex2);
                 angdiff = min(abs(medang1-medang2),abs(2*pi-abs(medang1-medang2)));
                 if angdiff < angTolerance
                     samedirection='yes';
-                    counter_add_ind=1;
                 elseif (abs(medang1-3*pi/2)<strongAngTolerance && abs(medang2-pi/2)<strongAngTolerance)
                     samedirection='strong no; collision';
-                    counter_add_ind=2;
                 else
                     samedirection='no';
-                    counter_add_ind=5;
                 end
             end
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
-
-            
 
         end
     end
@@ -1358,26 +1359,6 @@ while (ppp<=100)
     sprintf('Simulation %d done',ppp)
     toc
     if(quit_cond==0)
-        res_counters(counter_add_ind)=res_counters(counter_add_ind)+1;
-        if xor(abs(medang1-3*pi/2)<angle, abs(medang2-pi/2)<angle)
-            res_counters(6)=res_counters(6)+1;
-        end
-        if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1
-            medang2 = th(1,dirIndex2);
-            if abs(medang2-pi/2)>angle
-                res_counters(7)=res_counters(7)+1;
-            end
-        end
-        if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1
-            medang1 = th(1,dirIndex1);
-            if abs(medang1-3*pi/2)>angle
-                res_counters(7)=res_counters(7)+1;
-            end
-        end
-        if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
-            res_counters(7)=res_counters(7)+1;
-        end
-
         if savefigs==1
             % savefig(figc1,filenameC1);
             % savefig(figc2,filenameC2);
@@ -1385,10 +1366,48 @@ while (ppp<=100)
             savefig(scatplot,filenameScatter);
         end
         ppp = ppp + 1;
+        
+        if strcmp(samedirection, 'yes')
+            res_counters(1)=res_counters(1)+1;
+        elseif strcmp(samedirection, 'strong no; collision')
+            res_counters(2)=res_counters(2)+1;
+        elseif strcmp(samedirection, '1NP')
+            res_counters(3)=res_counters(3)+1;
+        elseif strcmp(samedirection, '2NP')
+            res_counters(4)=res_counters(4)+1;
+        else
+            res_counters(5)=res_counters(5)+1;
+        end
+
+        anglelf=pi/4;
+        if ~isempty(dirIndex1) && ~isempty(dirIndex2)
+            if xor(abs(medang1-3*pi/2)<anglelf, abs(medang2-pi/2)<anglelf)
+                res_counters(6)=res_counters(6)+1;
+            end
+        end
+
+        angledist=pi/4;
+        if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1
+            medang2 = th(1,dirIndex2);
+            if abs(medang2-pi/2)>angledist
+                res_counters(7)=res_counters(7)+1;
+            end
+        end
+        if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1
+            medang1 = th(1,dirIndex1);
+            if abs(medang1-3*pi/2)>angledist
+                res_counters(7)=res_counters(7)+1;
+            end
+        end
+        if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
+            res_counters(7)=res_counters(7)+1;
+        end
     end
 
-    
+
 end
+
+all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
 
 
 %% Plot all particle trajectories
@@ -1431,3 +1450,11 @@ end
 % end
 
 %end
+
+
+%     end
+% end
+
+
+% writematrix(all_results_matrix,'racupresults6.xls')
+

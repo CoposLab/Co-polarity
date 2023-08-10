@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/rhodownc1/10RhoOff';
+filename = './results/rhodown2/100thRhoOn';
 maxnum=100;
 
 angle=pi/4;
@@ -21,7 +21,7 @@ signal_polarized = 0;
 countbund1=0;
 countbund2=0;
 tic
-for i=1:maxnum
+for i=51:maxnum
     close all
     fig = openfig(strcat(filename,'Scatter_',string(i),'.fig'));
     ohf = findobj(gcf);

@@ -12,19 +12,27 @@ addpath('./freeze_colors')
 addpath('../SingleCellCode_Published')
 
 clear;
-
 close all;
 clc;
 
-counter_ppp = 1;
-ppp = 94;
-res_counters = [0,0,0,0,0,0,0]; &=
+c1_vals = [1,10,100,1000];
+c2_vals = [1,10,100,1000];
 
-while (ppp<=100)
-    close all;
-    savefigs=1;
+all_results_matrix = zeros(16,7);
+
+for c1_ind=1:length(c1_vals)
+    for c2_ind=1:length(c2_vals)
+
+res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
+
+counter_ppp = 1;
+ppp = 1;
+
+while (ppp<=1)
+    % close all;
+    savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./results3/rhodownc1/10RhoOff';
+    savelocation='./results/rhodownc1_racdownc2/100RhoOff100RacOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -42,7 +50,7 @@ while (ppp<=100)
 
     counter_ppp = counter_ppp+1;
 
-    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells
+    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells res_counters c1_vals c2_vals c1_ind c2_ind
     
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
@@ -100,7 +108,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
@@ -598,16 +606,16 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*10;
-        % Konx2(boundC2)=Konx2(boundC2)*10;
-
+        Konx1(boundC1)=Konx1(boundC1)*c1_vals(c1_ind);
+        Konx2(boundC2)=Konx2(boundC2)*c2_vals(c2_ind);
+        % 
         % Kony1(boundC1)=Kony1(boundC1)*10;
         % Kony2(boundC2)=Kony2(boundC2)*10;
-
+        % 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        % Koffx2(boundC2)=Koffx2(boundC2)*10;
+        % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
-        Koffy1(boundC1)=Koffy1(boundC1)*10;
+        % Koffy1(boundC1)=Koffy1(boundC1)*100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
@@ -1316,22 +1324,67 @@ while (ppp<=100)
             if isempty(dirIndex1) && isempty(dirIndex2)
                 samedirection='2NP';
                 angdiff=NaN;
+                if quit_cond==0
+                    res_counters(4)=res_counters(4)+1;
+                end
             elseif isempty(dirIndex1) || isempty(dirIndex2)
                 samedirection='1NP';
                 angdiff=NaN;
+                if quit_cond==0
+                    res_counters(3)=res_counters(3)+1;
+                end
             else
                 medang1 = th(1,dirIndex1);
                 medang2 = th(1,dirIndex2);
                 angdiff = min(abs(medang1-medang2),abs(2*pi-abs(medang1-medang2)));
                 if angdiff < angTolerance
                     samedirection='yes';
+                    % if quit_cond==0
+                    %     res_counters(1)=res_counters(1)+1;
+                    % end
                 elseif (abs(medang1-3*pi/2)<strongAngTolerance && abs(medang2-pi/2)<strongAngTolerance)
                     samedirection='strong no; collision';
+                    if quit_cond==0
+                        res_counters(2)=res_counters(2)+1;
+                    end
                 else
                     samedirection='no';
+                    if quit_cond==0
+                        res_counters(5)=res_counters(5)+1;
+                    end
+                end
+
+                anglelf=pi/4;
+                if xor(abs(medang1-3*pi/2)<anglelf, abs(medang2-pi/2)<anglelf)
+                    if quit_cond==0
+                        res_counters(6)=res_counters(6)+1;
+                    end
                 end
             end
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
+
+            angledist=pi/4;
+            if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1
+                medang2 = th(1,dirIndex2);
+                if abs(medang2-pi/2)>angledist
+                    if quit_cond==0
+                        res_counters(7)=res_counters(7)+1;
+                    end
+                end
+            end
+            if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1
+                medang1 = th(1,dirIndex1);
+                if abs(medang1-3*pi/2)>angledist
+                    if quit_cond==0
+                        res_counters(7)=res_counters(7)+1;
+                    end
+                end
+            end
+            if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
+                if quit_cond==0
+                    res_counters(7)=res_counters(7)+1;
+                end
+            end
 
         end
     end
@@ -1358,10 +1411,17 @@ while (ppp<=100)
             savefig(scatplot,filenameScatter);
         end
         ppp = ppp + 1;
+        
+        if strcomp(samedirection,'yes')
+            res_counters(1)=res_counters(1)+1;
+        elseif strcomp(samedirection, 'strong no')
+        end
     end
 
     
 end
+
+all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
 
 
 %% Plot all particle trajectories
@@ -1404,3 +1464,11 @@ end
 % end
 
 %end
+
+
+    end
+end
+
+
+writematrix(all_results_matrix,'racupresults.xls')
+
