@@ -1,23 +1,25 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/rhodown1/1000thRhoOn';
-maxnum=200;
+filename = './results3/rhodownc1/10RhoOff';
+maxnum=100;
 
 angle=pi/4;
 
 siglocation = 5*pi/4;
 sigper = 0.4;
 
-countbund1=0;
-countbund2=0;
-counterlf=0;
+
 counteryes=0;
 countersn=0;
 counterno=0;
 counter1np=0;
 counter2np=0;
-counterlf2=0;
+counterlf=0;
+counterdist=0;
+
 signal_polarized = 0;
+countbund1=0;
+countbund2=0;
 tic
 for i=1:maxnum
     close all
@@ -122,17 +124,17 @@ for i=1:maxnum
     if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1
         medang2 = th(1,dirIndex2);
         if abs(medang2-pi/2)>angle
-            counterlf2=counterlf2+1;
+            counterdist=counterdist+1;
         end
     end
     if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1
         medang1 = th(1,dirIndex1);
         if abs(medang1-3*pi/2)>angle
-            counterlf2=counterlf2+1;
+            counterdist=counterdist+1;
         end
     end
     if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
-        counterlf2=counterlf2+1;
+        counterdist=counterdist+1;
     end
 
     if ~isempty(dirIndex2)
@@ -142,18 +144,18 @@ for i=1:maxnum
         end
     end
 
-    if isempty(dirIndex1) && max(b1)>1 %bundled takes over cell 1
-        countbund1=countbund1+1;
-    end
-    if isempty(dirIndex2) && max(b2)>1 %bundled takes over cell 2
-        countbund2=countbund2+1;
-    end
+    % if isempty(dirIndex1) && max(b1)>1 %bundled takes over cell 1
+    %     countbund1=countbund1+1;
+    % end
+    % if isempty(dirIndex2) && max(b2)>1 %bundled takes over cell 2
+    %     countbund2=countbund2+1;
+    % end
 
 end
 toc
-sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber dist. effort: %d\nPolarized: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterlf2,signal_polarized)
+sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber dist. effort: %d\nPolarized: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterdist,signal_polarized)
 
-sprintf('Number where bundled took over cell 1: %d\nNumber where bundled took over cell 2: %d', countbund1, countbund2)
+% sprintf('Number where bundled took over cell 1: %d\nNumber where bundled took over cell 2: %d', countbund1, countbund2)
 
 % sprintf('Number leader/follower: %d',counterlf)
 % sprintf('Number leader/follower np: %d', counterlf2)

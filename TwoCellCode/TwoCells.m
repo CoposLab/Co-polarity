@@ -18,12 +18,13 @@ clc;
 
 counter_ppp = 1;
 ppp = 1;
+res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results/1rhoup2rhodown1/100RhoOn10RhoOff';
+    savelocation='./results3/rhodownc1/10RhoOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -41,7 +42,7 @@ while (ppp<=100)
 
     counter_ppp = counter_ppp+1;
 
-    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells
+    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells res_counters
     
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
@@ -99,7 +100,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
@@ -601,13 +602,13 @@ while (ppp<=100)
         % Konx2(boundC2)=Konx2(boundC2)*10;
 
         % Kony1(boundC1)=Kony1(boundC1)*10;
-        % Kony2(boundC2)=Kony2(boundC2)*1000;
+        % Kony2(boundC2)=Kony2(boundC2)*10;
 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        Koffx2(boundC2)=Koffx2(boundC2)*100;
+        % Koffx2(boundC2)=Koffx2(boundC2)*10;
 
-        Koffy1(boundC1)=Koffy1(boundC1)*100;
-        % Koffy2(boundC2)=Koffy2(boundC2)*10;
+        Koffy1(boundC1)=Koffy1(boundC1)*10;
+        % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
         % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
@@ -1315,22 +1316,29 @@ while (ppp<=100)
             if isempty(dirIndex1) && isempty(dirIndex2)
                 samedirection='2NP';
                 angdiff=NaN;
+                counter_add_ind=4;
             elseif isempty(dirIndex1) || isempty(dirIndex2)
                 samedirection='1NP';
                 angdiff=NaN;
+                counter_add_ind=3;
             else
                 medang1 = th(1,dirIndex1);
                 medang2 = th(1,dirIndex2);
                 angdiff = min(abs(medang1-medang2),abs(2*pi-abs(medang1-medang2)));
                 if angdiff < angTolerance
                     samedirection='yes';
+                    counter_add_ind=1;
                 elseif (abs(medang1-3*pi/2)<strongAngTolerance && abs(medang2-pi/2)<strongAngTolerance)
                     samedirection='strong no; collision';
+                    counter_add_ind=2;
                 else
                     samedirection='no';
+                    counter_add_ind=5;
                 end
             end
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
+
+            
 
         end
     end
@@ -1350,6 +1358,26 @@ while (ppp<=100)
     sprintf('Simulation %d done',ppp)
     toc
     if(quit_cond==0)
+        res_counters(counter_add_ind)=res_counters(counter_add_ind)+1;
+        if xor(abs(medang1-3*pi/2)<angle, abs(medang2-pi/2)<angle)
+            res_counters(6)=res_counters(6)+1;
+        end
+        if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1
+            medang2 = th(1,dirIndex2);
+            if abs(medang2-pi/2)>angle
+                res_counters(7)=res_counters(7)+1;
+            end
+        end
+        if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1
+            medang1 = th(1,dirIndex1);
+            if abs(medang1-3*pi/2)>angle
+                res_counters(7)=res_counters(7)+1;
+            end
+        end
+        if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
+            res_counters(7)=res_counters(7)+1;
+        end
+
         if savefigs==1
             % savefig(figc1,filenameC1);
             % savefig(figc2,filenameC2);
