@@ -30,7 +30,7 @@ ppp = 1;
 
 while (ppp<=100)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
     savelocation='./results3/bundledtoracc1_branchedtoracc2/1000bRacOn_1000aRacOff';
     if savefigs==1
@@ -86,7 +86,7 @@ while (ppp<=100)
     Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
-    tplot  = 100;
+    tplot  = 50;
 
     posx1 = zeros(N,Nt);              % array of positions of X(t) cell 1
     posy1 = zeros(N,Nt);              % array of positions of Y(t) cell 1
@@ -108,7 +108,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
@@ -606,8 +606,8 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*10;
-        % Konx2(boundC2)=Konx2(boundC2)*10;
+        Konx1(boundC1)=Konx1(boundC1)*1000;
+        Konx2(boundC2)=Konx2(boundC2)*1000;
         % 
         % Kony1(boundC1)=Kony1(boundC1)*100;
         % Kony2(boundC2)=Kony2(boundC2)*100;
@@ -693,7 +693,7 @@ while (ppp<=100)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
 
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
@@ -703,7 +703,7 @@ while (ppp<=100)
         % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*100;
 
         % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*100;
-        Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
+        % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
 
 
         %Cell 1
@@ -1097,45 +1097,6 @@ while (ppp<=100)
         %% Plot the solution(s)
          % if mod(t,tplot) == 0
         if t==(Nt-1)
-            scatplot=figure(ppp);
-            subplot(1,2,1); %Cell 1
-            plot(Xa,a1,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
-            plot(Xa,b1,'-ok','markerfacecolor','k','linewidth',3);
-            plot(s1,xC1,'-.','color',[0 0.45 0.75],'linewidth',1);
-            plot(s1,yC1,'-.k','linewidth',1);
-            % xlim([0 10]); ylim([0 2]);
-            %title('Time = 0');
-            set(gca,'fontname','times','fontsize',20); box on;
-            lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-            lgd.NumColumns = 2;
-            set(gcf,'color','w');
-            title('Cell 1')
-            hold off;
-            %keyboard
-            % pause(1.0);
-
-            subplot(1,2,2); %Cell 2
-            plot(Xa,a2,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
-            plot(Xa,b2,'-ok','markerfacecolor','k','linewidth',3);
-            plot(s2,xC2,'-.','color',[0 0.45 0.75],'linewidth',1);
-            plot(s2,yC2,'-.k','linewidth',1);
-            % xlim([0 10]); ylim([0 2]);
-            %title('Time = 0');
-            set(gca,'fontname','times','fontsize',20); box on;
-            lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-            lgd.NumColumns = 2;
-            set(gcf,'color','w');
-            title('Cell 2')
-            hold off;
-            %keyboard
-            % pause(1.0);
-
-            if vid==1
-                currframe = getframe(scatplot);
-                writeVideo(vidObj1,currframe);
-            end
-
-
 
             %Define colors
             colorLength = 50;
@@ -1190,6 +1151,47 @@ while (ppp<=100)
             bundledColor = whitedarkyellow2;
             branchedColName = 'Pink';
             bundledColName = 'Yellow';
+
+
+            % Make scatterplots
+            scatplot=figure(ppp);
+            subplot(1,2,1); %Cell 1
+            plot(Xa,a1,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+            plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
+            plot(s1,xC1,'-.','color',branchedColor(end,:),'linewidth',1);
+            plot(s1,yC1,'-.k','color',bundledColor(end,:),'linewidth',1);
+            % xlim([0 10]); ylim([0 2]);
+            %title('Time = 0');
+            set(gca,'fontname','times','fontsize',20); box on;
+            lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+            lgd.NumColumns = 2;
+            set(gcf,'color','w');
+            title('Cell 1')
+            hold off;
+            %keyboard
+            % pause(1.0);
+
+            subplot(1,2,2); %Cell 2
+            plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+            plot(Xa,b2,'-ok','color',bundledColor(end,:),'linewidth',3);
+            plot(s2,xC2,'-.','color',branchedColor(end,:),'linewidth',1);
+            plot(s2,yC2,'-.k','color',bundledColor(end,:),'linewidth',1);
+            % xlim([0 10]); ylim([0 2]);
+            %title('Time = 0');
+            set(gca,'fontname','times','fontsize',20); box on;
+            lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+            lgd.NumColumns = 2;
+            set(gcf,'color','w');
+            title('Cell 2')
+            hold off;
+            %keyboard
+            % pause(1.0);
+
+            if vid==1
+                currframe = getframe(scatplot);
+                writeVideo(vidObj1,currframe);
+            end
+
 
             % Define circles
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
@@ -1347,6 +1349,9 @@ while (ppp<=100)
             end
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
+
+            % save(strcat('./uncoupled_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2');
+
         end
     end
 
@@ -1462,5 +1467,5 @@ end
 % end
 
 
-% writematrix(all_results_matrix,'racupresults6.xls')
+writematrix(all_results_matrix,'1000konx1_1000konx2.xls')
 

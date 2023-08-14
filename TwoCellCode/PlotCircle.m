@@ -55,6 +55,40 @@ bundledColor = whitedarkyellow2;
 branchedColName = 'Pink';
 bundledColName = 'Yellow';
 
+% Make scatterplots
+scatplot=figure(1);
+subplot(1,2,1); %Cell 1
+plot(Xa,a1,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
+plot(s1,xC1,'-.','color',branchedColor(end,:),'linewidth',1);
+plot(s1,yC1,'-.k','color',bundledColor(end,:),'linewidth',1);
+% xlim([0 10]); ylim([0 2]);
+%title('Time = 0');
+set(gca,'fontname','times','fontsize',20); box on;
+lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+lgd.NumColumns = 2;
+set(gcf,'color','w');
+title('Cell 1')
+hold off;
+%keyboard
+% pause(1.0);
+
+subplot(1,2,2); %Cell 2
+plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+plot(Xa,b2,'-ok','color',bundledColor(end,:),'linewidth',3);
+plot(s2,xC2,'-.','color',branchedColor(end,:),'linewidth',1);
+plot(s2,yC2,'-.k','color',bundledColor(end,:),'linewidth',1);
+% xlim([0 10]); ylim([0 2]);
+%title('Time = 0');
+set(gca,'fontname','times','fontsize',20); box on;
+lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+lgd.NumColumns = 2;
+set(gcf,'color','w');
+title('Cell 2')
+hold off;
+%keyboard
+% pause(1.0);
+
 % Define circles
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
 [Xcol,Ycol] = pol2cart(th,rad);
@@ -71,38 +105,46 @@ allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
 % Concentric circles
 % Cell 1
-figcells=figure(1);
-surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
-view(2)
-colormap(branchedColor)
-freezeColors;
-freezeColors(colorbar('Location','westoutside'));
-clim([0,allmax])
-shading interp
+figcells=figure(2);
+% if max(ZBranch1)>0.5
+    surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
+    colormap(branchedColor)
+    freezeColors;
+    freezeColors(colorbar('Location','westoutside'));
+    clim([0,allmax])
+    shading interp
+% end
 hold on;
-surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
-colormap(bundledColor)
-clim([0,allmax])
-freezeColors;
-freezeColors(jicolorbar);
-shading interp
+% if max(ZBund1)>0.5
+    surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
+    colormap(bundledColor)
+    freezeColors;
+    freezeColors(jicolorbar);
+    clim([0,allmax])
+    shading interp
+% end
+view(2)
 grid off
 set(gca,'XTick',[], 'YTick', [])
 
 % Cell 2
-surf(Xcol,Ycol-2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
+% if max(ZBranch2)>0.5
+    surf(Xcol,Ycol-2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
+    colormap(branchedColor)
+    freezeColors;
+    freezeColors(colorbar('Location','westoutside'));
+    clim([0,allmax])
+    shading interp
+% end
+% if max(ZBund2)>0.5
+    surf(Xcol,Ycol-2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
+    colormap(bundledColor)
+    freezeColors;
+    freezeColors(jicolorbar);
+    clim([0,allmax])
+    shading interp
+% end
 view(2)
-colormap(branchedColor)
-freezeColors;
-freezeColors(colorbar('Location','westoutside'));
-clim([0,allmax])
-shading interp
-surf(Xcol,Ycol-2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
-colormap(bundledColor)
-freezeColors;
-freezeColors(jicolorbar);
-clim([0,allmax])
-shading interp
 grid off
 axis equal
 set(gca,'XTick',[], 'YTick', [])
@@ -166,7 +208,7 @@ if ~isempty(dirIndex2)
 end
 
 % Plot signal
-figure(1)
+figure(2)
 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
 [Xsig,Ysig] = pol2cart(th,rad);
 hold on;
@@ -226,7 +268,7 @@ end
 [~,maxind] = max(smoothed1(peakIndices1));
 peakInd1 = peakIndices1(maxind);
 if ~isempty(peakInd1)
-    figure(1)
+    figure(2)
     hold on
     quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
     hold off;
@@ -262,13 +304,13 @@ end
 [maxval,maxind] = max(smoothed2(peakIndices2));
 peakInd2 = peakIndices2(maxind);
 if ~isempty(peakInd2)
-    figure(1)
+    figure(2)
     hold on
     quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
     hold off;
 end
 
-figure(1)
+figure(2)
 ohf = findobj(gcf);
 figaxes = findobj(ohf(1), 'Type', 'axes');
 set(figaxes(1),'Fontsize',15)
@@ -276,33 +318,15 @@ set(figaxes(2),'Fontsize',14)
 camroll(90)
 
 
-figure(2)
-subplot(1,2,1)
-hold on
-plot(Xa,a1,'markerfacecolor',[159 219 229]/255,'linewidth',2);
-plot(Xa,b1,'markerfacecolor','k','linewidth',2);
-scatter(Xa(peakIndices1),a1(peakIndices1),'filled')
-lgd = legend('Branched','Bundled','Location','northeast');
-lgd.NumColumns = 1;
-hold off
-subplot(1,2,2)
-hold on
-plot(Xa,a2,'markerfacecolor',[159 219 229]/255,'linewidth',2);
-plot(Xa,b2,'markerfacecolor','k','linewidth',2);
-scatter(Xa(peakIndices2),a2(peakIndices2),'filled')
-lgd = legend('Branched','Bundled','Location','northeast');
-lgd.NumColumns = 1;
-hold off
-
-figure(3)
-subplot(1,2,1)
-hold on
-plot(Xa,a1);
-plot(Xa,smoothed1);
-hold off
-subplot(1,2,2)
-hold on
-plot(Xa,a2);
-plot(Xa,smoothed2);
-hold off
+% figure(3)
+% subplot(1,2,1)
+% hold on
+% plot(Xa,a1);
+% plot(Xa,smoothed1);
+% hold off
+% subplot(1,2,2)
+% hold on
+% plot(Xa,a2);
+% plot(Xa,smoothed2);
+% hold off
 

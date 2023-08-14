@@ -72,7 +72,9 @@ allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 % Concentric circles
 % Cell 1
 figcells=figure(1);
-surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
+if max(ZBranch1)>0.5
+    surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
+end
 view(2)
 colormap(branchedColor)
 freezeColors;
@@ -80,7 +82,9 @@ freezeColors(colorbar('Location','westoutside'));
 clim([0,allmax])
 shading interp
 hold on;
-surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
+if max(ZBund1)>0.5
+    surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
+end
 colormap(bundledColor)
 clim([0,allmax])
 freezeColors;
@@ -203,7 +207,7 @@ end
 % plot(freq,abs(xdft));
 % [~,I] = max(abs(xdft));
 
-baseline=0.1;
+baseline=1;
 peakIndices1=[];
 peakIndex=0;
 peakValue=0;
@@ -223,7 +227,7 @@ if peakIndex~=0
     peakIndices1=[peakIndices1,peakIndex];
 end
 
-[˜,maxind] = max(smoothed1(peakIndices1));
+[~,maxind] = max(smoothed1(peakIndices1));
 peakInd1 = peakIndices1(maxind);
 if ~isempty(peakInd1)
     figure(1)
@@ -241,7 +245,6 @@ for i=1:N
     smoothed2(i) = sum(a2(b.*(b>0 & b<=N)+(b+N).*(b<=0)+(b-N).*(b>N)))/(2*smoothAmount+1);
 end
 
-baseline=0.1;
 peakIndices2=[];
 peakIndex=0;
 peakValue=0;
@@ -280,7 +283,7 @@ camroll(90)
 figure(2)
 subplot(1,2,1)
 hold on
-plot(Xa,a1,'markerfacecolor',[159 219 229]/255,'linewidth',2); hold on;
+plot(Xa,a1,'markerfacecolor',[159 219 229]/255,'linewidth',2);
 plot(Xa,b1,'markerfacecolor','k','linewidth',2);
 scatter(Xa(peakIndices1),a1(peakIndices1),'filled')
 lgd = legend('Branched','Bundled','Location','northeast');
@@ -288,7 +291,7 @@ lgd.NumColumns = 1;
 hold off
 subplot(1,2,2)
 hold on
-plot(Xa,a2,'markerfacecolor',[159 219 229]/255,'linewidth',2); hold on;
+plot(Xa,a2,'markerfacecolor',[159 219 229]/255,'linewidth',2);
 plot(Xa,b2,'markerfacecolor','k','linewidth',2);
 scatter(Xa(peakIndices2),a2(peakIndices2),'filled')
 lgd = legend('Branched','Bundled','Location','northeast');
@@ -296,3 +299,14 @@ lgd.NumColumns = 1;
 hold off
 
 figure(3)
+subplot(1,2,1)
+hold on
+plot(Xa,a1);
+plot(Xa,smoothed1);
+hold off
+subplot(1,2,2)
+hold on
+plot(Xa,a2);
+plot(Xa,smoothed2);
+hold off
+
