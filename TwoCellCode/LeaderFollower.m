@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/rhodown2/100thRhoOn';
+filename = './results3/bundledtoracc1_branchedtorhoc2/1000bRacOn_1000aRhoOn';
 maxnum=100;
 
 angle=pi/4;
@@ -18,10 +18,11 @@ counterlf=0;
 counterdist=0;
 
 signal_polarized = 0;
+both_sig_pol = 0;
 countbund1=0;
 countbund2=0;
 tic
-for i=51:maxnum
+for i=1:maxnum
     close all
     fig = openfig(strcat(filename,'Scatter_',string(i),'.fig'));
     ohf = findobj(gcf);
@@ -144,6 +145,14 @@ for i=51:maxnum
         end
     end
 
+    if ~isempty(dirIndex1) && ~isempty(dirIndex2)
+        medang1 = th(1,dirIndex1);
+        medang2 = th(1,dirIndex2);
+        if abs(medang1 - siglocation)<(sigper*2*pi)/2 && abs(medang2 - siglocation)<(sigper*2*pi)/2
+            both_sig_pol=both_sig_pol+1;
+        end
+    end
+
     % if isempty(dirIndex1) && max(b1)>1 %bundled takes over cell 1
     %     countbund1=countbund1+1;
     % end
@@ -153,7 +162,9 @@ for i=51:maxnum
 
 end
 toc
-sprintf('%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\nNumber dist. effort: %d\nPolarized: %d', counteryes, countersn, counter1np, counter2np, counterlf,counterdist,signal_polarized)
+sprintf(['%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\n' ...
+    'Number dist. effort: %d\nC2 polarized: %d\nBoth polarized: %d'], ...
+    counteryes, countersn, counter1np, counter2np, counterlf,counterdist,signal_polarized,both_sig_pol)
 
 % sprintf('Number where bundled took over cell 1: %d\nNumber where bundled took over cell 2: %d', countbund1, countbund2)
 
