@@ -14,6 +14,9 @@ clear;
 close all;
 clc;
 
+polarize_time=0;
+num_polarized=0;
+
 savefigs = 0;
 setnum='100';
 savelocation='singlecellresults/';
@@ -32,10 +35,10 @@ vid = 0;
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     counter_ppp = counter_ppp+1;
 
-    clearvars -except counter_ppp vid vidObj ppp vidObjCol vidObjRR savefigs filenameCells filenameScatter
+    clearvars -except counter_ppp vid vidObj ppp vidObjCol vidObjRR savefigs filenameCells filenameScatter polarize_time num_polarized
     % Set actin filament parameters
     %
     Da      = 0.5;                  % diffusion coefficient for actin
@@ -368,24 +371,24 @@ while (ppp<=1)
     for t=1:(Nt-1)
 
         %% Run biochemisty
-        % [Konx,Kony,Kfbx,Kfby,Koffx,Koffy] = spatialrates(ron,rfb,roff,a,b,s,beta,cond,[]); % set rates
+        [Konx,Kony,Kfbx,Kfby,Koffx,Koffy] = spatialrates(ron,rfb,roff,a,b,s,beta,cond,[]); % set rates
 
-        sigper=0.25;
-        sigBound = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
+        % sigper=0.25;
+        % sigBound = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
         
-        Konx=ones(Na,1)*ron/10;
-        Kony=ones(Na,1)*ron;
-        Koffx=ones(Na,1)*roff;
-        Koffy=ones(Na,1)*roff/10;
-        Kfbx=ones(Na,1)*rfb/10;
-        Kfby=ones(Na,1)*rfb;
-
-        Konx(sigBound) = ron;
-        Kony(sigBound) = ron/10;
-        Koffx(sigBound) = roff/10;
-        Koffy(sigBound) = roff;
-        Kfbx(sigBound) = rfb;
-        Kfby(sigBound) = rfb/10;
+        % Konx=ones(Na,1)*ron/10;
+        % Kony=ones(Na,1)*ron;
+        % Koffx=ones(Na,1)*roff;
+        % Koffy=ones(Na,1)*roff/10;
+        % Kfbx=ones(Na,1)*rfb/10;
+        % Kfby=ones(Na,1)*rfb;
+        % 
+        % Konx(sigBound) = ron;
+        % Kony(sigBound) = ron/10;
+        % Koffx(sigBound) = roff/10;
+        % Koffy(sigBound) = roff;
+        % Kfbx(sigBound) = rfb;
+        % Kfby(sigBound) = rfb/10;
 
         if((t-1)*dt<Tx(rxn_count_x))
             NNx(t+1) = X(rxn_count_x-1);
@@ -670,6 +673,35 @@ while (ppp<=1)
 
 
         end
+
+        a1New = a;
+        a1New(a1New<0.0001)=0;
+        if (a1New(1)~=0 && a1New(length(a1New))~=0)
+            zeroInd1=find(a1New==0,1,'first');
+            zeroInd2=find(a1New==0,1,'last');
+            dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a1New~=0,1,'first');
+            ind2=find(a1New~=0,1,'last');
+            dirIndex1=ceil((ind1+ind2)/2);
+        end
+        b1New = b;
+        b1New(b1New<0.0001)=0;
+        if (b1New(1)~=0 && b1New(length(b1New))~=0)
+            zeroInd1=find(b1New==0,1,'first');
+            zeroInd2=find(b1New==0,1,'last');
+            dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(b1New~=0,1,'first');
+            ind2=find(b1New~=0,1,'last');
+            dirIndex2=ceil((ind1+ind2)/2);
+        end
+        if ~isempty(dirIndex1) && ~isempty(dirIndex2)
+            sprintf('Polarized after %d steps', t)
+            polarize_time=polarize_time+t;
+            num_polarized=num_polarized+1;
+            break
+        end
     end
 
     % measure of polarized state (1 if polarized and 0 otherwise)
@@ -685,11 +717,15 @@ while (ppp<=1)
     if(quit_cond==0)
         ppp = ppp + 1;
     end
+
+    if savefigs==1
+        savefig(figcells,filenameCells);
+        savefig(scatplot,filenameScatter);
+    end
 end
 
-if savefigs==1
-    savefig(figcells,filenameCells);
-    savefig(scatplot,filenameScatter);
+if num_polarized>0
+    sprintf('Average polarize time out of %d runs: %d steps',num_polarized,polarize_time/num_polarized)
 end
 
 %% Plot all particle trajectories

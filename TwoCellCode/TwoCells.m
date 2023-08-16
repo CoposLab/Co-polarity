@@ -20,9 +20,17 @@ c2_vals = [1,10,100,1000];
 
 all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
 
-% for c1_ind=1:length(c1_vals)
-%     for c2_ind=1:length(c2_vals)
+% for c1_ind=2:length(c1_vals)
+%     for c2_ind=c1_ind:length(c2_vals)
 
+polarize_time=0;
+polarize_time_c1=0;
+polarize_time_c2=0;
+num_polarized=0;
+num_pol_c1=0;
+num_pol_c2=0;
+countpol=0;
+writem=1;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
@@ -50,10 +58,18 @@ while (ppp<=100)
 
     counter_ppp = counter_ppp+1;
 
-    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 filenameScatter filenameCells res_counters c1_vals c2_vals c1_ind c2_ind all_results_matrix
+    clearvars -except counter_ppp vid vidObj1 ppp vidObjCol1 vidObjRR1 ... 
+        vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 ... 
+        filenameScatter filenameCells res_counters c1_vals c2_vals c1_ind ... 
+        c2_ind all_results_matrix polarize_time polarize_time_c1 ... 
+        polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem
     
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
+
+    polarizedc1=0; %has cell1 polarized yet
+    polarizedc2=0;
+
 
     % Set actin filament parameters
     %
@@ -110,7 +126,8 @@ while (ppp<=100)
     % Signal
     signal=0;
     sigper=0.40;
-    sigBound = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
+    sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
+    sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
     % Competition for limited resource (actin monomers) term
     %
@@ -530,7 +547,7 @@ while (ppp<=100)
             [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
             [Xsig,Ysig] = pol2cart(th,rad);
             hold on;
-            scatter(Xsig(sigBound),Ysig(sigBound)-2,'black','.')
+            scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
             hold off;
         end
 
@@ -576,13 +593,23 @@ while (ppp<=100)
 
         % this works
         if signal==1
-            steepness = 20;
-            Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
-            Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
-            Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
-            Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
-            Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound(1)))) + tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
-            Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound(1)))) - tanh(steepness*(s2-s2(sigBound(end)))) + 0.2)/2.2)';
+            if t<=1000
+                steepness = 20;
+                Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+            else
+                steepness = 20;
+                Konx1 = (ron*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Kony1 = (ron*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Kfbx1 = (rfb*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Kfby1 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Koffx1 = (roff*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Koffy1 = (roff*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+            end
         end
 
         % if signal==1
@@ -616,7 +643,7 @@ while (ppp<=100)
         % Koffx2(boundC2)=Koffx2(boundC2)*10;
 
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        % Koffy2(boundC2)=Koffy2(boundC2)*100;
+        % Koffy2(boundC2)=Koffy2(boundC2)*c2_vals(c2_ind);
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
         % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
@@ -1309,7 +1336,7 @@ while (ppp<=100)
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
                 hold on;
-                scatter(Xsig(sigBound),Ysig(sigBound)-2,'black','.')
+                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
                 hold off;
             end
 
@@ -1353,6 +1380,73 @@ while (ppp<=100)
             % save(strcat('./uncoupled_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2');
 
         end
+
+        % Check if polarized
+        a1New = a1;
+        a1New(a1New<0.0001)=0;
+        if (a1New(1)~=0 && a1New(length(a1New))~=0)
+            zeroInd1=find(a1New==0,1,'first');
+            zeroInd2=find(a1New==0,1,'last');
+            dirIndexa1=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a1New~=0,1,'first');
+            ind2=find(a1New~=0,1,'last');
+            dirIndexa1=ceil((ind1+ind2)/2);
+        end
+        b1New = b1;
+        b1New(b1New<0.0001)=0;
+        if (b1New(1)~=0 && b1New(length(b1New))~=0)
+            zeroInd1=find(b1New==0,1,'first');
+            zeroInd2=find(b1New==0,1,'last');
+            dirIndexb1=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(b1New~=0,1,'first');
+            ind2=find(b1New~=0,1,'last');
+            dirIndexb1=ceil((ind1+ind2)/2);
+        end
+        a2New = a2;
+        a2New(a2New<0.0001)=0;
+        if (a2New(1)~=0 && a2New(length(a2New))~=0)
+            zeroInd1=find(a2New==0,1,'first');
+            zeroInd2=find(a2New==0,1,'last');
+            dirIndexa2=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a2New~=0,1,'first');
+            ind2=find(a2New~=0,1,'last');
+            dirIndexa2=ceil((ind1+ind2)/2);
+        end
+        b2New = b2;
+        b2New(b2New<0.0001)=0;
+        if (b2New(1)~=0 && b2New(length(b2New))~=0)
+            zeroInd1=find(b2New==0,1,'first');
+            zeroInd2=find(b2New==0,1,'last');
+            dirIndexb2=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(b2New~=0,1,'first');
+            ind2=find(b2New~=0,1,'last');
+            dirIndexb2=ceil((ind1+ind2)/2);
+        end
+        if countpol==1
+            if polarizedc1==0 && ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
+                sprintf('Cell 1 polarized after %d steps', t)
+                polarize_time_c1=polarize_time_c1+t;
+                num_pol_c1=num_pol_c1+1;
+                polarizedc1=1;
+            end
+            if polarizedc2==0 && ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
+                sprintf('Cell 2 polarized after %d steps', t)
+                polarize_time_c2=polarize_time_c2+t;
+                num_pol_c2=num_pol_c2+1;
+                polarizedc2=1;
+            end
+            if ~isempty(dirIndexa1) && ~isempty(dirIndexb1) && ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
+                sprintf('Both polarized after %d steps', t)
+                polarize_time=polarize_time+t;
+                num_polarized=num_polarized+1;
+                break
+            end
+        end
+        
     end
 
     % measure of polarized state (1 if polarized and 0 otherwise)
@@ -1378,44 +1472,61 @@ while (ppp<=100)
         end
         ppp = ppp + 1;
         
-        if strcmp(samedirection, 'yes')
-            res_counters(1)=res_counters(1)+1;
-        elseif strcmp(samedirection, 'strong no; collision')
-            res_counters(2)=res_counters(2)+1;
-        elseif strcmp(samedirection, '1NP')
-            res_counters(3)=res_counters(3)+1;
-        elseif strcmp(samedirection, '2NP')
-            res_counters(4)=res_counters(4)+1;
-        else
-            res_counters(5)=res_counters(5)+1;
-        end
-
-        anglelf=pi/4;
-        if ~isempty(dirIndex1) && ~isempty(dirIndex2)
-            if xor(abs(medang1-3*pi/2)<anglelf, abs(medang2-pi/2)<anglelf)
-                res_counters(6)=res_counters(6)+1;
+        if writem==1
+            if strcmp(samedirection, 'yes')
+                res_counters(1)=res_counters(1)+1;
+            elseif strcmp(samedirection, 'strong no; collision')
+                res_counters(2)=res_counters(2)+1;
+            elseif strcmp(samedirection, '1NP')
+                res_counters(3)=res_counters(3)+1;
+            elseif strcmp(samedirection, '2NP')
+                res_counters(4)=res_counters(4)+1;
+            else
+                res_counters(5)=res_counters(5)+1;
             end
-        end
 
-        angledist=pi/4;
-        if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1
-            medang2 = th(1,dirIndex2);
-            if abs(medang2-pi/2)>angledist
+            anglelf=pi/4;
+            if ~isempty(dirIndex1) && ~isempty(dirIndex2)
+                if xor(abs(medang1-3*pi/2)<anglelf, abs(medang2-pi/2)<anglelf)
+                    res_counters(6)=res_counters(6)+1;
+                end
+            end
+
+            angledist=pi/4;
+            if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1
+                medang2 = th(1,dirIndex2);
+                if abs(medang2-pi/2)>angledist
+                    res_counters(7)=res_counters(7)+1;
+                end
+            end
+            if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1
+                medang1 = th(1,dirIndex1);
+                if abs(medang1-3*pi/2)>angledist
+                    res_counters(7)=res_counters(7)+1;
+                end
+            end
+            if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
                 res_counters(7)=res_counters(7)+1;
             end
-        end
-        if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1
-            medang1 = th(1,dirIndex1);
-            if abs(medang1-3*pi/2)>angledist
-                res_counters(7)=res_counters(7)+1;
-            end
-        end
-        if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
-            res_counters(7)=res_counters(7)+1;
         end
     end
 
 
+end
+
+if countpol==1
+    if num_polarized>0
+        sprintf('Average polarization time for both cells with %d runs: %d timesteps',num_polarized,polarize_time/num_polarized)
+    end
+    % if num_pol_c1>0
+    %     sprintf('Average polarization time for cell 1 with %d runs: %d timesteps',num_pol_c1,polarize_time_c1/num_pol_c1)
+    % end
+    % if num_pol_c2>0
+    %     sprintf('Average polarization time for cell 2 with %d runs: %d timesteps',num_pol_c2,polarize_time_c2/num_pol_c2)
+    % end
+    if num_pol_c1>0
+        sprintf('Average polarization time for one cell with %d runs: %d timesteps',num_pol_c1+num_pol_c2,(polarize_time_c1+polarize_time_c2)/(num_pol_c1+num_pol_c2))
+    end
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
@@ -1462,10 +1573,14 @@ end
 
 %end
 
+% if writem==1
+%     writematrix(res_counters,strcat('./allparamsresults/racup/',...
+%         int2str(c1_vals(c1_ind)),'konx1_',int2str(c2_vals(c2_ind)),'konx2.xls'))
+% end
 
 %     end
 % end
 
-
-writematrix(all_results_matrix,'1000konx1_1000konx2.xls')
-
+if writem==1
+    writematrix(res_counters,'./allparamsresults/racup/1000konx1_1000konx2.xls')
+end
