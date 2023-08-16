@@ -15,13 +15,19 @@ clear;
 close all;
 clc;
 
-c1_vals = [1,10,100,1000];
-c2_vals = [1,10,100,1000];
+% c1_vals = [0,0.9,-0.9];
+% c2_vals = [1,10,100,1000];
+ka_vals=[0,0.9,-0.9];
+kb_vals=[0,0.9,-0.9];
+kc_vals=[0,0.9,-0.9];
+kd_vals=[0,0.9,-0.9];
 
-all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
+% all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
 
-% for c1_ind=2:length(c1_vals)
-%     for c2_ind=c1_ind:length(c2_vals)
+for ka_ind=1:length(ka_vals)
+    for kb_ind=1:length(kb_vals)
+        kc_ind=ka_ind;
+        kd_ind=kb_ind;
 
 polarize_time=0;
 polarize_time_c1=0;
@@ -30,7 +36,7 @@ num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
 countpol=0;
-writem=0;
+writem=1;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
@@ -40,7 +46,7 @@ while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./results3/bundledtoracc1_branchedtoracc2/1000bRacOn_1000aRacOff';
+    savelocation='';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -124,7 +130,7 @@ while (ppp<=1)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
     sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
@@ -1107,10 +1113,10 @@ while (ppp<=1)
 
         gamma=1.5;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled
@@ -1123,6 +1129,19 @@ while (ppp<=1)
         % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
         % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
+        rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
+            + ka_vals(ka_ind) * ka1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+            + kb_vals(kb_ind) * ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1 ...
+            + kc_vals(kc_ind) * kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+            + kd_vals(kd_ind) * kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2 ...
+            + ka_vals(ka_ind) * ka2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+            + kb_vals(kb_ind) * ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2 ...
+            + kc_vals(kc_ind) * kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+            + kd_vals(kd_ind) * kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
 
@@ -1130,8 +1149,8 @@ while (ppp<=1)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-         if mod(t,tplot) == 0
-        % if t==(Nt-1)
+         % if mod(t,tplot) == 0
+        if t==(Nt-1)
 
             %Define colors
             colorLength = 50;
@@ -1391,7 +1410,7 @@ while (ppp<=1)
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
 
-            save(strcat('./sigswitch_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
+            % save(strcat('./sigswitch_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
 
         end
 
@@ -1526,6 +1545,16 @@ while (ppp<=1)
     end
 
 
+    % if writem==1
+    %     writematrix(res_counters,'./allparamsresults/branchedbundled/0ka_0kb_0kc_0kd.xls')
+    %     sprintf(int2str(res_counters))
+    % end
+    if writem==1
+        writematrix(res_counters,strcat('./allparamsresults/branchedbundled/',...
+            string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
+            string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
+        sprintf(int2str(res_counters))
+    end
 end
 
 if countpol==1
@@ -1592,10 +1621,10 @@ end
 %         int2str(c1_vals(c1_ind)),'konx1_',int2str(c2_vals(c2_ind)),'konx2.xls'))
 % end
 
-%     end
-% end
-
-if writem==1
-    writematrix(res_counters,'./allparamsresults/cilcoa/10koffx_100konx_10kony.xls')
-    sprintf(int2str(res_counters))
+    end
 end
+
+% if writem==1
+%     writematrix(res_counters,'./allparamsresults/rhodown/1koffy1_100koffy2.xls')
+%     sprintf(int2str(res_counters))
+% end
