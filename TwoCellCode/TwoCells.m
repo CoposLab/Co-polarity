@@ -30,13 +30,13 @@ num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
 countpol=0;
-writem=1;
+writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=100)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -124,7 +124,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
     sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
@@ -546,9 +546,15 @@ while (ppp<=100)
         if signal==1
             [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
             [Xsig,Ysig] = pol2cart(th,rad);
-            hold on;
-            scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
-            hold off;
+            if t<=1000
+                hold on;
+                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+                hold off;
+            else
+                hold on;
+                scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                hold off;
+            end
         end
 
         ohf = findobj(gcf);
@@ -563,6 +569,8 @@ while (ppp<=100)
         end
 
     end
+
+    save(strcat('./sigswitch_vid_files/vars_t0'),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
 
     %% Run simulation
     %
@@ -593,7 +601,7 @@ while (ppp<=100)
 
         % this works
         if signal==1
-            if t<=1000
+            if t<=1500
                 steepness = 20;
                 Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
@@ -603,12 +611,12 @@ while (ppp<=100)
                 Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
             else
                 steepness = 20;
-                Konx1 = (ron*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Kony1 = (ron*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Kfbx1 = (rfb*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Kfby1 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Koffx1 = (roff*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Koffy1 = (roff*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
             end
         end
 
@@ -633,17 +641,17 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        Konx1(boundC1)=Konx1(boundC1)*1000;
-        Konx2(boundC2)=Konx2(boundC2)*1000;
+        % Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
         % 
-        % Kony1(boundC1)=Kony1(boundC1)*100;
-        % Kony2(boundC2)=Kony2(boundC2)*100;
+        % Kony1(boundC1)=Kony1(boundC1)*10;
+        % Kony2(boundC2)=Kony2(boundC2)*10;
         % 
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2)=Koffx2(boundC2)*10;
 
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        % Koffy2(boundC2)=Koffy2(boundC2)*c2_vals(c2_ind);
+        % Koffy2(boundC2)=Koffy2(boundC2)*1000;
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
         % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
@@ -1122,8 +1130,8 @@ while (ppp<=100)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-         % if mod(t,tplot) == 0
-        if t==(Nt-1)
+         if mod(t,tplot) == 0
+        % if t==(Nt-1)
 
             %Define colors
             colorLength = 50;
@@ -1335,9 +1343,15 @@ while (ppp<=100)
             if signal==1
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
-                hold on;
-                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
-                hold off;
+                if t<=1000
+                    hold on;
+                    scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+                    hold off;
+                else
+                    hold on;
+                    scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                    hold off;
+                end
             end
 
             ohf = findobj(gcf);
@@ -1377,7 +1391,7 @@ while (ppp<=100)
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
 
-            % save(strcat('./uncoupled_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2');
+            save(strcat('./sigswitch_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
 
         end
 
@@ -1582,5 +1596,6 @@ end
 % end
 
 if writem==1
-    writematrix(res_counters,'./allparamsresults/racup/1000konx1_1000konx2.xls')
+    writematrix(res_counters,'./allparamsresults/cilcoa/10koffx_100konx_10kony.xls')
+    sprintf(int2str(res_counters))
 end

@@ -3,7 +3,9 @@ close all;
 clear;
 clc;
 
-savelocation='./movies4/uncoupled';
+loadfile='./sigswitch_vid_files/vars_t';
+
+savelocation='./movies4/sigswitch_uncoupled';
 setnum=int2str(1);
 
 vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -17,9 +19,24 @@ vidObj2.Quality = 75;
 open(vidObj1);
 open(vidObj2);
 
-t=1;
-    clearvars -except t vidObj1 vidObj2
-    load(strcat('./uncoupled_vid_files/vars_t',int2str(t*50)));
+allmax=0;
+for t=1:44
+    load(strcat(loadfile,int2str(t*50)));
+    allmax = max(max(max(max(a1),max(a2)),max(max(b1),max(b2))),allmax);
+end
+
+% Define circles
+[th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
+[Xcol,Ycol] = pol2cart(th,rad);
+[th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
+[Xsm,Ysm] = pol2cart(th,rad);
+[th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
+[Xmid,Ymid] = pol2cart(th,rad);
+
+for t=1:49
+    close all;
+    clearvars -except t vidObj1 vidObj2 Xcol Ycol Xsm Ysm Xmid Ymid allmax
+    load(strcat(loadfile,int2str(t*50)));
 
     %Define colors
     colorLength = 50;
@@ -77,6 +94,7 @@ t=1;
 
     % Make scatterplots
     scatplot=figure(1);
+    clf
     subplot(1,2,1); %Cell 1
     plot(Xa,a1,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
     plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
@@ -109,23 +127,20 @@ t=1;
     %keyboard
     % pause(1.0);
 
-    % Define circles
-    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
-    [Xcol,Ycol] = pol2cart(th,rad);
+    scatframe = getframe(scatplot);
+    writeVideo(vidObj1,scatframe);
+
     ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
     ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
     ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
     ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
-    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-    [Xsm,Ysm] = pol2cart(th,rad);
-    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
-    [Xmid,Ymid] = pol2cart(th,rad);
 
-    allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
+    % allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
     % Concentric circles
     % Cell 1
     figcells=figure(2);
+    clf
     % if max(ZBranch1)>0.5
     surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
     colormap(branchedColor)
@@ -167,6 +182,8 @@ t=1;
     view(2)
     grid off
     axis equal
+    xlim([-1.5,1.5]);
+    ylim([-3.5,1.5]);
     set(gca,'XTick',[], 'YTick', [])
     title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
@@ -181,15 +198,6 @@ t=1;
     set(gca,'YColor','w')
     set(gcf,'color','w');
 
-
-
-    % Plot signal
-    % figure(2)
-    % [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
-    % [Xsig,Ysig] = pol2cart(th,rad);
-    % hold on;
-    % scatter(Xsig(sigBound),Ysig(sigBound)-2,'black','.')
-    % hold off;
 
     % Find peak for cell 1
     N=length(a1);
@@ -224,7 +232,7 @@ t=1;
     [~,maxind] = max(smoothed1(peakIndices1));
     peakInd1 = peakIndices1(maxind);
     if ~isempty(peakInd1)
-        figure(2)
+        % figure(2)
         hold on
         quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
         hold off;
@@ -260,13 +268,28 @@ t=1;
     [maxval,maxind] = max(smoothed2(peakIndices2));
     peakInd2 = peakIndices2(maxind);
     if ~isempty(peakInd2)
-        figure(2)
+        % figure(2)
         hold on
         quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
         hold off;
     end
 
-    figure(2)
+    % Plot signal
+        if signal==1
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+            [Xsig,Ysig] = pol2cart(th,rad);
+            if t<=1000
+                hold on;
+                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+                hold off;
+            else
+                hold on;
+                scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                hold off;
+            end
+        end
+
+    % figure(2)
     ohf = findobj(gcf);
     figaxes = findobj(ohf(1), 'Type', 'axes');
     set(figaxes(1),'Fontsize',15)
@@ -274,14 +297,11 @@ t=1;
     camroll(90)
 
 
-    scatframe = getframe(scatplot);
-    writeVideo(vidObj1,scatframe);
-
     cellsframe = getframe(figcells);
     writeVideo(vidObj2,cellsframe);
 
 
-% end
+end
 
 close(vidObj1);
 close(vidObj2);

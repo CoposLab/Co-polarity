@@ -3,9 +3,11 @@ close all;
 clear;
 clc;
 
-loadfile='./uncoupled_vid_files/vars_t';
+signal=1;
 
-savelocation='./movies4/uncoupled';
+loadfile='./sigswitch_vid_files/vars_t';
+
+savelocation='./movies4/sigswitch_uncoupled';
 setnum=int2str(1);
 
 vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -20,7 +22,7 @@ open(vidObj1);
 open(vidObj2);
 
 allmax=0;
-for t=1:49
+for t=1:44
     load(strcat(loadfile,int2str(t*50)));
     allmax = max(max(max(max(a1),max(a2)),max(max(b1),max(b2))),allmax);
 end
@@ -35,8 +37,13 @@ end
 
 for t=1:49
     close all;
-    clearvars -except t vidObj1 vidObj2 Xcol Ycol Xsm Ysm Xmid Ymid allmax
+    clearvars -except t vidObj1 vidObj2 Xcol Ycol Xsm Ysm Xmid Ymid allmax loadfile savelocation signal sigBound1 sigBound2
     load(strcat(loadfile,int2str(t*50)));
+
+    Na=101;
+    sigper=0.40;
+    sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
+    sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
     %Define colors
     colorLength = 50;
@@ -231,7 +238,7 @@ for t=1:49
 
     [~,maxind] = max(smoothed1(peakIndices1));
     peakInd1 = peakIndices1(maxind);
-    if ~isempty(peakInd1)
+    if ~isempty(peakInd1) && min(a1)<0.01 && max(b1)>1
         % figure(2)
         hold on
         quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
@@ -267,12 +274,27 @@ for t=1:49
     end
     [maxval,maxind] = max(smoothed2(peakIndices2));
     peakInd2 = peakIndices2(maxind);
-    if ~isempty(peakInd2)
+    if ~isempty(peakInd2) && min(a2)<0.01 && max(b2)>1
         % figure(2)
         hold on
         quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
         hold off;
     end
+
+    % Plot signal
+        if signal==1
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+            [Xsig,Ysig] = pol2cart(th,rad);
+            if t*50<=1500
+                hold on;
+                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+                hold off;
+            else
+                hold on;
+                scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                hold off;
+            end
+        end
 
     % figure(2)
     ohf = findobj(gcf);

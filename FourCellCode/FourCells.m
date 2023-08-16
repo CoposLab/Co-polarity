@@ -26,9 +26,13 @@ all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
 polarize_time=0;
 polarize_time_c1=0;
 polarize_time_c2=0;
+polarize_time_c3=0;
+polarize_time_c4=0;
 num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
+num_pol_c3=0;
+num_pol_c4=0;
 countpol=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -62,13 +66,16 @@ while (ppp<=1)
         vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 ... 
         filenameScatter filenameCells res_counters c1_vals c2_vals c1_ind ... 
         c2_ind all_results_matrix polarize_time polarize_time_c1 ... 
-        polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem
+        polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem ... 
+        polarize_time_c3 polarize_time_c4 num_pol_c3 num_pol_c4
     
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
 
     polarizedc1=0; %has cell1 polarized yet
     polarizedc2=0;
+    polarizedc3=0;
+    polarizedc4=0;
 
 
     % Set actin filament parameters
@@ -110,6 +117,12 @@ while (ppp<=1)
     posx2 = zeros(N,Nt);              % array of positions of X(t) cell 2
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
+    posx3 = zeros(N,Nt);              % array of positions of X(t) cell 3
+    posy3 = zeros(N,Nt);              % array of positions of Y(t) cell 3
+
+    posx4 = zeros(N,Nt);              % array of positions of X(t) cell 4
+    posy4 = zeros(N,Nt);              % array of positions of Y(t) cell 4
+
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
     numToRemove=0;
     counter1=0;
@@ -121,10 +134,14 @@ while (ppp<=1)
     % boundC2 = (floor(Na/4 - ((Na-1)*bper)/2)):((floor(Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 2
 
     boundC1 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
-    boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
+    boundC2_1 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
+    boundC2_2 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
+    boundC3_1 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
+    boundC3_2 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
+    boundC4 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
     sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
@@ -136,18 +153,32 @@ while (ppp<=1)
 
     branchedConst1 = 1.0;
     bundledConst1 = 1.0;
-    branchedConst2 = 1.0;
-    bundledConst2 = 1.0;
+    branchedConst2 = [1.0,1.0];
+    bundledConst2 = [1.0,1.0];
+    branchedConst3 = [1.0,1.0];
+    bundledConst3 = [1.0,1.0];
+    branchedConst4 = 1.0;
+    bundledConst4 = 1.0;
 
     Ka1=ones(Na,1);
     Kb1=ones(Na,1);
     Ka2=ones(Na,1);
     Kb2=ones(Na,1);
+    Ka3=ones(Na,1);
+    Kb3=ones(Na,1);
+    Ka4=ones(Na,1);
+    Kb4=ones(Na,1);
 
     Ka1(boundC1) = branchedConst1*Ka1(boundC1);
     Kb1(boundC1) = bundledConst1*Kb1(boundC1);
-    Ka2(boundC2) = branchedConst2*Ka2(boundC2);
-    Kb2(boundC2) = bundledConst2*Kb2(boundC2);
+    Ka2(boundC2_1) = branchedConst2(1)*Ka2(boundC2_1);
+    Ka2(boundC2_2) = branchedConst2(2)*Ka2(boundC2_2);
+    Kb2(boundC2_1) = bundledConst2(1)*Kb2(boundC2_1);
+    Kb2(boundC2_2) = bundledConst2(2)*Kb2(boundC2_2);
+    Ka3(boundC3_1) = branchedConst3(1)*Ka3(boundC3_1);
+    Ka3(boundC3_2) = branchedConst3(2)*Ka3(boundC3_2);
+    Kb3(boundC3_1) = bundledConst3(1)*Kb3(boundC3_1);
+    Kb3(boundC3_2) = bundledConst3(2)*Kb3(boundC3_2);
 
     % Kb1(setdiff(1:length(Kb1),boundC1)) = 1.5*Kb1(setdiff(1:length(Kb1),boundC1));
 
@@ -171,36 +202,57 @@ while (ppp<=1)
     b2       = zeros(N,1);
     bnew2    = zeros(N,1);
 
+    a3       = zeros(N,1);
+    anew3    = zeros(N,1);
+    b3       = zeros(N,1);
+    bnew3    = zeros(N,1);
+
+    a4       = zeros(N,1);
+    anew4    = zeros(N,1);
+    b4       = zeros(N,1);
+    bnew4    = zeros(N,1);
+
     % (1) pulse in middle
     if (ictype==1)
         a1   = ones(N,1);
         anew1= ones(N,1);
-
         b1   = 0.5*ones(N,1);
         bnew1= 0.5*ones(N,1);
-
         a2   = ones(N,1);
         anew2= ones(N,1);
-
         b2   = 0.5*ones(N,1);
         bnew2= 0.5*ones(N,1);
+        a3   = ones(N,1);
+        anew3= ones(N,1);
+        b3   = 0.5*ones(N,1);
+        bnew3= 0.5*ones(N,1);
+        a4   = ones(N,1);
+        anew4= ones(N,1);
+        b4   = 0.5*ones(N,1);
+        bnew4= 0.5*ones(N,1);
 
         % (2) random
     elseif (ictype==2)
         a1 = 0.1 + 0.9.*rand(length(Xa),1);
         b1 = 0.1 + 0.9.*rand(length(Xa),1);
-
         a2 = 0.1 + 0.9.*rand(length(Xb),1);
         b2 = 0.1 + 0.9.*rand(length(Xb),1);
+        a3 = 0.1 + 0.9.*rand(length(Xa),1);
+        b3 = 0.1 + 0.9.*rand(length(Xa),1);
+        a4 = 0.1 + 0.9.*rand(length(Xb),1);
+        b5 = 0.1 + 0.9.*rand(length(Xb),1);
 
         % (3) arctangent
     elseif (ictype==3)
         steepness = 20;
         a1 = (tanh(steepness*(X1-0.375)) - tanh(steepness*(X1-1.125)) + 0.2)/2.2;
         b1 = (2 - tanh(steepness*(X1-0.375)) + tanh(steepness*(X1-1.125)) + 0.2)/2.2;
-
         a2 = (tanh(steepness*(X2-0.375)) - tanh(steepness*(X2-1.125)) + 0.2)/2.2;
         b2 = (2 - tanh(steepness*(X2-0.375)) + tanh(steepness*(X2-1.125)) + 0.2)/2.2;
+        a3 = (tanh(steepness*(X3-0.375)) - tanh(steepness*(X3-1.125)) + 0.2)/2.2;
+        b3 = (2 - tanh(steepness*(X3-0.375)) + tanh(steepness*(X3-1.125)) + 0.2)/2.2;
+        a4 = (tanh(steepness*(X4-0.375)) - tanh(steepness*(X4-1.125)) + 0.2)/2.2;
+        b4 = (2 - tanh(steepness*(X4-0.375)) + tanh(steepness*(X4-1.125)) + 0.2)/2.2;
 
         %a = (tanh(steepness*(X-0.5)) - tanh(steepness*(X-1.5)) + 0.2)/2.2;
         %b = (2 - tanh(steepness*(X-0.5)) + tanh(steepness*(X-1.5)) +0.2)/2.2;
@@ -209,27 +261,37 @@ while (ppp<=1)
         steepness = 10;
         a1 = (1-cos(3*Xa*pi/5))/2; a1=a1';
         b1 = (tanh(steepness*(Xa-7.5))+1)/2 + (1-tanh(steepness*(Xa-2.5)))/2; b1=b1';
-
         a2 = (1-cos(3*Xb*pi/5))/2; a2=a2';
         b2 = (tanh(steepness*(Xb-7.5))+1)/2 + (1-tanh(steepness*(Xb-2.5)))/2; b2=b2';
+        a3 = (1-cos(3*Xa*pi/5))/2; a3=a3';
+        b3 = (tanh(steepness*(Xa-7.5))+1)/2 + (1-tanh(steepness*(Xa-2.5)))/2; b3=b3';
+        a4 = (1-cos(3*Xb*pi/5))/2; a4=a4';
+        b5 = (tanh(steepness*(Xb-7.5))+1)/2 + (1-tanh(steepness*(Xb-2.5)))/2; b4=b4';
 
     elseif (ictype==5)
         % (4) odd condition #2
         steepness = 10;
         b1 = (1-cos(Xa*pi/5))/2; b1=b1';
         a1 = (tanh(steepness*(Xa-7.5))+1)/2 + (1-tanh(steepness*(Xa-2.5)))/2; a1=a1';
-
         b2 = (1-cos(Xb*pi/5))/2; b2=b2';
         a2 = (tanh(steepness*(Xb-7.5))+1)/2 + (1-tanh(steepness*(Xb-2.5)))/2; a2=a2';
+        b3 = (1-cos(Xa*pi/5))/2; b3=b3';
+        a3 = (tanh(steepness*(Xa-7.5))+1)/2 + (1-tanh(steepness*(Xa-2.5)))/2; a3=a3';
+        b4 = (1-cos(Xb*pi/5))/2; b4=b4';
+        a4 = (tanh(steepness*(Xb-7.5))+1)/2 + (1-tanh(steepness*(Xb-2.5)))/2; a4=a4';
 
     elseif (ictype==6)
         % (5) odd condition #3
         mu = 1.8; sigma = 0.1;
         a1 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); a1=a1';
         a2 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); a2=a2';
+        a3 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); a3=a3';
+        a4 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); a4=a4';
         mu = 1.9; sigma = 0.1;
         b1 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); b1=b1';
         b2 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); b2=b2';
+        b3 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); b3=b3';
+        b4 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); b4=b4';
     end
 
     % Laplacian difference operator with no flux boundary conditions
@@ -240,13 +302,24 @@ while (ppp<=1)
     Lapdiff1(Na,1) = 1; Lapdiff1(Na,Na-1) = 1; Lapdiff1(Na,Na) = -2;
     Hm1 = II1+(pa/2)*Lapdiff1;
     Hs1 = II1-(pa/2)*Lapdiff1;
-
     II2 = speye(Na,Na);
     Lapdiff2 = spdiags(ones(Na,1)*[0 1 -2 1 0], [-Na+1, -1, 0 , 1, Na-1], Na, Na);
     Lapdiff2(1,1) = -2; Lapdiff2(1,2) = 1; Lapdiff2(1,Na) = 1;
     Lapdiff2(Na,1) = 1; Lapdiff2(Na,Na-1) = 1; Lapdiff2(Na,Na) = -2;
     Hm2 = II2+(pa/2)*Lapdiff2;
     Hs2 = II2-(pa/2)*Lapdiff2;
+    II3 = speye(Na,Na);
+    Lapdiff3 = spdiags(ones(Na,1)*[0 1 -2 1 0], [-Na+1, -1, 0 , 1, Na-1], Na, Na);
+    Lapdiff3(1,1) = -2; Lapdiff3(1,2) = 1; Lapdiff3(1,Na) = 1;
+    Lapdiff3(Na,1) = 1; Lapdiff3(Na,Na-1) = 1; Lapdiff3(Na,Na) = -2;
+    Hm3 = II3+(pa/2)*Lapdiff3;
+    Hs3 = II3-(pa/2)*Lapdiff3;
+    II4 = speye(Na,Na);
+    Lapdiff4 = spdiags(ones(Na,1)*[0 1 -2 1 0], [-Na+1, -1, 0 , 1, Na-1], Na, Na);
+    Lapdiff4(1,1) = -2; Lapdiff4(1,2) = 1; Lapdiff4(1,Na) = 1;
+    Lapdiff4(Na,1) = 1; Lapdiff4(Na,Na-1) = 1; Lapdiff4(Na,Na) = -2;
+    Hm4 = II4+(pa/2)*Lapdiff4;
+    Hs4 = II4-(pa/2)*Lapdiff4;
 
     % Setup polarity concentrations
     %
@@ -269,13 +342,34 @@ while (ppp<=1)
     NNx2  = zeros(Nt,1);
     NNy2  = zeros(Nt,1);
 
+    nx3   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active)
+    ny3   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active)
+    Tx3   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for X(t)
+    Ty3   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for Y(t)
+    X3    = zeros(MAX_OUTPUT_LENGTH,1);       % number of X(t) molecules on the membrane
+    Y3    = zeros(MAX_OUTPUT_LENGTH,1);       % number of Y(t) molecules on the membrane
+    NNx3  = zeros(Nt,1);
+    NNy3  = zeros(Nt,1);
+
+    nx4   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active)
+    ny4   = zeros(N,Nt);                      % state of the particle (0 inactive, 1 active)
+    Tx4   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for X(t)
+    Ty4   = zeros(MAX_OUTPUT_LENGTH,1);       % times of chemical reactions for Y(t)
+    X4    = zeros(MAX_OUTPUT_LENGTH,1);       % number of X(t) molecules on the membrane
+    Y4    = zeros(MAX_OUTPUT_LENGTH,1);       % number of Y(t) molecules on the membrane
+    NNx4  = zeros(Nt,1);
+    NNy4  = zeros(Nt,1);
+
     % Set initial conditions for polarity molecules distribution
     %
     rxn_count_x1       = 1;
     rxn_count_y1       = 1;
-
     rxn_count_x2       = 1;
     rxn_count_y2       = 1;
+    rxn_count_x3       = 1;
+    rxn_count_y3       = 1;
+    rxn_count_x4       = 1;
+    rxn_count_y4       = 1;
 
     X1(1)              = 0.1*N;                 % # of particles on membrane
     Y1(1)              = 0.1*N;                 % # of particles on membrane
@@ -300,6 +394,30 @@ while (ppp<=1)
     r2 = randperm(ceil(L/(0.0102)),X2(1)+Y2(1))*0.0102;
     posx2(1:X2(1),1)=r2(1:X2(1));
     posy2(1:Y2(1),1)=r2(X2(1)+1:end);
+
+    X3(1)              = 0.1*N;                 % # of particles on membrane
+    Y3(1)              = 0.1*N;                 % # of particles on membrane
+    NNx3(1)            = X3(1);
+    NNy3(1)            = Y3(1);
+    Tx3(1)             = 0.0;
+    Ty3(1)             = 0.0;
+    nx3(1:X3(1),1)      = 1;                     % activate mem-bound particles
+    ny3(1:X3(1),1)      = 1;
+    r3 = randperm(ceil(L/(0.0102)),X3(1)+Y3(1))*0.0102;
+    posx3(1:X3(1),1)=r3(1:X3(1));
+    posy3(1:Y3(1),1)=r3(X3(1)+1:end);
+
+    X4(1)              = 0.1*N;                 % # of particles on membrane
+    Y4(1)              = 0.1*N;                 % # of particles on membrane
+    NNx4(1)            = X4(1);
+    NNy4(1)            = Y4(1);
+    Tx4(1)             = 0.0;
+    Ty4(1)             = 0.0;
+    nx4(1:X4(1),1)      = 1;                     % activate mem-bound particles
+    ny4(1:X4(1),1)      = 1;
+    r4 = randperm(ceil(L/(0.0102)),X4(1)+Y4(1))*0.0102;
+    posx4(1:X4(1),1)=r4(1:X4(1));
+    posy4(1:Y4(1),1)=r4(X4(1)+1:end);
 
     % Sample concentration at actin filament spatial scale
     %
@@ -485,7 +603,7 @@ while (ppp<=1)
         set(gca,'XTick',[], 'YTick', [])
         title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
-        flipc2 = flip(boundC2);
+        flipc2 = flip(boundC2_1);
         for i=1:length(boundC1)
             plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
         end
@@ -546,15 +664,9 @@ while (ppp<=1)
         if signal==1
             [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
             [Xsig,Ysig] = pol2cart(th,rad);
-            if t<=1000
-                hold on;
-                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
-                hold off;
-            else
-                hold on;
-                scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
-                hold off;
-            end
+            hold on;
+            scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+            hold off;
         end
 
         ohf = findobj(gcf);
@@ -570,8 +682,6 @@ while (ppp<=1)
 
     end
 
-    save(strcat('./sigswitch_vid_files/vars_t0'),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
-
     %% Run simulation
     %
     tic
@@ -581,7 +691,7 @@ while (ppp<=1)
 
         %% Run biochemistry
         [Konx1,Kony1,Kfbx1,Kfby1,Koffx1,Koffy1] = spatialrates(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1); % set rates
-        [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
+        [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2_1);
 
 
         % Add external signal for cell 1
@@ -601,7 +711,7 @@ while (ppp<=1)
 
         % this works
         if signal==1
-            if t<=1500
+            if t<=1000
                 steepness = 20;
                 Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
@@ -611,12 +721,12 @@ while (ppp<=1)
                 Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
             else
                 steepness = 20;
-                Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Konx1 = (ron*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Kony1 = (ron*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Kfbx1 = (rfb*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Kfby1 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Koffx1 = (roff*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+                Koffy1 = (roff*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
             end
         end
 
@@ -641,14 +751,14 @@ while (ppp<=1)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
-        % 
-        % Kony1(boundC1)=Kony1(boundC1)*10;
-        % Kony2(boundC2)=Kony2(boundC2)*10;
-        % 
-        % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        % Koffx2(boundC2)=Koffx2(boundC2)*10;
+        Konx1(boundC1)=Konx1(boundC1)*100;
+        Konx2(boundC2_1)=Konx2(boundC2_1)*100;
+
+        Kony1(boundC1)=Kony1(boundC1)*10;
+        Kony2(boundC2_1)=Kony2(boundC2_1)*10;
+
+        Koffx1(boundC1)=Koffx1(boundC1)*10;
+        Koffx2(boundC2_1)=Koffx2(boundC2_1)*10;
 
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
         % Koffy2(boundC2)=Koffy2(boundC2)*1000;
@@ -1038,7 +1148,7 @@ while (ppp<=1)
             % Look for nearby rho (posy2), take them off
             % locx2=location of rac binding
             if numToRemove>0
-                boundC2Scaled=(L*boundC2/Na);
+                boundC2Scaled=(L*boundC2_1/Na);
                 locRemovey2 = find(abs(posy2(:,t+1)-posx2(K1_2,t+1))<epsilon,numToRemove);
                 numFound = length(locRemovey2);
                 if ~isempty(locRemovey2) && boundC2Scaled(1)<=posx2(K1_2,t+1) && boundC2Scaled(end)>=posx2(K1_2,t+1)
@@ -1100,9 +1210,9 @@ while (ppp<=1)
         kb1=zeros(length(a2),1);
         kb1(boundC1)=1*ones(length(boundC1),1);
         ka2=zeros(length(b1),1);
-        ka2(boundC2)=1*ones(length(boundC2),1);
+        ka2(boundC2_1)=1*ones(length(boundC2_1),1);
         kb2=zeros(length(a1),1);
-        kb2(boundC2)=1*ones(length(boundC2),1);
+        kb2(boundC2_1)=1*ones(length(boundC2_1),1);
         abmax=50;
 
         gamma=1.5;
@@ -1130,8 +1240,8 @@ while (ppp<=1)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-         if mod(t,tplot) == 0
-        % if t==(Nt-1)
+         % if mod(t,tplot) == 0
+        if t==(Nt-1)
 
             %Define colors
             colorLength = 50;
@@ -1282,7 +1392,7 @@ while (ppp<=1)
             set(gca,'XTick',[], 'YTick', [])
             title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
-            flipc2 = flip(boundC2);
+            flipc2 = flip(boundC2_1);
             for i=1:length(boundC1)
                 plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
             end
@@ -1343,15 +1453,9 @@ while (ppp<=1)
             if signal==1
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
-                if t<=1000
-                    hold on;
-                    scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
-                    hold off;
-                else
-                    hold on;
-                    scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
-                    hold off;
-                end
+                hold on;
+                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+                hold off;
             end
 
             ohf = findobj(gcf);
@@ -1391,7 +1495,7 @@ while (ppp<=1)
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
 
-            save(strcat('./sigswitch_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2');
+            % save(strcat('./uncoupled_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2');
 
         end
 
@@ -1469,11 +1573,6 @@ while (ppp<=1)
     if vid==1
         close(vidObj1);
         close(vidObjCol1);
-        % close(vidObjRR1);
-        %
-        % close(vidObj2);
-        % close(vidObjCol2);
-        % close(vidObjRR2);
     end
     sprintf('Simulation %d done',ppp)
     toc
@@ -1546,46 +1645,6 @@ end
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
 
 
-%% Plot all particle trajectories
-% ccx = [0 0 255]/256.*ones(Nt,1);     % blue
-% ccy = [255 219 88]/256.*ones(Nt,1);  % mustard yellow
-% time = linspace(0,Tend,Nt);
-% figure(10);
-% subplot(1,2,1);
-% for j=1:2:max(max([NNx1,NNy1]))
-%     hold on;
-%     %plot(linspace(0,Tend,Nt),pos(j,:));
-%     scatter(linspace(0,Tend,Nt),posx1(j,:),1,ccx);
-%     scatter(linspace(0,Tend,Nt),posy1(j,:),1,ccy);
-%     box on;
-%     set(gca,'Color','k','fontsize',20,'fontname','times');
-%     pbaspect([3 1 1]);
-%     set(gcf,'color','w');
-%     title('Cell 1')
-%     %xlabel('Time');
-%     %ylabel('Location on cell membrane');
-%     %yticks([0 0.5 1 1.5 2]);
-%     %yticklabels({'0','0.25','0.5','0.75','1'});
-% end
-%
-% subplot(1,2,2);
-% for j=1:2:max(max([NNx2,NNy2]))
-%     hold on;
-%     %plot(linspace(0,Tend,Nt),pos(j,:));
-%     scatter(linspace(0,Tend,Nt),posx2(j,:),1,ccx);
-%     scatter(linspace(0,Tend,Nt),posy2(j,:),1,ccy);
-%     box on;
-%     set(gca,'Color','k','fontsize',20,'fontname','times');
-%     pbaspect([3 1 1]);
-%     set(gcf,'color','w');
-%     title('Cell 2')
-%     %xlabel('Time');
-%     %ylabel('Location on cell membrane');
-%     %yticks([0 0.5 1 1.5 2]);
-%     %yticklabels({'0','0.25','0.5','0.75','1'});
-% end
-
-%end
 
 % if writem==1
 %     writematrix(res_counters,strcat('./allparamsresults/racup/',...
