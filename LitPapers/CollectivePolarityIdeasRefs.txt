@@ -1,0 +1,160 @@
+2 network competition model
+
+chemical reaction-diffusion model
+
+mechanical model with flow of actomyosin and cell movement
+
+mechanical model with non-local force
+
+mechanochemical model with flow
+
+mechanochemical model with competition
+
+compass vs stabilizing pseudopod
+
+opposing fronts, adjoining rears, then in one of the cell rotation of the pattern 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Dev Growth Differ. 2017 Jun;59(5):471-490. doi: 10.1111/dgd.12381. Epub 2017 Jul 17.
+Mathematical model of collective cell migrations based on cell polarity.
+Akiyama M1, Sushida T1, Ishida S2, Haga H3.
+-- A bit more collective, phenomenological
+
+Proc Natl Acad Sci U S A. 2014 Oct 14; 111(41): 14770–14775.
+Polarity mechanisms such as contact inhibition of locomotion regulate persistent rotational motion of mammalian cells on micropatterns
+Brian A. Camley,a,b Yunsong Zhang,c,d Yanxiang Zhao,b,e,f Bo Li,b,e Eshel Ben-Jacob,d,g Herbert Levine,d,h,1 and Wouter-Jan Rappela,b
+-- Confined pairs exhibit rotations but also stall
+-- Found that rotation exhibited with either (1) front-front inhibition of RhoGTPase (CW) or (2) velocity alignment (CCW) and not with contact inhibition of locomotion or neighbor alignment.
+
+Cell-alignment patterns in the collective migration of cells with polarized adhesion
+Katsuyoshi Matsushita
+Phys. Rev. E 95, 032415
+-- Don't know
+
+Curr Opin Syst Biol. 2017 Jun; 3: 43–53.
+Mechanisms of Cell Polarization
+Wouter-Jan Rappel and Leah Edelstein-Keshet
+
+Dev Biol. 2018 Dec 1;444 Suppl 1:S262-S273. doi: 10.1016/j.ydbio.2018.01.013. Epub 2018 Jan 31.
+A Rho-GTPase based model explains spontaneous collective migration of neural crest cell clusters.
+Merchant B1, Edelstein-Keshet L2, Feng JJ3.
+
+Journal of Physics D: Applied Physics Volume 50, Number 11
+Physical models of collective cell motility: from cell to tissue
+B A Camley and W-J Rappel 
+
+Nat Rev Mol Cell Biol. 2009 Jul;10(7):445-57. doi: 10.1038/nrm2720.
+Collective cell migration in morphogenesis, regeneration and cancer.
+Friedl P1, Gilmour D.
+
+J Mech Behav Biomed Mater. 2018 Dec;88:330-339. doi: 10.1016/j.jmbbm.2018.08.014. Epub 2018 Aug 18.
+Collective cell polarization and alignment on curved surfaces.
+Liu C1, Xu J1, He S1, Zhang W2, Li H2, Huo B1, Ji B3.
+
+Predicting Collective Migration of Cell Populations Defined by Varying Repolarization Dynamics.
+Mathur J, Sarker B, Pathak A.
+Biophys J. 2018 Dec 18;115(12):2474-2485.
+
+Flocking transitions in confluent tissues.
+Giavazzi F, Paoluzzi M, Macchi M, Bi D, Scita G, Manning ML, Cerbino R, Marchetti MC.
+Soft Matter. 2018 May 9;14(18):3471-3477. 
+
+Polarization and migration in the zebrafish posterior lateral line system.
+Knutsdottir H, Zmurchok C, Bhaskar D, Palsson E, Dalle Nogare D, Chitnis AB, Edelstein-Keshet L.
+PLoS Comput Biol. 2017 Apr 3;13(4):e1005451.
+
+Collective Chemotaxis through Noisy Multicellular Gradient Sensing.
+Varennes J, Han B, Mugler A.
+Biophys J. 2016 Aug 9;111(3):640-649.
+
+Phase-field model for collective cell migration.
+Najem S, Grant M.
+Phys Rev E. 2016 May;93(5):052405.
+
+Emergence and Persistence of Collective Cell Migration on Small Circular Micropatterns.
+Segerer FJ, Thüroff F, Piera Alberola A, Frey E, Rädler JO.
+Phys Rev Lett. 2015 Jun 5;114(22):228102.
+
+Collective cell migration induced by mechanical stress and substrate adhesiveness.
+Köpf MH.
+Phys Rev E Stat Nonlin Soft Matter Phys. 2015 Jan;91(1):012712. 
+
+A modeling approach to study the effect of cell polarization on keratinocyte migration.
+Fuhr MJ, Meyer M, Fehr E, Ponzio G, Werner S, Herrmann HJ.
+PLoS One. 2015 Feb 11;10(2):e0117676.
+
+Coherent motions in confluent cell monolayer sheets.
+Li B, Sun SX.
+Biophys J. 2014 Oct 7;107(7):1532-41.
+
+Collective polarization model for gradient sensing via Dachsous-Fat intercellular signaling.
+Mani M, Goyal S, Irvine KD, Shraiman BI.
+Proc Natl Acad Sci U S A. 2013 Dec 17;110(51):20420-5.
+
+Contact inhibition of locomotion probabilities drive solitary versus collective cell migration.
+Desai RA, Gopal SB, Chen S, Chen CS.
+J R Soc Interface. 2013 Sep 18;10(88):20130717. 
+
+Collective mesendoderm migration relies on an intrinsic directionality signal transmitted through cell contacts.
+Dumortier JG, Martin S, Meyer D, Rosa FM, David NB.
+Proc Natl Acad Sci U S A. 2012 Oct 16;109(42):16945-50. 
+
+Active elasticity of gels with contractile cells.
+Zemel A, Bischofs IB, Safran SA.
+Phys Rev Lett. 2006 Sep 22;97(12):128103. 
+
+The mechanics behind cell polarity
+Atef Asnacios1 and Olivier Hamant2,3
+Trends in Cell Biology, November 2012, Vol. 22, No. 11
+
+Force Generation,Transmission, and Integration during Cell and Tissue Morphogenesis
+Thomas Lecuit,1 Pierre-Francois Lenne,1
+and Edwin Munro2 
+Annu. Rev. Cell Dev. Biol. 2011. 27:157–84
+
+Coordinating cell movements in vivo: junctional and
+cytoskeletal dynamics lead the way
+Miranda V Hunter1,2 and Rodrigo Fernandez-Gonzalez
+Current Opinion in Cell Biology 2017, 48:54–62
+
+Actomyosin contractility and collective migration: may the force be with you
+Pahini Pandya, Jose L Orgaz and Victoria Sanz-Moreno
+Current Opinion in Cell Biology 2017, 48:87–96
+
+Collective Signal Processing in Cluster Chemotaxis: Roles of Adaptation, Amplification, and Co-attraction in Collective Guidance
+Brian A. Camley1*, Juliane Zimmermann2, Herbert Levine2,3, Wouter-Jan Rappel1
+PLoS Comput Biol 12(7): e1005008.
+
+Diverse roles of guanine nucleotide exchange factors in regulating collective cell migration
+Assaf Zaritsky,1,2* Yun‑Yu Tseng,3* M. Angeles Rabadán,3 Shefali Krishna,3 Michael Overholtzer,3
+Gaudenz Danuser,1,2 and Alan Hall3
+https://doi.org/10.1083/jcb.201609095
+
+Neighborly relations during collective migration
+Sandrine Etienne-Manneville
+Current Opinion in Cell Biology 2014, 30:51–59
+
+Multidisciplinary approaches to understanding collective cell migration
+in developmental biology
+Linus J. Schumacher1,2, Paul M. Kulesa3, Rebecca McLennan3, Ruth E. Baker1
+and Philip K. Maini1
+Open Biol. 6: 160056.
+
+Modelling collective cell migration of neural crest
+Andra´ s Szabo´ and Roberto Mayor
+Current Opinion in Cell Biology 2016, 42:22–28
+
+Collective cell migration in development
+Elena Scarpa and Roberto Mayor
+J. Cell Biol. Vol. 212 No. 2 143–155
+
+Integrating chemotaxis and contact-inhibition during collective cell migration 
+Small GTPases at work
+Eric Theveneau and Roberto Mayor*
+Small GTPases 1:2, 113-117; September/October 2010
+
+John R. Davis, Andrei Luchici, ...,
+Mark Miodownik, Brian M. Stramer
+Inter-Cellular Forces Orchestrate Contact Inhibition
+of Locomotion. Davis et al., 2015, Cell 161, 361–373

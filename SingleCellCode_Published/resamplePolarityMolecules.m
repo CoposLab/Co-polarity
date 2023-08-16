@@ -30,4 +30,3 @@ xConcentration = sum(xsmear,2);
 yConcentration = sum(ysmear,2);
 
 end
-
