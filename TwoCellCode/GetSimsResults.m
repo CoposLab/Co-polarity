@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results3/bundledtoracc1_branchedtoracc2/1000bRacOn_1000aRacOff';
+filename = './results_nosignal/racdown1/100RacOff';
 maxnum=100;
 
 angle=pi/4;

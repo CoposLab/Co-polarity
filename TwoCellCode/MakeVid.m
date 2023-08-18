@@ -22,7 +22,7 @@ open(vidObj1);
 open(vidObj2);
 
 allmax=0;
-for t=1:44
+for t=1:49
     load(strcat(loadfile,int2str(t*50)));
     allmax = max(max(max(max(a1),max(a2)),max(max(b1),max(b2))),allmax);
 end
