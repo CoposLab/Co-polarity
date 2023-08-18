@@ -30,9 +30,9 @@ coeff_vals=[1,10,1000];
         %kc_ind=ka_ind;
         %kd_ind=kb_ind;
         
-for konx_ind=2:2
-    for koffx_ind=1:length(coeff_vals)
-        kony_ind=1;
+% for konx_ind=3:3
+%     for koffx_ind=1:3
+%         kony_ind=3;
 
 polarize_time=0;
 polarize_time_c1=0;
@@ -40,17 +40,12 @@ polarize_time_c2=0;
 num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
-countpol=0;
-writem=1;
+countpol=1;
+writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
-
-if koffx_ind==1
-    res_counters = [18,3,6,1,54,32,2];
-    ppp=27;
-end
 
 while (ppp<=100)
     close all;
@@ -87,6 +82,7 @@ while (ppp<=100)
 
     polarizedc1=0; %has cell1 polarized yet
     polarizedc2=0;
+    samedir_counter=0; %how many timesteps in a row have they polarized in the same direction
 
 
     % Set actin filament parameters
@@ -144,7 +140,7 @@ while (ppp<=100)
     % Signal
     signal=0;
     sigper=0.40;
-    sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
+    sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
     % Competition for limited resource (actin monomers) term
@@ -659,14 +655,14 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        Konx1(boundC1)=Konx1(boundC1)*coeff_vals(konx_ind);
-        Konx2(boundC2)=Konx2(boundC2)*coeff_vals(konx_ind);
+        % Konx1(boundC1)=Konx1(boundC1)*coeff_vals(konx_ind);
+        % Konx2(boundC2)=Konx2(boundC2)*coeff_vals(konx_ind);
         % 
-        Kony1(boundC1)=Kony1(boundC1)*coeff_vals(kony_ind);
-        Kony2(boundC2)=Kony2(boundC2)*coeff_vals(kony_ind);
+        % Kony1(boundC1)=Kony1(boundC1)*coeff_vals(kony_ind);
+        % Kony2(boundC2)=Kony2(boundC2)*coeff_vals(kony_ind);
         % 
-        Koffx1(boundC1)=Koffx1(boundC1)*coeff_vals(koffx_ind);
-        Koffx2(boundC2)=Koffx2(boundC2)*coeff_vals(koffx_ind);
+        % Koffx1(boundC1)=Koffx1(boundC1)*coeff_vals(koffx_ind);
+        % Koffx2(boundC2)=Koffx2(boundC2)*coeff_vals(koffx_ind);
 
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
         % Koffy2(boundC2)=Koffy2(boundC2)*1000;
@@ -1141,18 +1137,22 @@ while (ppp<=100)
         % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
         % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
-         %rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
-         %    + ka_vals(ka_ind) * ka1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-         %    + kb_vals(kb_ind) * ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-         %rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1 ...
-         %    + kc_vals(kc_ind) * kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-         %    + kd_vals(kd_ind) * kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-         %rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2 ...
-         %    + ka_vals(ka_ind) * ka2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-         %    + kb_vals(kb_ind) * ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
-         %rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2 ...
-         %    + kc_vals(kc_ind) * kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-         %    + kd_vals(kd_ind) * kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+        ka_ind=2;
+        kb_ind=2;
+        kc_ind=2;
+        kd_ind=2;
+         rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
+            + ka_vals(ka_ind) * ka1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+            + kb_vals(kb_ind) * ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+         rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1 ...
+            + kc_vals(kc_ind) * kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+            + kd_vals(kd_ind) * kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+         rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2 ...
+            + ka_vals(ka_ind) * ka2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+            + kb_vals(kb_ind) * ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
+         rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2 ...
+            + kc_vals(kc_ind) * kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+            + kd_vals(kd_ind) * kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
@@ -1471,6 +1471,18 @@ while (ppp<=100)
             ind2=find(b2New~=0,1,'last');
             dirIndexb2=ceil((ind1+ind2)/2);
         end
+        if dirIndexa1<1
+                dirIndexa1=dirIndexa1+101;
+        end
+        if dirIndexb1<1
+                dirIndexb1=dirIndexb1+101;
+        end
+        if dirIndexa2<1
+                dirIndexa2=dirIndexa2+101;
+        end
+        if dirIndexb2<1
+                dirIndexb2=dirIndexb2+101;
+        end
         if countpol==1
             if polarizedc1==0 && ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
                 sprintf('Cell 1 polarized after %d steps', t)
@@ -1484,8 +1496,28 @@ while (ppp<=100)
                 num_pol_c2=num_pol_c2+1;
                 polarizedc2=1;
             end
+            % if ~isempty(dirIndexa1) && ~isempty(dirIndexb1) && ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
+            %     sprintf('Both polarized after %d steps', t)
+            %     polarize_time=polarize_time+t;
+            %     num_polarized=num_polarized+1;
+            %     break
+            % end
             if ~isempty(dirIndexa1) && ~isempty(dirIndexb1) && ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
-                sprintf('Both polarized after %d steps', t)
+                [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+                medang1 = th(1,dirIndexa1);
+                medang2 = th(1,dirIndexa2);
+                angdiff = min(abs(medang1-medang2),abs(2*pi-abs(medang1-medang2)));
+                angTolerance=pi/4;
+                if angdiff < angTolerance
+                    samedir_counter=samedir_counter+1;
+                else
+                    samedir_counter=0;
+                end
+            else
+                samedir_counter=0;
+            end
+            if samedir_counter>=10
+                sprintf('Both polarized in same direction after %d steps', t)
                 polarize_time=polarize_time+t;
                 num_polarized=num_polarized+1;
                 break
@@ -1567,26 +1599,31 @@ while (ppp<=100)
      %        string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
      %    sprintf(int2str(res_counters))
      %end
-    if writem==1
-        writematrix(res_counters,strcat('./allparamsresults/cilcoa/',...
-            string(coeff_vals(konx_ind)),'konx_',string(coeff_vals(koffx_ind)),...
-            'koffx_',string(coeff_vals(kony_ind)),'kony.xls'))
-        sprintf(int2str(res_counters))
-    end
+    % if writem==1
+    %     writematrix(res_counters,strcat('./allparamsresults/cilcoa/',...
+    %         string(coeff_vals(konx_ind)),'konx_',string(coeff_vals(koffx_ind)),...
+    %         'koffx_',string(coeff_vals(kony_ind)),'kony.xls'))
+    %     sprintf(int2str(res_counters))
+    % end
 end
 
 if countpol==1
-    if num_polarized>0
-        sprintf('Average polarization time for both cells with %d runs: %d timesteps',num_polarized,polarize_time/num_polarized)
-    end
+    % if num_polarized>0
+    %     sprintf('Average polarization time for both cells with %d runs: %d timesteps',num_polarized,polarize_time/num_polarized)
+    % end
     % if num_pol_c1>0
     %     sprintf('Average polarization time for cell 1 with %d runs: %d timesteps',num_pol_c1,polarize_time_c1/num_pol_c1)
     % end
     % if num_pol_c2>0
     %     sprintf('Average polarization time for cell 2 with %d runs: %d timesteps',num_pol_c2,polarize_time_c2/num_pol_c2)
     % end
-    if num_pol_c1>0
-        sprintf('Average polarization time for one cell with %d runs: %d timesteps',num_pol_c1+num_pol_c2,(polarize_time_c1+polarize_time_c2)/(num_pol_c1+num_pol_c2))
+    % if num_pol_c1+num_pol_c2>0
+    %     sprintf('Average polarization time for one cell with %d runs: %d timesteps',num_pol_c1+num_pol_c2,(polarize_time_c1+polarize_time_c2)/(num_pol_c1+num_pol_c2))
+    % end
+    if num_polarized>0
+        sprintf('Average polarization time for both cells in same direction with %d runs: %d timesteps',num_polarized,polarize_time/num_polarized)
+    else
+        sprintf('None polarized in the same direction')
     end
 end
 
@@ -1639,8 +1676,8 @@ end
 %         int2str(c1_vals(c1_ind)),'konx1_',int2str(c2_vals(c2_ind)),'konx2.xls'))
 % end
 
-    end
-end
+%     end
+% end
 
 % if writem==1
 %     writematrix(res_counters,'./allparamsresults/rhodown/1koffy1_100koffy2.xls')
