@@ -21,13 +21,18 @@ ka_vals=[0,0.9,-0.9];
 kb_vals=[0,0.9,-0.9];
 kc_vals=[0,0.9,-0.9];
 kd_vals=[0,0.9,-0.9];
+coeff_vals=[1,10,1000];
 
 % all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
 
-for ka_ind=1:length(ka_vals)
-    for kb_ind=1:length(kb_vals)
-        kc_ind=ka_ind;
-        kd_ind=kb_ind;
+%for ka_ind=1:1
+    %for kb_ind=3:3
+        %kc_ind=ka_ind;
+        %kd_ind=kb_ind;
+        
+for konx_ind=3:3
+    for koffx_ind=1:3
+        kony_ind=3;
 
 polarize_time=0;
 polarize_time_c1=0;
@@ -42,7 +47,7 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -55,8 +60,8 @@ while (ppp<=1)
     end
     
     vid = 0;
-    vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
-    vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
+    % vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid',setnum,'.mp4'),'MPEG-4');
+    % vidObjCol1 = VideoWriter(strcat(savelocation,'Colorvid',setnum,'.mp4'),'MPEG-4');
     % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
     % vidObj2 = VideoWriter('lineplot2.mp4','MPEG-4');
     % vidObjCol2 = VideoWriter('colorplot2.mp4','MPEG-4');
@@ -68,10 +73,12 @@ while (ppp<=1)
         vidObj2 vidObjCol2 vidObjRR2 savefigs filenameC1 filenameC2 ... 
         filenameScatter filenameCells res_counters c1_vals c2_vals c1_ind ... 
         c2_ind all_results_matrix polarize_time polarize_time_c1 ... 
-        polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem
+        polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem ...
+        ka_ind kb_ind kc_ind kd_ind ka_vals kb_vals kc_vals kd_vals coeff_vals ...
+        konx_ind koffx_ind kony_ind
     
     rng('shuffle');
-    set(0,'DefaultFigureVisible','on')
+    set(0,'DefaultFigureVisible','off')
 
     polarizedc1=0; %has cell1 polarized yet
     polarizedc2=0;
@@ -647,14 +654,14 @@ while (ppp<=1)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
+        Konx1(boundC1)=Konx1(boundC1)*coeff_vals(konx_ind);
+        Konx2(boundC2)=Konx2(boundC2)*coeff_vals(konx_ind);
         % 
-        % Kony1(boundC1)=Kony1(boundC1)*10;
-        % Kony2(boundC2)=Kony2(boundC2)*10;
+        Kony1(boundC1)=Kony1(boundC1)*coeff_vals(kony_ind);
+        Kony2(boundC2)=Kony2(boundC2)*coeff_vals(kony_ind);
         % 
-        % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        % Koffx2(boundC2)=Koffx2(boundC2)*10;
+        Koffx1(boundC1)=Koffx1(boundC1)*coeff_vals(koffx_ind);
+        Koffx2(boundC2)=Koffx2(boundC2)*coeff_vals(koffx_ind);
 
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
         % Koffy2(boundC2)=Koffy2(boundC2)*1000;
@@ -1113,10 +1120,10 @@ while (ppp<=1)
 
         gamma=1.5;
 
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled
@@ -1129,18 +1136,18 @@ while (ppp<=1)
         % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
         % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
-        rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
-            + ka_vals(ka_ind) * ka1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kb_vals(kb_ind) * ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1 ...
-            + kc_vals(kc_ind) * kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kd_vals(kd_ind) * kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2 ...
-            + ka_vals(ka_ind) * ka2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kb_vals(kb_ind) * ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2 ...
-            + kc_vals(kc_ind) * kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kd_vals(kd_ind) * kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+         %rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
+         %    + ka_vals(ka_ind) * ka1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+         %    + kb_vals(kb_ind) * ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+         %rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1 ...
+         %    + kc_vals(kc_ind) * kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+         %    + kd_vals(kd_ind) * kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+         %rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2 ...
+         %    + ka_vals(ka_ind) * ka2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+         %    + kb_vals(kb_ind) * ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
+         %rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2 ...
+         %    + kc_vals(kc_ind) * kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+         %    + kd_vals(kd_ind) * kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
@@ -1549,10 +1556,16 @@ while (ppp<=1)
     %     writematrix(res_counters,'./allparamsresults/branchedbundled/0ka_0kb_0kc_0kd.xls')
     %     sprintf(int2str(res_counters))
     % end
+     %if writem==1
+     %    writematrix(res_counters,strcat('./allparamsresults/branchedbundled/',...
+     %        string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
+     %        string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
+     %    sprintf(int2str(res_counters))
+     %end
     if writem==1
-        writematrix(res_counters,strcat('./allparamsresults/branchedbundled/',...
-            string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
-            string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
+        writematrix(res_counters,strcat('./allparamsresults/cilcoa/',...
+            string(coeff_vals(konx_ind)),'konx_',string(coeff_vals(koffx_ind)),...
+            'koffx_',string(coeff_vals(kony_ind)),'kony.xls'))
         sprintf(int2str(res_counters))
     end
 end
