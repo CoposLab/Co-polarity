@@ -29,8 +29,8 @@ coeff_vals=[1,10,1000];
     %for kb_ind=1:2:3
         %kc_ind=kb_ind;
         %kd_ind=ka_ind;
- for c1_ind=3:4
-    for c2_ind=c1_ind:4
+ for c1_ind=1:1
+    for c2_ind=3:4
         
 % for konx_ind=3:3
 %     for koffx_ind=1:3
@@ -48,6 +48,10 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 
 counter_ppp = 1;
 ppp = 1;
+if c2_ind==3
+    ppp=99;
+    res_counters = [73,0,18,0,7,78,0];
+end
 
 while (ppp<=100)
     close all;
