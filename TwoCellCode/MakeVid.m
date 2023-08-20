@@ -5,9 +5,9 @@ clc;
 
 signal=1;
 
-loadfile='./sigswitch_vid_files/vars_t';
+loadfile='./vid_matfiles/sigswitch_vid_files/vars_t';
 
-savelocation='./movies4/sigswitch_uncoupled';
+savelocation='./movies/sigswitch_turnsaround';
 setnum=int2str(1);
 
 vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -40,10 +40,10 @@ for t=1:49
     clearvars -except t vidObj1 vidObj2 Xcol Ycol Xsm Ysm Xmid Ymid allmax loadfile savelocation signal sigBound1 sigBound2
     load(strcat(loadfile,int2str(t*50)));
 
-    Na=101;
-    sigper=0.40;
-    sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
-    sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
+    % Na=101;
+    % sigper=0.40;
+    % sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
+    % sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
     %Define colors
     colorLength = 50;
@@ -206,95 +206,64 @@ for t=1:49
     set(gcf,'color','w');
 
 
-    % Find peak for cell 1
-    N=length(a1);
-    smoothed1=zeros(1,N);
-    smoothAmount=20;
-    region=-smoothAmount:smoothAmount;
-    for i=1:N
-        b=i-region;
-        smoothed1(i) = sum(a1(b.*(b>0 & b<=N)+(b+N).*(b<=0)+(b-N).*(b>N)))/(2*smoothAmount+1);
+    % Find median for cell 1
+    a1New = a1;
+    a1New(a1New<1)=0;
+    if (a1New(1)~=0 && a1New(length(a1New))~=0)
+        zeroInd1=find(a1New==0,1,'first');
+        zeroInd2=find(a1New==0,1,'last');
+        dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
+    else
+        ind1=find(a1New~=0,1,'first');
+        ind2=find(a1New~=0,1,'last');
+        dirIndex1=ceil((ind1+ind2)/2);
     end
-
-    baseline=1;
-    peakIndices1=[];
-    peakIndex=0;
-    peakValue=0;
-    for i=1:N
-        if smoothed1(i)>baseline
-            if peakValue==0 || smoothed1(i)>peakValue
-                peakIndex=i;
-                peakValue=smoothed1(i);
-            end
-        elseif smoothed1(i)<baseline && peakIndex~=0
-            peakIndices1=[peakIndices1,peakIndex];
-            peakIndex=0;
-            peakValue=0;
-        end
+    if dirIndex1<1
+        dirIndex1=dirIndex1+101;
     end
-    if peakIndex~=0
-        peakIndices1=[peakIndices1,peakIndex];
-    end
-
-    [~,maxind] = max(smoothed1(peakIndices1));
-    peakInd1 = peakIndices1(maxind);
-    if ~isempty(peakInd1) && min(a1)<0.01 && max(b1)>1
-        % figure(2)
-        hold on
-        quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    if ~isempty(dirIndex1)
+        hold on;
+        quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
         hold off;
     end
 
-    % Find peak for cell 2
-    N=length(a2);
-    smoothed2=zeros(1,N);
-    region=-smoothAmount:smoothAmount;
-    for i=1:N
-        b=i-region;
-        smoothed2(i) = sum(a2(b.*(b>0 & b<=N)+(b+N).*(b<=0)+(b-N).*(b>N)))/(2*smoothAmount+1);
-    end
 
-    peakIndices2=[];
-    peakIndex=0;
-    peakValue=0;
-    for i=1:N
-        if smoothed2(i)>baseline
-            if peakValue==0 || smoothed2(i)>peakValue
-                peakIndex=i;
-                peakValue=smoothed2(i);
-            end
-        elseif smoothed2(i)<baseline && peakIndex~=0
-            peakIndices2=[peakIndices2,peakIndex];
-            peakIndex=0;
-            peakValue=0;
-        end
+
+    % Find median for cell 2
+    a2New = a2;
+    a2New(a2New<1)=0;
+    if (a2New(1)~=0 && a2New(length(a2New))~=0)
+        zeroInd1=find(a2New==0,1,'first');
+        zeroInd2=find(a2New==0,1,'last');
+        dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
+    else
+        ind1=find(a2New~=0,1,'first');
+        ind2=find(a2New~=0,1,'last');
+        dirIndex2=ceil((ind1+ind2)/2);
     end
-    if peakIndex~=0
-        peakIndices2=[peakIndices2,peakIndex];
+    if dirIndex2<1
+        dirIndex2=dirIndex2+101;
     end
-    [maxval,maxind] = max(smoothed2(peakIndices2));
-    peakInd2 = peakIndices2(maxind);
-    if ~isempty(peakInd2) && min(a2)<0.01 && max(b2)>1
-        % figure(2)
-        hold on
-        quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    if ~isempty(dirIndex2)
+        hold on;
+        quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
         hold off;
     end
 
     % Plot signal
-        if signal==1
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
-            [Xsig,Ysig] = pol2cart(th,rad);
-            if t*50<=1500
-                hold on;
-                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
-                hold off;
-            else
-                hold on;
-                scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
-                hold off;
-            end
+    if signal==1
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+        [Xsig,Ysig] = pol2cart(th,rad);
+        if t*50<=500
+            hold on;
+            scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+            hold off;
+        else
+            hold on;
+            scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+            hold off;
         end
+    end
 
     % figure(2)
     ohf = findobj(gcf);

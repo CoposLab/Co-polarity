@@ -29,8 +29,8 @@ coeff_vals=[1,10,1000];
     %for kb_ind=1:2:3
         %kc_ind=kb_ind;
         %kd_ind=ka_ind;
- for c1_ind=1:1
-    for c2_ind=3:4
+ % for c1_ind=1:1
+ %    for c2_ind=3:4
         
 % for konx_ind=3:3
 %     for koffx_ind=1:3
@@ -43,17 +43,13 @@ num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
 countpol=0;
-writem=1;
+writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
-if c2_ind==3
-    ppp=99;
-    res_counters = [73,0,18,0,7,78,0];
-end
 
-while (ppp<=100)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -144,7 +140,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -634,11 +630,24 @@ while (ppp<=100)
                 Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
 
-                % Konx1(boundC1)=Konx1(boundC1)*100;
-                % Kony2(boundC2)=Kony2(boundC2)*100;
-                % Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*100;
-                % Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*100;
-                % Koffx2(boundC2)=Koffx2(boundC2)*1000;
+                Konx1(boundC1)=Konx1(boundC1)*100;
+                Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))/100;
+                Koffx1(boundC1)=Koffx1(boundC1)/100;
+                Koffx1(setdiff(1:length(Koffx1),boundC1)) = Koffx1(setdiff(1:length(Koffx1),boundC1))*100;
+                Kony1(boundC1)=Kony1(boundC1)/100;
+                Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*100;
+                Koffy1(boundC1)=Koffy1(boundC1)*100;
+                Koffy1(setdiff(1:length(Koffy1),boundC1)) = Koffy1(setdiff(1:length(Koffy1),boundC1))/100;
+
+                Konx2(boundC2)=Konx2(boundC2)/100;
+                Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*100;
+                Koffx2(boundC2)=Koffx2(boundC2)*100;
+                Koffx2(setdiff(1:length(Koffx2),boundC2)) = Koffx2(setdiff(1:length(Koffx2),boundC2))/100;
+                Kony2(boundC2)=Kony2(boundC2)*100;
+                Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))/100;
+                Koffy2(boundC2)=Koffy2(boundC2)/100;
+                Koffy2(setdiff(1:length(Koffy2),boundC2)) = Koffy2(setdiff(1:length(Koffy2),boundC2))*100;
+                
             else
                 steepness = 20;
                 Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
@@ -648,11 +657,23 @@ while (ppp<=100)
                 Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
                 Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
 
-                % Konx2(boundC2)=Konx2(boundC2)*100;
-                % Kony1(boundC1)=Kony1(boundC1)*100;
-                % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*100;
-                % Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*100;
-                % Koffx1(boundC1)=Koffx1(boundC1)*1000;
+                Konx1(boundC1)=Konx1(boundC1)/1000;
+                Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*10;
+                Koffx1(boundC1)=Koffx1(boundC1)*1000;
+                Koffx1(setdiff(1:length(Koffx1),boundC1)) = Koffx1(setdiff(1:length(Koffx1),boundC1))/10;
+                Kony1(boundC1)=Kony1(boundC1)*1000;
+                Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))/10;
+                Koffy1(boundC1)=Koffy1(boundC1)/1000;
+                Koffy1(setdiff(1:length(Koffy1),boundC1)) = Koffy1(setdiff(1:length(Koffy1),boundC1))*10;
+
+                Konx2(boundC2)=Konx2(boundC2)*1000;
+                Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))/10;
+                Koffx2(boundC2)=Koffx2(boundC2)/10;
+                Koffx2(setdiff(1:length(Koffx2),boundC2)) = Koffx2(setdiff(1:length(Koffx2),boundC2))*1000;
+                Kony2(boundC2)=Kony2(boundC2)/100;
+                Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*100;
+                Koffy2(boundC2)=Koffy2(boundC2)*100;
+                Koffy2(setdiff(1:length(Koffy2),boundC2)) = Koffy2(setdiff(1:length(Koffy2),boundC2))/100;
             end
         end
 
@@ -764,33 +785,33 @@ while (ppp<=100)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        if c1_ind==1
-            Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
-        end
-        if c2_ind==1
-        Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
-        end
-
-        if c1_ind==2
-        Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        end
-        if c2_ind==2
-        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
-        end
-
-        if c1_ind==4
-        Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
-        end
-        if c2_ind==4
-        Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
-        end
-
-        if c1_ind==3
-        Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
-        end
-        if c2_ind==3
-        Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
-        end
+        % if c1_ind==1
+        %     Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        % end
+        % if c2_ind==1
+        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
+        % end
+        % 
+        % if c1_ind==2
+        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
+        % end
+        % if c2_ind==2
+        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+        % end
+        % 
+        % if c1_ind==4
+        % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
+        % end
+        % if c2_ind==4
+        % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
+        % end
+        % 
+        % if c1_ind==3
+        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
+        % end
+        % if c2_ind==3
+        % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
+        % end
 
 
         %Cell 1
@@ -1159,6 +1180,26 @@ while (ppp<=100)
 
         gamma=1.5;
 
+        if t<=500
+            Ka1(boundC1)=1.2;
+            Ka1(setdiff(1:length(Ka1),boundC1)) = 0.8;
+            Kb2(boundC2)=1.2;
+            Kb2(setdiff(1:length(Kb2),boundC2)) = 0.8;
+            Kb1(boundC1)=1;
+            Kb1(setdiff(1:length(Kb1),boundC1)) = 1.5;
+            Ka2(boundC2)=0.8;
+            Ka2(setdiff(1:length(Ka2),boundC2)) = 1.2;
+        else
+            Ka2(boundC2)=1.5;
+            Ka2(setdiff(1:length(Ka2),boundC2)) = 0.8;
+            Kb1(boundC1)=1.5;
+            Kb1(setdiff(1:length(Kb1),boundC1)) = 0.8;
+            Kb2(boundC2)=0.8;
+            Kb2(setdiff(1:length(Kb2),boundC2)) = 1.2;
+            Ka1(boundC1)=0.8;
+            Ka1(setdiff(1:length(Ka1),boundC1)) = 1.2;
+        end
+
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
         rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
@@ -1195,8 +1236,8 @@ while (ppp<=100)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-         %if mod(t,tplot) == 0
-         if t==(Nt-1)
+         if mod(t,tplot) == 0
+         % if t==(Nt-1)
 
             %Define colors
             colorLength = 50;
@@ -1456,7 +1497,7 @@ while (ppp<=100)
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
 
-            %save(strcat('./vid_matfiles/sigswitch_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
+            save(strcat('./vid_matfiles/sigswitch_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
 
         end
 
@@ -1631,9 +1672,9 @@ while (ppp<=100)
          %writematrix(res_counters,strcat('./allparamsresults/branchedbundled/',...
          %    string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
          %    string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
-         options=["Bkonx","Akony","Akoffx","Bkoffy"];
-         writematrix(res_counters,strcat('./allparamsresults/forcedependent/',...
-             '1000',options(c1_ind),'C1_','1000',options(c2_ind),'C2.xls'))
+         % options=["Bkonx","Akony","Akoffx","Bkoffy"];
+         % writematrix(res_counters,strcat('./allparamsresults/forcedependent/',...
+         %     '1000',options(c1_ind),'C1_','1000',options(c2_ind),'C2.xls'))
          sprintf(int2str(res_counters))
      end
     % if writem==1
@@ -1713,8 +1754,8 @@ end
 %         int2str(c1_vals(c1_ind)),'konx1_',int2str(c2_vals(c2_ind)),'konx2.xls'))
 % end
 
-    end
-end
+%     end
+% end
 
 % if writem==1
 %     writematrix(res_counters,'./allparamsresults/rhodown/1koffy1_100koffy2.xls')
