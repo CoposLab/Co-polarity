@@ -212,7 +212,7 @@ figure(2)
 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
 [Xsig,Ysig] = pol2cart(th,rad);
 hold on;
-scatter(Xsig(sigBound),Ysig(sigBound)-2,'black','.')
+scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
 hold off;
 
 % Find peak for cell 1
