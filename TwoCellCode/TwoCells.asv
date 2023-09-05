@@ -15,13 +15,13 @@ clear;
 close all;
 clc;
 
-% c1_vals = [0,0.9,-0.9];
-% c2_vals = [1,10,100,1000];
-ka_vals=[0,0.9,-0.9];
-kb_vals=[0,0.9,-0.9];
-kc_vals=[0,0.9,-0.9];
-kd_vals=[0,0.9,-0.9];
-coeff_vals=[1,10,1000];
+%c1_vals = [1,10,1000];
+%c2_vals = [1,10,1000];
+%ka_vals=[0,0.9,-0.9];
+%kb_vals=[0,0.9,-0.9];
+%kc_vals=[0,0.9,-0.9];
+%kd_vals=[0,0.9,-0.9];
+coeff_vals=[10,1000];
 
 % all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
 
@@ -29,8 +29,10 @@ coeff_vals=[1,10,1000];
     %for kb_ind=1:2:3
         %kc_ind=kb_ind;
         %kd_ind=ka_ind;
- % for c1_ind=1:1
- %    for c2_ind=3:4
+ for c1_ind=1:1 %koffx,koffy,konx,kony
+    for c2_ind=1:2 %koffx,koffy,konx,kony
+        for c1coeff_ind=2:2 %10,1000
+            for c2coeff_ind=2:2 %10,1000
         
 % for konx_ind=3:3
 %     for koffx_ind=1:3
@@ -43,13 +45,13 @@ num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
 countpol=0;
-writem=0;
+writem=1;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -77,7 +79,7 @@ while (ppp<=1)
         c2_ind all_results_matrix polarize_time polarize_time_c1 ... 
         polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem ...
         ka_ind kb_ind kc_ind kd_ind ka_vals kb_vals kc_vals kd_vals coeff_vals ...
-        konx_ind koffx_ind kony_ind
+        konx_ind koffx_ind kony_ind c1coeff_ind c2coeff_ind
     
     rng('shuffle');
     set(0,'DefaultFigureVisible','off')
@@ -140,7 +142,7 @@ while (ppp<=1)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -590,7 +592,7 @@ while (ppp<=1)
 
     end
 
-    save(strcat('./vid_matfiles/sigswitch_vid_files/vars_t0'),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
+    % save(strcat('./vid_matfiles/sigswitch_vid_files/vars_t0'),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
 
     %% Run simulation
     %
@@ -698,17 +700,33 @@ while (ppp<=1)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        %Konx1(boundC1)=Konx1(boundC1)*100;
-        %Konx2(boundC2)=Konx2(boundC2)*100;
-        % 
-        % Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Kony2(boundC2)=Kony2(boundC2)*1000;
-        % 
-        % Koffx1(boundC1)=Koffx1(boundC1)*100;
-        % Koffx2(boundC2)=Koffx2(boundC2)*100;
+        if c1_ind==3
+            Konx1(boundC1)=Konx1(boundC1)*coeff_vals(c1coeff_ind);
+        end
+        if c2_ind==3
+            Konx2(boundC2)=Konx2(boundC2)*coeff_vals(c2coeff_ind);
+        end
+        
+        if c1_ind==4
+            Kony1(boundC1)=Kony1(boundC1)*coeff_vals(c1coeff_ind);
+        end
+        if c2_ind==4
+            Kony2(boundC2)=Kony2(boundC2)*coeff_vals(c2coeff_ind);
+        end
+        
+        if c1_ind==1
+            Koffx1(boundC1)=Koffx1(boundC1)*coeff_vals(c1coeff_ind);
+        end
+        if c2_ind==1
+            Koffx2(boundC2)=Koffx2(boundC2)*coeff_vals(c2coeff_ind);
+        end
 
-        % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        % Koffy2(boundC2)=Koffy2(boundC2)*1000;
+        if c1_ind==2
+            Koffy1(boundC1)=Koffy1(boundC1)*coeff_vals(c1coeff_ind);
+        end
+        if c2_ind==2
+            Koffy2(boundC2)=Koffy2(boundC2)*coeff_vals(c2coeff_ind);
+        end
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
         % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
@@ -1180,19 +1198,25 @@ while (ppp<=1)
 
         gamma=1.5;
 
-        if t<=500
-            Ka1(boundC1)=1.2;
-            Ka1(setdiff(1:length(Ka1),boundC1)) = 0.8;
-            Kb2(boundC2)=1.2;
-            
-            Kb1(setdiff(1:length(Kb1),boundC1)) = 1.2;
-            Ka2(setdiff(1:length(Ka2),boundC2)) = 1.2;
-        else
-            Ka2(boundC2)=1.5;
-            Kb1(boundC1)=1.5;
-            Kb2(setdiff(1:length(Kb2),boundC2)) = 1.2;
-            Ka1(setdiff(1:length(Ka1),boundC1)) = 1.2;
-        end
+        %if t<=500
+        %    Ka1(boundC1)=1.2;
+        %    Ka1(setdiff(1:length(Ka1),boundC1)) = 0.8;
+        %    Kb2(boundC2)=1.2;
+        %    Kb2(setdiff(1:length(Kb2),boundC2)) = 0.8;
+        %    Kb1(boundC1)=1;
+        %    Kb1(setdiff(1:length(Kb1),boundC1)) = 1.5;
+        %    Ka2(boundC2)=0.8;
+        %    Ka2(setdiff(1:length(Ka2),boundC2)) = 1.2;
+        %else
+        %    Ka2(boundC2)=1.5;
+        %    Ka2(setdiff(1:length(Ka2),boundC2)) = 0.8;
+        %    Kb1(boundC1)=1.5;
+        %    Kb1(setdiff(1:length(Kb1),boundC1)) = 0.8;
+        %    Kb2(boundC2)=0.8;
+        %    Kb2(setdiff(1:length(Kb2),boundC2)) = 1.2;
+        %    Ka1(boundC1)=0.8;
+        %    Ka1(setdiff(1:length(Ka1),boundC1)) = 1.2;
+        %end
 
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
@@ -1230,8 +1254,8 @@ while (ppp<=1)
         b2 = Hs2\(diffRHSb2+rxnb2);
 
         %% Plot the solution(s)
-         if mod(t,tplot) == 0
-         % if t==(Nt-1)
+         %if mod(t,tplot) == 0
+          if t==(Nt-1)
 
             %Define colors
             colorLength = 50;
@@ -1491,7 +1515,7 @@ while (ppp<=1)
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
 
 
-            save(strcat('./vid_matfiles/sigswitch_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
+            %save(strcat('./vid_matfiles/sigswitch_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
 
         end
 
@@ -1657,11 +1681,6 @@ while (ppp<=1)
         end
     end
 
-
-    % if writem==1
-    %     writematrix(res_counters,'./allparamsresults/branchedbundled/0ka_0kb_0kc_0kd.xls')
-    %     sprintf(int2str(res_counters))
-    % end
      if writem==1
          %writematrix(res_counters,strcat('./allparamsresults/branchedbundled/',...
          %    string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
@@ -1669,14 +1688,12 @@ while (ppp<=1)
          % options=["Bkonx","Akony","Akoffx","Bkoffy"];
          % writematrix(res_counters,strcat('./allparamsresults/forcedependent/',...
          %     '1000',options(c1_ind),'C1_','1000',options(c2_ind),'C2.xls'))
+         options=["koffx","koffy","konx","kony"];
+         writematrix(res_counters,strcat('./allparamsresults/allracrho/',...
+                string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+                string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
          sprintf(int2str(res_counters))
      end
-    % if writem==1
-    %     writematrix(res_counters,strcat('./allparamsresults/cilcoa/',...
-    %         string(coeff_vals(konx_ind)),'konx_',string(coeff_vals(koffx_ind)),...
-    %         'koffx_',string(coeff_vals(kony_ind)),'kony.xls'))
-    %     sprintf(int2str(res_counters))
-    % end
 end
 
 if countpol==1
@@ -1740,18 +1757,11 @@ end
 %     %yticks([0 0.5 1 1.5 2]);
 %     %yticklabels({'0','0.25','0.5','0.75','1'});
 % end
-
 %end
 
-% if writem==1
-%     writematrix(res_counters,strcat('./allparamsresults/racup/',...
-%         int2str(c1_vals(c1_ind)),'konx1_',int2str(c2_vals(c2_ind)),'konx2.xls'))
-% end
 
-%     end
-% end
+            end
+        end
+    end
+ end
 
-% if writem==1
-%     writematrix(res_counters,'./allparamsresults/rhodown/1koffy1_100koffy2.xls')
-%     sprintf(int2str(res_counters))
-% end
