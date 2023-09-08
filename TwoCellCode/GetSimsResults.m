@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_nosignal/racdown1/100RacOff';
+filename = './results_nosignal/celldifference/uncoupled/5KbC2';
 maxnum=100;
 
 angle=pi/4;
