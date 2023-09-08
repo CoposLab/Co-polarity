@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_nosignal/celldifference/uncoupled/5KbC2';
+filename = './results_nosignal/celldifference/uncoupled/1_2KbC2';
 maxnum=100;
 
 angle=pi/4;
