@@ -1,7 +1,7 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_nosignal/branchedupbundledupnotsquared/5branched5bundled';
-maxnum=50;
+filename = './results_nosignal/branchedbundledpromotion3/0_5ka0_5kb';
+maxnum=100;
 
 angle=pi/4;
 
