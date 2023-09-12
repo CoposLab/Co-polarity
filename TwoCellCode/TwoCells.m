@@ -55,7 +55,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results_nosignal/celldifference/uncoupled/1_2KbC2';
+    savelocation='./results_celldifference/1_2Kb_allC2/rhodownc1/1000KoffyC1';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -700,6 +700,7 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
+        Koffy1(boundC1)=Koffy1(boundC1)*1000;
         %if c1_ind==3
         %    Konx1(boundC1)=Konx1(boundC1)*coeff_vals(c1coeff_ind);
         %end

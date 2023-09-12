@@ -1,6 +1,6 @@
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_nosignal/branchedbundledpromotion3/0_5ka0_5kb';
+filename = './results_nosignal/bundledtoracc1_branchedtoracc2/1000bRacOn_1000aRacOff';
 maxnum=100;
 
 angle=pi/4;
@@ -122,10 +122,19 @@ for i=1:maxnum
 
         if xor(abs(medang1-3*pi/2)<angle, abs(medang2-pi/2)<angle)
             counterlf=counterlf+1;
-            if medang1>=0 && medang1<=pi && medang2>=0 && medang2<=pi
-                countleft=countleft+1;
-            elseif medang1>=pi && medang1<=2*pi && medang2>=pi && medang2<=2*pi
-                countright=countright+1;
+
+            if abs(medang1-3*pi/2)<angle %if cell 2 is the leader
+                if medang2>=0 && medang2<=pi
+                    countleft=countleft+1;
+                elseif medang2>=pi && medang2<=2*pi
+                    countright=countright+1;
+                end
+            else %otherwise cell 1 is the leader
+                if medang1>=0 && medang1<=pi
+                    countleft=countleft+1;
+                elseif medang1>=pi && medang1<=2*pi
+                    countright=countright+1;
+                end
             end
         end
     end
