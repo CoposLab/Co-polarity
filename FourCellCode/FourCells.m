@@ -38,13 +38,13 @@ clc;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 16;
 
-while (ppp<=100)
+while (ppp<=16)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results/alternateracuprhoup/10RacOn10RhoOn';
+    savelocation='./results/uncoupled/uncoupled';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -875,15 +875,15 @@ while (ppp<=100)
         % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        Konx1(boundC1)=Konx1(boundC1)*10;
+        % Konx1(boundC1)=Konx1(boundC1)*10;
         % Konx2(boundC2_1)=Konx2(boundC2_1)*100;
-        Konx2(boundC2_2)=Konx2(boundC2_2)*10;
-        Konx3(boundC3_2)=Konx3(boundC3_2)*10;
+        % Konx2(boundC2_2)=Konx2(boundC2_2)*10;
+        % Konx3(boundC3_2)=Konx3(boundC3_2)*10;
         
         % Kony1(boundC1)=Kony1(boundC1)*10;
-        Kony2(boundC2_1)=Kony2(boundC2_1)*10;
-        Kony3(boundC3_1)=Kony3(boundC3_1)*10;
-        Kony4(boundC4)=Kony4(boundC4)*10;
+        % Kony2(boundC2_1)=Kony2(boundC2_1)*10;
+        % Kony3(boundC3_1)=Kony3(boundC3_1)*10;
+        % Kony4(boundC4)=Kony4(boundC4)*10;
         
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2_1)=Koffx2(boundC2_1)*10;
@@ -1841,7 +1841,7 @@ while (ppp<=100)
 
             % Concentric circles
             % Cell 1
-            figcells=figure(16);
+            figcells=figure(ppp+1);
             clf
             surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
             view(2)

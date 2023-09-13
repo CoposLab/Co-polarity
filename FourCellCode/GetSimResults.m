@@ -1,7 +1,9 @@
+% 4 cells
+
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/uncoupled/uncoupled';
-maxnum=10;
+filename = './results/alternateracuprhoup/10RacOn10RhoOn';
+maxnum=100;
 
 countyesleft=0;
 countyesright=0;

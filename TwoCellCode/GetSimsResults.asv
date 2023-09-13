@@ -1,6 +1,8 @@
+% 2 cells
+
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_nosignal/bundledtoracc1_branchedtoracc2/1000bRacOn_1000aRacOff';
+filename = './results_celldifference/1_2Kb_allC2/rhoupc1_rhodownc2/1000RhoOnC1_100RhoOffC2';
 maxnum=100;
 
 angle=pi/4;

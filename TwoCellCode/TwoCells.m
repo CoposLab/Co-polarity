@@ -55,7 +55,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results_celldifference/1_2Kb_allC2/rhodownc1/1000KoffyC1';
+    savelocation='./results_celldifference/1_2Kb_allC2/rhoupc1_rhodownc2/1000RhoOnC1_100RhoOffC2';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -700,34 +700,12 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        %if c1_ind==3
-        %    Konx1(boundC1)=Konx1(boundC1)*coeff_vals(c1coeff_ind);
-        %end
-        %if c2_ind==3
-        %    Konx2(boundC2)=Konx2(boundC2)*coeff_vals(c2coeff_ind);
-        %end
-        
-        %if c1_ind==4
-        %    Kony1(boundC1)=Kony1(boundC1)*coeff_vals(c1coeff_ind);
-        %end
-        %if c2_ind==4
-        %    Kony2(boundC2)=Kony2(boundC2)*coeff_vals(c2coeff_ind);
-        %end
-        
-        %if c1_ind==1
-        %    Koffx1(boundC1)=Koffx1(boundC1)*coeff_vals(c1coeff_ind);
-        %end
-        %if c2_ind==1
-        %    Koffx2(boundC2)=Koffx2(boundC2)*coeff_vals(c2coeff_ind);
-        %end
-
-        %if c1_ind==2
-        %    Koffy1(boundC1)=Koffy1(boundC1)*coeff_vals(c1coeff_ind);
-        %end
-        %if c2_ind==2
-        %    Koffy2(boundC2)=Koffy2(boundC2)*coeff_vals(c2coeff_ind);
-        %end
+        % Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        % Konx1(boundC1)=Konx1(boundC1)*1000;
+        % Konx2(boundC2)=Konx2(boundC2)*10;
+        Kony1(boundC1)=Kony1(boundC1)*1000;
+        % Konx2(boundC2)=Konx2(boundC2)*1000;
+        Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
         % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
