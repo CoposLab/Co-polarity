@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/alternateracuprhoup/10RacOn10RhoOn';
+filename = './results/alternateracdownrhodown/10RacOff10RhoOff';
 maxnum=100;
 
 countyesleft=0;
