@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/alternateracdownrhodown/100RacOff100RhoOff';
+filename = './results/alternateracdownrhodown/10RacOff10RhoOff';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes
