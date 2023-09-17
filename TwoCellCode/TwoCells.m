@@ -55,7 +55,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results_celldifference/1_2Kb_allC2/rhoupc1_rhodownc2/1000RhoOnC1_100RhoOffC2';
+    savelocation='./results_nosignal/1_2Kb_allC1_1_2Kb_allC2/branchedbundledpromotion/1kb1kc1alpha50max';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -104,7 +104,7 @@ while (ppp<=100)
 
     % Set feedback (or coupling) strength
     %
-    alpha = [2,2];
+    alpha = [1,1];
     beta = [2,2]; %first argument is away from overlap, second is on overlap
 
     % Set discretization
@@ -162,7 +162,7 @@ while (ppp<=100)
     bundledConst2 = 1.0;
 
     Ka1=ones(Na,1);
-    Kb1=ones(Na,1);
+    Kb1=1.2*ones(Na,1);
     Ka2=ones(Na,1);
     Kb2=1.2*ones(Na,1);
 
@@ -699,29 +699,36 @@ while (ppp<=100)
          % Koffx1 = roff*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
-        % Set konx and kony in contact region
-        % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        % Konx1(boundC1)=Konx1(boundC1)*1000;
-        % Konx2(boundC2)=Konx2(boundC2)*10;
-        Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Konx2(boundC2)=Konx2(boundC2)*1000;
-        Koffy2(boundC2)=Koffy2(boundC2)*100;
+         % Konx2=Konx2*10;
+         % Kony2=Kony2*10;
+         % Set konx and kony in contact region
+         % Konx1(boundC1)=Konx1(boundC1)*100;
+         % Konx2(boundC2)=Konx2(boundC2)*100;
+         
+         % Kony1(boundC1)=Kony1(boundC1)*10;
+         % Kony2(boundC2)=Kony2(boundC2)*10;
+         
+         % Koffx1(boundC1)=Koffx1(boundC1)*10;
+         % Koffx2(boundC2)=Koffx2(boundC2)*10;
 
-        % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
-        % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
+         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
+         % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
-        % Kfby1(boundC1)=Kfby1(boundC1)/10;
-        % Kfby2(boundC2)=Kfby2(boundC2)/10;
+         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
+         % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
 
-        % Set konx and kony away from contact region
-        % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
-        % Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*1000;
-        % Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*100;
-        % Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*100;
+         % Kfby1(boundC1)=Kfby1(boundC1)/10;
+         % Kfby2(boundC2)=Kfby2(boundC2)/10;
 
-        % Set konx and kony in entire cell
-        % Konx2=Konx2*10;
-        % Kony2=Kony2*10;
+         % Set konx and kony away from contact region
+         % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
+         % Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*1000;
+         % Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*100;
+         % Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*100;
+
+         % Set konx and kony in entire cell
+         % Konx2=Konx2*10;
+         % Kony2=Kony2*10;
 
 
         % Set konx and kony depending on rac/rho concentrations in contact
@@ -1201,10 +1208,10 @@ while (ppp<=100)
         %    Ka1(setdiff(1:length(Ka1),boundC1)) = 1.2;
         %end
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled
@@ -1212,10 +1219,10 @@ while (ppp<=100)
         % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.*flip(a1)) - b2.*b2)); %Cell 2 bundled
 
         % Growth term maxes out version
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
           % rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
           %    + ka_vals(ka_ind) * ka1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
