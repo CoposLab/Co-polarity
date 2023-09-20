@@ -1,0 +1,59 @@
+close all;
+cla
+
+f=figure(1);
+subplot(1,4,1)
+scatter3(ka(kc==-0.9),kb(kc==-0.9),kd(kc==-0.9),1000,lf(kc==-0.9),'filled')
+% colorbar
+clim([0,max(lf)])
+xlabel('ka')
+ylabel('kb')
+zlabel('kd')
+title('kc=-0.9','Position',[0,0,2])
+colormap('winter')
+alpha 0.9
+view(-52.8368,30.7651)
+axis equal
+grid off
+
+subplot(1,4,2)
+scatter3(ka(kc==0),kb(kc==0),kd(kc==0),1000,lf(kc==0),'filled')
+% colorbar
+clim([0,max(lf)])
+xlabel('ka')
+ylabel('kb')
+zlabel('kd')
+title('kc=0','Position',[0,0,2])
+colormap('winter')
+alpha 0.9
+view(-52.8368,30.7651)
+axis equal
+grid off
+
+subplot(1,4,3)
+scatter3(ka(kc==0.9),kb(kc==0.9),kd(kc==0.9),1000,lf(kc==0.9),'filled')
+% colorbar
+clim([0,max(lf)])
+xlabel('ka')
+ylabel('kb')
+zlabel('kd')
+title('kc=0.9','Position',[0,0,2])
+colormap('winter')
+alpha 0.9
+view(-52.8368,30.7651)
+axis equal
+grid off
+
+subplot(1,4,4)
+cb=colorbar;
+clim([0,max(lf)])
+pos=get(cb,'position');
+% set(cb,'position',[1 1 .01 .3])
+% set(gca,'position',[0,0,0,0])
+% axis equal
+set(gca,'XColor','w')
+set(gca,'YColor','w')
+set(gcf,'color','w');
+
+
+f.Position = [584,599,1247,559];

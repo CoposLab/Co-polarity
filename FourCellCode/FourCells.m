@@ -44,7 +44,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results/alternateracdownrhodown/100RacOff100RhoOff';
+    savelocation='./results/alternatebranchedupbundledup/5Ka5Kb';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -151,14 +151,14 @@ while (ppp<=100)
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 1.0;
+    branchedConst1 = 5.0;
     bundledConst1 = 1.0;
-    branchedConst2 = [1.0,1.0];
-    bundledConst2 = [1.0,1.0];
-    branchedConst3 = [1.0,1.0];
-    bundledConst3 = [1.0,1.0];
+    branchedConst2 = [1.0,5.0]; %[left,right]
+    bundledConst2 = [5.0,1.0]; %[left,right]
+    branchedConst3 = [1.0,5.0]; %[left,right]
+    bundledConst3 = [5.0,1.0]; %[left,right]
     branchedConst4 = 1.0;
-    bundledConst4 = 1.0;
+    bundledConst4 = 5.0;
 
     Ka1=ones(Na,1);
     Kb1=ones(Na,1);
@@ -885,14 +885,14 @@ while (ppp<=100)
         % Kony3(boundC3_1)=Kony3(boundC3_1)*100;
         % Kony4(boundC4)=Kony4(boundC4)*100;
         
-        Koffx1(boundC1)=Koffx1(boundC1)*100;
-        Koffx2(boundC2_2)=Koffx2(boundC2_2)*100;
-        Koffx3(boundC3_2)=Koffx3(boundC3_2)*100;
+        % Koffx1(boundC1)=Koffx1(boundC1)*100;
+        % Koffx2(boundC2_2)=Koffx2(boundC2_2)*100;
+        % Koffx3(boundC3_2)=Koffx3(boundC3_2)*100;
 
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        Koffy2(boundC2_1)=Koffy2(boundC2_1)*100;
-        Koffy3(boundC3_1)=Koffy3(boundC3_1)*100;
-        Koffy4(boundC4)=Koffy4(boundC4)*100;
+        % Koffy2(boundC2_1)=Koffy2(boundC2_1)*100;
+        % Koffy3(boundC3_1)=Koffy3(boundC3_1)*100;
+        % Koffy4(boundC4)=Koffy4(boundC4)*100;
 
         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
         % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
