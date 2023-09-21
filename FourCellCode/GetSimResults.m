@@ -6,6 +6,7 @@ filename = './results/alternateracdownrhodown/100RacOff100RhoOff';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes
+anglelf=pi/4; % tolerance for leader follower
 
 countallleft=0;
 countallright=0;
@@ -167,8 +168,8 @@ for i=1:maxnum
             countyes=countyes+1;
         end
 
-        if xor(abs(medang2-3*pi/2)<angle, abs(medang3-pi/2)<angle) %cell 2 -> cell 3 or cell 2 <- cell 3
-            if abs(medang1-3*pi/2)<angle && abs(medang2-3*pi/2)<angle && abs(medang3-3*pi/2)<angle % all pointing to cell 4
+        if xor(abs(medang2-3*pi/2)<anglelf, abs(medang3-pi/2)<anglelf) %cell 2 -> cell 3 or cell 2 <- cell 3
+            if abs(medang1-3*pi/2)<anglelf && abs(medang2-3*pi/2)<anglelf && abs(medang3-3*pi/2)<anglelf % all pointing to cell 4
                 countlf=countlf+1;
                 %check CW vs CCW
                 if (medang4>=0 && medang4<=pi/2) || (medang4>=3*pi/2 && medang4<2*pi)
@@ -176,7 +177,7 @@ for i=1:maxnum
                 elseif medang4>=pi/2 && medang4<=3*pi/2
                     countcw=countcw+1;
                 end
-            elseif abs(medang2-pi/2)<angle && abs(medang3-pi/2)<angle && abs(medang4-pi/2)<angle % all pointing to cell 1
+            elseif abs(medang2-pi/2)<anglelf && abs(medang3-pi/2)<anglelf && abs(medang4-pi/2)<anglelf % all pointing to cell 1
                 countlf=countlf+1;
                 %check CW vs CCW
                 if (medang1>=0 && medang1<=pi/2) || (medang1>=3*pi/2 && medang1<2*pi)
