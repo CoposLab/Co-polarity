@@ -55,7 +55,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results_nosignal/1_2Kb_allC1_1_2Kb_allC2/branchedbundledpromotion/1kb1kc1alpha50max';
+    savelocation='./results_celldifference/10RacOn_allC2/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -104,7 +104,7 @@ while (ppp<=100)
 
     % Set feedback (or coupling) strength
     %
-    alpha = [1,1];
+    alpha = [2,2];
     beta = [2,2]; %first argument is away from overlap, second is on overlap
 
     % Set discretization
@@ -162,9 +162,9 @@ while (ppp<=100)
     bundledConst2 = 1.0;
 
     Ka1=ones(Na,1);
-    Kb1=1.2*ones(Na,1);
+    Kb1=ones(Na,1);
     Ka2=ones(Na,1);
-    Kb2=1.2*ones(Na,1);
+    Kb2=ones(Na,1);
 
     Ka1(boundC1) = branchedConst1*Ka1(boundC1);
     Kb1(boundC1) = bundledConst1*Kb1(boundC1);
@@ -699,8 +699,11 @@ while (ppp<=100)
          % Koffx1 = roff*(2 - tanh(steepness*(s1-1.875)) + tanh(steepness*(s1-5.625)) + 0.2)/2.2;
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
-         % Konx2=Konx2*10;
+         
+         Konx2=Konx2*10;
          % Kony2=Kony2*10;
+         % Koffx2=Koffx2*10;
+         % Koffy2=Koffy2*10;
          % Set konx and kony in contact region
          % Konx1(boundC1)=Konx1(boundC1)*100;
          % Konx2(boundC2)=Konx2(boundC2)*100;
@@ -711,7 +714,7 @@ while (ppp<=100)
          % Koffx1(boundC1)=Koffx1(boundC1)*10;
          % Koffx2(boundC2)=Koffx2(boundC2)*10;
 
-         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
+         % Koffy1(boundC1)=Koffy1(boundC1)*100;
          % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
          % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
@@ -1177,13 +1180,13 @@ while (ppp<=100)
         diffRHSb2 = Hm2*b2;
 
         ka1=zeros(length(b2),1);
-        ka1(boundC1)=1*ones(length(boundC1),1);
+        ka1(boundC1)=0.9*ones(length(boundC1),1);
         kb1=zeros(length(a2),1);
-        kb1(boundC1)=1*ones(length(boundC1),1);
+        kb1(boundC1)=0.9*ones(length(boundC1),1);
         ka2=zeros(length(b1),1);
-        ka2(boundC2)=1*ones(length(boundC2),1);
+        ka2(boundC2)=0.9*ones(length(boundC2),1);
         kb2=zeros(length(a1),1);
-        kb2(boundC2)=1*ones(length(boundC2),1);
+        kb2(boundC2)=0.9*ones(length(boundC2),1);
         abmax=50;
 
         gamma=1.5;
