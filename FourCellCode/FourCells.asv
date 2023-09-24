@@ -44,7 +44,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
+    savelocation='./results/alternaterhodownnothing/100RhoOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -876,28 +876,28 @@ while (ppp<=100)
         % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
         % Set konx and kony in contact region
-        % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2_2)=Konx2(boundC2_2)*100;
-        % Konx3(boundC3_2)=Konx3(boundC3_2)*100;
+        % Konx1(boundC1)=Konx1(boundC1)*1000;
+        % Konx2(boundC2_2)=Konx2(boundC2_2)*1000;
+        % Konx3(boundC3_2)=Konx3(boundC3_2)*1000;
         
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
         % Kony2(boundC2_1)=Kony2(boundC2_1)*100;
+        % Kony2(boundC2_2)=Kony2(boundC2_2)*1000;
         % Kony3(boundC3_1)=Kony3(boundC3_1)*100;
+        % Kony3(boundC3_2)=Kony3(boundC3_2)*1000;
         % Kony4(boundC4)=Kony4(boundC4)*100;
         
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
+        % Koffx2(boundC2_1)=Koffx2(boundC2_1)*100;
         % Koffx2(boundC2_2)=Koffx2(boundC2_2)*10;
+        % Koffx3(boundC3_1)=Koffx3(boundC3_1)*100;
         % Koffx3(boundC3_2)=Koffx3(boundC3_2)*10;
+        % Koffx4(boundC4)=Koffx4(boundC4)*100;
 
-        % Koffy2(boundC2_1)=Koffy2(boundC2_1)*10;
-        % Koffy3(boundC3_1)=Koffy3(boundC3_1)*10;
-        % Koffy4(boundC4)=Koffy4(boundC4)*10;
-
-
-        % Set konx and kony away from contact region
-        % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
-        % Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*1000;
-        % Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*100;
-        % Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*100;
+        Koffy1(boundC1)=Koffy1(boundC1)*100;
+        % Koffy2(boundC2_1)=Koffy2(boundC2_1)*100;
+        % Koffy3(boundC3_1)=Koffy3(boundC3_1)*100;
+        % Koffy4(boundC4)=Koffy4(boundC4)*100;
 
 
         % Set konx and kony depending on rac/rho concentrations in contact
@@ -962,17 +962,19 @@ while (ppp<=100)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
-        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
-
-        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
-        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
-
-        % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
-        % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*100;
-
-        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*100;
-        % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2_1))*100;
+        % Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1))*100;
+        % Konx2(boundC2_2) = Konx2(boundC2_2).*flip(b3(boundC3_1))*100;
+        % Konx3(boundC3_1) = Konx3(boundC3_1).*flip(b2(boundC2_2))*100;
+        % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b4(boundC4))*100;
+        % Konx4(boundC4) = Konx4(boundC4).*flip(b3(boundC3_2))*100;
+        % 
+        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2_1))*100;
+        % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1))*100;
+        % Kony2(boundC2_2) = Kony2(boundC2_2).*flip(a3(boundC3_1))*100;
+        % Kony3(boundC3_1) = Kony3(boundC3_1).*flip(a2(boundC2_2))*100;
+        % Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a4(boundC4))*100;
+        % Kony4(boundC4) = Kony4(boundC4).*flip(a3(boundC3_2))*100;
 
 
         %Cell 1
@@ -1644,61 +1646,58 @@ while (ppp<=100)
         %kb = branched pushing on bundled
         %kc = bundled pulling on branched
         kb1=zeros(length(a1),1);
-        kb1(boundC1)=1*ones(length(boundC1),1);
+        kb1(boundC1)=0.9*ones(length(boundC1),1);
         kc1=zeros(length(b1),1);
-        kc1(boundC1)=1*ones(length(boundC1),1);
+        kc1(boundC1)=0.9*ones(length(boundC1),1);
 
         kb2_1=zeros(length(a2),1);
-        kb2_1(boundC2_1)=1*ones(length(boundC2_1),1);
+        kb2_1(boundC2_1)=0.9*ones(length(boundC2_1),1);
         kb2_2=zeros(length(a2),1);
-        kb2_2(boundC2_2)=1*ones(length(boundC2_2),1);
+        kb2_2(boundC2_2)=0.9*ones(length(boundC2_2),1);
         kc2_1=zeros(length(b2),1);
-        kc2_1(boundC2_1)=1*ones(length(boundC2_1),1);
+        kc2_1(boundC2_1)=0.9*ones(length(boundC2_1),1);
         kc2_2=zeros(length(b2),1);
-        kc2_2(boundC2_2)=1*ones(length(boundC2_2),1);
+        kc2_2(boundC2_2)=0.9*ones(length(boundC2_2),1);
 
         kb3_1=zeros(length(a3),1);
-        kb3_1(boundC3_1)=1*ones(length(boundC3_1),1);
+        kb3_1(boundC3_1)=0.9*ones(length(boundC3_1),1);
         kb3_2=zeros(length(a3),1);
-        kb3_2(boundC3_2)=1*ones(length(boundC3_2),1);
+        kb3_2(boundC3_2)=0.9*ones(length(boundC3_2),1);
         kc3_1=zeros(length(b3),1);
-        kc3_1(boundC3_1)=1*ones(length(boundC3_1),1);
+        kc3_1(boundC3_1)=0.9*ones(length(boundC3_1),1);
         kc3_2=zeros(length(b3),1);
-        kc3_2(boundC3_2)=1*ones(length(boundC3_2),1);
+        kc3_2(boundC3_2)=0.9*ones(length(boundC3_2),1);
 
         kb4=zeros(length(a4),1);
-        kb4(boundC4)=1*ones(length(boundC4),1);
+        kb4(boundC4)=0.9*ones(length(boundC4),1);
         kc4=zeros(length(b4),1);
-        kc4(boundC4)=1*ones(length(boundC4),1);
+        kc4(boundC4)=0.9*ones(length(boundC4),1);
         abmax=50;
 
         gamma=1.5;
 
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*kb1)) - a1.*a1); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kc1)) - b1.*b1); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*kb2)) - a2.*a2); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kc2)) - b2.*b2); %Cell 2 bundled
-        % rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3 + 0*kb3)) - a3.*a3); %Cell 3 branched
-        % rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3 + 0*kc3)) - b3.*b3); %Cell 3 bundled
-        % rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4 + 0*kb4)) - a4.*a4); %Cell 4 branched
-        % rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4 + 0*kc4)) - b4.*b4); %Cell 4 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2)) - a2.*a2); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2)) - b2.*b2); %Cell 2 bundled
+        rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3)) - a3.*a3); %Cell 3 branched
+        rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3)) - b3.*b3); %Cell 3 bundled
+        rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4)) - a4.*a4); %Cell 4 branched
+        rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4)) - b4.*b4); %Cell 4 bundled
 
         % Growth term maxes out version
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + kb2_1.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
-            + kb2_2.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kc2_1.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kc2_2.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b2.*b2)); %Cell 2 bundled
-
-        rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3 + kb3_1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
-            + kb3_2.* (flip(b4).*(flip(b4)<=abmax) + abmax*(flip(b4)>abmax))) - a3.*a3)); %Cell 3 branched
-        rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3 + kc3_1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kc3_2.* (flip(a4).*(flip(a4)<=abmax) + abmax*(flip(a4)>abmax)) ) - b3.*b3)); %Cell 3 bundled
-
-        rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4 + kb4.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a4.*a4)); %Cell 4 branched
-        rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4 + kc4.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b4.*b4)); %Cell 4 bundled
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + kb2_1.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
+        %     + kb2_2.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a2.*a2)); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kc2_1.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+        %     + kc2_2.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+        % rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3 + kb3_1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
+        %     + kb3_2.* (flip(b4).*(flip(b4)<=abmax) + abmax*(flip(b4)>abmax))) - a3.*a3)); %Cell 3 branched
+        % rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3 + kc3_1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+        %     + kc3_2.* (flip(a4).*(flip(a4)<=abmax) + abmax*(flip(a4)>abmax)) ) - b3.*b3)); %Cell 3 bundled
+        % rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4 + kb4.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a4.*a4)); %Cell 4 branched
+        % rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4 + kc4.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b4.*b4)); %Cell 4 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
