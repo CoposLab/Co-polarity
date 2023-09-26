@@ -44,7 +44,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results/antagonism/10RhoRemoved0_5epsilon';
+    savelocation='./results/rhouprhodownforces/1000aRhoOn_1000bRhoOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -124,7 +124,7 @@ while (ppp<=100)
     posy4 = zeros(N,Nt);              % array of positions of Y(t) cell 4
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=10;
+    numToRemove=0;
     counter1=0;
     counter2=0;
 
@@ -964,19 +964,29 @@ while (ppp<=100)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2_1))*100;
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2_1))*1000;
         % Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1))*100;
-        % Konx2(boundC2_2) = Konx2(boundC2_2).*flip(b3(boundC3_1))*100;
+        % Konx2(boundC2_2) = Konx2(boundC2_2).*flip(b3(boundC3_1))*1000;
         % Konx3(boundC3_1) = Konx3(boundC3_1).*flip(b2(boundC2_2))*100;
-        % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b4(boundC4))*100;
+        % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b4(boundC4))*1000;
         % Konx4(boundC4) = Konx4(boundC4).*flip(b3(boundC3_2))*100;
         % 
-        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2_1))*100;
-        % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1))*100;
-        % Kony2(boundC2_2) = Kony2(boundC2_2).*flip(a3(boundC3_1))*100;
-        % Kony3(boundC3_1) = Kony3(boundC3_1).*flip(a2(boundC2_2))*100;
-        % Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a4(boundC4))*100;
-        % Kony4(boundC4) = Kony4(boundC4).*flip(a3(boundC3_2))*100;
+        Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2_1))*1000;
+        % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1))*1000;
+        Kony2(boundC2_2) = Kony2(boundC2_2).*flip(a3(boundC3_1))*1000;
+        % Kony3(boundC3_1) = Kony3(boundC3_1).*flip(a2(boundC2_2))*1000;
+        Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a4(boundC4))*1000;
+        % Kony4(boundC4) = Kony4(boundC4).*flip(a3(boundC3_2))*1000;
+
+        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2_1))*1000;
+        % Koffx2(boundC2_1) = Koffx2(boundC2_1).*flip(a1(boundC1))*1000;
+        Koffy2(boundC2_1) = Koffy2(boundC2_1).*flip(b1(boundC1))*1000;
+        % Koffx2(boundC2_2) = Koffx2(boundC2_2).*flip(a3(boundC3_1))*1000;
+        % Koffx3(boundC3_1) = Koffx3(boundC3_1).*flip(a2(boundC2_2))*1000;
+        Koffy3(boundC3_1) = Koffy3(boundC3_1).*flip(b2(boundC2_2))*1000;
+        % Koffx3(boundC3_2) = Koffx3(boundC3_2).*flip(a4(boundC4))*1000;
+        % Koffx4(boundC4) = Koffx4(boundC4).*flip(a3(boundC3_2))*1000;
+        Koffy4(boundC4) = Koffy4(boundC4).*flip(b3(boundC3_2))*1000;
 
 
         %Cell 1

@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/alternateracdownrhodown/100RacOff100RhoOff';
+filename = './results/racuprhoupforces/1000bRacOn_1000aRhoOn';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes
@@ -168,21 +168,22 @@ for i=1:maxnum
             countyes=countyes+1;
         end
 
+        epsilon=0.01*2*pi;
         if xor(abs(medang2-3*pi/2)<anglelf, abs(medang3-pi/2)<anglelf) %cell 2 -> cell 3 or cell 2 <- cell 3
             if abs(medang1-3*pi/2)<anglelf && abs(medang2-3*pi/2)<anglelf && abs(medang3-3*pi/2)<anglelf % all pointing to cell 4
                 countlf=countlf+1;
                 %check CW vs CCW
-                if (medang4>=0 && medang4<=pi/2) || (medang4>=3*pi/2 && medang4<2*pi)
+                if (medang4>=0 && medang4<(pi/2)-epsilon) || (medang4>(3*pi/2)+epsilon && medang4<=2*pi)
                     countccw=countccw+1;
-                elseif medang4>=pi/2 && medang4<=3*pi/2
+                elseif medang4>(pi/2)+epsilon && medang4<(3*pi/2)-epsilon
                     countcw=countcw+1;
                 end
             elseif abs(medang2-pi/2)<anglelf && abs(medang3-pi/2)<anglelf && abs(medang4-pi/2)<anglelf % all pointing to cell 1
                 countlf=countlf+1;
                 %check CW vs CCW
-                if (medang1>=0 && medang1<=pi/2) || (medang1>=3*pi/2 && medang1<2*pi)
+                if (medang1>=0 && medang1<(pi/2)-epsilon) || (medang1>(3*pi/2)+epsilon && medang1<=2*pi)
                     countcw=countcw+1;
-                elseif medang1>=pi/2 && medang1<=3*pi/2
+                elseif medang1>(pi/2)+epsilon && medang1<(3*pi/2)-epsilon
                     countccw=countccw+1;
                 end
             end

@@ -122,19 +122,20 @@ for i=1:maxnum
             counterno=counterno+1;
         end
 
+        epsilon=0.01*2*pi;
         if xor(abs(medang1-3*pi/2)<angle, abs(medang2-pi/2)<angle) %leader/follower
             counterlf=counterlf+1;
 
             if abs(medang1-3*pi/2)<angle %if cell 2 is the leader
-                if (medang2>=0 && medang2<=pi/2) || (medang2>=3*pi/2 && medang2<=2*pi)
+                if (medang2>=0 && medang2<(pi/2)-epsilon) || (medang2>(3*pi/2)+epsilon && medang2<=2*pi)
                     countccw=countccw+1;
-                elseif medang2>=pi/2 && medang2<=3*pi/2
+                elseif medang2>(pi/2)+epsilon && medang2<(3*pi/2)-epsilon
                     countcw=countcw+1;
                 end
             else %otherwise cell 1 is the leader
-                if (medang1>=0 && medang1<=pi/2) || (medang1>=3*pi/2 && medang1<=2*pi)
+                if (medang1>=0 && medang1<(pi/2)-epsilon) || (medang1>(3*pi/2)+epsilon && medang1<=2*pi)
                     countcw=countcw+1;
-                elseif medang1>=pi/2 && medang1<=3*pi/2
+                elseif medang1>(pi/2)+epsilon && medang1<(3*pi/2)-epsilon
                     countccw=countccw+1;
                 end
             end

@@ -55,7 +55,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results_celldifference/10RacOn_allC2/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
+    savelocation='./results_nosignal/branchedrho_branchedbundled/100aRhoOn0_8kb0_8kc2alpha50max';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -700,7 +700,7 @@ while (ppp<=100)
          % Koffy1 = roff*(tanh(steepness*(s1-1.875)) - tanh(steepness*(s1-5.625)) + 0.2)/2.2;
 
          
-         Konx2=Konx2*10;
+         % Konx2=Konx2*10;
          % Kony2=Kony2*10;
          % Koffx2=Koffx2*10;
          % Koffy2=Koffy2*10;
@@ -796,33 +796,10 @@ while (ppp<=100)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % if c1_ind==1
-        %     Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
-        % end
-        % if c2_ind==1
-        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
-        % end
-        % 
-        % if c1_ind==2
-        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        % end
-        % if c2_ind==2
-        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
-        % end
-        % 
-        % if c1_ind==4
-        % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
-        % end
-        % if c2_ind==4
-        % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
-        % end
-        % 
-        % if c1_ind==3
-        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
-        % end
-        % if c2_ind==3
-        % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
-        % end
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
+        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
+        Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
+        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
 
 
         %Cell 1
@@ -1180,13 +1157,13 @@ while (ppp<=100)
         diffRHSb2 = Hm2*b2;
 
         ka1=zeros(length(b2),1);
-        ka1(boundC1)=0.9*ones(length(boundC1),1);
+        ka1(boundC1)=0.8*ones(length(boundC1),1);
         kb1=zeros(length(a2),1);
-        kb1(boundC1)=0.9*ones(length(boundC1),1);
+        kb1(boundC1)=0.8*ones(length(boundC1),1);
         ka2=zeros(length(b1),1);
-        ka2(boundC2)=0.9*ones(length(boundC2),1);
+        ka2(boundC2)=0.8*ones(length(boundC2),1);
         kb2=zeros(length(a1),1);
-        kb2(boundC2)=0.9*ones(length(boundC2),1);
+        kb2(boundC2)=0.8*ones(length(boundC2),1);
         abmax=50;
 
         gamma=1.5;
