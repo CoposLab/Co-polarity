@@ -53,7 +53,7 @@ ppp = 1;
 
 while (ppp<=100)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
     savelocation='./results_nosignal/branchedrho_branchedbundled/100aRhoOn0_8kb0_8kc2alpha50max';
     if savefigs==1
