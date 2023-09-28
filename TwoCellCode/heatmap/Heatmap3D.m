@@ -16,8 +16,9 @@ subplot(1,4,1)
 scatter3(ka(kc==-0.9),kb(kc==-0.9),kd(kc==-0.9),1000,lf(kc==-0.9),'filled')
 clim([0,max(lf)])
 xlabel('ka')
-ylabel('kb')
-zlabel('kd')
+ylabel('kb');
+zl=zlabel('kd');
+zl.Position(2) = zl.Position(2)-1;
 title('kc=-0.9','Position',[0,0,2])
 colormap(ggb)
 alpha 1
@@ -31,7 +32,8 @@ scatter3(ka(kc==0),kb(kc==0),kd(kc==0),1000,lf(kc==0),'filled')
 clim([0,max(lf)])
 xlabel('ka')
 ylabel('kb')
-zlabel('kd')
+zl=zlabel('kd');
+zl.Position(2) = zl.Position(2)-1;
 title('kc=0','Position',[0,0,2])
 colormap(ggb)
 alpha 1
@@ -45,7 +47,8 @@ scatter3(ka(kc==0.9),kb(kc==0.9),kd(kc==0.9),1000,lf(kc==0.9),'filled')
 clim([0,max(lf)])
 xlabel('ka')
 ylabel('kb')
-zlabel('kd')
+zl=zlabel('kd');
+zl.Position(2) = zl.Position(2)-1;
 title('kc=0.9','Position',[0,0,2])
 colormap(ggb)
 alpha 1

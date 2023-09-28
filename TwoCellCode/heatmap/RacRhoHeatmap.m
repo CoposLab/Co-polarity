@@ -34,3 +34,16 @@ h.YLabel='Cell 1';
 h.XLabel='Cell 2';
 colormap(ggb)
 set(gcf,'color','w')
+
+load('racrho_unbinding.mat')
+
+xvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
+yvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
+
+figure(3)
+h=heatmap(xvals,yvals,unbindingvals);
+h.Title='Proportion Leader/Follower';
+h.YLabel='Cell 1';
+h.XLabel='Cell 2';
+colormap(ggb)
+set(gcf,'color','w')
