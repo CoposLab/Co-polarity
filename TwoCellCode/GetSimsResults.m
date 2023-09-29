@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_nosignal/branchedrho_branchedbundled/100aRhoOn0_8kb0_8kc2alpha50max';
+filename = './results_nosignal/antagonism_bidirectional/0_5epsilon10Removed';
 maxnum=100;
 
 angle=pi/4;

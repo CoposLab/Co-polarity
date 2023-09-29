@@ -53,9 +53,9 @@ ppp = 1;
 
 while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results_nosignal/branchedrho_branchedbundled/100aRhoOn0_8kb0_8kc2alpha50max';
+    savelocation='./results_nosignal/antagonism_bidirectional/0_5epsilon10Removed';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -129,7 +129,7 @@ while (ppp<=100)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numToRemove=0;
+    numToRemove=10;
     counter1=0;
     counter2=0;
 
@@ -798,8 +798,8 @@ while (ppp<=100)
         % Set rac/rho rates depending on branched/bundled concentrations
         % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
-        Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
-        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
+        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
+        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
 
 
         %Cell 1
@@ -1128,6 +1128,21 @@ while (ppp<=100)
             posy1(K2_1,t+1) = posy1(K2_1,t)+(rr<pony1)*locy1;               % on event
             posy1(K2_1,t+1) = posy1(K2_1,t)+(rr>=pony1)*posy1(minidy1,t);    % recruitment event
             ny1(K2_1,t+1) = 1;
+
+            if numToRemove>0
+                boundC1Scaled=(L*boundC1/Na);
+                locRemovex1 = find(abs(posx1(:,t+1)-posy1(K2_1,t+1))<epsilon,numToRemove);
+                numFound = length(locRemovex1);
+                if ~isempty(locRemovex1) && boundC1Scaled(1)<=posy1(K2_1,t+1) && boundC1Scaled(end)>=posy1(K2_1,t+1)
+                    oldcol = posx1(locRemovex1,1:end); % Find the particle(s) to be removed
+                    othercols = posx1(setdiff(1:K1_1,locRemovex1),1:end); % Gather other "on" particles
+                    otherothercols = posx1(K1_1+1:end,1:end); % Gather "off" particles
+                    newpos = [othercols;oldcol;otherothercols]; % Put removed particle at the end of "on" particles
+                    posx1 = newpos;
+                    nx1(K1_1-numFound+1:K1_1,t+1) = 0;
+                    counter1=counter1+numFound;
+                end
+            end
         end
 
         %Cell 2
@@ -1143,6 +1158,21 @@ while (ppp<=100)
             posy2(K2_2,t+1) = posy2(K2_2,t)+(rr<pony2)*locy2;               % on event
             posy2(K2_2,t+1) = posy2(K2_2,t)+(rr>=pony2)*posy2(minidy2,t);    % recruitment event
             ny2(K2_2,t+1) = 1;
+
+            if numToRemove>0
+                boundC2Scaled=(L*boundC2/Na);
+                locRemovex2 = find(abs(posx2(:,t+1)-posy2(K2_2,t+1))<epsilon,numToRemove);
+                numFound = length(locRemovex2);
+                if ~isempty(locRemovex2) && boundC2Scaled(1)<=posy2(K2_2,t+1) && boundC2Scaled(end)>=posy2(K2_2,t+1)
+                    oldcol = posx2(locRemovex2,1:end); % Find the particle(s) to be removed
+                    othercols = posx2(setdiff(1:K1_2,locRemovex2),1:end); % Gather other "on" particles
+                    otherothercols = posx2(K1_2+1:end,1:end); % Gather "off" particles
+                    newpos = [othercols;oldcol;otherothercols]; % Put removed particle at the end of "on" particles
+                    posx2 = newpos;
+                    nx2(K1_2-numFound+1:K1_2,t+1) = 0;
+                    counter2=counter2+numFound;
+                end
+            end
         end
 
         [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),K1_1,K2_1,L,Na);
@@ -1188,10 +1218,10 @@ while (ppp<=100)
         %    Ka1(setdiff(1:length(Ka1),boundC1)) = 1.2;
         %end
 
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*ka1)) - a1.*a1); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kb1)) - b1.*b1); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*ka2)) - a2.*a2); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kb2)) - b2.*b2); %Cell 2 bundled
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.*flip(b2)) - a1.*a1)); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.*flip(a2)) - b1.*b1)); %Cell 1 bundled
@@ -1199,10 +1229,10 @@ while (ppp<=100)
         % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.*flip(a1)) - b2.*b2)); %Cell 2 bundled
 
         % Growth term maxes out version
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + ka1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + ka2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
           % rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
           %    + ka_vals(ka_ind) * ka1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
