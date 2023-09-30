@@ -1,5 +1,6 @@
 clear
 close all
+set(0,'DefaultFigureVisible','on')
 
 load('racrho_binding_unbinding.mat')
 bindunbind=vals1;
@@ -20,6 +21,7 @@ h.Title='Proportion Leader/Follower';
 h.YLabel='Cell 1';
 h.XLabel='Cell 2';
 colormap(ggb)
+clim([0.2,1])
 set(gcf,'color','w')
 
 load('racrho_binding.mat')
@@ -33,6 +35,7 @@ h.Title='Proportion Leader/Follower';
 h.YLabel='Cell 1';
 h.XLabel='Cell 2';
 colormap(ggb)
+clim([0.2,1])
 set(gcf,'color','w')
 
 load('racrho_unbinding.mat')
@@ -46,4 +49,5 @@ h.Title='Proportion Leader/Follower';
 h.YLabel='Cell 1';
 h.XLabel='Cell 2';
 colormap(ggb)
+clim([0.2,1])
 set(gcf,'color','w')

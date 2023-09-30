@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/rhouprhodownforces/1000aRhoOn_1000bRhoOff';
+filename = './results/bundledrac_branchedrho_branchedbundled/1000aRhoOn1000bRacOn1kb1kc2alpha50max';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes

@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_nosignal/antagonism_bidirectional/0_5epsilon10Removed';
+filename = './results_celldifference/1_2Ka_allC1/cilcoa/10RhoOn10RacOff100RacOn';
 maxnum=100;
 
 angle=pi/4;
