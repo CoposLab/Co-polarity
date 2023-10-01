@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_celldifference/1_2Ka_allC1/cilcoa/10RhoOn10RacOff100RacOn';
+filename = './results_celldifference/1_2Ka_allC1/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
 maxnum=100;
 
 angle=pi/4;
