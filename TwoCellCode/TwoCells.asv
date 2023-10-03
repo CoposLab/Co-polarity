@@ -49,13 +49,13 @@ writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 88;
+ppp = 1;
 
 while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./results_nosignal/rhopromotesrho_racpromotesrac_acrosscells/1000sumyRhoOn1000sumxRacOn';
+    savelocation='./results_nosignal/racrhopromotion_bundledrac_branchedrho/1000sumyRacOn_1000sumxRhoOn_1000bRacOn_1000aRhoOn';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -746,34 +746,34 @@ while (ppp<=100)
             sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
             sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
             if sumx1>0
-                Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*1000);
+                % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*1000);
                 % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*1000);
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
                 % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
-                % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*100);
+                % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*1000);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
             end
             if sumx2>0
-                Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*1000);
+                % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*1000);
                 % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*1000);
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
                 % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
-                % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*100);
+                % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*1000);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
             end
             if sumy1>0
-                Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumy1*1000);
+                % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumy1*1000);
                 % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*1000);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
                 % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
-                % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*100);
+                % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*1000);
             end
             if sumy2>0
-                Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumy2*1000);
+                % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumy2*1000);
                 % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*1000);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
                 % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
-                % Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*100);
+                % Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*1000);
             end
         end
 
@@ -796,10 +796,10 @@ while (ppp<=100)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*100;
-        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*100;
-        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*100;
-        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*100;
+        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
+        Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
+        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
 
 
         %Cell 1

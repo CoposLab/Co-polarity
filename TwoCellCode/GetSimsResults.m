@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_celldifference/1_2Ka_allC1/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
+filename = './results_nosignal/racrhopromotion_rhoinhibition_racinhibition_bundledrac_branchedrho_branchedbundled/1000sumyRacOn_1000sumxRhoOn_1000sumyRhoOff_1000sumxRacOff_1000bRacOn_1000aRhoOn_0_9kb0_9kc2alpha50max';
 maxnum=100;
 
 angle=pi/4;
