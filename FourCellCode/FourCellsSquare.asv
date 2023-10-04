@@ -42,9 +42,9 @@ ppp = 1;
 
 while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='';
+    savelocation='./results_square/racupracdownforces/1000bRacOn_1000aRacOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -612,14 +612,14 @@ while (ppp<=100)
         set(gca,'XTick',[], 'YTick', [])
 
         % Cell 3
-        surf(Xcol,Ycol-4,ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol-2,Ycol-2,ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','westoutside'));
         clim([0,allmax])
         shading interp
-        surf(Xcol,Ycol-4,ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol-2,Ycol-2,ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
         freezeColors(jicolorbar);
@@ -630,14 +630,14 @@ while (ppp<=100)
         set(gca,'XTick',[], 'YTick', [])
 
         % Cell 4
-        surf(Xcol,Ycol-6,ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol-2,Ycol,ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','westoutside'));
         clim([0,allmax])
         shading interp
-        surf(Xcol,Ycol-6,ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol-2,Ycol,ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
         freezeColors(jicolorbar);
@@ -651,13 +651,15 @@ while (ppp<=100)
         title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
         % Plot boundary between cells
+        flipc1 = flip(boundC1_4);
         flipc2 = flip(boundC2_1);
         flipc3 = flip(boundC3_2);
         flipc4 = flip(boundC4_3);
         for i=1:length(boundC1_2)
             plot3([Xcol(end,boundC1_2(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1_2(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-            plot3([Xcol(end,boundC2_3(i)) Xcol(end,flipc3(i))], [Ycol(end,boundC2_3(i))-2 Ycol(end,flipc3(i))-4],[allmax+1,allmax+1],'black')
-            plot3([Xcol(end,boundC3_4(i)) Xcol(end,flipc4(i))], [Ycol(end,boundC3_4(i))-4 Ycol(end,flipc4(i))-6],[allmax+1,allmax+1],'black')
+            plot3([Xcol(end,boundC2_3(i)) Xcol(end,flipc3(i))-2], [Ycol(end,boundC2_3(i))-2 Ycol(end,flipc3(i))-2],[allmax+1,allmax+1],'black')
+            plot3([Xcol(end,boundC3_4(i))-2 Xcol(end,flipc4(i))-2], [Ycol(end,boundC3_4(i))-2 Ycol(end,flipc4(i))],[allmax+1,allmax+1],'black')
+            plot3([Xcol(end,boundC4_1(i))-2 Xcol(end,flipc1(i))], [Ycol(end,boundC4_1(i)) Ycol(end,flipc1(i))],[allmax+1,allmax+1],'black')
         end
 
         hold off;
@@ -933,29 +935,33 @@ while (ppp<=100)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        Konx1(boundC1_2) = Konx1(boundC1_2).*flip(b2(boundC2_1))*1000;
-        Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1_2))*1000;
-        Konx2(boundC2_3) = Konx2(boundC2_3).*flip(b3(boundC3_2))*1000;
-        Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b2(boundC2_3))*1000;
-        Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
-        Konx4(boundC4_3) = Konx4(boundC4_3).*flip(b3(boundC3_4))*1000;
+        % Konx1(boundC1_2) = Konx1(boundC1_2).*flip(b2(boundC2_1))*1000;
+        % Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1_2))*1000;
+        % Konx2(boundC2_3) = Konx2(boundC2_3).*flip(b3(boundC3_2))*1000;
+        % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b2(boundC2_3))*1000;
+        % Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
+        % Konx4(boundC4_3) = Konx4(boundC4_3).*flip(b3(boundC3_4))*1000;
+        % Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
         
-        Kony1(boundC1_2) = Kony1(boundC1_2).*flip(a2(boundC2_1))*1000;
-        Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
-        Kony2(boundC2_3) = Kony2(boundC2_3).*flip(a3(boundC3_2))*1000;
-        Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
-        Kony3(boundC3_4) = Kony3(boundC3_4).*flip(a4(boundC4_3))*1000;
-        Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
+        % Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
+        % Kony1(boundC1_2) = Kony1(boundC1_2).*flip(a2(boundC2_1))*1000;
+        % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
+        % Kony2(boundC2_3) = Kony2(boundC2_3).*flip(a3(boundC3_2))*1000;
+        % Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
+        % Kony3(boundC3_4) = Kony3(boundC3_4).*flip(a4(boundC4_3))*1000;
+        % Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
 
-        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2_1))*1000;
-        % Koffx2(boundC2_1) = Koffx2(boundC2_1).*flip(a1(boundC1))*1000;
-        % Koffy2(boundC2_1) = Koffy2(boundC2_1).*flip(b1(boundC1))*1000;
-        % Koffx2(boundC2_2) = Koffx2(boundC2_2).*flip(a3(boundC3_1))*1000;
-        % Koffx3(boundC3_1) = Koffx3(boundC3_1).*flip(a2(boundC2_2))*1000;
-        % Koffy3(boundC3_1) = Koffy3(boundC3_1).*flip(b2(boundC2_2))*1000;
-        % Koffx3(boundC3_2) = Koffx3(boundC3_2).*flip(a4(boundC4))*1000;
-        % Koffx4(boundC4) = Koffx4(boundC4).*flip(a3(boundC3_2))*1000;
-        % Koffy4(boundC4) = Koffy4(boundC4).*flip(b3(boundC3_2))*1000;
+        % Koffy1(boundC1_4) = Koffy1(boundC1_4).*flip(b4(boundC4_1))*100;
+        Koffx1(boundC1_4) = Koffx1(boundC1_4).*flip(a4(boundC2_1))*100;
+        % Koffx1(boundC1_2) = Koffx1(boundC1_2).*flip(a2(boundC2_1))*100;
+        % Koffy2(boundC2_1) = Koffy2(boundC2_1).*flip(b1(boundC1_2))*100;
+        % Koffx2(boundC2_3) = Koffx2(boundC2_3).*flip(a3(boundC3_2))*100;
+        % Koffy3(boundC3_2) = Koffy3(boundC3_2).*flip(b2(boundC2_3))*100;
+        % Koffx3(boundC3_4) = Koffx3(boundC3_4).*flip(a4(boundC4_3))*100;
+        % Koffy4(boundC4_3) = Koffy4(boundC4_3).*flip(b3(boundC3_4))*100;
+        % Koffx4(boundC4_1) = Koffx4(boundC4_1).*flip(a1(boundC1_4))*100;
+        
+        
 
 
         %Cell 1
@@ -1658,27 +1664,27 @@ while (ppp<=100)
         gamma=1.5;
 
         rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2)) - a2.*a2); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2)) - b2.*b2); %Cell 2 bundled
-        rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3)) - a3.*a3); %Cell 3 branched
-        rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3)) - b3.*b3); %Cell 3 bundled
-        rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4)) - a4.*a4); %Cell 4 branched
-        rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4)) - b4.*b4); %Cell 4 bundled
+        rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2)) - a2.*a2); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2)) - b2.*b2); %Cell 2 bundled
+        rxna3 = dt*( F(a3,b3) + (a3.*(1+alpha(1)*xC3)) - a3.*a3); %Cell 3 branched
+        rxnb3 = dt*( F(b3,a3) + (b3.*(1+alpha(1)*yC3)) - b3.*b3); %Cell 3 bundled
+        rxna4 = dt*( F(a4,b4) + (a4.*(1+alpha(1)*xC4)) - a4.*a4); %Cell 4 branched
+        rxnb4 = dt*( F(b4,a4) + (b4.*(1+alpha(1)*yC4)) - b4.*b4); %Cell 4 bundled
 
         % Growth term maxes out version
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + kb2_1.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
-            + kb2_2.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kc2_1.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kc2_2.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b2.*b2)); %Cell 2 bundled
-        rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3 + kb3_1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
-            + kb3_2.* (flip(b4).*(flip(b4)<=abmax) + abmax*(flip(b4)>abmax))) - a3.*a3)); %Cell 3 branched
-        rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3 + kc3_1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kc3_2.* (flip(a4).*(flip(a4)<=abmax) + abmax*(flip(a4)>abmax)) ) - b3.*b3)); %Cell 3 bundled
-        rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4 + kb4.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a4.*a4)); %Cell 4 branched
-        rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4 + kc4.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b4.*b4)); %Cell 4 bundled
+        % rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2 + kb2_1.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
+        %     + kb2_2.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a2.*a2)); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2 + kc2_1.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+        %     + kc2_2.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+        % rxna3 = dt*( F(a3,b3) + (a3.*(1+alpha(1)*xC3 + kb3_1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
+        %     + kb3_2.* (flip(b4).*(flip(b4)<=abmax) + abmax*(flip(b4)>abmax))) - a3.*a3)); %Cell 3 branched
+        % rxnb3 = dt*( F(b3,a3) + (b3.*(1+alpha(1)*yC3 + kc3_1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+        %     + kc3_2.* (flip(a4).*(flip(a4)<=abmax) + abmax*(flip(a4)>abmax)) ) - b3.*b3)); %Cell 3 bundled
+        % rxna4 = dt*( F(a4,b4) + (a4.*(1+alpha(1)*xC4 + kb4.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a4.*a4)); %Cell 4 branched
+        % rxnb4 = dt*( F(b4,a4) + (b4.*(1+alpha(1)*yC4 + kc4.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b4.*b4)); %Cell 4 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
@@ -1690,8 +1696,8 @@ while (ppp<=100)
         b4 = Hs4\(diffRHSb4+rxnb4);
 
         %% Plot the solution(s)
-        if mod(t,tplot) == 0
-        % if t==(Nt-1)
+        % if mod(t,tplot) == 0
+        if t==(Nt-1)
 
             %Define colors
             colorLength = 50;
@@ -1870,14 +1876,14 @@ while (ppp<=100)
             set(gca,'XTick',[], 'YTick', [])
 
             % Cell 3
-            surf(Xcol,Ycol-4,ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol-2,Ycol-2,ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
             view(2)
             colormap(branchedColor)
             freezeColors;
             freezeColors(colorbar('Location','westoutside'));
             clim([0,allmax])
             shading interp
-            surf(Xcol,Ycol-4,ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol-2,Ycol-2,ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
             freezeColors;
             freezeColors(jicolorbar);
@@ -1888,14 +1894,14 @@ while (ppp<=100)
             set(gca,'XTick',[], 'YTick', [])
 
             % Cell 4
-            surf(Xcol,Ycol-6,ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol-2,Ycol,ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
             view(2)
             colormap(branchedColor)
             freezeColors;
             freezeColors(colorbar('Location','westoutside'));
             clim([0,allmax])
             shading interp
-            surf(Xcol,Ycol-6,ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol-2,Ycol,ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
             freezeColors;
             freezeColors(jicolorbar);
@@ -1909,13 +1915,15 @@ while (ppp<=100)
             title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
             % Plot boundary between cells
+            flipc1 = flip(boundC1_4);
             flipc2 = flip(boundC2_1);
             flipc3 = flip(boundC3_2);
             flipc4 = flip(boundC4_3);
             for i=1:length(boundC1_2)
                 plot3([Xcol(end,boundC1_2(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1_2(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-                plot3([Xcol(end,boundC2_3(i)) Xcol(end,flipc3(i))], [Ycol(end,boundC2_3(i))-2 Ycol(end,flipc3(i))-4],[allmax+1,allmax+1],'black')
-                plot3([Xcol(end,boundC3_4(i)) Xcol(end,flipc4(i))], [Ycol(end,boundC3_4(i))-4 Ycol(end,flipc4(i))-6],[allmax+1,allmax+1],'black')
+                plot3([Xcol(end,boundC2_3(i)) Xcol(end,flipc3(i))-2], [Ycol(end,boundC2_3(i))-2 Ycol(end,flipc3(i))-2],[allmax+1,allmax+1],'black')
+                plot3([Xcol(end,boundC3_4(i))-2 Xcol(end,flipc4(i))-2], [Ycol(end,boundC3_4(i))-2 Ycol(end,flipc4(i))],[allmax+1,allmax+1],'black')
+                plot3([Xcol(end,boundC4_1(i))-2 Xcol(end,flipc1(i))], [Ycol(end,boundC4_1(i)) Ycol(end,flipc1(i))],[allmax+1,allmax+1],'black')
             end
 
             hold off;
@@ -1985,7 +1993,7 @@ while (ppp<=100)
             end
             if ~isempty(dirIndex3)
                 hold on;
-                quiver(0,-4,Xsm(dirIndex3),Ysm(dirIndex3),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                quiver(-2,-2,Xsm(dirIndex3),Ysm(dirIndex3),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
                 hold off;
             end
 
@@ -2006,7 +2014,7 @@ while (ppp<=100)
             end
             if ~isempty(dirIndex4)
                 hold on;
-                quiver(0,-6,Xsm(dirIndex4),Ysm(dirIndex4),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                quiver(-2,0,Xsm(dirIndex4),Ysm(dirIndex4),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
                 hold off;
             end
 

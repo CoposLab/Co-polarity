@@ -1,15 +1,17 @@
-% 4 cells
+% 4 cells square
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/bundledrac_branchedrho_branchedbundled/1000aRhoOn1000bRacOn1kb1kc2alpha50max';
+filename = '';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes
 anglelf=pi/4; % tolerance for leader follower
 
-countallleft=0;
-countallright=0;
+% countallleft=0;
+% countallright=0;
+% countallup=0;
+% countalldown=0;
 countyes=0;
 countlf=0;
 countcw=0;
@@ -127,7 +129,7 @@ for i=1:maxnum
         dirIndex3=dirIndex3+101;
     end
 
-    % Find median for cell 3
+    % Find median for cell 4
     a4New = a4;
     a4New(a4New<1)=0;
     if (a4New(1)~=0 && a4New(length(a4New))~=0)
@@ -143,19 +145,20 @@ for i=1:maxnum
         dirIndex4=dirIndex4+101;
     end
 
+
     if ~isempty(dirIndex1) && ~isempty(dirIndex2) && ~isempty(dirIndex3) && ~isempty(dirIndex4)
         medang1 = th(1,dirIndex1);
         medang2 = th(1,dirIndex2);
         medang3 = th(1,dirIndex3);
         medang4 = th(1,dirIndex4);
 
-        if medang1>=0 && medang1<=pi && medang2>=0 && medang2<=pi ...
-                && medang3>=0 && medang3<=pi && medang4>=0 && medang4<=pi
-            countallleft=countallleft+1;
-        elseif medang1>=pi && medang1<=2*pi && medang2>=pi && medang2<=2*pi ...
-                && medang3>=pi && medang3<=2*pi && medang4>=pi && medang4<=2*pi
-            countallright=countallright+1;
-        end
+        % if medang1>=0 && medang1<=pi && medang2>=0 && medang2<=pi ...
+        %         && medang3>=0 && medang3<=pi && medang4>=0 && medang4<=pi
+        %     countallleft=countallleft+1;
+        % elseif medang1>=pi && medang1<=2*pi && medang2>=pi && medang2<=2*pi ...
+        %         && medang3>=pi && medang3<=2*pi && medang4>=pi && medang4<=2*pi
+        %     countallright=countallright+1;
+        % end
 
         angdiff1=max([min(abs(medang1-medang2),2*pi-abs(medang1-medang2)),... %max angle diff between cell 1 and other cells
             min(abs(medang1-medang3),2*pi-abs(medang1-medang3)),...
@@ -169,29 +172,58 @@ for i=1:maxnum
         end
 
         epsilon=0.01*2*pi;
-        if xor(abs(medang2-3*pi/2)<anglelf, abs(medang3-pi/2)<anglelf) %cell 2 -> cell 3 or cell 2 <- cell 3
-            if abs(medang1-3*pi/2)<anglelf && abs(medang2-3*pi/2)<anglelf && abs(medang3-3*pi/2)<anglelf % all pointing to cell 4
-                countlf=countlf+1;
-                %check CW vs CCW
-                if (medang4>=0 && medang4<(pi/2)-epsilon) || (medang4>(3*pi/2)+epsilon && medang4<=2*pi)
-                    countccw=countccw+1;
-                elseif medang4>(pi/2)+epsilon && medang4<(3*pi/2)-epsilon
-                    countcw=countcw+1;
-                end
-            elseif abs(medang2-pi/2)<anglelf && abs(medang3-pi/2)<anglelf && abs(medang4-pi/2)<anglelf % all pointing to cell 1
-                countlf=countlf+1;
-                %check CW vs CCW
-                if (medang1>=0 && medang1<(pi/2)-epsilon) || (medang1>(3*pi/2)+epsilon && medang1<=2*pi)
-                    countcw=countcw+1;
-                elseif medang1>(pi/2)+epsilon && medang1<(3*pi/2)-epsilon
-                    countccw=countccw+1;
-                end
-            end
+        if abs(medang1-3*pi/2)<anglelf && abs(medang2-pi)<anglelf ...
+                && abs(medang3-pi/2)<anglelf ...
+                && min(abs(medang4-0),abs(medang4-2*pi))<anglelf %c1->c2->c3->c4->c1
+            countlf=countlf+1;
+            countcw=countcw+1;
+        elseif abs(medang1-3*pi/2)<anglelf && abs(medang2-pi)<anglelf ...
+                && abs(medang3-pi/2)<anglelf %c1->c2->c3->c4
+            countlf=countlf+1;
+            countcw=countcw+1;
+        elseif abs(medang2-pi)<anglelf ...
+                && abs(medang3-pi/2)<anglelf ...
+                && min(abs(medang4-0),abs(medang4-2*pi))<anglelf %c2->c3->c4->c1
+            countlf=countlf+1;
+            countcw=countcw+1;
+        elseif abs(medang3-pi/2)<anglelf ...
+                && min(abs(medang4-0),abs(medang4-2*pi))<anglelf ...
+                && abs(medang1-3*pi/2)<anglelf %c3->c4->c1->c2
+            countlf=countlf+1;
+            countcw=countcw+1;
+        elseif min(abs(medang4-0),abs(medang4-2*pi))<anglelf ...
+                && abs(medang1-3*pi/2)<anglelf && abs(medang2-pi)<anglelf %c4->c1->c2->c3
+            countlf=countlf+1;
+            countcw=countcw+1;
+        elseif abs(medang1-pi)<anglelf && abs(medang4-3*pi/2)<anglelf ...
+                && min(abs(medang3-0),abs(medang3-2*pi))<anglelf ...
+                && abs(medang2-pi/2)<anglelf %c1->c4->c3->c2->c1
+            countlf=countlf+1;
+            countccw=countccw+1;
+        elseif abs(medang1-pi)<anglelf && abs(medang4-3*pi/2)<anglelf ...
+                && min(abs(medang3-0),abs(medang3-2*pi))<anglelf %c1->c4->c3->c2
+            countlf=countlf+1;
+            countccw=countccw+1;
+        elseif abs(medang4-3*pi/2)<anglelf ...
+                && min(abs(medang3-0),abs(medang3-2*pi))<anglelf ...
+                && abs(medang2-pi/2)<anglelf %c4->c3->c2->c1
+            countlf=countlf+1;
+            countccw=countccw+1;
+        elseif min(abs(medang3-0),abs(medang3-2*pi))<anglelf ...
+                && abs(medang2-pi/2)<anglelf && abs(medang1-pi)<anglelf %c3->c2->c1->c4
+            countlf=countlf+1;
+            countccw=countccw+1;
+        elseif abs(medang2-pi/2)<anglelf && abs(medang1-pi)<anglelf ...
+                && abs(medang4-3*pi/2)<anglelf %c2->c1->c4->c3
+            countlf=countlf+1;
+            countccw=countccw+1;
         end
+
+        
     end
 
 end
 toc
 
-sprintf('All same direction: %d\nYes: %d\nLeader/Follower: %d\nCW: %d, CCW: %d',...
-    countallleft+countallright, countyes, countlf, countcw, countccw)
+sprintf('Yes: %d\nLeader/Follower: %d\nCW: %d, CCW: %d',...
+    countyes, countlf, countcw, countccw)

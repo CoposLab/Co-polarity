@@ -42,9 +42,9 @@ ppp = 1;
 
 while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='';
+    savelocation='./results_square/rhouprhodownforces/1000aRhoOn_1000bRhoOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -941,23 +941,31 @@ while (ppp<=100)
         % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b2(boundC2_3))*1000;
         % Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
         % Konx4(boundC4_3) = Konx4(boundC4_3).*flip(b3(boundC3_4))*1000;
+        % Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
         
-        % Kony1(boundC1_2) = Kony1(boundC1_2).*flip(a2(boundC2_1))*1000;
+        % Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
+        Kony1(boundC1_2) = Kony1(boundC1_2).*flip(a2(boundC2_1))*1000;
         % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
-        % Kony2(boundC2_3) = Kony2(boundC2_3).*flip(a3(boundC3_2))*1000;
+        Kony2(boundC2_3) = Kony2(boundC2_3).*flip(a3(boundC3_2))*1000;
         % Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
-        % Kony3(boundC3_4) = Kony3(boundC3_4).*flip(a4(boundC4_3))*1000;
+        Kony3(boundC3_4) = Kony3(boundC3_4).*flip(a4(boundC4_3))*1000;
         % Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
+        Kony4(boundC4_1) = Kony4(boundC4_1).*flip(a1(boundC1_4))*1000;
 
-        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2_1))*1000;
-        % Koffx2(boundC2_1) = Koffx2(boundC2_1).*flip(a1(boundC1))*1000;
-        % Koffy2(boundC2_1) = Koffy2(boundC2_1).*flip(b1(boundC1))*1000;
-        % Koffx2(boundC2_2) = Koffx2(boundC2_2).*flip(a3(boundC3_1))*1000;
-        % Koffx3(boundC3_1) = Koffx3(boundC3_1).*flip(a2(boundC2_2))*1000;
-        % Koffy3(boundC3_1) = Koffy3(boundC3_1).*flip(b2(boundC2_2))*1000;
-        % Koffx3(boundC3_2) = Koffx3(boundC3_2).*flip(a4(boundC4))*1000;
-        % Koffx4(boundC4) = Koffx4(boundC4).*flip(a3(boundC3_2))*1000;
-        % Koffy4(boundC4) = Koffy4(boundC4).*flip(b3(boundC3_2))*1000;
+        Koffy1(boundC1_4) = Koffy1(boundC1_4).*flip(b4(boundC4_1))*1000;
+        % Koffx1(boundC1_4) = Koffx1(boundC1_4).*flip(a4(boundC4_1))*1000;
+        % Koffx1(boundC1_2) = Koffx1(boundC1_2).*flip(a2(boundC2_1))*100;
+        Koffy2(boundC2_1) = Koffy2(boundC2_1).*flip(b1(boundC1_2))*1000;
+        % Koffx2(boundC2_1) = Koffx2(boundC2_1).*flip(a1(boundC1_2))*1000;
+        % Koffx2(boundC2_3) = Koffx2(boundC2_3).*flip(a3(boundC3_2))*100;
+        Koffy3(boundC3_2) = Koffy3(boundC3_2).*flip(b2(boundC2_3))*1000;
+        % Koffx3(boundC3_2) = Koffx3(boundC3_2).*flip(a2(boundC2_3))*1000;
+        % Koffx3(boundC3_4) = Koffx3(boundC3_4).*flip(a4(boundC4_3))*100;
+        Koffy4(boundC4_3) = Koffy4(boundC4_3).*flip(b3(boundC3_4))*1000;
+        % Koffx4(boundC4_3) = Koffx4(boundC4_3).*flip(a3(boundC3_4))*1000;
+        % Koffx4(boundC4_1) = Koffx4(boundC4_1).*flip(a1(boundC1_4))*100;
+        
+        
 
 
         %Cell 1
@@ -1692,8 +1700,8 @@ while (ppp<=100)
         b4 = Hs4\(diffRHSb4+rxnb4);
 
         %% Plot the solution(s)
-        if mod(t,tplot) == 0
-        % if t==(Nt-1)
+        % if mod(t,tplot) == 0
+        if t==(Nt-1)
 
             %Define colors
             colorLength = 50;
