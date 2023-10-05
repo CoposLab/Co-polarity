@@ -15,48 +15,48 @@ ggb=flip([gg gb]');
 xvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
 yvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding times 10','Rac binding times 1000'};
 
-% figure(1)
-% h=heatmap(xvals,yvals,bindunbind);
-% h.Title='Proportion Leader/Follower';
-% h.YLabel='Cell 1';
-% h.XLabel='Cell 2';
-% colormap(ggb)
-% clim([0.2,1])
-% set(gcf,'color','w')
-
 figure(1)
-imagesc(bindunbind)
-colorbar;
+h=heatmap(xvals,yvals,bindunbind);
+h.Title='Proportion Leader/Follower';
+h.YLabel='Cell 1';
+h.XLabel='Cell 2';
 colormap(ggb)
 clim([0.2,1])
 set(gcf,'color','w')
-set(gca,'XTick',[],'YTick',[])
 
-
-% load('racrho_binding.mat')
-% 
-% xvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding times 10','Rac binding times 1000'};
-% yvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding times 10','Rac binding times 1000'};
-% 
-% figure(2)
-% h=heatmap(xvals,yvals,bindingvals);
-% h.Title='Proportion Leader/Follower';
-% h.YLabel='Cell 1';
-% h.XLabel='Cell 2';
+% figure(1)
+% imagesc(bindunbind)
+% colorbar;
 % colormap(ggb)
 % clim([0.2,1])
 % set(gcf,'color','w')
-% 
-% load('racrho_unbinding.mat')
-% 
-% xvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
-% yvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
-% 
-% figure(3)
-% h=heatmap(xvals,yvals,unbindingvals);
-% h.Title='Proportion Leader/Follower';
-% h.YLabel='Cell 1';
-% h.XLabel='Cell 2';
-% colormap(ggb)
-% clim([0.2,1])
-% set(gcf,'color','w')
+% set(gca,'XTick',[],'YTick',[])
+
+
+load('racrho_binding.mat')
+
+xvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding times 10','Rac binding times 1000'};
+yvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding times 10','Rac binding times 1000'};
+
+figure(2)
+h=heatmap(xvals,yvals,bindingvals);
+h.Title='Proportion Leader/Follower';
+h.YLabel='Cell 1';
+h.XLabel='Cell 2';
+colormap(ggb)
+clim([0.2,1])
+set(gcf,'color','w')
+
+load('racrho_unbinding.mat')
+
+xvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
+yvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
+
+figure(3)
+h=heatmap(xvals,yvals,unbindingvals);
+h.Title='Proportion Leader/Follower';
+h.YLabel='Cell 1';
+h.XLabel='Cell 2';
+colormap(ggb)
+clim([0.2,1])
+set(gcf,'color','w')
