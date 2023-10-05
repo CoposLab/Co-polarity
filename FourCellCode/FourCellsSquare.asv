@@ -40,11 +40,11 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=100)
+while (ppp<=1)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./results_line/racrhopromotion_racinhibition_rhoinhibition_acrosscells/1000sumyRacOn_1000sumxRhoOn_1000sumyRhoOff_1000sumxRacOff';
+    savelocation='./movies_square/rhouprhodownforces/1000aRhoOn_1000bRhoOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -52,7 +52,7 @@ while (ppp<=100)
         filenameScatter=strcat(savelocation,'Scatter_',setnum);
     end
 
-    vid = 0;
+    vid = 1;
     vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
     vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
     % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
@@ -133,12 +133,14 @@ while (ppp<=100)
     % boundC1 = (ceil(3*Na/4 - ((Na-1)*bper)/2)):((ceil(3*Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 1
     % boundC2 = (floor(Na/4 - ((Na-1)*bper)/2)):((floor(Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 2
 
-    boundC1 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
+    boundC1_4 = (floor((Na-1)*1/2 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/2 + floor((Na-1)*bper/2)))+1;
+    boundC1_2 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
     boundC2_1 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
-    boundC2_2 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
-    boundC3_1 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
-    boundC3_2 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
-    boundC4 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
+    boundC2_3 = (floor((Na-1)*1/2 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/2 + floor((Na-1)*bper/2)))+1;
+    boundC3_2 = [(floor((Na-1)*1 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1)), 1:(floor((Na-1)*0 + floor((Na-1)*bper/2)))+1];
+    boundC3_4 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
+    boundC4_3 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
+    boundC4_1 = [(floor((Na-1)*1 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1)), 1:(floor((Na-1)*0 + floor((Na-1)*bper/2)))+1];
 
     % Signal
     signal=0;
@@ -150,39 +152,6 @@ while (ppp<=100)
     %
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
-
-    branchedConst1 = 1.0;
-    bundledConst1 = 1.0;
-    branchedConst2 = [1.0,1.0]; %[left,right]
-    bundledConst2 = [1.0,1.0]; %[left,right]
-    branchedConst3 = [1.0,1.0]; %[left,right]
-    bundledConst3 = [1.0,1.0]; %[left,right]
-    branchedConst4 = 1.0;
-    bundledConst4 = 1.0;
-
-    Ka1=ones(Na,1);
-    Kb1=ones(Na,1);
-    Ka2=ones(Na,1);
-    Kb2=ones(Na,1);
-    Ka3=ones(Na,1);
-    Kb3=ones(Na,1);
-    Ka4=ones(Na,1);
-    Kb4=ones(Na,1);
-
-    Ka1(boundC1) = branchedConst1*Ka1(boundC1);
-    Kb1(boundC1) = bundledConst1*Kb1(boundC1);
-    Ka2(boundC2_1) = branchedConst2(1)*Ka2(boundC2_1);
-    Ka2(boundC2_2) = branchedConst2(2)*Ka2(boundC2_2);
-    Kb2(boundC2_1) = bundledConst2(1)*Kb2(boundC2_1);
-    Kb2(boundC2_2) = bundledConst2(2)*Kb2(boundC2_2);
-    Ka3(boundC3_1) = branchedConst3(1)*Ka3(boundC3_1);
-    Ka3(boundC3_2) = branchedConst3(2)*Ka3(boundC3_2);
-    Kb3(boundC3_1) = bundledConst3(1)*Kb3(boundC3_1);
-    Kb3(boundC3_2) = bundledConst3(2)*Kb3(boundC3_2);
-    Ka4(boundC4) = branchedConst4*Ka4(boundC4);
-    Kb4(boundC4) = bundledConst4*Kb4(boundC4);
-
-    % Kb1(setdiff(1:length(Kb1),boundC1)) = 1.5*Kb1(setdiff(1:length(Kb1),boundC1));
 
     % Set initial conditions for actin distribution
     %
@@ -601,7 +570,7 @@ while (ppp<=100)
 
     allmax = max([max(a1),max(a2),max(a3),max(a4),max(b1),max(b2),max(b3),max(b4)]);
 
-    if vid == 1
+    % if vid == 1
 
         % Concentric circles
         % Cell 1
@@ -643,14 +612,14 @@ while (ppp<=100)
         set(gca,'XTick',[], 'YTick', [])
 
         % Cell 3
-        surf(Xcol,Ycol-4,ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol-2,Ycol-2,ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','westoutside'));
         clim([0,allmax])
         shading interp
-        surf(Xcol,Ycol-4,ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol-2,Ycol-2,ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
         freezeColors(jicolorbar);
@@ -661,14 +630,14 @@ while (ppp<=100)
         set(gca,'XTick',[], 'YTick', [])
 
         % Cell 4
-        surf(Xcol,Ycol-6,ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol-2,Ycol,ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','westoutside'));
         clim([0,allmax])
         shading interp
-        surf(Xcol,Ycol-6,ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol-2,Ycol,ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
         freezeColors(jicolorbar);
@@ -682,13 +651,15 @@ while (ppp<=100)
         title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
         % Plot boundary between cells
+        flipc1 = flip(boundC1_4);
         flipc2 = flip(boundC2_1);
-        flipc3 = flip(boundC3_1);
-        flipc4 = flip(boundC4);
-        for i=1:length(boundC1)
-            plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-            plot3([Xcol(end,boundC2_2(i)) Xcol(end,flipc3(i))], [Ycol(end,boundC2_2(i))-2 Ycol(end,flipc3(i))-4],[allmax+1,allmax+1],'black')
-            plot3([Xcol(end,boundC3_2(i)) Xcol(end,flipc4(i))], [Ycol(end,boundC3_2(i))-4 Ycol(end,flipc4(i))-6],[allmax+1,allmax+1],'black')
+        flipc3 = flip(boundC3_2);
+        flipc4 = flip(boundC4_3);
+        for i=1:length(boundC1_2)
+            plot3([Xcol(end,boundC1_2(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1_2(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
+            plot3([Xcol(end,boundC2_3(i)) Xcol(end,flipc3(i))-2], [Ycol(end,boundC2_3(i))-2 Ycol(end,flipc3(i))-2],[allmax+1,allmax+1],'black')
+            plot3([Xcol(end,boundC3_4(i))-2 Xcol(end,flipc4(i))-2], [Ycol(end,boundC3_4(i))-2 Ycol(end,flipc4(i))],[allmax+1,allmax+1],'black')
+            plot3([Xcol(end,boundC4_1(i))-2 Xcol(end,flipc1(i))], [Ycol(end,boundC4_1(i)) Ycol(end,flipc1(i))],[allmax+1,allmax+1],'black')
         end
 
         hold off;
@@ -803,7 +774,7 @@ while (ppp<=100)
             writeVideo(vidObjCol1,currframe);
         end
 
-    end
+    % end
 
     %% Run simulation
     %
@@ -813,10 +784,10 @@ while (ppp<=100)
     for t=1:(Nt-1)
 
         %% Run biochemistry
-        [Konx1,Kony1,Kfbx1,Kfby1,Koffx1,Koffy1] = spatialrates(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1); % set rates
-        [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,[boundC2_1,boundC2_2]);
-        [Konx3,Kony3,Kfbx3,Kfby3,Koffx3,Koffy3] = spatialrates(ron,rfb,roff,a3,b3,s3,beta,cond,[boundC3_1,boundC3_2]);
-        [Konx4,Kony4,Kfbx4,Kfby4,Koffx4,Koffy4] = spatialrates(ron,rfb,roff,a4,b4,s4,beta,cond,boundC4);
+        [Konx1,Kony1,Kfbx1,Kfby1,Koffx1,Koffy1] = spatialrates(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1_2); % set rates
+        [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,[boundC2_1,boundC2_3]);
+        [Konx3,Kony3,Kfbx3,Kfby3,Koffx3,Koffy3] = spatialrates(ron,rfb,roff,a3,b3,s3,beta,cond,[boundC3_2,boundC3_4]);
+        [Konx4,Kony4,Kfbx4,Kfby4,Koffx4,Koffy4] = spatialrates(ron,rfb,roff,a4,b4,s4,beta,cond,boundC4_3);
 
 
         % Add external signal for cell 1
@@ -964,29 +935,37 @@ while (ppp<=100)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2_1))*1000;
-        Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1))*1000;
-        Konx2(boundC2_2) = Konx2(boundC2_2).*flip(b3(boundC3_1))*1000;
-        Konx3(boundC3_1) = Konx3(boundC3_1).*flip(b2(boundC2_2))*1000;
-        Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b4(boundC4))*1000;
-        Konx4(boundC4) = Konx4(boundC4).*flip(b3(boundC3_2))*1000;
+        % Konx1(boundC1_2) = Konx1(boundC1_2).*flip(b2(boundC2_1))*1000;
+        % Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1_2))*1000;
+        % Konx2(boundC2_3) = Konx2(boundC2_3).*flip(b3(boundC3_2))*1000;
+        % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b2(boundC2_3))*1000;
+        % Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
+        % Konx4(boundC4_3) = Konx4(boundC4_3).*flip(b3(boundC3_4))*1000;
+        % Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
         
-        Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2_1))*1000;
-        Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1))*1000;
-        Kony2(boundC2_2) = Kony2(boundC2_2).*flip(a3(boundC3_1))*1000;
-        Kony3(boundC3_1) = Kony3(boundC3_1).*flip(a2(boundC2_2))*1000;
-        Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a4(boundC4))*1000;
-        Kony4(boundC4) = Kony4(boundC4).*flip(a3(boundC3_2))*1000;
+        % Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
+        Kony1(boundC1_2) = Kony1(boundC1_2).*flip(a2(boundC2_1))*1000;
+        % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
+        Kony2(boundC2_3) = Kony2(boundC2_3).*flip(a3(boundC3_2))*1000;
+        % Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
+        Kony3(boundC3_4) = Kony3(boundC3_4).*flip(a4(boundC4_3))*1000;
+        % Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
+        Kony4(boundC4_1) = Kony4(boundC4_1).*flip(a1(boundC1_4))*1000;
 
-        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2_1))*1000;
-        % Koffx2(boundC2_1) = Koffx2(boundC2_1).*flip(a1(boundC1))*1000;
-        % Koffy2(boundC2_1) = Koffy2(boundC2_1).*flip(b1(boundC1))*1000;
-        % Koffx2(boundC2_2) = Koffx2(boundC2_2).*flip(a3(boundC3_1))*1000;
-        % Koffx3(boundC3_1) = Koffx3(boundC3_1).*flip(a2(boundC2_2))*1000;
-        % Koffy3(boundC3_1) = Koffy3(boundC3_1).*flip(b2(boundC2_2))*1000;
-        % Koffx3(boundC3_2) = Koffx3(boundC3_2).*flip(a4(boundC4))*1000;
-        % Koffx4(boundC4) = Koffx4(boundC4).*flip(a3(boundC3_2))*1000;
-        % Koffy4(boundC4) = Koffy4(boundC4).*flip(b3(boundC3_2))*1000;
+        Koffy1(boundC1_4) = Koffy1(boundC1_4).*flip(b4(boundC4_1))*1000;
+        % Koffx1(boundC1_4) = Koffx1(boundC1_4).*flip(a4(boundC4_1))*1000;
+        % Koffx1(boundC1_2) = Koffx1(boundC1_2).*flip(a2(boundC2_1))*100;
+        Koffy2(boundC2_1) = Koffy2(boundC2_1).*flip(b1(boundC1_2))*1000;
+        % Koffx2(boundC2_1) = Koffx2(boundC2_1).*flip(a1(boundC1_2))*1000;
+        % Koffx2(boundC2_3) = Koffx2(boundC2_3).*flip(a3(boundC3_2))*100;
+        Koffy3(boundC3_2) = Koffy3(boundC3_2).*flip(b2(boundC2_3))*1000;
+        % Koffx3(boundC3_2) = Koffx3(boundC3_2).*flip(a2(boundC2_3))*1000;
+        % Koffx3(boundC3_4) = Koffx3(boundC3_4).*flip(a4(boundC4_3))*100;
+        Koffy4(boundC4_3) = Koffy4(boundC4_3).*flip(b3(boundC3_4))*1000;
+        % Koffx4(boundC4_3) = Koffx4(boundC4_3).*flip(a3(boundC3_4))*1000;
+        % Koffx4(boundC4_1) = Koffx4(boundC4_1).*flip(a1(boundC1_4))*100;
+        
+        
 
 
         %Cell 1
@@ -1466,7 +1445,7 @@ while (ppp<=100)
             % Look for nearby rho (posy1), take them off
             % posx1(K1_1,t+1)=location of rac binding
             if numToRemove>0
-                boundC1Scaled=(L*boundC1/Na);
+                boundC1Scaled=(L*boundC1_2/Na);
                 locRemovey1 = find(abs(posy1(:,t+1)-posx1(K1_1,t+1))<epsilon,numToRemove);
                 numFound = length(locRemovey1);
                 if ~isempty(locRemovey1) && boundC1Scaled(1)<=posx1(K1_1,t+1) && boundC1Scaled(end)>=posx1(K1_1,t+1)
@@ -1499,7 +1478,7 @@ while (ppp<=100)
             % locx2=location of rac binding
             if numToRemove>0
                 boundC2Scaled1=(L*boundC2_1/Na);
-                boundC2Scaled2=(L*boundC2_2/Na);
+                boundC2Scaled2=(L*boundC2_3/Na);
                 locRemovey2 = find(abs(posy2(:,t+1)-posx2(K1_2,t+1))<epsilon,numToRemove);
                 numFound = length(locRemovey2);
                 if ~isempty(locRemovey2) && ((boundC2Scaled1(1)<=posx2(K1_2,t+1) && boundC2Scaled1(end)>=posx2(K1_2,t+1)) ...
@@ -1532,8 +1511,8 @@ while (ppp<=100)
             % Look for nearby rho (posy3), take them off
             % locx3=location of rac binding
             if numToRemove>0
-                boundC3Scaled1=(L*boundC3_1/Na);
-                boundC3Scaled2=(L*boundC3_2/Na);
+                boundC3Scaled1=(L*boundC3_2/Na);
+                boundC3Scaled2=(L*boundC3_4/Na);
                 locRemovey3 = find(abs(posy3(:,t+1)-posx3(K1_3,t+1))<epsilon,numToRemove);
                 numFound = length(locRemovey3);
                 if ~isempty(locRemovey3) && ((boundC3Scaled1(1)<=posx3(K1_3,t+1) && boundC3Scaled1(end)>=posx3(K1_3,t+1)) ...
@@ -1565,7 +1544,7 @@ while (ppp<=100)
             % Look for nearby rho (posy1), take them off
             % posx1(K1_1,t+1)=location of rac binding
             if numToRemove>0
-                boundC4Scaled=(L*boundC4/Na);
+                boundC4Scaled=(L*boundC4_3/Na);
                 locRemovey4 = find(abs(posy4(:,t+1)-posx4(K1_4,t+1))<epsilon,numToRemove);
                 numFound = length(locRemovey4);
                 if ~isempty(locRemovey4) && boundC4Scaled(1)<=posx4(K1_4,t+1) && boundC4Scaled(end)>=posx4(K1_4,t+1)
@@ -1658,58 +1637,58 @@ while (ppp<=100)
         %kb = branched pushing on bundled
         %kc = bundled pulling on branched
         kb1=zeros(length(a1),1);
-        kb1(boundC1)=1*ones(length(boundC1),1);
+        kb1(boundC1_2)=1*ones(length(boundC1_2),1);
         kc1=zeros(length(b1),1);
-        kc1(boundC1)=1*ones(length(boundC1),1);
+        kc1(boundC1_2)=1*ones(length(boundC1_2),1);
 
         kb2_1=zeros(length(a2),1);
         kb2_1(boundC2_1)=1*ones(length(boundC2_1),1);
         kb2_2=zeros(length(a2),1);
-        kb2_2(boundC2_2)=1*ones(length(boundC2_2),1);
+        kb2_2(boundC2_3)=1*ones(length(boundC2_3),1);
         kc2_1=zeros(length(b2),1);
         kc2_1(boundC2_1)=1*ones(length(boundC2_1),1);
         kc2_2=zeros(length(b2),1);
-        kc2_2(boundC2_2)=1*ones(length(boundC2_2),1);
+        kc2_2(boundC2_3)=1*ones(length(boundC2_3),1);
 
         kb3_1=zeros(length(a3),1);
-        kb3_1(boundC3_1)=1*ones(length(boundC3_1),1);
+        kb3_1(boundC3_2)=1*ones(length(boundC3_2),1);
         kb3_2=zeros(length(a3),1);
-        kb3_2(boundC3_2)=1*ones(length(boundC3_2),1);
+        kb3_2(boundC3_4)=1*ones(length(boundC3_4),1);
         kc3_1=zeros(length(b3),1);
-        kc3_1(boundC3_1)=1*ones(length(boundC3_1),1);
+        kc3_1(boundC3_2)=1*ones(length(boundC3_2),1);
         kc3_2=zeros(length(b3),1);
-        kc3_2(boundC3_2)=1*ones(length(boundC3_2),1);
+        kc3_2(boundC3_4)=1*ones(length(boundC3_4),1);
 
         kb4=zeros(length(a4),1);
-        kb4(boundC4)=1*ones(length(boundC4),1);
+        kb4(boundC4_3)=1*ones(length(boundC4_3),1);
         kc4=zeros(length(b4),1);
-        kc4(boundC4)=1*ones(length(boundC4),1);
+        kc4(boundC4_3)=1*ones(length(boundC4_3),1);
         abmax=50;
 
         gamma=1.5;
 
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2)) - a2.*a2); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2)) - b2.*b2); %Cell 2 bundled
-        % rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3)) - a3.*a3); %Cell 3 branched
-        % rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3)) - b3.*b3); %Cell 3 bundled
-        % rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4)) - a4.*a4); %Cell 4 branched
-        % rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4)) - b4.*b4); %Cell 4 bundled
+        rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2)) - a2.*a2); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2)) - b2.*b2); %Cell 2 bundled
+        rxna3 = dt*( F(a3,b3) + (a3.*(1+alpha(1)*xC3)) - a3.*a3); %Cell 3 branched
+        rxnb3 = dt*( F(b3,a3) + (b3.*(1+alpha(1)*yC3)) - b3.*b3); %Cell 3 bundled
+        rxna4 = dt*( F(a4,b4) + (a4.*(1+alpha(1)*xC4)) - a4.*a4); %Cell 4 branched
+        rxnb4 = dt*( F(b4,a4) + (b4.*(1+alpha(1)*yC4)) - b4.*b4); %Cell 4 bundled
 
         % Growth term maxes out version
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + kb2_1.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
-            + kb2_2.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kc2_1.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kc2_2.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b2.*b2)); %Cell 2 bundled
-        rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3 + kb3_1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
-            + kb3_2.* (flip(b4).*(flip(b4)<=abmax) + abmax*(flip(b4)>abmax))) - a3.*a3)); %Cell 3 branched
-        rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3 + kc3_1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kc3_2.* (flip(a4).*(flip(a4)<=abmax) + abmax*(flip(a4)>abmax)) ) - b3.*b3)); %Cell 3 bundled
-        rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4 + kb4.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a4.*a4)); %Cell 4 branched
-        rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4 + kc4.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b4.*b4)); %Cell 4 bundled
+        % rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2 + kb2_1.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
+        %     + kb2_2.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a2.*a2)); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2 + kc2_1.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+        %     + kc2_2.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+        % rxna3 = dt*( F(a3,b3) + (a3.*(1+alpha(1)*xC3 + kb3_1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
+        %     + kb3_2.* (flip(b4).*(flip(b4)<=abmax) + abmax*(flip(b4)>abmax))) - a3.*a3)); %Cell 3 branched
+        % rxnb3 = dt*( F(b3,a3) + (b3.*(1+alpha(1)*yC3 + kc3_1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+        %     + kc3_2.* (flip(a4).*(flip(a4)<=abmax) + abmax*(flip(a4)>abmax)) ) - b3.*b3)); %Cell 3 bundled
+        % rxna4 = dt*( F(a4,b4) + (a4.*(1+alpha(1)*xC4 + kb4.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a4.*a4)); %Cell 4 branched
+        % rxnb4 = dt*( F(b4,a4) + (b4.*(1+alpha(1)*yC4 + kc4.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b4.*b4)); %Cell 4 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
@@ -1901,14 +1880,14 @@ while (ppp<=100)
             set(gca,'XTick',[], 'YTick', [])
 
             % Cell 3
-            surf(Xcol,Ycol-4,ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol-2,Ycol-2,ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
             view(2)
             colormap(branchedColor)
             freezeColors;
             freezeColors(colorbar('Location','westoutside'));
             clim([0,allmax])
             shading interp
-            surf(Xcol,Ycol-4,ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol-2,Ycol-2,ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
             freezeColors;
             freezeColors(jicolorbar);
@@ -1919,14 +1898,14 @@ while (ppp<=100)
             set(gca,'XTick',[], 'YTick', [])
 
             % Cell 4
-            surf(Xcol,Ycol-6,ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol-2,Ycol,ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
             view(2)
             colormap(branchedColor)
             freezeColors;
             freezeColors(colorbar('Location','westoutside'));
             clim([0,allmax])
             shading interp
-            surf(Xcol,Ycol-6,ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol-2,Ycol,ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
             freezeColors;
             freezeColors(jicolorbar);
@@ -1940,13 +1919,15 @@ while (ppp<=100)
             title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
             % Plot boundary between cells
+            flipc1 = flip(boundC1_4);
             flipc2 = flip(boundC2_1);
-            flipc3 = flip(boundC3_1);
-            flipc4 = flip(boundC4);
-            for i=1:length(boundC1)
-                plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-                plot3([Xcol(end,boundC2_2(i)) Xcol(end,flipc3(i))], [Ycol(end,boundC2_2(i))-2 Ycol(end,flipc3(i))-4],[allmax+1,allmax+1],'black')
-                plot3([Xcol(end,boundC3_2(i)) Xcol(end,flipc4(i))], [Ycol(end,boundC3_2(i))-4 Ycol(end,flipc4(i))-6],[allmax+1,allmax+1],'black')
+            flipc3 = flip(boundC3_2);
+            flipc4 = flip(boundC4_3);
+            for i=1:length(boundC1_2)
+                plot3([Xcol(end,boundC1_2(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1_2(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
+                plot3([Xcol(end,boundC2_3(i)) Xcol(end,flipc3(i))-2], [Ycol(end,boundC2_3(i))-2 Ycol(end,flipc3(i))-2],[allmax+1,allmax+1],'black')
+                plot3([Xcol(end,boundC3_4(i))-2 Xcol(end,flipc4(i))-2], [Ycol(end,boundC3_4(i))-2 Ycol(end,flipc4(i))],[allmax+1,allmax+1],'black')
+                plot3([Xcol(end,boundC4_1(i))-2 Xcol(end,flipc1(i))], [Ycol(end,boundC4_1(i)) Ycol(end,flipc1(i))],[allmax+1,allmax+1],'black')
             end
 
             hold off;
@@ -2007,8 +1988,8 @@ while (ppp<=100)
                 zeroInd2=find(a3New==0,1,'last');
                 dirIndex3=ceil((zeroInd1+zeroInd2)/2) - 50;
             else
-                ind1=find(a3New~=0,1,'first');
-                ind2=find(a3New~=0,1,'last');
+                ind1=find(a2New~=0,1,'first');
+                ind2=find(a2New~=0,1,'last');
                 dirIndex3=ceil((ind1+ind2)/2);
             end
             if dirIndex3<1
@@ -2016,7 +1997,7 @@ while (ppp<=100)
             end
             if ~isempty(dirIndex3)
                 hold on;
-                quiver(0,-4,Xsm(dirIndex3),Ysm(dirIndex3),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                quiver(-2,-2,Xsm(dirIndex3),Ysm(dirIndex3),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
                 hold off;
             end
 
@@ -2037,7 +2018,7 @@ while (ppp<=100)
             end
             if ~isempty(dirIndex4)
                 hold on;
-                quiver(0,-6,Xsm(dirIndex4),Ysm(dirIndex4),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                quiver(-2,0,Xsm(dirIndex4),Ysm(dirIndex4),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
                 hold off;
             end
 

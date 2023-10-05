@@ -40,11 +40,11 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=100)
+while (ppp<=1)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./results_square/rhouprhodownforces/1000aRhoOn_1000bRhoOff';
+    savelocation='./movies_square/racuprhoupforces/1000bRacOn_1000aRhoOn';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -52,7 +52,7 @@ while (ppp<=100)
         filenameScatter=strcat(savelocation,'Scatter_',setnum);
     end
 
-    vid = 0;
+    vid = 1;
     vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
     vidObjCol1 = VideoWriter(strcat(savelocation,'ColorVid_',setnum,'.mp4'),'MPEG-4');
     % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
@@ -935,33 +935,33 @@ while (ppp<=100)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1_2) = Konx1(boundC1_2).*flip(b2(boundC2_1))*1000;
+        Konx1(boundC1_2) = Konx1(boundC1_2).*flip(b2(boundC2_1))*1000;
         % Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1_2))*1000;
-        % Konx2(boundC2_3) = Konx2(boundC2_3).*flip(b3(boundC3_2))*1000;
+        Konx2(boundC2_3) = Konx2(boundC2_3).*flip(b3(boundC3_2))*1000;
         % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b2(boundC2_3))*1000;
-        % Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
+        Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
         % Konx4(boundC4_3) = Konx4(boundC4_3).*flip(b3(boundC3_4))*1000;
-        % Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
+        Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
         
-        % Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
-        Kony1(boundC1_2) = Kony1(boundC1_2).*flip(a2(boundC2_1))*1000;
-        % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
-        Kony2(boundC2_3) = Kony2(boundC2_3).*flip(a3(boundC3_2))*1000;
-        % Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
-        Kony3(boundC3_4) = Kony3(boundC3_4).*flip(a4(boundC4_3))*1000;
-        % Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
-        Kony4(boundC4_1) = Kony4(boundC4_1).*flip(a1(boundC1_4))*1000;
+        Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
+        % Kony1(boundC1_2) = Kony1(boundC1_2).*flip(a2(boundC2_1))*1000;
+        Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
+        % Kony2(boundC2_3) = Kony2(boundC2_3).*flip(a3(boundC3_2))*1000;
+        Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
+        % Kony3(boundC3_4) = Kony3(boundC3_4).*flip(a4(boundC4_3))*1000;
+        Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
+        % Kony4(boundC4_1) = Kony4(boundC4_1).*flip(a1(boundC1_4))*1000;
 
-        Koffy1(boundC1_4) = Koffy1(boundC1_4).*flip(b4(boundC4_1))*1000;
+        % Koffy1(boundC1_4) = Koffy1(boundC1_4).*flip(b4(boundC4_1))*1000;
         % Koffx1(boundC1_4) = Koffx1(boundC1_4).*flip(a4(boundC4_1))*1000;
         % Koffx1(boundC1_2) = Koffx1(boundC1_2).*flip(a2(boundC2_1))*100;
-        Koffy2(boundC2_1) = Koffy2(boundC2_1).*flip(b1(boundC1_2))*1000;
+        % Koffy2(boundC2_1) = Koffy2(boundC2_1).*flip(b1(boundC1_2))*1000;
         % Koffx2(boundC2_1) = Koffx2(boundC2_1).*flip(a1(boundC1_2))*1000;
         % Koffx2(boundC2_3) = Koffx2(boundC2_3).*flip(a3(boundC3_2))*100;
-        Koffy3(boundC3_2) = Koffy3(boundC3_2).*flip(b2(boundC2_3))*1000;
+        % Koffy3(boundC3_2) = Koffy3(boundC3_2).*flip(b2(boundC2_3))*1000;
         % Koffx3(boundC3_2) = Koffx3(boundC3_2).*flip(a2(boundC2_3))*1000;
         % Koffx3(boundC3_4) = Koffx3(boundC3_4).*flip(a4(boundC4_3))*100;
-        Koffy4(boundC4_3) = Koffy4(boundC4_3).*flip(b3(boundC3_4))*1000;
+        % Koffy4(boundC4_3) = Koffy4(boundC4_3).*flip(b3(boundC3_4))*1000;
         % Koffx4(boundC4_3) = Koffx4(boundC4_3).*flip(a3(boundC3_4))*1000;
         % Koffx4(boundC4_1) = Koffx4(boundC4_1).*flip(a1(boundC1_4))*100;
         
@@ -1700,8 +1700,8 @@ while (ppp<=100)
         b4 = Hs4\(diffRHSb4+rxnb4);
 
         %% Plot the solution(s)
-        % if mod(t,tplot) == 0
-        if t==(Nt-1)
+        if mod(t,tplot) == 0
+        % if t==(Nt-1)
 
             %Define colors
             colorLength = 50;
@@ -1988,8 +1988,8 @@ while (ppp<=100)
                 zeroInd2=find(a3New==0,1,'last');
                 dirIndex3=ceil((zeroInd1+zeroInd2)/2) - 50;
             else
-                ind1=find(a2New~=0,1,'first');
-                ind2=find(a2New~=0,1,'last');
+                ind1=find(a3New~=0,1,'first');
+                ind2=find(a3New~=0,1,'last');
                 dirIndex3=ceil((ind1+ind2)/2);
             end
             if dirIndex3<1
