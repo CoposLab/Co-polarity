@@ -53,7 +53,7 @@ xvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbi
 yvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
 
 figure(3)
-h=heatmap(xvals,yvals,unbindingvals);
+h=heatmap(xvals,yvals,unbindingvals');
 h.Title='Proportion Leader/Follower';
 h.YLabel='Cell 1';
 h.XLabel='Cell 2';
