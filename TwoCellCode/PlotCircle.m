@@ -1,5 +1,6 @@
 set(0,'DefaultFigureVisible','on')
 close all;
+signal=0;
 
 %Define colors
 colorLength = 50;
@@ -91,7 +92,11 @@ hold off;
 
 % Define circles
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
-[Xcol,Ycol] = pol2cart(th,rad);
+[Xcol,Ycol1] = pol2cart(th,rad);
+Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
+[Xcol,Ycol2] = pol2cart(th,rad);
+Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
+Ycol2 = Ycol2 - 2*max(max(Ycol2));
 ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
 ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
 ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
@@ -103,11 +108,16 @@ ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
 
 allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
+notBoundC1=setdiff(1:Na,boundC1);
+
 % Concentric circles
 % Cell 1
 figcells=figure(2);
 % if max(ZBranch1)>0.5
-    surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
+    alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
+    surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+    % surf(Xcol(:,notBoundC1),Ycol(:,notBoundC1),ZBranch1(:,notBoundC1),'AlphaData',alphaData(:,notBoundC1),'FaceAlpha','interp','FaceColor','interp');
+    % surf(Xcol(:,notBoundC1(end)*ones(1,length(boundC1))),Ycol(:,boundC1),ZBranch1(:,boundC1),'AlphaData',alphaData(:,boundC1),'FaceAlpha','interp','FaceColor','interp');
     colormap(branchedColor)
     freezeColors;
     freezeColors(colorbar('Location','westoutside'));
@@ -116,7 +126,10 @@ figcells=figure(2);
 % end
 hold on;
 % if max(ZBund1)>0.5
-    surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
+    alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
+    surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+    % surf(Xcol(:,notBoundC1),Ycol(:,notBoundC1),ZBund1(:,notBoundC1),'AlphaData',alphaData(:,notBoundC1),'FaceAlpha','interp','FaceColor','interp');
+    % surf(Xcol(:,boundC1(1)*ones(1,length(boundC1))),Ycol(:,boundC1),ZBund1(:,boundC1),'AlphaData',alphaData(:,boundC1),'FaceAlpha','interp','FaceColor','interp');
     colormap(bundledColor)
     freezeColors;
     freezeColors(jicolorbar);
@@ -129,7 +142,7 @@ set(gca,'XTick',[], 'YTick', [])
 
 % Cell 2
 % if max(ZBranch2)>0.5
-    surf(Xcol,Ycol-2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
+    surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
     colormap(branchedColor)
     freezeColors;
     freezeColors(colorbar('Location','westoutside'));
@@ -137,7 +150,7 @@ set(gca,'XTick',[], 'YTick', [])
     shading interp
 % end
 % if max(ZBund2)>0.5
-    surf(Xcol,Ycol-2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
+    surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
     colormap(bundledColor)
     freezeColors;
     freezeColors(jicolorbar);
@@ -152,7 +165,7 @@ title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
 flipc2 = flip(boundC2);
 for i=1:length(boundC1)
-    plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
+    plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol1(end,boundC1(i)) Ycol2(end,flipc2(i))],[allmax+1,allmax+1],'black')
 end
 
 hold off;
@@ -203,7 +216,7 @@ if dirIndex2<1
 end
 if ~isempty(dirIndex2)
     hold on;
-    quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    quiver(0,-2*abs(max(max(Ycol2))),Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
     hold off;
 end
 
@@ -211,9 +224,11 @@ end
 figure(2)
 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
 [Xsig,Ysig] = pol2cart(th,rad);
-hold on;
-scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
-hold off;
+if signal==1
+    hold on;
+    scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+    hold off;
+end
 
 % Find peak for cell 1
 N=length(a1);
@@ -269,9 +284,9 @@ end
 peakInd1 = peakIndices1(maxind);
 if ~isempty(peakInd1)
     figure(2)
-    hold on
-    quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
-    hold off;
+    % hold on
+    % quiver(0,0,Xsm(peakInd1),Ysm(peakInd1),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    % hold off;
 end
 
 % Find peak for cell 2
@@ -305,9 +320,9 @@ end
 peakInd2 = peakIndices2(maxind);
 if ~isempty(peakInd2)
     figure(2)
-    hold on
-    quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
-    hold off;
+    % hold on
+    % quiver(0,-2,Xsm(peakInd2),Ysm(peakInd2),0,'color',[1 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    % hold off;
 end
 
 figure(2)
