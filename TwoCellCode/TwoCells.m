@@ -49,7 +49,7 @@ writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 54;
+ppp = 1;
 
 while (ppp<=100)
     close all;

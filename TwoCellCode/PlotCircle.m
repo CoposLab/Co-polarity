@@ -108,16 +108,12 @@ ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
 
 allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
-notBoundC1=setdiff(1:Na,boundC1);
-
 % Concentric circles
 % Cell 1
 figcells=figure(2);
 % if max(ZBranch1)>0.5
     alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
     surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
-    % surf(Xcol(:,notBoundC1),Ycol(:,notBoundC1),ZBranch1(:,notBoundC1),'AlphaData',alphaData(:,notBoundC1),'FaceAlpha','interp','FaceColor','interp');
-    % surf(Xcol(:,notBoundC1(end)*ones(1,length(boundC1))),Ycol(:,boundC1),ZBranch1(:,boundC1),'AlphaData',alphaData(:,boundC1),'FaceAlpha','interp','FaceColor','interp');
     colormap(branchedColor)
     freezeColors;
     freezeColors(colorbar('Location','westoutside'));
@@ -128,8 +124,6 @@ hold on;
 % if max(ZBund1)>0.5
     alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
     surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
-    % surf(Xcol(:,notBoundC1),Ycol(:,notBoundC1),ZBund1(:,notBoundC1),'AlphaData',alphaData(:,notBoundC1),'FaceAlpha','interp','FaceColor','interp');
-    % surf(Xcol(:,boundC1(1)*ones(1,length(boundC1))),Ycol(:,boundC1),ZBund1(:,boundC1),'AlphaData',alphaData(:,boundC1),'FaceAlpha','interp','FaceColor','interp');
     colormap(bundledColor)
     freezeColors;
     freezeColors(jicolorbar);
@@ -175,7 +169,6 @@ set(gca,'YColor','w')
 set(gcf,'color','w');
 
 
-
 % Find median for cell 1
 a1New = a1;
 a1New(a1New<1)=0;
@@ -192,6 +185,7 @@ if dirIndex1<1
     dirIndex1=dirIndex1+101;
 end
 if ~isempty(dirIndex1)
+    figure(2)
     hold on;
     quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
     hold off;
@@ -215,6 +209,7 @@ if dirIndex2<1
     dirIndex2=dirIndex2+101;
 end
 if ~isempty(dirIndex2)
+    figure(2)
     hold on;
     quiver(0,-2*abs(max(max(Ycol2))),Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
     hold off;
@@ -225,6 +220,7 @@ figure(2)
 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
 [Xsig,Ysig] = pol2cart(th,rad);
 if signal==1
+    figure(2)
     hold on;
     scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
     hold off;
@@ -330,6 +326,53 @@ ohf = findobj(gcf);
 figaxes = findobj(ohf(1), 'Type', 'axes');
 set(figaxes(1),'Fontsize',15)
 set(figaxes(2),'Fontsize',14)
+camroll(90)
+
+
+figure(3)
+clf
+hold on;
+th = (0:3.6:360)*pi/180;
+Xvals=cos(th);
+Yvals1=sin(th);
+Yvals1(boundC1)=Yvals1(boundC1(1));
+Yvals2=sin(th);
+Yvals2(boundC2)=Yvals2(boundC2(1));
+plot(Xvals,Yvals1,'black')
+plot(Xvals,Yvals2-2*abs(max(Yvals2)),'black')
+YRac1=sin(posx1(1:NNx1(t),1)*2*pi/L);
+YRac1(YRac1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
+YRho1=sin(posy1(1:NNy1(t),1)*2*pi/L);
+YRho1(YRho1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
+YRac2=sin(posx2(1:NNx2(t),1)*2*pi/L);
+YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
+YRho2=sin(posy2(1:NNy2(t),1)*2*pi/L);
+YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
+scatter(cos(posx1(1:NNx1(t),1)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'linewidth',2)
+scatter(cos(posx2(1:NNx2(t),1)*2*pi/L),YRac2-2*abs(max(Yvals2)),'MarkerEdgeColor',branchedColor(end,:),'linewidth',2)
+scatter(cos(posy1(1:NNy1(t),1)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'linewidth',2)
+scatter(cos(posy2(1:NNy2(t),1)*2*pi/L),YRho2-2*abs(max(Yvals2)),'MarkerEdgeColor',bundledColor(end,:),'linewidth',2)
+hold off;
+set(gca,'XColor','w')
+set(gca,'YColor','w')
+set(gcf,'color','w')
+axis([-1 1 -3 1])
+axis equal
+
+if ~isempty(dirIndex2)
+    figure(3)
+    hold on;
+    quiver(0,-2*abs(max(max(Ycol2))),Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    hold off;
+end
+if ~isempty(dirIndex1)
+    figure(3)
+    hold on;
+    quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+    hold off;
+end
+
+figure(3)
 camroll(90)
 
 
