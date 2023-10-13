@@ -96,7 +96,7 @@ hold off;
 Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
 [Xcol,Ycol2] = pol2cart(th,rad);
 Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
-Ycol2 = Ycol2 - 2*max(max(Ycol2));
+Ycol2 = Ycol2 - 2*max(max(Ycol2))-0.01;
 ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
 ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
 ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
@@ -157,10 +157,10 @@ axis equal
 set(gca,'XTick',[], 'YTick', [])
 title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
-flipc2 = flip(boundC2);
-for i=1:length(boundC1)
-    plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol1(end,boundC1(i)) Ycol2(end,flipc2(i))],[allmax+1,allmax+1],'black')
-end
+% flipc2 = flip(boundC2);
+% for i=1:length(boundC1)
+%     plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol1(end,boundC1(i)) Ycol2(end,flipc2(i))],[allmax+1,allmax+1],'black')
+% end
 
 hold off;
 box off;
