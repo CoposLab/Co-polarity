@@ -51,11 +51,11 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=100)
+while (ppp<=10)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./results_signal/antagonismRacRemoved/0_5epsilon1RacRemoved';
+    savelocation='';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -129,8 +129,8 @@ while (ppp<=100)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numRhoToRemove=0;
-    numRacToRemove=1;
+    numRhoToRemove=10;
+    numRacToRemove=10;
     counter1=0;
     counter2=0;
 
@@ -184,15 +184,16 @@ while (ppp<=100)
     %    the front and rear cell
     %    5 = odd condition #2: both peaks in the middle (w/ noise)
 
-    a1       = zeros(N,1);
-    anew1    = zeros(N,1);
-    b1       = zeros(N,1);
-    bnew1    = zeros(N,1);
+    a1       = zeros(length(Xa),1);
+    anew1    = zeros(length(Xa),1);
+    b1       = zeros(length(Xa),1);
+    bnew1    = zeros(length(Xa),1);
 
-    a2       = zeros(N,1);
-    anew2    = zeros(N,1);
-    b2       = zeros(N,1);
-    bnew2    = zeros(N,1);
+    a2       = zeros(length(Xb),1);
+    anew2    = zeros(length(Xb),1);
+    b2       = zeros(length(Xb),1);
+    bnew2    = zeros(length(Xb),1);
+
 
     % (1) pulse in middle
     if (ictype==1)
@@ -254,6 +255,15 @@ while (ppp<=100)
         b1 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); b1=b1';
         b2 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); b2=b2';
     end
+
+    a1all=zeros(length(Xa),Nt);
+    a2all=zeros(length(Xb),Nt);
+    b1all=zeros(length(Xa),Nt);
+    b2all=zeros(length(Xb),Nt);
+    a1all(:,1)=a1;
+    a2all(:,1)=a2;
+    b1all(:,1)=b1;
+    b2all(:,1)=b2;
 
     % Laplacian difference operator with no flux boundary conditions
     % Crank-Nicolson operators
@@ -1130,7 +1140,6 @@ while (ppp<=100)
         end
 
         [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:K1_1,t+1),posy1(1:K2_1,t+1),K1_1,K2_1,L,Na);
-
         [s2,xC2,yC2] = resamplePolarityMolecules(posx2(1:K1_2,t+1),posy2(1:K2_2,t+1),K1_2,K2_2,L,Na);
 
         %% Update actin filaments
@@ -1181,6 +1190,11 @@ while (ppp<=100)
 
         a2 = Hs2\(diffRHSa2+rxna2);
         b2 = Hs2\(diffRHSb2+rxnb2);
+
+        a1all(:,t)=a1;
+        a2all(:,t)=a2;
+        b1all(:,t)=b1;
+        b2all(:,t)=b2;
 
         %% Plot the solution(s)
          %if mod(t,tplot) == 0
@@ -1569,6 +1583,9 @@ while (ppp<=100)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
+        save(strcat('vid_matfiles/antagonism_signal_vidfiles/0_5epsilon_10RacRemoved10RhoRemoved',int2str(ppp),'.mat'),...
+            'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
+            'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2')
         ppp = ppp + 1;
         
         if writem==1

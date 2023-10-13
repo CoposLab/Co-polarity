@@ -91,12 +91,13 @@ hold off;
 % pause(1.0);
 
 % Define circles
+gapsize=0.01;
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
 [Xcol,Ycol1] = pol2cart(th,rad);
 Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
 [Xcol,Ycol2] = pol2cart(th,rad);
 Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
-Ycol2 = Ycol2 - 2*max(max(Ycol2))-0.01;
+Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
 ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
 ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
 ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
@@ -211,7 +212,7 @@ end
 if ~isempty(dirIndex2)
     figure(2)
     hold on;
-    quiver(0,-2*abs(max(max(Ycol2))),Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
     hold off;
 end
 
@@ -222,7 +223,7 @@ figure(2)
 if signal==1
     figure(2)
     hold on;
-    scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+    scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
     hold off;
 end
 
@@ -330,6 +331,7 @@ camroll(90)
 
 
 figure(3)
+gapsize=0.05;
 clf
 hold on;
 th = (0:3.6:360)*pi/180;
@@ -339,15 +341,15 @@ Yvals1(boundC1)=Yvals1(boundC1(1));
 Yvals2=sin(th);
 Yvals2(boundC2)=Yvals2(boundC2(1));
 plot(Xvals,Yvals1,'black')
-plot(Xvals,Yvals2-2*abs(max(Yvals2)),'black')
+plot(Xvals,Yvals2-2*abs(max(Yvals2))-gapsize,'black')
 YRac1=sin(posx1(1:NNx1(t),1)*2*pi/L);
 YRac1(YRac1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
 YRho1=sin(posy1(1:NNy1(t),1)*2*pi/L);
 YRho1(YRho1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
-YRac2=sin(posx2(1:NNx2(t),1)*2*pi/L);
-YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
-YRho2=sin(posy2(1:NNy2(t),1)*2*pi/L);
-YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
+YRac2=sin(posx2(1:NNx2(t),1)*2*pi/L)-gapsize;
+YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1))-gapsize;
+YRho2=sin(posy2(1:NNy2(t),1)*2*pi/L)-gapsize;
+YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1))-gapsize;
 scatter(cos(posx1(1:NNx1(t),1)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'linewidth',2)
 scatter(cos(posx2(1:NNx2(t),1)*2*pi/L),YRac2-2*abs(max(Yvals2)),'MarkerEdgeColor',branchedColor(end,:),'linewidth',2)
 scatter(cos(posy1(1:NNy1(t),1)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'linewidth',2)
@@ -362,7 +364,7 @@ axis equal
 if ~isempty(dirIndex2)
     figure(3)
     hold on;
-    quiver(0,-2*abs(max(max(Ycol2))),Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
     hold off;
 end
 if ~isempty(dirIndex1)
