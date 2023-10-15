@@ -1,0 +1,36 @@
+set(0,'DefaultFigureVisible','off')
+close all;
+clear;
+clc;
+
+signal=1;
+
+for i=1:1
+
+loadfile='./vid_matfiles/antagonism_signal_vidfiles/0_5epsilon_10RacRemoved10RhoRemoved';
+
+setnum=int2str(i);
+savelocation='./movies/antagonism_bothdirections_signal/0_5epsilon_10RacRemoved10RhoRemoved';
+
+% vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
+vidObj2 = VideoWriter(strcat(savelocation,'BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
+% vidObj3 = VideoWriter(strcat(savelocation,'RacRhoVid_',setnum,'.mp4'),'MPEG-4');
+
+% vidObj1.FrameRate = 5;
+% vidObj1.Quality = 75;
+vidObj2.FrameRate = 5;
+vidObj2.Quality = 75;
+% vidObj3.FrameRate = 5;
+% vidObj3.Quality = 75;
+
+% open(vidObj1);
+open(vidObj2);
+% open(vidObj3);
+
+load(strcat(loadfile,setnum));
+set(0,'DefaultFigureVisible','off')
+
+
+
+
+end

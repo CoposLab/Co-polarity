@@ -51,7 +51,7 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=10)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -82,7 +82,7 @@ while (ppp<=10)
         konx_ind koffx_ind kony_ind c1coeff_ind c2coeff_ind
     
     rng('shuffle');
-    set(0,'DefaultFigureVisible','off')
+    set(0,'DefaultFigureVisible','on')
 
     polarizedc1=0; %has cell1 polarized yet
     polarizedc2=0;
@@ -129,8 +129,8 @@ while (ppp<=10)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numRhoToRemove=10;
-    numRacToRemove=10;
+    numRhoToRemove=0;
+    numRacToRemove=0;
     counter1=0;
     counter2=0;
 
@@ -143,7 +143,7 @@ while (ppp<=10)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -355,6 +355,13 @@ while (ppp<=10)
     conv1_2 = zeros(Nt,2);
     conv2_2 = zeros(Nt,2);
     convsup_2 = zeros(Nt,2);
+
+    %amount cells have moved
+    xshift1=zeros(1,Nt);
+    yshift1=zeros(1,Nt);
+    xshift2=zeros(1,Nt);
+    yshift2=zeros(1,Nt);
+
 
     % Set movie making
     %
@@ -669,11 +676,11 @@ while (ppp<=10)
          % Koffx2=Koffx2*10;
          % Koffy2=Koffy2*10;
          % Set konx and kony in contact region
-         % Konx1(boundC1)=Konx1(boundC1)*100;
+         % Konx1(boundC1)=Konx1(boundC1)*1000;
          % Konx2(boundC2)=Konx2(boundC2)*100;
          
          % Kony1(boundC1)=Kony1(boundC1)*10;
-         % Kony2(boundC2)=Kony2(boundC2)*10;
+         % Kony2(boundC2)=Kony2(boundC2)*1000;
          
          % Koffx1(boundC1)=Koffx1(boundC1)*10;
          % Koffx2(boundC2)=Koffx2(boundC2)*10;
@@ -760,10 +767,10 @@ while (ppp<=10)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
 
 
         %Cell 1
@@ -1196,8 +1203,52 @@ while (ppp<=10)
         b1all(:,t)=b1;
         b2all(:,t)=b2;
 
+        %Calculate direction angles
+        % Find median for cell 1
+        a1New = a1;
+        a1New(a1New<1)=0;
+        if (a1New(1)~=0 && a1New(length(a1New))~=0)
+            zeroInd1=find(a1New==0,1,'first');
+            zeroInd2=find(a1New==0,1,'last');
+            dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a1New~=0,1,'first');
+            ind2=find(a1New~=0,1,'last');
+            dirIndex1=ceil((ind1+ind2)/2);
+        end
+        if dirIndex1<1
+            dirIndex1=dirIndex1+101;
+        end
+        % Find median for cell 2
+        a2New = a2;
+        a2New(a2New<1)=0;
+        if (a2New(1)~=0 && a2New(length(a2New))~=0)
+            zeroInd1=find(a2New==0,1,'first');
+            zeroInd2=find(a2New==0,1,'last');
+            dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a2New~=0,1,'first');
+            ind2=find(a2New~=0,1,'last');
+            dirIndex2=ceil((ind1+ind2)/2);
+        end
+        if dirIndex2<1
+            dirIndex2=dirIndex2+101;
+        end
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,1);
+        
+        if ~isempty(dirIndex1)
+            xshift1(t+1)=xshift1(t)+cos(th(dirIndex1))*0.0005;
+            yshift1(t+1)=yshift1(t)+sin(th(dirIndex1))*0.0005;
+        end
+        if ~isempty(dirIndex2)
+            xshift2(t+1)=xshift2(t)+cos(th(dirIndex2))*0.0005;
+            yshift2(t+1)=yshift2(t)+sin(th(dirIndex2))*0.0005;
+        end
+
+
+
         %% Plot the solution(s)
-         %if mod(t,tplot) == 0
+         % if mod(t,tplot) == 0
          if t==(Nt-1)
 
             %Define colors
@@ -1313,7 +1364,7 @@ while (ppp<=10)
             % Cell 1
             figcells=figure(ppp+1);
             clf
-            surf(Xcol,Ycol,ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol+xshift1(t+1),Ycol+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
             view(2)
             colormap(branchedColor)
             freezeColors;
@@ -1321,7 +1372,7 @@ while (ppp<=10)
             clim([0,allmax])
             shading interp
             hold on;
-            surf(Xcol,Ycol,ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol+xshift1(t+1),Ycol+yshift1(t+1),ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
             clim([0,allmax])
             freezeColors;
@@ -1331,28 +1382,30 @@ while (ppp<=10)
             set(gca,'XTick',[], 'YTick', [])
 
             % Cell 2
-            surf(Xcol,Ycol-2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol+xshift2(t+1),Ycol-2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
             view(2)
             colormap(branchedColor)
             freezeColors;
             freezeColors(colorbar('Location','westoutside'));
             clim([0,allmax])
             shading interp
-            surf(Xcol,Ycol-2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol+xshift2(t+1),Ycol-2+yshift2(t+1),ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
             freezeColors;
             freezeColors(jicolorbar);
             clim([0,allmax])
             shading interp
             grid off
+            xlim([-3,3])
+            ylim([-4,2])
             axis equal
             set(gca,'XTick',[], 'YTick', [])
             title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
-            flipc2 = flip(boundC2);
-            for i=1:length(boundC1)
-                plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
-            end
+            % flipc2 = flip(boundC2);
+            % for i=1:length(boundC1)
+            %     plot3([Xcol(end,boundC1(i)) Xcol(end,flipc2(i))], [Ycol(end,boundC1(i)) Ycol(end,flipc2(i))-2],[allmax+1,allmax+1],'black')
+            % end
 
             hold off;
             box off;
@@ -1362,47 +1415,15 @@ while (ppp<=10)
 
 
 
-            % Find median for cell 1
-            a1New = a1;
-            a1New(a1New<1)=0;
-            if (a1New(1)~=0 && a1New(length(a1New))~=0)
-                zeroInd1=find(a1New==0,1,'first');
-                zeroInd2=find(a1New==0,1,'last');
-                dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-            else
-                ind1=find(a1New~=0,1,'first');
-                ind2=find(a1New~=0,1,'last');
-                dirIndex1=ceil((ind1+ind2)/2);
-            end
-            if dirIndex1<1
-                dirIndex1=dirIndex1+101;
-            end
+            % Plot arrows
             if ~isempty(dirIndex1)
                 hold on;
-                quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+                quiver(0+xshift1(t+1),0+yshift1(t+1),Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
                 hold off;
-            end
-
-
-
-            % Find median for cell 2
-            a2New = a2;
-            a2New(a2New<1)=0;
-            if (a2New(1)~=0 && a2New(length(a2New))~=0)
-                zeroInd1=find(a2New==0,1,'first');
-                zeroInd2=find(a2New==0,1,'last');
-                dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
-            else
-                ind1=find(a2New~=0,1,'first');
-                ind2=find(a2New~=0,1,'last');
-                dirIndex2=ceil((ind1+ind2)/2);
-            end
-            if dirIndex2<1
-                dirIndex2=dirIndex2+101;
             end
             if ~isempty(dirIndex2)
                 hold on;
-                quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                quiver(0+xshift2(t+1),-2+yshift2(t+1),Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
                 hold off;
             end
 
@@ -1583,9 +1604,10 @@ while (ppp<=10)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        save(strcat('vid_matfiles/antagonism_signal_vidfiles/0_5epsilon_10RacRemoved10RhoRemoved',int2str(ppp),'.mat'),...
+        save(strcat('vid_matfiles/moving_cells/racupc1_rhoupc2_forcedependent/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
             'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
-            'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2')
+            'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
+            'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2')
         ppp = ppp + 1;
         
         if writem==1
