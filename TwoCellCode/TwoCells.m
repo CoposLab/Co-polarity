@@ -21,7 +21,7 @@ clc;
 % kb_vals=[-0.9,0,0.9];
 % kc_vals=[-0.9,0,0.9];
 % kd_vals=[-0.9,0,0.9];
-%coeff_vals=[1,10,1000];
+coeff_vals=[1,10,1000];
 
 % all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
 
@@ -29,10 +29,11 @@ clc;
 %     for kb_ind=3:3 %-0.9,0,0.9
 %         for kc_ind=1:1 %-0.9,0,0.9
 %             for kd_ind=3:3 %-0.9,0,0.9
- %for c1_ind=4:4 %koffx,koffy,konx,kony
-    %for c2_ind=1:1 %koffx,koffy,konx,kony
-        %for c1coeff_ind=3:3 %1,10,1000
-            %for c2coeff_ind=1:1 %1,10,1000
+
+ for c1_ind=4:4 %koffx,koffy,konx,kony
+    for c2_ind=2:4 %koffx,koffy,konx,kony
+        for c1coeff_ind=2:3 %1,10,1000
+            for c2coeff_ind=1:3 %1,10,1000
         
 % for konx_ind=3:3
 %     for koffx_ind=1:3
@@ -45,13 +46,13 @@ num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
 countpol=0;
-writem=0;
+writem=1;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -143,7 +144,7 @@ while (ppp<=1)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -675,7 +676,28 @@ while (ppp<=1)
          % Kony2=Kony2*10;
          % Koffx2=Koffx2*10;
          % Koffy2=Koffy2*10;
+
          % Set konx and kony in contact region
+         if c1_ind==1
+             Koffx1(boundC1)=Koffx1(boundC1)*coeff_vals(c1coeff_ind);
+         elseif c1_ind==2
+             Koffy1(boundC1)=Koffy1(boundC1)*coeff_vals(c1coeff_ind);
+         elseif c1_ind==3
+             Konx1(boundC1)=Konx1(boundC1)*coeff_vals(c1coeff_ind);
+         elseif c1_ind==4
+             Kony1(boundC1)=Kony1(boundC1)*coeff_vals(c1coeff_ind);
+         end
+         if c2_ind==1
+             Koffx2(boundC2)=Koffx2(boundC2)*coeff_vals(c2coeff_ind);
+         elseif c2_ind==2
+             Koffy2(boundC2)=Koffy2(boundC2)*coeff_vals(c2coeff_ind);
+         elseif c2_ind==3
+             Konx2(boundC2)=Konx2(boundC2)*coeff_vals(c2coeff_ind);
+         elseif c2_ind==4
+             Kony2(boundC2)=Kony2(boundC2)*coeff_vals(c2coeff_ind);
+         end
+
+
          % Konx1(boundC1)=Konx1(boundC1)*1000;
          % Konx2(boundC2)=Konx2(boundC2)*100;
          
@@ -688,11 +710,6 @@ while (ppp<=1)
          % Koffy1(boundC1)=Koffy1(boundC1)*1000;
          % Koffy2(boundC2)=Koffy2(boundC2)*1000;
 
-         % Kfbx1(boundC1)=Kfbx1(boundC1)/10;
-         % Kfbx2(boundC2)=Kfbx2(boundC2)/10;
-
-         % Kfby1(boundC1)=Kfby1(boundC1)/10;
-         % Kfby2(boundC2)=Kfby2(boundC2)/10;
 
          % Set konx and kony away from contact region
          % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
@@ -767,10 +784,10 @@ while (ppp<=1)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
 
 
         %Cell 1
@@ -1237,12 +1254,12 @@ while (ppp<=1)
         [th,rad] = meshgrid((0:3.6:360)*pi/180,1);
         
         if ~isempty(dirIndex1)
-            xshift1(t+1)=xshift1(t)+cos(th(dirIndex1))*0.0005;
-            yshift1(t+1)=yshift1(t)+sin(th(dirIndex1))*0.0005;
+            % xshift1(t+1)=xshift1(t)+cos(th(dirIndex1))*0.0005;
+            % yshift1(t+1)=yshift1(t)+sin(th(dirIndex1))*0.0005;
         end
         if ~isempty(dirIndex2)
-            xshift2(t+1)=xshift2(t)+cos(th(dirIndex2))*0.0005;
-            yshift2(t+1)=yshift2(t)+sin(th(dirIndex2))*0.0005;
+            % xshift2(t+1)=xshift2(t)+cos(th(dirIndex2))*0.0005;
+            % yshift2(t+1)=yshift2(t)+sin(th(dirIndex2))*0.0005;
         end
 
 
@@ -1604,10 +1621,10 @@ while (ppp<=1)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        save(strcat('vid_matfiles/moving_cells/racupc1_rhoupc2_forcedependent/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
-            'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
-            'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
-            'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2')
+        % save(strcat('vid_matfiles/moving_cells/racupc1_rhoupc2_forcedependent/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
+        %     'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
+        %     'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
+        %     'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2')
         ppp = ppp + 1;
         
         if writem==1
@@ -1650,16 +1667,16 @@ while (ppp<=1)
     end
 
      if writem==1
-         writematrix(res_counters,strcat('./allparamsresults/branchedbundled/',...
-             string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
-             string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
+         % writematrix(res_counters,strcat('./allparamsresults/branchedbundled/',...
+         %     string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
+         %     string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
          % options=["Bkonx","Akony","Akoffx","Bkoffy"];
          % writematrix(res_counters,strcat('./allparamsresults/forcedependent/',...
          %     '1000',options(c1_ind),'C1_','1000',options(c2_ind),'C2.xls'))
-         %options=["koffx","koffy","konx","kony"];
-         %writematrix(res_counters,strcat('./allparamsresults/allracrho/',...
-         %       string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
-         %       string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
+         options=["koffx","koffy","konx","kony"];
+         writematrix(res_counters,strcat('./allparamsresults/signal_allracrho/',...
+               string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+               string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
          sprintf(int2str(res_counters))
      end
 end
@@ -1728,8 +1745,8 @@ end
 %end
 
 
- %            end
- %        end
- %    end
- % end
+            end
+        end
+    end
+ end
 

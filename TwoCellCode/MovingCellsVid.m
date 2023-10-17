@@ -48,16 +48,14 @@ for i=1:1
 
         % Define circles
         gapsize=0.01;
-        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
         [Xcol,Ycol] = pol2cart(th,rad);
-        ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
-        ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
-        ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
-        ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
+        ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
+        ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
+        ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
+        ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2]';
         [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
         [Xsm,Ysm] = pol2cart(th,rad);
-        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
-        [Xmid,Ymid] = pol2cart(th,rad);
 
 
         sigper=0.40;
@@ -122,14 +120,15 @@ for i=1:1
         % Cell 1
         figcells=figure(1);
         clf
+        hold on;
+        plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         surf(Xcol+xshift1(t+1),Ycol+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
-        freezeColors(colorbar('Location','westoutside'));
+        freezeColors(colorbar('Location','eastoutside'));
         clim([0,allmax])
         shading interp
-        hold on;
         surf(Xcol+xshift1(t+1),Ycol+yshift1(t+1),ZBund1,'AlphaData',ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1))),'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         clim([0,allmax])
@@ -140,11 +139,12 @@ for i=1:1
         % set(gca,'XTick',[], 'YTick', [])
 
         % Cell 2
+        plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         surf(Xcol+xshift2(t+1),Ycol-2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
-        freezeColors(colorbar('Location','westoutside'));
+        freezeColors(colorbar('Location','eastoutside'));
         clim([0,allmax])
         shading interp
         surf(Xcol+xshift2(t+1),Ycol-2+yshift2(t+1),ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
@@ -221,7 +221,7 @@ for i=1:1
         ohf = findobj(gcf);
         figaxes = findobj(ohf(1), 'Type', 'axes');
         set(figaxes(1),'Fontsize',15)
-        set(figaxes(2),'Fontsize',14)
+        set(figaxes(2),'Fontsize',1)
         camroll(90)
 
 
