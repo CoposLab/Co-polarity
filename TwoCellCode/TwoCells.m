@@ -25,15 +25,15 @@ coeff_vals=[1,10,1000];
 
 % all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
 
-% for ka_ind=2:2 %-0.9,0,0.9
-%     for kb_ind=3:3 %-0.9,0,0.9
-%         for kc_ind=1:1 %-0.9,0,0.9
+% for ka_ind=1:3 %-0.9,0,0.9
+%     for kb_ind=1:3 %-0.9,0,0.9
+%         for kc_ind=1:3 %-0.9,0,0.9
 %             for kd_ind=3:3 %-0.9,0,0.9
 
- for c1_ind=4:4 %koffx,koffy,konx,kony
+ for c1_ind=1:1 %koffx,koffy,konx,kony
     for c2_ind=2:4 %koffx,koffy,konx,kony
-        for c1coeff_ind=2:3 %1,10,1000
-            for c2coeff_ind=1:3 %1,10,1000
+        for c1coeff_ind=1:1 %1,10,1000
+            for c2coeff_ind=2:3 %1,10,1000
         
 % for konx_ind=3:3
 %     for koffx_ind=1:3
@@ -1667,7 +1667,7 @@ while (ppp<=100)
     end
 
      if writem==1
-         % writematrix(res_counters,strcat('./allparamsresults/branchedbundled/',...
+         % writematrix(res_counters,strcat('./allparamsresults/signal_branchedbundled/',...
          %     string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
          %     string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
          % options=["Bkonx","Akony","Akoffx","Bkoffy"];
