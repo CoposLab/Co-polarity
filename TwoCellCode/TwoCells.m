@@ -17,23 +17,23 @@ clc;
 
 %c1_vals = [1,10,1000];
 %c2_vals = [1,10,1000];
-% ka_vals=[-0.9,0,0.9];
-% kb_vals=[-0.9,0,0.9];
-% kc_vals=[-0.9,0,0.9];
-% kd_vals=[-0.9,0,0.9];
-coeff_vals=[1,10,1000];
+ka_vals=[-0.9,0,0.9];
+kb_vals=[-0.9,0,0.9];
+kc_vals=[-0.9,0,0.9];
+kd_vals=[-0.9,0,0.9];
+% coeff_vals=[1,10,1000];
 
 % all_results_matrix = zeros(length(c1_vals)*length(c2_vals),7);
 
-% for ka_ind=1:3 %-0.9,0,0.9
-%     for kb_ind=1:3 %-0.9,0,0.9
-%         for kc_ind=1:3 %-0.9,0,0.9
-%             for kd_ind=3:3 %-0.9,0,0.9
+for ka_ind=3:3 %-0.9,0,0.9
+    for kb_ind=1:3 %-0.9,0,0.9
+        for kc_ind=1:3 %-0.9,0,0.9
+            for kd_ind=1:3 %-0.9,0,0.9
 
- for c1_ind=1:1 %koffx,koffy,konx,kony
-    for c2_ind=2:4 %koffx,koffy,konx,kony
-        for c1coeff_ind=1:1 %1,10,1000
-            for c2coeff_ind=2:3 %1,10,1000
+ % for c1_ind=1:1 %koffx,koffy,konx,kony
+ %    for c2_ind=2:4 %koffx,koffy,konx,kony
+ %        for c1coeff_ind=1:1 %1,10,1000
+ %            for c2coeff_ind=2:3 %1,10,1000
         
 % for konx_ind=3:3
 %     for koffx_ind=1:3
@@ -678,24 +678,24 @@ while (ppp<=100)
          % Koffy2=Koffy2*10;
 
          % Set konx and kony in contact region
-         if c1_ind==1
-             Koffx1(boundC1)=Koffx1(boundC1)*coeff_vals(c1coeff_ind);
-         elseif c1_ind==2
-             Koffy1(boundC1)=Koffy1(boundC1)*coeff_vals(c1coeff_ind);
-         elseif c1_ind==3
-             Konx1(boundC1)=Konx1(boundC1)*coeff_vals(c1coeff_ind);
-         elseif c1_ind==4
-             Kony1(boundC1)=Kony1(boundC1)*coeff_vals(c1coeff_ind);
-         end
-         if c2_ind==1
-             Koffx2(boundC2)=Koffx2(boundC2)*coeff_vals(c2coeff_ind);
-         elseif c2_ind==2
-             Koffy2(boundC2)=Koffy2(boundC2)*coeff_vals(c2coeff_ind);
-         elseif c2_ind==3
-             Konx2(boundC2)=Konx2(boundC2)*coeff_vals(c2coeff_ind);
-         elseif c2_ind==4
-             Kony2(boundC2)=Kony2(boundC2)*coeff_vals(c2coeff_ind);
-         end
+         % if c1_ind==1
+         %     Koffx1(boundC1)=Koffx1(boundC1)*coeff_vals(c1coeff_ind);
+         % elseif c1_ind==2
+         %     Koffy1(boundC1)=Koffy1(boundC1)*coeff_vals(c1coeff_ind);
+         % elseif c1_ind==3
+         %     Konx1(boundC1)=Konx1(boundC1)*coeff_vals(c1coeff_ind);
+         % elseif c1_ind==4
+         %     Kony1(boundC1)=Kony1(boundC1)*coeff_vals(c1coeff_ind);
+         % end
+         % if c2_ind==1
+         %     Koffx2(boundC2)=Koffx2(boundC2)*coeff_vals(c2coeff_ind);
+         % elseif c2_ind==2
+         %     Koffy2(boundC2)=Koffy2(boundC2)*coeff_vals(c2coeff_ind);
+         % elseif c2_ind==3
+         %     Konx2(boundC2)=Konx2(boundC2)*coeff_vals(c2coeff_ind);
+         % elseif c2_ind==4
+         %     Kony2(boundC2)=Kony2(boundC2)*coeff_vals(c2coeff_ind);
+         % end
 
 
          % Konx1(boundC1)=Konx1(boundC1)*1000;
@@ -1174,21 +1174,21 @@ while (ppp<=100)
         diffRHSb2 = Hm2*b2;
 
         kb1=zeros(length(b2),1);
-        kb1(boundC1)=0.9*ones(length(boundC1),1);
+        kb1(boundC1)=ones(length(boundC1),1);
         kc1=zeros(length(a2),1);
-        kc1(boundC1)=0.9*ones(length(boundC1),1);
+        kc1(boundC1)=ones(length(boundC1),1);
         kb2=zeros(length(b1),1);
-        kb2(boundC2)=0.9*ones(length(boundC2),1);
+        kb2(boundC2)=ones(length(boundC2),1);
         kc2=zeros(length(a1),1);
-        kc2(boundC2)=0.9*ones(length(boundC2),1);
+        kc2(boundC2)=ones(length(boundC2),1);
         abmax=50;
 
         gamma=1.5;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*kb1)) - a1.*a1); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kc1)) - b1.*b1); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*kb2)) - a2.*a2); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kc2)) - b2.*b2); %Cell 2 bundled
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*kb1)) - a1.*a1); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kc1)) - b1.*b1); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*kb2)) - a2.*a2); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kc2)) - b2.*b2); %Cell 2 bundled
 
         % Growth term maxes out version
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
@@ -1196,18 +1196,18 @@ while (ppp<=100)
         % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
         % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kc2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
-          % rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
-          %    + ka_vals(ka_ind) * kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-          %    + kb_vals(kb_ind) * kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-          % rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1 ...
-          %    + kc_vals(kc_ind) * kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-          %    + kd_vals(kd_ind) * kc1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-          % rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2 ...
-          %    + ka_vals(ka_ind) * kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-          %    + kb_vals(kb_ind) * kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
-          % rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2 ...
-          %    + kc_vals(kc_ind) * kc2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-          %    + kd_vals(kd_ind) * kc2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+          rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
+             + ka_vals(ka_ind) * kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+             + kb_vals(kb_ind) * kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+          rxnb1 = dt*( F(b1,a1) + (b1.*(1+alpha(1)*yC1 ...
+             + kc_vals(kc_ind) * kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+             + kd_vals(kd_ind) * kc1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+          rxna2 = dt*( F(a2,b2) + (a2.*(1+alpha(1)*xC2 ...
+             + ka_vals(ka_ind) * kb2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+             + kb_vals(kb_ind) * kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
+          rxnb2 = dt*( F(b2,a2) + (b2.*(1+alpha(1)*yC2 ...
+             + kc_vals(kc_ind) * kc2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+             + kd_vals(kd_ind) * kc2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
@@ -1667,16 +1667,16 @@ while (ppp<=100)
     end
 
      if writem==1
-         % writematrix(res_counters,strcat('./allparamsresults/signal_branchedbundled/',...
-         %     string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
-         %     string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
+         writematrix(res_counters,strcat('./allparamsresults/signal_branchedbundled/',...
+             string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
+             string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
          % options=["Bkonx","Akony","Akoffx","Bkoffy"];
          % writematrix(res_counters,strcat('./allparamsresults/forcedependent/',...
          %     '1000',options(c1_ind),'C1_','1000',options(c2_ind),'C2.xls'))
-         options=["koffx","koffy","konx","kony"];
-         writematrix(res_counters,strcat('./allparamsresults/signal_allracrho/',...
-               string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
-               string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
+         % options=["koffx","koffy","konx","kony"];
+         % writematrix(res_counters,strcat('./allparamsresults/signal_allracrho/',...
+         %       string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+         %       string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
          sprintf(int2str(res_counters))
      end
 end
