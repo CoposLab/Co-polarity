@@ -19,11 +19,11 @@ for i=1:1
     % vidObj3 = VideoWriter(strcat(savelocation,'RacRhoVid_',setnum,'.mp4'),'MPEG-4');
 
     % vidObj1.FrameRate = 5;
-    % vidObj1.Quality = 75;
+    % vidObj1.Quality = 100;
     vidObj2.FrameRate = 5;
-    vidObj2.Quality = 75;
+    vidObj2.Quality = 100;
     % vidObj3.FrameRate = 5;
-    % vidObj3.Quality = 75;
+    % vidObj3.Quality = 100;
 
     % open(vidObj1);
     open(vidObj2);
@@ -205,7 +205,7 @@ for i=1:1
         end
         if ~isempty(dirIndex1)
             hold on;
-            quiver(0+xshift1(t+1),0+yshift1(t+1),Xsm(dirIndex1),Ysm1(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+            quiver(0+xshift1(t+1),0+yshift1(t+1),Xsm(dirIndex1),Ysm1(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7);
             hold off;
         end
 
@@ -226,7 +226,7 @@ for i=1:1
         end
         if ~isempty(dirIndex2)
             hold on;
-            quiver(0+xshift2(t+1),-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),Xsm(dirIndex2),Ysm2(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+            quiver(0+xshift2(t+1),-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),Xsm(dirIndex2),Ysm2(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
             hold off;
         end
 

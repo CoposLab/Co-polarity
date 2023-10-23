@@ -92,16 +92,17 @@ hold off;
 
 % Define circles
 gapsize=0.01;
-[th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
-[Xcol,Ycol1] = pol2cart(th,rad);
+[th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
+[Xcol,Ycol] = pol2cart(th,rad);
+Ycol1=Ycol;
+Ycol2=Ycol;
 Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
-[Xcol,Ycol2] = pol2cart(th,rad);
 Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
 Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
-ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1]';
-ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1]';
-ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2]';
-ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2]';
+ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
+ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
+ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
+ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2]';
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
 [Xsm,Ysm] = pol2cart(th,rad);
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
@@ -137,7 +138,8 @@ set(gca,'XTick',[], 'YTick', [])
 
 % Cell 2
 % if max(ZBranch2)>0.5
-    surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
+    alphaData=ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2)));
+    surf(Xcol,Ycol2,ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
     colormap(branchedColor)
     freezeColors;
     freezeColors(colorbar('Location','westoutside'));
@@ -145,7 +147,8 @@ set(gca,'XTick',[], 'YTick', [])
     shading interp
 % end
 % if max(ZBund2)>0.5
-    surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
+alphaData=ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2)));
+    surf(Xcol,Ycol2,ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
     colormap(bundledColor)
     freezeColors;
     freezeColors(jicolorbar);
@@ -388,5 +391,168 @@ camroll(90)
 % hold on
 % plot(Xa,a2);
 % plot(Xa,smoothed2);
+% hold off
+
+
+figure(4)
+range=3;
+% subplot(1,2,1)
+alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
+surf(Xcol,Ycol,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+hold on
+colormap(branchedColor)
+freezeColors;
+freezeColors(colorbar('Location','westoutside'));
+clim([0,allmax])
+shading interp
+alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
+surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+colormap(bundledColor)
+freezeColors;
+freezeColors(jicolorbar);
+clim([0,allmax])
+shading interp
+view(2)
+% plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black')
+% plot(2*cos(2*pi*Xa/L),2*sin(2*pi*Xa/L),'color','black')
+if max(xC1)>=0.5
+    racxvals1=(range-1)*xC1/max(xC1)+1;
+    racyvals1=(range-1)*xC1/max(xC1)+1;
+end
+racxvals1=(racxvals1)'.*cos(2*pi*Xa/L);
+racyvals1=(racyvals1)'.*sin(2*pi*Xa/L);
+plot(racxvals1,racyvals1,'color',...
+    branchedColor(end,:),'LineWidth',3)
+plot([racxvals1(end),racxvals1(1)],[racyvals1(end),racyvals1(1)],...
+    'color',branchedColor(end,:),'LineWidth',3)
+if max(xC1)>=0.5
+    rhoxvals1=(range-1)*yC1/max(yC1)+1; 
+    rhoyvals1=(range-1)*yC1/max(yC1)+1;
+end
+rhoxvals1=(rhoxvals1)'.*cos(2*pi*Xa/L);
+rhoyvals1=(rhoyvals1)'.*sin(2*pi*Xa/L);
+plot(rhoxvals1,rhoyvals1,'color',...
+    bundledColor(end,:),'LineWidth',3)
+plot([rhoxvals1(end),rhoxvals1(1)],[rhoyvals1(end),rhoyvals1(1)],...
+    'color',bundledColor(end,:),'LineWidth',3)
+axis equal
+hold off
+
+%cell 2
+hold on
+alphaData=ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2)));
+surf(Xcol,Ycol-(2*range),ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+hold on
+colormap(branchedColor)
+freezeColors;
+freezeColors(colorbar('Location','westoutside'));
+clim([0,allmax])
+shading interp
+alphaData=ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2)));
+surf(Xcol,Ycol-(2*range),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+colormap(bundledColor)
+freezeColors;
+freezeColors(jicolorbar);
+clim([0,allmax])
+shading interp
+view(2)
+% plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black')
+% plot(2*cos(2*pi*Xa/L),2*sin(2*pi*Xa/L),'color','black')
+if max(xC2)>=0.5
+    racxvals2=(range-1)*xC2/max(xC2)+1;
+    racyvals2=(range-1)*xC2/max(xC2)+1;
+end
+racxvals2=(racxvals2)'.*cos(2*pi*Xa/L);
+racyvals2=(racyvals2)'.*sin(2*pi*Xa/L);
+plot(racxvals2,racyvals2-(2*range),'color',...
+    branchedColor(end,:),'LineWidth',3)
+plot([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-(2*range),...
+    'color',branchedColor(end,:),'LineWidth',3)
+if max(xC1)>=0.5
+    rhoxvals2=(range-1)*yC2/max(yC2)+1;
+    rhoyvals2=(range-1)*yC2/max(yC2)+1;
+end
+rhoxvals2=(rhoxvals2)'.*cos(2*pi*Xa/L);
+rhoyvals2=(rhoyvals2)'.*sin(2*pi*Xa/L);
+plot(rhoxvals2,rhoyvals2-(2*range),'color',...
+    bundledColor(end,:),'LineWidth',3)
+plot([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2*range,...
+    'color',bundledColor(end,:),'LineWidth',3)
+axis equal
+hold off
+
+if ~isempty(dirIndex1)
+    figure(4)
+    hold on;
+    quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7);
+    hold off;
+end
+if ~isempty(dirIndex2)
+    figure(4)
+    hold on;
+    quiver(0,-2*range,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+    hold off;
+end
+
+grid off
+set(gca,'XTick',[],'YTick',[])
+set(gca,'XColor','w')
+set(gca,'YColor','w')
+set(gcf,'color','w');
+ohf = findobj(gcf);
+figaxes = findobj(ohf(1), 'Type', 'axes');
+set(figaxes(1),'Fontsize',15)
+set(figaxes(2),'Fontsize',14)
+camroll(90)
+
+
+
+
+
+figure(5)
+subplot(2,1,1)
+for j=1:2:max(max([NNx1,NNy1]))
+    scatter3(linspace(0,Tend,Nt),cos(posx1(j,:)*2*pi/10),sin(posx1(j,:)*2*pi/10),1,'MarkerEdgeColor',branchedColor(end,:))
+    hold on;
+    scatter3(linspace(0,Tend,Nt),cos(posy1(j,:)*2*pi/10),sin(posy1(j,:)*2*pi/10),1,'MarkerEdgeColor',bundledColor(end,:))
+    box on;
+    set(gca,'Color','k','fontsize',20,'fontname','times');
+    pbaspect([3 1 1]);
+    set(gcf,'color','w');
+    title('Cell 1')
+end
+hold off
+xlabel('Time')
+
+subplot(2,1,2)
+for j=1:2:max(max([NNx2,NNy2]))
+    scatter3(linspace(0,Tend,Nt),cos(posx2(j,:)*2*pi/10),sin(posx2(j,:)*2*pi/10),1,'MarkerEdgeColor',branchedColor(end,:))
+    hold on;
+    scatter3(linspace(0,Tend,Nt),cos(posy2(j,:)*2*pi/10),sin(posy2(j,:)*2*pi/10),1,'MarkerEdgeColor',bundledColor(end,:))
+    box on;
+    set(gca,'Color','k','fontsize',20,'fontname','times');
+    pbaspect([3 1 1]);
+    set(gcf,'color','w');
+    title('Cell 2')
+end
+hold off
+xlabel('Time')
+
+
+
+% figure(6)
+% ccx = [0 0 255]/256.*ones(Nt,1);     % blue
+% ccy = [255 219 88]/256.*ones(Nt,1);  % mustard yellow
+% time = linspace(0,Tend,Nt);
+% for j=1:2:max(max([NNx1,NNy1]))
+%     hold on;
+%     scatter(linspace(0,Tend,Nt),posx1(j,:),1,branchedColor(end,:));
+%     scatter(linspace(0,Tend,Nt),posy1(j,:),1,bundledColor(end,:));
+%     box on;
+%     set(gca,'Color','k','fontsize',20,'fontname','times');
+%     pbaspect([3 1 1]);
+%     set(gcf,'color','w');
+%     title('Cell 1')
+% end
 % hold off
 
