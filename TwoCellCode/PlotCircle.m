@@ -406,7 +406,7 @@ freezeColors(colorbar('Location','westoutside'));
 clim([0,allmax])
 shading interp
 alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
-surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+surf(Xcol,Ycol,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
 freezeColors;
 freezeColors(jicolorbar);
@@ -510,28 +510,29 @@ camroll(90)
 
 
 figure(5)
-subplot(2,1,1)
+% subplot(2,1,1)
 for j=1:2:max(max([NNx1,NNy1]))
     scatter3(linspace(0,Tend,Nt),cos(posx1(j,:)*2*pi/10),sin(posx1(j,:)*2*pi/10),1,'MarkerEdgeColor',branchedColor(end,:))
     hold on;
     scatter3(linspace(0,Tend,Nt),cos(posy1(j,:)*2*pi/10),sin(posy1(j,:)*2*pi/10),1,'MarkerEdgeColor',bundledColor(end,:))
     box on;
     set(gca,'Color','k','fontsize',20,'fontname','times');
-    pbaspect([3 1 1]);
+    pbaspect([3 2 1]);
     set(gcf,'color','w');
     title('Cell 1')
 end
 hold off
 xlabel('Time')
 
-subplot(2,1,2)
+% subplot(2,1,2)
 for j=1:2:max(max([NNx2,NNy2]))
-    scatter3(linspace(0,Tend,Nt),cos(posx2(j,:)*2*pi/10),sin(posx2(j,:)*2*pi/10),1,'MarkerEdgeColor',branchedColor(end,:))
     hold on;
-    scatter3(linspace(0,Tend,Nt),cos(posy2(j,:)*2*pi/10),sin(posy2(j,:)*2*pi/10),1,'MarkerEdgeColor',bundledColor(end,:))
+    scatter3(linspace(0,Tend,Nt),cos(posx2(j,:)*2*pi/10)-2,sin(posx2(j,:)*2*pi/10),1,'MarkerEdgeColor',branchedColor(end,:))
+    % hold on;
+    scatter3(linspace(0,Tend,Nt),cos(posy2(j,:)*2*pi/10)-2,sin(posy2(j,:)*2*pi/10),1,'MarkerEdgeColor',bundledColor(end,:))
     box on;
     set(gca,'Color','k','fontsize',20,'fontname','times');
-    pbaspect([3 1 1]);
+    pbaspect([3 2 1]);
     set(gcf,'color','w');
     title('Cell 2')
 end
