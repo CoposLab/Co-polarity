@@ -1618,9 +1618,8 @@ while (ppp<=100)
         if polarizedc1==1
             num_pol_c1=num_pol_c1-1;
         end
-        if polarizedc2==1
-            num_pol_c2=num_pol_c2-1;
-        end
+        if polarizedc1==1
+            num_
     end
     if(quit_cond==0)
         if savefigs==1
