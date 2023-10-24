@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results/bundledrac_branchedrho_branchedbundled/1000aRhoOn1000bRacOn1kb1kc2alpha50max';
+filename = './results_line/racrhopromotion_racinhibition_rhoinhibition_acrosscells/1000sumyRacOn_1000sumxRhoOn_1000sumyRhoOff_1000sumxRacOff';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes

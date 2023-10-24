@@ -1211,7 +1211,6 @@ while (ppp<=100)
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
-
         a2 = Hs2\(diffRHSa2+rxna2);
         b2 = Hs2\(diffRHSb2+rxnb2);
 
@@ -1614,14 +1613,6 @@ while (ppp<=100)
     end
     sprintf('Simulation %d done',ppp)
     toc
-    if quit_cond==1
-        if polarizedc1==1
-            num_pol_c1=num_pol_c1-1;
-        end
-        if polarizedc2==1
-            num_pol_c2=num_pol_c2-1;
-        end
-    end
     if(quit_cond==0)
         if savefigs==1
             % savefig(figc1,filenameC1);
@@ -1716,7 +1707,7 @@ if countpol==1
         sprintf('None polarized in the same direction')
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
-    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2],'./timetopolarizeresults/racupc1_racdownc2/1000RacOnC1_100RacOffC2.xls')
+    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],'./timetopolarizeresults/racupc1_racdownc2/1000RacOnC1_100RacOffC2.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
