@@ -705,7 +705,7 @@ while (ppp<=100)
          % Kony2(boundC2)=Kony2(boundC2)*1000;
          
          % Koffx1(boundC1)=Koffx1(boundC1)*10;
-         % Koffx2(boundC2)=Koffx2(boundC2)*1000;
+         % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
          % Koffy1(boundC1)=Koffy1(boundC1)*1000;
          % Koffy2(boundC2)=Koffy2(boundC2)*100;
@@ -788,6 +788,8 @@ while (ppp<=100)
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
         % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+
+        Koffy1(boundC1) = Koffy1(boundC1).*flip(a1(boundC1))*1000;
 
 
         %Cell 1
@@ -1211,7 +1213,6 @@ while (ppp<=100)
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
-
         a2 = Hs2\(diffRHSa2+rxna2);
         b2 = Hs2\(diffRHSb2+rxnb2);
 
@@ -1708,7 +1709,7 @@ if countpol==1
         sprintf('None polarized in the same direction')
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
-    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],'./timetopolarizeresults/rhodownc1_racdownc2/1000RhoOffC1_1000RacOffC2.xls')
+    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],'./timetopolarizeresults/rhoupc1_racupc2_forces/1000aRhoOnC1_1000bRacOnC2.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;

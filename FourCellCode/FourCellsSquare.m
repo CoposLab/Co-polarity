@@ -265,6 +265,23 @@ while (ppp<=1)
         b4 = awgn(exp(-0.5*((Xa-mu)/sigma).^2)./(sigma*sqrt(32*pi)),20); b4=b4';
     end
 
+    a1all=zeros(length(Xa),Nt);
+    a2all=zeros(length(Xb),Nt);
+    b1all=zeros(length(Xa),Nt);
+    b2all=zeros(length(Xb),Nt);
+    a3all=zeros(length(Xa),Nt);
+    a4all=zeros(length(Xb),Nt);
+    b3all=zeros(length(Xa),Nt);
+    b4all=zeros(length(Xb),Nt);
+    a1all(:,1)=a1;
+    a2all(:,1)=a2;
+    b1all(:,1)=b1;
+    b2all(:,1)=b2;
+    a3all(:,1)=a3;
+    a4all(:,1)=a4;
+    b3all(:,1)=b3;
+    b4all(:,1)=b4;
+
     % Laplacian difference operator with no flux boundary conditions
     % Crank-Nicolson operators
     II1 = speye(Na,Na);
@@ -421,6 +438,16 @@ while (ppp<=1)
     conv1_4 = zeros(Nt,2);
     conv2_4 = zeros(Nt,2);
     convsup_4 = zeros(Nt,2);
+
+    %amount cells have moved
+    xshift1=zeros(1,Nt);
+    yshift1=zeros(1,Nt);
+    xshift2=zeros(1,Nt);
+    yshift2=zeros(1,Nt);
+    xshift3=zeros(1,Nt);
+    yshift3=zeros(1,Nt);
+    xshift4=zeros(1,Nt);
+    yshift4=zeros(1,Nt);
 
     % Set movie making
     %
@@ -935,21 +962,21 @@ while (ppp<=1)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        Konx1(boundC1_2) = Konx1(boundC1_2).*flip(b2(boundC2_1))*1000;
+        % Konx1(boundC1_2) = Konx1(boundC1_2).*flip(b2(boundC2_1))*1000;
         % Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1_2))*1000;
-        Konx2(boundC2_3) = Konx2(boundC2_3).*flip(b3(boundC3_2))*1000;
+        % Konx2(boundC2_3) = Konx2(boundC2_3).*flip(b3(boundC3_2))*1000;
         % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b2(boundC2_3))*1000;
-        Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
+        % Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
         % Konx4(boundC4_3) = Konx4(boundC4_3).*flip(b3(boundC3_4))*1000;
-        Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
+        % Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
         
-        Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
+        % Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
         % Kony1(boundC1_2) = Kony1(boundC1_2).*flip(a2(boundC2_1))*1000;
-        Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
+        % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
         % Kony2(boundC2_3) = Kony2(boundC2_3).*flip(a3(boundC3_2))*1000;
-        Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
+        % Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
         % Kony3(boundC3_4) = Kony3(boundC3_4).*flip(a4(boundC4_3))*1000;
-        Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
+        % Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
         % Kony4(boundC4_1) = Kony4(boundC4_1).*flip(a1(boundC1_4))*1000;
 
         % Koffy1(boundC1_4) = Koffy1(boundC1_4).*flip(b4(boundC4_1))*1000;
@@ -1699,9 +1726,100 @@ while (ppp<=1)
         a4 = Hs4\(diffRHSa4+rxna4);
         b4 = Hs4\(diffRHSb4+rxnb4);
 
+        a1all(:,t)=a1;
+        a2all(:,t)=a2;
+        b1all(:,t)=b1;
+        b2all(:,t)=b2;
+        a3all(:,t)=a3;
+        a4all(:,t)=a4;
+        b3all(:,t)=b3;
+        b4all(:,t)=b4;
+
+        % Find median for cell 1
+        a1New = a1;
+        a1New(a1New<1)=0;
+        if (a1New(1)~=0 && a1New(length(a1New))~=0)
+            zeroInd1=find(a1New==0,1,'first');
+            zeroInd2=find(a1New==0,1,'last');
+            dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a1New~=0,1,'first');
+            ind2=find(a1New~=0,1,'last');
+            dirIndex1=ceil((ind1+ind2)/2);
+        end
+        if dirIndex1<1
+            dirIndex1=dirIndex1+101;
+        end
+
+        % Find median for cell 2
+        a2New = a2;
+        a2New(a2New<1)=0;
+        if (a2New(1)~=0 && a2New(length(a2New))~=0)
+            zeroInd1=find(a2New==0,1,'first');
+            zeroInd2=find(a2New==0,1,'last');
+            dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a2New~=0,1,'first');
+            ind2=find(a2New~=0,1,'last');
+            dirIndex2=ceil((ind1+ind2)/2);
+        end
+        if dirIndex2<1
+            dirIndex2=dirIndex2+101;
+        end
+
+        % Find median for cell 3
+        a3New = a3;
+        a3New(a3New<1)=0;
+        if (a3New(1)~=0 && a3New(length(a3New))~=0)
+            zeroInd1=find(a3New==0,1,'first');
+            zeroInd2=find(a3New==0,1,'last');
+            dirIndex3=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a3New~=0,1,'first');
+            ind2=find(a3New~=0,1,'last');
+            dirIndex3=ceil((ind1+ind2)/2);
+        end
+        if dirIndex3<1
+            dirIndex3=dirIndex3+101;
+        end
+
+        % Find median for cell 4
+        a4New = a4;
+        a4New(a4New<1)=0;
+        if (a4New(1)~=0 && a4New(length(a4New))~=0)
+            zeroInd1=find(a4New==0,1,'first');
+            zeroInd2=find(a4New==0,1,'last');
+            dirIndex4=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a4New~=0,1,'first');
+            ind2=find(a4New~=0,1,'last');
+            dirIndex4=ceil((ind1+ind2)/2);
+        end
+        if dirIndex4<1
+            dirIndex4=dirIndex4+101;
+        end
+
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,1);
+        if ~isempty(dirIndex1)
+            xshift1(t+1)=xshift1(t)+cos(th(dirIndex1))*0.0005;
+            yshift1(t+1)=yshift1(t)+sin(th(dirIndex1))*0.0005;
+        end
+        if ~isempty(dirIndex2)
+            xshift2(t+1)=xshift2(t)+cos(th(dirIndex2))*0.0005;
+            yshift2(t+1)=yshift2(t)+sin(th(dirIndex2))*0.0005;
+        end
+        if ~isempty(dirIndex3)
+            xshift3(t+1)=xshift3(t)+cos(th(dirIndex3))*0.0005;
+            yshift3(t+1)=yshift3(t)+sin(th(dirIndex3))*0.0005;
+        end
+        if ~isempty(dirIndex4)
+            xshift4(t+1)=xshift4(t)+cos(th(dirIndex4))*0.0005;
+            yshift4(t+1)=yshift4(t)+sin(th(dirIndex4))*0.0005;
+        end
+
         %% Plot the solution(s)
-        if mod(t,tplot) == 0
-        % if t==(Nt-1)
+        % if mod(t,tplot) == 0
+        if t==(Nt-1)
 
             %Define colors
             colorLength = 50;
@@ -1938,83 +2056,21 @@ while (ppp<=1)
 
 
 
-            % Find median for cell 1
-            a1New = a1;
-            a1New(a1New<1)=0;
-            if (a1New(1)~=0 && a1New(length(a1New))~=0)
-                zeroInd1=find(a1New==0,1,'first');
-                zeroInd2=find(a1New==0,1,'last');
-                dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-            else
-                ind1=find(a1New~=0,1,'first');
-                ind2=find(a1New~=0,1,'last');
-                dirIndex1=ceil((ind1+ind2)/2);
-            end
-            if dirIndex1<1
-                dirIndex1=dirIndex1+101;
-            end
+            % Plot arrows
             if ~isempty(dirIndex1)
                 hold on;
                 quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
                 hold off;
-            end
-
-            % Find median for cell 2
-            a2New = a2;
-            a2New(a2New<1)=0;
-            if (a2New(1)~=0 && a2New(length(a2New))~=0)
-                zeroInd1=find(a2New==0,1,'first');
-                zeroInd2=find(a2New==0,1,'last');
-                dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
-            else
-                ind1=find(a2New~=0,1,'first');
-                ind2=find(a2New~=0,1,'last');
-                dirIndex2=ceil((ind1+ind2)/2);
-            end
-            if dirIndex2<1
-                dirIndex2=dirIndex2+101;
             end
             if ~isempty(dirIndex2)
                 hold on;
                 quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
                 hold off;
             end
-
-            % Find median for cell 3
-            a3New = a3;
-            a3New(a3New<1)=0;
-            if (a3New(1)~=0 && a3New(length(a3New))~=0)
-                zeroInd1=find(a3New==0,1,'first');
-                zeroInd2=find(a3New==0,1,'last');
-                dirIndex3=ceil((zeroInd1+zeroInd2)/2) - 50;
-            else
-                ind1=find(a3New~=0,1,'first');
-                ind2=find(a3New~=0,1,'last');
-                dirIndex3=ceil((ind1+ind2)/2);
-            end
-            if dirIndex3<1
-                dirIndex3=dirIndex3+101;
-            end
             if ~isempty(dirIndex3)
                 hold on;
                 quiver(-2,-2,Xsm(dirIndex3),Ysm(dirIndex3),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
                 hold off;
-            end
-
-            % Find median for cell 4
-            a4New = a4;
-            a4New(a4New<1)=0;
-            if (a4New(1)~=0 && a4New(length(a4New))~=0)
-                zeroInd1=find(a4New==0,1,'first');
-                zeroInd2=find(a4New==0,1,'last');
-                dirIndex4=ceil((zeroInd1+zeroInd2)/2) - 50;
-            else
-                ind1=find(a4New~=0,1,'first');
-                ind2=find(a4New~=0,1,'last');
-                dirIndex4=ceil((ind1+ind2)/2);
-            end
-            if dirIndex4<1
-                dirIndex4=dirIndex4+101;
             end
             if ~isempty(dirIndex4)
                 hold on;
@@ -2087,6 +2143,12 @@ while (ppp<=1)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
+
+        save(strcat('vid_matfiles/moving_cells_square/alt_racup_rhoup_forcedependent/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
+            'boundC1_4','boundC1_2','boundC2_1','boundC2_3','boundC3_2','boundC3_4','boundC4_3','boundC4_1','posx1','posx2','posx3','posx4','posy1','posy2','posy3','posy4','NNx1','NNx2','NNx3','NNx4',...
+            'NNy1','NNy2','NNy3','NNy4','a1all','a2all','a3all','a4all','b1all','b2all','b3all','b4all','Xa','Xb','s1','s2','s3','s4',...
+            'xC1','xC2','xC3','xC4','yC1','yC2','yC3','yC4','xshift1','yshift1','xshift2','yshift2','xshift3','yshift3','xshift4','yshift4')
+
         ppp = ppp + 1;
     end
 end

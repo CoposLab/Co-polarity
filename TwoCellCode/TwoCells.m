@@ -158,10 +158,10 @@ while (ppp<=100)
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 1.0;
+    branchedConst1 = 3.0;
     bundledConst1 = 1.0;
     branchedConst2 = 1.0;
-    bundledConst2 = 1.0;
+    bundledConst2 = 3.0;
 
     Ka1=ones(Na,1);
     Kb1=ones(Na,1);
@@ -698,14 +698,14 @@ while (ppp<=100)
          % end
 
 
-         Konx1(boundC1)=Konx1(boundC1)*1000;
+         % Konx1(boundC1)=Konx1(boundC1)*1000;
          % Konx2(boundC2)=Konx2(boundC2)*1000;
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
          % Kony2(boundC2)=Kony2(boundC2)*1000;
          
          % Koffx1(boundC1)=Koffx1(boundC1)*10;
-         Koffx2(boundC2)=Koffx2(boundC2)*100;
+         % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
          % Koffy1(boundC1)=Koffy1(boundC1)*1000;
          % Koffy2(boundC2)=Koffy2(boundC2)*100;
@@ -788,6 +788,11 @@ while (ppp<=100)
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
         % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+
+        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
+        % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
+        % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
+        % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
 
 
         %Cell 1
@@ -1174,13 +1179,13 @@ while (ppp<=100)
         diffRHSb2 = Hm2*b2;
 
         kb1=zeros(length(b2),1);
-        kb1(boundC1)=ones(length(boundC1),1);
+        kb1(boundC1)=0.8*ones(length(boundC1),1);
         kc1=zeros(length(a2),1);
-        kc1(boundC1)=ones(length(boundC1),1);
+        kc1(boundC1)=0.8*ones(length(boundC1),1);
         kb2=zeros(length(b1),1);
-        kb2(boundC2)=ones(length(boundC2),1);
+        kb2(boundC2)=0.8*ones(length(boundC2),1);
         kc2=zeros(length(a1),1);
-        kc2(boundC2)=ones(length(boundC2),1);
+        kc2(boundC2)=0.8*ones(length(boundC2),1);
         abmax=50;
 
         gamma=1.5;
@@ -1707,7 +1712,7 @@ if countpol==1
         sprintf('None polarized in the same direction')
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
-    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],'./timetopolarizeresults/racupc1_racdownc2/1000RacOnC1_100RacOffC2.xls')
+    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],'./timetopolarizeresults/branchedupc1_bundledupc2/3Ka_3Kb.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
