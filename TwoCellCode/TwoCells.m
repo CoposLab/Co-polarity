@@ -45,14 +45,14 @@ polarize_time_c2=0;
 num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
-countpol=1;
+countpol=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=100)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -158,10 +158,10 @@ while (ppp<=100)
     %F = @(U,V) -U.*U - m0*U.*V;
     F = @(U,V) -m0*U.*V;
 
-    branchedConst1 = 3.0;
+    branchedConst1 = 1.0;
     bundledConst1 = 1.0;
     branchedConst2 = 1.0;
-    bundledConst2 = 3.0;
+    bundledConst2 = 1.0;
 
     Ka1=ones(Na,1);
     Kb1=ones(Na,1);
@@ -698,7 +698,7 @@ while (ppp<=100)
          % end
 
 
-         % Konx1(boundC1)=Konx1(boundC1)*1000;
+         Konx1(boundC1)=Konx1(boundC1)*1000;
          % Konx2(boundC2)=Konx2(boundC2)*1000;
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
@@ -1258,12 +1258,12 @@ while (ppp<=100)
         [th,rad] = meshgrid((0:3.6:360)*pi/180,1);
         
         if ~isempty(dirIndex1)
-            % xshift1(t+1)=xshift1(t)+cos(th(dirIndex1))*0.0005;
-            % yshift1(t+1)=yshift1(t)+sin(th(dirIndex1))*0.0005;
+            xshift1(t+1)=xshift1(t)+cos(th(dirIndex1))*0.0005;
+            yshift1(t+1)=yshift1(t)+sin(th(dirIndex1))*0.0005;
         end
         if ~isempty(dirIndex2)
-            % xshift2(t+1)=xshift2(t)+cos(th(dirIndex2))*0.0005;
-            % yshift2(t+1)=yshift2(t)+sin(th(dirIndex2))*0.0005;
+            xshift2(t+1)=xshift2(t)+cos(th(dirIndex2))*0.0005;
+            yshift2(t+1)=yshift2(t)+sin(th(dirIndex2))*0.0005;
         end
 
 
@@ -1625,10 +1625,10 @@ while (ppp<=100)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        % save(strcat('vid_matfiles/moving_cells/racupc1_rhoupc2_forcedependent/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
-        %     'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
-        %     'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
-        %     'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2')
+        save(strcat('vid_matfiles/moving_cells/racupc1/1000RacOnC1',int2str(ppp),'.mat'),...
+            'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
+            'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
+            'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2')
         ppp = ppp + 1;
         
         if writem==1
@@ -1712,7 +1712,8 @@ if countpol==1
         sprintf('None polarized in the same direction')
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
-    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],'./timetopolarizeresults/branchedupc1_bundledupc2/3Ka_3Kb.xls')
+    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],...
+        './timetopolarizeresults_signal/branchedbundled/0_8kb0_8kc50max2alpha.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;

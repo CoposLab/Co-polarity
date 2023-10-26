@@ -44,7 +44,7 @@ while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./movies_square/racuprhoupforces/1000bRacOn_1000aRhoOn';
+    savelocation='';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -962,21 +962,21 @@ while (ppp<=1)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1_2) = Konx1(boundC1_2).*flip(b2(boundC2_1))*1000;
+        Konx1(boundC1_2) = Konx1(boundC1_2).*flip(b2(boundC2_1))*1000;
         % Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1_2))*1000;
-        % Konx2(boundC2_3) = Konx2(boundC2_3).*flip(b3(boundC3_2))*1000;
+        Konx2(boundC2_3) = Konx2(boundC2_3).*flip(b3(boundC3_2))*1000;
         % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b2(boundC2_3))*1000;
-        % Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
+        Konx3(boundC3_4) = Konx3(boundC3_4).*flip(b4(boundC4_3))*1000;
         % Konx4(boundC4_3) = Konx4(boundC4_3).*flip(b3(boundC3_4))*1000;
-        % Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
+        Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
         
-        % Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
+        Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
         % Kony1(boundC1_2) = Kony1(boundC1_2).*flip(a2(boundC2_1))*1000;
-        % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
+        Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1_2))*1000;
         % Kony2(boundC2_3) = Kony2(boundC2_3).*flip(a3(boundC3_2))*1000;
-        % Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
+        Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a2(boundC2_3))*1000;
         % Kony3(boundC3_4) = Kony3(boundC3_4).*flip(a4(boundC4_3))*1000;
-        % Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
+        Kony4(boundC4_3) = Kony4(boundC4_3).*flip(a3(boundC3_4))*1000;
         % Kony4(boundC4_1) = Kony4(boundC4_1).*flip(a1(boundC1_4))*1000;
 
         % Koffy1(boundC1_4) = Koffy1(boundC1_4).*flip(b4(boundC4_1))*1000;
@@ -2144,7 +2144,7 @@ while (ppp<=1)
             savefig(scatplot,filenameScatter);
         end
 
-        save(strcat('vid_matfiles/moving_cells_square/alt_racup_rhoup_forcedependent/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
+        save(strcat('vid_matfiles/moving_cells_square/alt_racuprhoupforces/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
             'boundC1_4','boundC1_2','boundC2_1','boundC2_3','boundC3_2','boundC3_4','boundC4_3','boundC4_1','posx1','posx2','posx3','posx4','posy1','posy2','posy3','posy4','NNx1','NNx2','NNx3','NNx4',...
             'NNy1','NNy2','NNy3','NNy4','a1all','a2all','a3all','a4all','b1all','b2all','b3all','b4all','Xa','Xb','s1','s2','s3','s4',...
             'xC1','xC2','xC3','xC4','yC1','yC2','yC3','yC4','xshift1','yshift1','xshift2','yshift2','xshift3','yshift3','xshift4','yshift4')

@@ -9,10 +9,10 @@ squished=0;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/moving_cells/alt_racup_rhoup_forcedependent/1000bRacOn_1000aRhoOn';
+    loadfile='./vid_matfiles/moving_cells_square/alt_racuprhoupforces/1000bRacOn_1000aRhoOn';
 
     setnum=int2str(i);
-    savelocation='./movies_line/moving_cells/alt_racup_rhoup_forcedependent/1000bRacOn_1000aRhoOn';
+    savelocation='./movies_square/moving_cells/alt_racuprhoupforces/1000bRacOn_1000aRhoOn';
 
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
 
@@ -50,13 +50,19 @@ for i=1:1
         Ycol2=Ycol;
         Ycol3=Ycol;
         Ycol4=Ycol;
+        Xcol1=Xcol;
+        Xcol2=Xcol;
+        Xcol3=Xcol;
+        Xcol4=Xcol;
         if squished==1
             Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
             Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
         end
         Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
-        Ycol3 = Ycol3 - 4*abs(max(max(Ycol3)))-gapsize;
-        Ycol4 = Ycol4 - 6*abs(max(max(Ycol4)))-gapsize;
+        Ycol3 = Ycol3 - 2*abs(max(max(Ycol3)))-gapsize;
+        Ycol4 = Ycol4 - 0*abs(max(max(Ycol4)))-gapsize;
+        Xcol3=Xcol3-2;
+        Xcol4=Xcol4-2;
         ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
         ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
         ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
@@ -143,14 +149,14 @@ for i=1:1
         else
             plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         end
-        surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol1+xshift1(t+1),Ycol1+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','eastoutside'));
         clim([0,allmax])
         shading interp
-        surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBund1,'AlphaData',ZBund1,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol1+xshift1(t+1),Ycol1+yshift1(t+1),ZBund1,'AlphaData',ZBund1,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         clim([0,allmax])
         freezeColors;
@@ -164,14 +170,14 @@ for i=1:1
             plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         end
         % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
-        surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol2+xshift2(t+1),Ycol2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','eastoutside'));
         clim([0,allmax])
         shading interp
-        surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBund2,'AlphaData',ZBund2,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol2+xshift2(t+1),Ycol2+yshift2(t+1),ZBund2,'AlphaData',ZBund2,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
         freezeColors(jicolorbar);
@@ -180,19 +186,19 @@ for i=1:1
 
         % Cell 3
         if squished==1
-            plot3(cos(th(1,[1:boundC3(1),boundC3(end):end]))+xshift3(t+1),sin(th(1,[1:boundC3(1),boundC3(end):end]))-4*abs(max(max(Ycol3)))-gapsize+yshift3(t+1),ones(1,length(th(1,[1:boundC3(1),boundC3(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,[1:boundC3(1),boundC3(end):end]))-2+xshift3(t+1),sin(th(1,[1:boundC3(1),boundC3(end):end]))-2*abs(max(max(Ycol3)))-gapsize+yshift3(t+1),ones(1,length(th(1,[1:boundC3(1),boundC3(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         else
-            plot3(cos(th(1,:))+xshift3(t+1),sin(th(1,:))-4+yshift3(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,:))-2+xshift3(t+1),sin(th(1,:))-2+yshift3(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         end
         % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
-        surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol3+xshift3(t+1),Ycol3+yshift3(t+1),ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','eastoutside'));
         clim([0,allmax])
         shading interp
-        surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol3+xshift3(t+1),Ycol3+yshift3(t+1),ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
         freezeColors(jicolorbar);
@@ -201,27 +207,27 @@ for i=1:1
 
         % Cell 4
         if squished==1
-            plot3(cos(th(1,[1:boundC4(1),boundC4(end):end]))+xshift4(t+1),sin(th(1,[1:boundC4(1),boundC4(end):end]))-6*abs(max(max(Ycol4)))-gapsize+yshift4(t+1),ones(1,length(th(1,[1:boundC4(1),boundC4(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,[1:boundC4(1),boundC4(end):end]))-2+xshift4(t+1),sin(th(1,[1:boundC4(1),boundC4(end):end]))-0*abs(max(max(Ycol4)))-gapsize+yshift4(t+1),ones(1,length(th(1,[1:boundC4(1),boundC4(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         else
-            plot3(cos(th(1,:))+xshift4(t+1),sin(th(1,:))-6+yshift4(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,:))-2+xshift4(t+1),sin(th(1,:))+yshift4(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         end
         % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
-        surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol4+xshift4(t+1),Ycol4+yshift4(t+1),ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
         freezeColors;
         freezeColors(colorbar('Location','eastoutside'));
         clim([0,allmax])
         shading interp
-        surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
+        surf(Xcol4+xshift4(t+1),Ycol4+yshift4(t+1),ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
         freezeColors(jicolorbar);
         clim([0,allmax])
         shading interp
         grid off
-        xlim([-7,7])
-        ylim([-10,4])
+        xlim([-6,4])
+        ylim([-6,4])
         axis square
 
         hold off;
@@ -313,12 +319,12 @@ for i=1:1
         end
         if ~isempty(dirIndex3)
             hold on;
-            quiver(0+xshift3(t+1),-4+yshift3(t+1),Xsm(dirIndex3),Ysm(dirIndex3),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+            quiver(-2+xshift3(t+1),-2+yshift3(t+1),Xsm(dirIndex3),Ysm(dirIndex3),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
             hold off;
         end
         if ~isempty(dirIndex4)
             hold on;
-            quiver(0+xshift4(t+1),-6+yshift4(t+1),Xsm(dirIndex4),Ysm(dirIndex4),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+            quiver(-2+xshift4(t+1),0+yshift4(t+1),Xsm(dirIndex4),Ysm(dirIndex4),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
             hold off;
         end
 

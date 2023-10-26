@@ -45,14 +45,14 @@ polarize_time_c2=0;
 num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
-countpol=1;
+countpol=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=100)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -789,7 +789,10 @@ while (ppp<=100)
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
         % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
 
-        Koffy1(boundC1) = Koffy1(boundC1).*flip(a1(boundC1))*1000;
+        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
+        % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
+        % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
+        % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
 
 
         %Cell 1
@@ -1176,27 +1179,27 @@ while (ppp<=100)
         diffRHSb2 = Hm2*b2;
 
         kb1=zeros(length(b2),1);
-        kb1(boundC1)=ones(length(boundC1),1);
+        kb1(boundC1)=0.8*ones(length(boundC1),1);
         kc1=zeros(length(a2),1);
-        kc1(boundC1)=ones(length(boundC1),1);
+        kc1(boundC1)=0.8*ones(length(boundC1),1);
         kb2=zeros(length(b1),1);
-        kb2(boundC2)=ones(length(boundC2),1);
+        kb2(boundC2)=0.8*ones(length(boundC2),1);
         kc2=zeros(length(a1),1);
-        kc2(boundC2)=ones(length(boundC2),1);
+        kc2(boundC2)=0.8*ones(length(boundC2),1);
         abmax=50;
 
         gamma=1.5;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*kb1)) - a1.*a1); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kc1)) - b1.*b1); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*kb2)) - a2.*a2); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kc2)) - b2.*b2); %Cell 2 bundled
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*kb1)) - a1.*a1); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kc1)) - b1.*b1); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*kb2)) - a2.*a2); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kc2)) - b2.*b2); %Cell 2 bundled
 
         % Growth term maxes out version
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kc2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kc2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
           % rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
           %    + ka_vals(ka_ind) * kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
@@ -1709,7 +1712,8 @@ if countpol==1
         sprintf('None polarized in the same direction')
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
-    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],'./timetopolarizeresults/rhoupc1_racupc2_forces/1000aRhoOnC1_1000bRacOnC2.xls')
+    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],...
+        './timetopolarizeresults_signal/branchedbundled/0_8kb0_8kc50max2alpha.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
