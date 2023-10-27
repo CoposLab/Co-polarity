@@ -3,14 +3,14 @@ close all;
 clear;
 clc;
 
-signal=1;
+signal=0;
 
 for i=1:10
 
-loadfile='./vid_matfiles/antagonism_signal_vidfiles/0_5epsilon_10RacRemoved10RhoRemoved';
+loadfile='./vid_matfiles/polarize_time/uncoupled/uncoupled';
 
 setnum=int2str(i);
-savelocation='./movies/antagonism_bothdirections_signal/0_5epsilon_10RacRemoved10RhoRemoved';
+savelocation='./movies/polarize_time/uncoupled/uncoupled';
 
 vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
 vidObj2 = VideoWriter(strcat(savelocation,'BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
@@ -36,7 +36,8 @@ open(vidObj3);
 load(strcat(loadfile,setnum));
 set(0,'DefaultFigureVisible','off')
 
-for t=1:50:2499
+% for t=1:50:2499
+for t=1:5:150
     a1=a1all(:,t);
     a2=a2all(:,t);
     b1=b1all(:,t);
@@ -222,6 +223,7 @@ for t=1:50:2499
     set(gca,'XColor','w')
     set(gca,'YColor','w')
     set(gcf,'color','w');
+    title(strcat('t=',int2str(t)))
 
 
     % Find median for cell 1
