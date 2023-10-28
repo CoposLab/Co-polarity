@@ -631,7 +631,7 @@ while (ppp<=100)
 
 
          % Konx1(boundC1)=Konx1(boundC1)*1000;
-         % Konx2(boundC2)=Konx2(boundC2)*1000;
+         Konx2(boundC2)=Konx2(boundC2)*1000;
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
          % Kony2(boundC2)=Kony2(boundC2)*1000;
@@ -1601,7 +1601,7 @@ if countpol==1
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
     writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],...
-        './timetopolarizeresults/newversion/uncoupled/uncoupled.xls')
+        './timetopolarizeresults/newversion/racup/1000RacOnC2.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
