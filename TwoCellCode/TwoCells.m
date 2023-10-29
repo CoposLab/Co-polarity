@@ -45,16 +45,16 @@ polarize_time_c2=0;
 num_polarized=0;
 num_pol_c1=0;
 num_pol_c2=0;
-countpol=1;
+countpol=0;
 
-move_cells=0;
+move_cells=1;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 3;
 
-while (ppp<=100)
+while (ppp<=3)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -366,6 +366,10 @@ while (ppp<=100)
     xshift2=zeros(1,Nt);
     yshift2=zeros(1,Nt);
 
+    %positions of center of each cell
+    posn1=[0,0];
+    posn2=[0,-2];
+
 
     % Set movie making
     %
@@ -631,7 +635,7 @@ while (ppp<=100)
 
 
          % Konx1(boundC1)=Konx1(boundC1)*1000;
-         Konx2(boundC2)=Konx2(boundC2)*1000;
+         % Konx2(boundC2)=Konx2(boundC2)*1000;
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
          % Kony2(boundC2)=Kony2(boundC2)*1000;
@@ -1183,14 +1187,29 @@ while (ppp<=100)
         [th,rad] = meshgrid((0:3.6:360)*pi/180,1);
 
         if move_cells==1
+            xshift1(t+1)=xshift1(t);
+            yshift1(t+1)=yshift1(t);
+            xshift2(t+1)=xshift2(t);
+            yshift2(t+1)=yshift2(t);
+
             if ~isempty(dirIndex1)
-                xshift1(t+1)=xshift1(t)+cos(th(dirIndex1))*0.0005;
-                yshift1(t+1)=yshift1(t)+sin(th(dirIndex1))*0.0005;
+                xshift1(t+1)=xshift1(t+1)+cos(th(dirIndex1))*0.001;
+                yshift1(t+1)=yshift1(t+1)+sin(th(dirIndex1))*0.001;
             end
             if ~isempty(dirIndex2)
-                xshift2(t+1)=xshift2(t)+cos(th(dirIndex2))*0.0005;
-                yshift2(t+1)=yshift2(t)+sin(th(dirIndex2))*0.0005;
+                xshift2(t+1)=xshift2(t+1)+cos(th(dirIndex2))*0.001;
+                yshift2(t+1)=yshift2(t+1)+sin(th(dirIndex2))*0.001;
             end
+
+            posn1=[0+xshift1(t+1),0+yshift1(t+1)];
+            posn2=[0+xshift2(t+1),-2+yshift2(t+1)];
+
+            xshift1(t+1)=xshift1(t+1)+0.0003*(posn2(1)-posn1(1))/sqrt(sum((posn2-posn1).^2));
+            yshift1(t+1)=yshift1(t+1)+0.0003*(posn2(2)-posn1(2))/sqrt(sum((posn2-posn1).^2));
+            xshift2(t+1)=xshift2(t+1)+0.0003*(posn1(1)-posn2(1))/sqrt(sum((posn2-posn1).^2));
+            yshift2(t+1)=yshift2(t+1)+0.0003*(posn1(2)-posn2(2))/sqrt(sum((posn2-posn1).^2));
+
+            % cell_distance = sqrt((posn1(1)-posn2(1))^2+(posn1(2)-posn2(2))^2);
         end
 
 
@@ -1513,10 +1532,11 @@ while (ppp<=100)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        % save(strcat('vid_matfiles/polarize_time/uncoupled/uncoupled',int2str(ppp),'.mat'),...
-        %     'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
-        %     'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
-        %     'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2')
+        save(strcat('./vid_matfiles/moving_cells/pull_centers_together/uncoupled/uncoupled',int2str(ppp),'.mat'),...
+            'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
+            'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
+            'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
+            'posn1','posn2')
         ppp = ppp + 1;
         
         if writem==1
@@ -1601,7 +1621,7 @@ if countpol==1
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
     writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_polarized],...
-        './timetopolarizeresults/newversion/racup/1000RacOnC2.xls')
+        './timetopolarizeresults/newversion/bundledupc1_branchedupc2/3Ka_3Kb.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
