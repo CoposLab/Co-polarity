@@ -14,12 +14,12 @@ gg=[linspace(green(1),grey(1),20);linspace(green(2),grey(2),20);linspace(green(3
 gb=[linspace(grey(1),blue(1),20);linspace(grey(2),blue(2),20);linspace(grey(3),blue(3),20)];
 ggb=flip([gg gb]');
 
-xvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
-yvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding times 10','Rac binding times 1000'};
+yvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbinding times 10','Rho unbinding times 1000'};
+xvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding times 10','Rac binding times 1000'};
 
 figure(1)
 % h=heatmap(xvals,yvals,bindunbind); %lf
-h=heatmap(xvals,yvals,bindunbindyes); %yes
+h=heatmap(xvals,yvals,bindunbindyes'); %yes
 % h.Title='Proportion Leader/Follower';
 h.Title='Proportion Yes';
 h.YLabel='Cell 1';
@@ -44,7 +44,7 @@ yvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding 
 
 figure(2)
 % h=heatmap(xvals,yvals,bindingvals); %lf
-h=heatmap(xvals,yvals,bindingyes); %yes
+h=heatmap(xvals,yvals,bindingyes'); %yes
 % h.Title='Proportion Leader/Follower';
 h.Title='Proportion Yes';
 h.YLabel='Cell 1';
@@ -60,7 +60,7 @@ yvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbi
 
 figure(3)
 % h=heatmap(xvals,yvals,unbindingvals'); %lf
-h=heatmap(xvals,yvals,unbindingyes'); %yes
+h=heatmap(xvals,yvals,unbindingyes); %yes
 % h.Title='Proportion Leader/Follower';
 h.Title='Proportion Yes';
 h.YLabel='Cell 1';
