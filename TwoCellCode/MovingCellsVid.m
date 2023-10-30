@@ -7,12 +7,12 @@ clc;
 signal=0;
 squished=0;
 
-for i=1:1
+for i=2:3
 
-    loadfile='./vid_matfiles/moving_cells/racupc1/1000RacOnC1';
+    loadfile='./vid_matfiles/moving_cells/pull_centers_together/uncoupled/uncoupled';
 
     setnum=int2str(i);
-    savelocation='./movies/moving_cells/racupc1/1000RacOnC1';
+    savelocation='./movies/moving_cells/pull_centers_together/uncoupled/uncoupled';
 
     % vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');

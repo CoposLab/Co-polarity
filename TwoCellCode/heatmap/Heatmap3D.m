@@ -2,7 +2,8 @@ clear
 close all;
 cla
 
-load('branched_bundled_heatmap_vals.mat')
+% load('branched_bundled_heatmap_vals.mat')
+load('signal_branched_bundled_heatmap_vals.mat')
 
 green=[0,1,0.5];
 grey=[0.4,0.6,0.7];

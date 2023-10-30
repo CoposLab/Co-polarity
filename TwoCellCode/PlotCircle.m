@@ -5,54 +5,21 @@ signal=0;
 %Define colors
 colorLength = 50;
 white = [1,1,1];
-red = [1,0,0];
-blue = [143/256,177/256,221/256];
-maroon = [0.4,0,0];
-navy = [33/256,81/256,127/256];
-yellow = [1,0.9,0];
 darkyellow = [227/256,180/256,76/256];
-yellow2 = [254/256,254/256,98/256];
+yellow = [254/256,254/256,98/256];
 pink = [211/256,95/256,183/256];
 darkpink = [141/256,45/256,113/256];
-green = [26,255,26]/256;
-darkgreen = [16,150,16]/256;
-purple = [150,65,240]/256;
-darkpurple = [65,0,136]/256;
-orange = [230,97,0]/256;
-darkorange = [170,27,0]/256;
 
-
-whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
-whiteredmaroon = [whitered;redmaroon];
-whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
-whitebluenavy = [whiteblue; bluenavy];
-myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-redblue = abs(whiteblue+whitered)./2;
-redwhiteblue = [flip(whitered); whiteblue];
 whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
 yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
 whitedarkyellow = [whiteyellow;yellowdarkyellow];
-whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
-yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
-whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
 whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
 pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
 whitedarkpink = [whitepink;pinkdarkpink];
-whitegreen = [linspace(white(1),green(1),colorLength)',linspace(white(2),green(2),colorLength)',linspace(white(3),green(3),colorLength)'];
-greendarkgreen = [linspace(green(1),darkgreen(1),colorLength)',linspace(green(2),darkgreen(2),colorLength)',linspace(green(3),darkgreen(3),colorLength)'];
-whitedarkgreen = [whitegreen;greendarkgreen];
-whitepurple = [linspace(white(1),purple(1),colorLength)',linspace(white(2),purple(2),colorLength)',linspace(white(3),purple(3),colorLength)'];
-purpledarkpurple = [linspace(purple(1),darkpurple(1),colorLength)',linspace(purple(2),darkpurple(2),colorLength)',linspace(purple(3),darkpurple(3),colorLength)'];
-whitedarkpurple = [whitepurple;purpledarkpurple];
-whiteorange = [linspace(white(1),orange(1),colorLength)',linspace(white(2),orange(2),colorLength)',linspace(white(3),orange(3),colorLength)'];
-orangedarkorange = [linspace(orange(1),darkorange(1),colorLength)',linspace(orange(2),darkorange(2),colorLength)',linspace(orange(3),darkorange(3),colorLength)'];
-whitedarkorange = [whiteorange;orangedarkorange];
 
 
 branchedColor = whitedarkpink;
-bundledColor = whitedarkyellow2;
+bundledColor = whitedarkyellow;
 branchedColName = 'Pink';
 bundledColName = 'Yellow';
 
@@ -508,47 +475,57 @@ camroll(90)
 
 
 
-
+end_time=200;
 figure(5)
-% subplot(2,1,1)
-for j=1:2:max(max([NNx1,NNy1]))
-    scatter3(linspace(0,Tend,Nt),cos(posx1(j,:)*2*pi/10),sin(posx1(j,:)*2*pi/10),1,'MarkerEdgeColor',branchedColor(end,:))
+clf
+subplot(2,1,1)
+% for j=1:2:max(max([NNx1,NNy1]))
+for j=1:200
+    scatter3(linspace(0,Tend*end_time/Nt,end_time),cos(posx1(j,1:end_time)*2*pi/10),sin(posx1(j,1:end_time)*2*pi/10),...
+        'filled','MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
     hold on;
-    scatter3(linspace(0,Tend,Nt),cos(posy1(j,:)*2*pi/10),sin(posy1(j,:)*2*pi/10),1,'MarkerEdgeColor',bundledColor(end,:))
+    scatter3(linspace(0,Tend*end_time/Nt,end_time),cos(posy1(j,1:end_time)*2*pi/10),sin(posy1(j,1:end_time)*2*pi/10),...
+        'filled','MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
     box on;
     set(gca,'Color','k','fontsize',20,'fontname','times');
-    pbaspect([3 2 1]);
+    pbaspect([3 1 1]);
     set(gcf,'color','w');
     title('Cell 1')
 end
 hold off
 xlabel('Time')
+set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
 
-% subplot(2,1,2)
-for j=1:2:max(max([NNx2,NNy2]))
+subplot(2,1,2)
+for j=1:200
     hold on;
-    scatter3(linspace(0,Tend,Nt),cos(posx2(j,:)*2*pi/10)-2,sin(posx2(j,:)*2*pi/10),1,'MarkerEdgeColor',branchedColor(end,:))
+    scatter3(linspace(0,Tend*end_time/Nt,end_time),cos(posx2(j,1:end_time)*2*pi/10),sin(posx2(j,1:end_time)*2*pi/10),...
+        'filled','MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
     % hold on;
-    scatter3(linspace(0,Tend,Nt),cos(posy2(j,:)*2*pi/10)-2,sin(posy2(j,:)*2*pi/10),1,'MarkerEdgeColor',bundledColor(end,:))
+    scatter3(linspace(0,Tend*end_time/Nt,end_time),cos(posy2(j,1:end_time)*2*pi/10),sin(posy2(j,1:end_time)*2*pi/10), ...
+        'filled','MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
     box on;
     set(gca,'Color','k','fontsize',20,'fontname','times');
-    pbaspect([3 2 1]);
+    pbaspect([3 1 1]);
     set(gcf,'color','w');
     title('Cell 2')
 end
 hold off
 xlabel('Time')
+set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
 
 
 
 % figure(6)
+% clf
 % ccx = [0 0 255]/256.*ones(Nt,1);     % blue
 % ccy = [255 219 88]/256.*ones(Nt,1);  % mustard yellow
 % time = linspace(0,Tend,Nt);
-% for j=1:2:max(max([NNx1,NNy1]))
+% % for j=1:2:max(max([NNx1,NNy1]))
+% for j=1:200
 %     hold on;
-%     scatter(linspace(0,Tend,Nt),posx1(j,:),1,branchedColor(end,:));
-%     scatter(linspace(0,Tend,Nt),posy1(j,:),1,bundledColor(end,:));
+%     scatter(linspace(0,Tend*end_time/Nt,end_time),posx1(j,1:end_time),1,branchedColor(end,:));
+%     scatter(linspace(0,Tend*end_time/Nt,end_time),posy1(j,1:end_time),1,bundledColor(end,:));
 %     box on;
 %     set(gca,'Color','k','fontsize',20,'fontname','times');
 %     pbaspect([3 1 1]);
