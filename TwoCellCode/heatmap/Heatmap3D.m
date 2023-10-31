@@ -2,8 +2,8 @@ clear
 close all;
 cla
 
-% load('branched_bundled_heatmap_vals.mat')
-load('signal_branched_bundled_heatmap_vals.mat')
+% load('data/branched_bundled_heatmap_vals.mat')
+load('data/signal_branched_bundled_heatmap_vals.mat')
 
 green=[0,1,0.5];
 grey=[0.4,0.6,0.7];
@@ -14,13 +14,15 @@ ggb=flip([gg gb]');
 
 f=figure(1);
 subplot(1,4,1)
-scatter3(ka(kc==-0.9),kb(kc==-0.9),kd(kc==-0.9),1000,lf(kc==-0.9),'filled')
+% scatter3(ka(kc==-0.9),kb(kc==-0.9),kd(kc==-0.9),1000,lf(kc==-0.9),'filled')
+scatter3(ka(kc==-kb),kb(kc==-kb),kd(kc==-kb),1000,lf(kc==-kb),'filled')
 clim([0,max(lf)])
 xlabel('ka')
 ylabel('kb');
 zl=zlabel('kd');
 zl.Position(2) = zl.Position(2)-1;
-title('kc=-0.9','Position',[0,0,2])
+% title('kc=-0.9','Position',[0,0,2])
+title('kc=-kb','Position',[0,0,2])
 colormap(ggb)
 alpha 1
 view(-52.8368,30.7651)
@@ -44,13 +46,15 @@ set(gca,'XTick',[],'YTick',[],'ZTick',[])
 grid on
 
 subplot(1,4,3)
-scatter3(ka(kc==0.9),kb(kc==0.9),kd(kc==0.9),1000,lf(kc==0.9),'filled')
+% scatter3(ka(kc==0.9),kb(kc==0.9),kd(kc==0.9),1000,lf(kc==0.9),'filled')
+scatter3(ka(kc==kb),kb(kc==kb),kd(kc==kb),1000,lf(kc==kb),'filled')
 clim([0,max(lf)])
 xlabel('ka')
 ylabel('kb')
 zl=zlabel('kd');
 zl.Position(2) = zl.Position(2)-1;
-title('kc=0.9','Position',[0,0,2])
+% title('kc=0.9','Position',[0,0,2])
+title('kc=kb','Position',[0,0,2])
 colormap(ggb)
 alpha 1
 view(-52.8368,30.7651)
