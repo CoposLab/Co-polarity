@@ -47,14 +47,14 @@ num_pol_c1=0;
 num_pol_c2=0;
 countpol=0;
 
-move_cells=1;
+move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 3;
+ppp = 1;
 
-while (ppp<=3)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -166,10 +166,10 @@ while (ppp<=3)
     branchedConst2 = 1.0;
     bundledConst2 = 1.0;
 
-    Ka1=ones(Na,1);
+    Ka1=2*ones(Na,1);
     Kb1=ones(Na,1);
     Ka2=ones(Na,1);
-    Kb2=ones(Na,1);
+    Kb2=2*ones(Na,1);
 
     Ka1(boundC1) = branchedConst1*Ka1(boundC1);
     Kb1(boundC1) = bundledConst1*Kb1(boundC1);
@@ -1532,7 +1532,7 @@ while (ppp<=3)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        save(strcat('./vid_matfiles/moving_cells/pull_centers_together/uncoupled/uncoupled',int2str(ppp),'.mat'),...
+        save(strcat('./vid_matfiles/not_polarized/branchedupallC1_bundledupallC2/2KaC1_2KbC2','_',int2str(ppp),'.mat'),...
             'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
             'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
             'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
