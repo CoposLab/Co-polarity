@@ -368,8 +368,8 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.96644836"
-     inkscape:cx="827.25578"
-     inkscape:cy="611.51741"
+     inkscape:cx="840.7071"
+     inkscape:cy="723.26679"
      inkscape:window-width="2512"
      inkscape:window-height="1301"
      inkscape:window-x="0"
@@ -2092,7 +2092,8 @@
        transform="matrix(0.33270505,-0.94303094,0.76400828,0.64520644,0,0)" /></g><g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="line"><path
+     inkscape:label="line"
+     sodipodi:insensitive="true"><path
        style="fill:#262626;fill-opacity:1;stroke:#fcfcfc;stroke-width:1.01453;stroke-dasharray:none;stroke-opacity:1"
        d="M 197.1847,132.89803 1536.0977,1291.7679"
        id="path59" /></g><g
@@ -2106,11 +2107,11 @@
        transform="matrix(2.7400512,0,0,2.7400512,-973.13226,-26.219782)"><tspan
          x="639.45508"
          y="78.203823"
-         id="tspan2">Leader/Follower</tspan></text><text
+         id="tspan4">Leader/Follower</tspan></text><text
        xml:space="preserve"
        id="text60-9"
        style="white-space:pre;shape-inside:url(#rect60-1);display:inline;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.729913;stroke-dasharray:none;stroke-opacity:1"
        transform="matrix(0,-2.7400512,2.7400512,0,73.983625,2644.7425)"><tspan
          x="639.45508"
          y="78.203823"
-         id="tspan3">Co-alignment</tspan></text></g></svg>
+         id="tspan5">Co-alignment</tspan></text></g></svg>
