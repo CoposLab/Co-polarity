@@ -85,7 +85,12 @@
          xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAADFJREFUWIXtzjEBADAMw7CsYMKf4Qqjj0zAem1/DpvLOQAAAAAAAAAAAAAAAAAAQJIsTtcBsXZB4UIAAAAASUVORK5CYII="
          transform="scale(16)"
          clip-path="url(#clipPath54-7)"
-         id="image54-3" /></pattern></defs><sodipodi:namedview
+         id="image54-3" /></pattern><clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath13-8"><path
+         d="M 1255,3875 V 815 h 3565 v 3060 h -713 -713 -713 -713 z"
+         transform="matrix(2.8050491e-4,0,0,-3.2679739e-4,-0.35203366,1.2663399)"
+         id="path13-06" /></clipPath></defs><sodipodi:namedview
      id="namedview1"
      pagecolor="#262626"
      bordercolor="#000000"
@@ -97,14 +102,14 @@
      showborder="false"
      borderlayer="false"
      inkscape:zoom="0.87885424"
-     inkscape:cx="742.44394"
-     inkscape:cy="430.10545"
+     inkscape:cx="706.03289"
+     inkscape:cy="566.64687"
      inkscape:window-width="1880"
      inkscape:window-height="1199"
      inkscape:window-x="248"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g1-5"
+     inkscape:current-layer="layer2"
      inkscape:document-units="mm"><inkscape:page
        x="0"
        y="0"
