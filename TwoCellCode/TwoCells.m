@@ -52,9 +52,9 @@ writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 2;
 
-while (ppp<=1)
+while (ppp<=2)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -166,10 +166,10 @@ while (ppp<=1)
     branchedConst2 = 1.0;
     bundledConst2 = 1.0;
 
-    Ka1=2*ones(Na,1);
+    Ka1=ones(Na,1);
     Kb1=ones(Na,1);
     Ka2=ones(Na,1);
-    Kb2=2*ones(Na,1);
+    Kb2=ones(Na,1);
 
     Ka1(boundC1) = branchedConst1*Ka1(boundC1);
     Kb1(boundC1) = bundledConst1*Kb1(boundC1);
@@ -342,6 +342,16 @@ while (ppp<=1)
     %
     [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:NNx1(1),1),posy1(1:NNy1(1),1),NNx1(1),NNy1(1),L,Na);
     [s2,xC2,yC2] = resamplePolarityMolecules(posx2(1:NNx2(1),1),posy2(1:NNy2(1),1),NNx2(1),NNy2(1),L,Na);
+
+    xC1all=zeros(Na,Nt);
+    yC1all=zeros(Na,Nt);
+    xC2all=zeros(Na,Nt);
+    yC2all=zeros(Na,Nt);
+
+    xC1all(:,1)=xC1;
+    yC1all(:,1)=yC1;
+    xC2all(:,1)=xC2;
+    yC2all(:,1)=yC2;
 
     aic1 = a1;
     bic1 = b1;
@@ -717,10 +727,10 @@ while (ppp<=1)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
 
         % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
         % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
@@ -1099,6 +1109,11 @@ while (ppp<=1)
 
         [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:Kx1,t+1),posy1(1:Ky1,t+1),Kx1,Ky1,L,Na);
         [s2,xC2,yC2] = resamplePolarityMolecules(posx2(1:Kx2,t+1),posy2(1:Ky2,t+1),Kx2,Ky2,L,Na);
+
+        xC1all(:,t+1)=xC1;
+        yC1all(:,t+1)=yC1;
+        xC2all(:,t+1)=xC2;
+        yC2all(:,t+1)=yC2;
 
         %% Update actin filaments
         diffRHSa1 = Hm1*a1;
@@ -1532,11 +1547,11 @@ while (ppp<=1)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        save(strcat('./vid_matfiles/not_polarized/branchedupallC1_bundledupallC2/2KaC1_2KbC2','_',int2str(ppp),'.mat'),...
+        save(strcat('./vid_matfiles/coalign/racupc1_rhoupc2_forces/1000aRhoOn_1000bRacOn',int2str(ppp),'.mat'),...
             'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
             'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
             'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
-            'posn1','posn2')
+            'posn1','posn2','xC1all','yC1all','xC2all','yC2all')
         ppp = ppp + 1;
         
         if writem==1

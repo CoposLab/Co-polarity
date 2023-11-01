@@ -9,10 +9,10 @@ squished=0;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/moving_cells_square/alt_racuprhoupforces/1000bRacOn_1000aRhoOn';
+    loadfile='./vid_matfiles/moving_cells_square/coalign/rhoupracupc1_rhouprhoupc2_racuprhoupc3_racupracupc4_forces/1000bRacOn_1000aRhoOn';
 
     setnum=int2str(i);
-    savelocation='./movies_square/moving_cells/alt_racuprhoupforces/1000bRacOn_1000aRhoOn';
+    savelocation='./movies_square/moving_cells/coalign/rhoupracupc1_rhouprhoupc2_racuprhoupc3_racupracupc4_forces/1000bRacOn_1000aRhoOn';
 
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
 

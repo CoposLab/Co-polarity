@@ -47,14 +47,14 @@ num_pol_c1=0;
 num_pol_c2=0;
 countpol=0;
 
-move_cells=1;
+move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 6;
+ppp = 1;
 
-while (ppp<=6)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -166,10 +166,10 @@ while (ppp<=6)
     branchedConst2 = 1.0;
     bundledConst2 = 1.0;
 
-    Ka1=ones(Na,1);
+    Ka1=2*ones(Na,1);
     Kb1=ones(Na,1);
     Ka2=ones(Na,1);
-    Kb2=ones(Na,1);
+    Kb2=2*ones(Na,1);
 
     Ka1(boundC1) = branchedConst1*Ka1(boundC1);
     Kb1(boundC1) = bundledConst1*Kb1(boundC1);
@@ -342,6 +342,16 @@ while (ppp<=6)
     %
     [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:NNx1(1),1),posy1(1:NNy1(1),1),NNx1(1),NNy1(1),L,Na);
     [s2,xC2,yC2] = resamplePolarityMolecules(posx2(1:NNx2(1),1),posy2(1:NNy2(1),1),NNx2(1),NNy2(1),L,Na);
+
+    xC1all=zeros(Na,Nt);
+    yC1all=zeros(Na,Nt);
+    xC2all=zeros(Na,Nt);
+    yC2all=zeros(Na,Nt);
+
+    xC1all(:,1)=xC1;
+    yC1all(:,1)=yC1;
+    xC2all(:,1)=xC2;
+    yC2all(:,1)=yC2;
 
     aic1 = a1;
     bic1 = b1;
@@ -1100,6 +1110,11 @@ while (ppp<=6)
         [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:Kx1,t+1),posy1(1:Ky1,t+1),Kx1,Ky1,L,Na);
         [s2,xC2,yC2] = resamplePolarityMolecules(posx2(1:Kx2,t+1),posy2(1:Ky2,t+1),Kx2,Ky2,L,Na);
 
+        xC1all(:,t+1)=xC1;
+        yC1all(:,t+1)=yC1;
+        xC2all(:,t+1)=xC2;
+        yC2all(:,t+1)=yC2;
+
         %% Update actin filaments
         diffRHSa1 = Hm1*a1;
         diffRHSb1 = Hm1*b1;
@@ -1204,10 +1219,10 @@ while (ppp<=6)
             posn1=[0+xshift1(t+1),0+yshift1(t+1)];
             posn2=[0+xshift2(t+1),-2+yshift2(t+1)];
 
-            xshift1(t+1)=xshift1(t+1)+(posn2(1)-posn1(1))/sqrt();
-            yshift1(t+1)=yshift1(t+1)+(posn2(2)-posn1(2));
-            xshift2(t+1)=xshift2(t+1)+(posn1(1)-posn2(1));
-            yshift2(t+1)=yshift2(t+1)+(posn1(2)-posn1(2));
+            xshift1(t+1)=xshift1(t+1)+0.0003*(posn2(1)-posn1(1))/sqrt(sum((posn2-posn1).^2));
+            yshift1(t+1)=yshift1(t+1)+0.0003*(posn2(2)-posn1(2))/sqrt(sum((posn2-posn1).^2));
+            xshift2(t+1)=xshift2(t+1)+0.0003*(posn1(1)-posn2(1))/sqrt(sum((posn2-posn1).^2));
+            yshift2(t+1)=yshift2(t+1)+0.0003*(posn1(2)-posn2(2))/sqrt(sum((posn2-posn1).^2));
 
             % cell_distance = sqrt((posn1(1)-posn2(1))^2+(posn1(2)-posn2(2))^2);
         end
@@ -1532,11 +1547,11 @@ while (ppp<=6)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        save(strcat('./vid_matfiles/moving_cells/pull_centers_together/uncoupled/uncoupled',int2str(ppp),'.mat'),...
+        save(strcat('./vid_matfiles/coalign/racupc1_rhoupc2_forces/','_',int2str(ppp),'.mat'),...
             'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
             'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
             'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
-            'posn1','posn2')
+            'posn1','posn2','xC1all','yC1all','xC2all','yC2all')
         ppp = ppp + 1;
         
         if writem==1
