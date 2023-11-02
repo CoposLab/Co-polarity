@@ -3,6 +3,8 @@ close all;
 clear;
 clc;
 
+addpath('./freeze_colors')
+
 signal=0;
 
 scatvid=0;
@@ -13,10 +15,11 @@ adjacent=1;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/not_polarized/branchedupallC1_bundledupallC2/2KaC1_2KbC2_';
+    % loadfile='./vid_matfiles/not_polarized/branchedupallC1_bundledupallC2/2KaC1_2KbC2_';
+    loadfile='./vid_matfiles/coalign/racupc1_rhoupc2_forces/1000aRhoOn_1000bRacOn';
 
     setnum=int2str(i);
-    savelocation='./movies/circle_scatterplot/adjacentcells/twocells_notpolarized';
+    savelocation='./movies/circle_scatterplot/adjacentcells2/twocells_coalign';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -457,7 +460,7 @@ for i=1:1
             if adjacent==0
                 surf(Xcol,Ycol-(2*range),ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             else
-                surf(Xcol,Ycol-2,ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+                surf(Xcol,Ycol-2-(range-1),ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             end
             hold on
             colormap(branchedColor)
@@ -469,7 +472,7 @@ for i=1:1
             if adjacent==0
                 surf(Xcol,Ycol-(2*range),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             else
-                surf(Xcol,Ycol-2,ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+                surf(Xcol,Ycol-2-(range-1),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             end
             colormap(bundledColor)
             freezeColors;
@@ -494,9 +497,9 @@ for i=1:1
                 plot3([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-(2*range),...
                     [allmax+1,allmax+1],'color',branchedColor(end,:),'LineWidth',3)
             else
-                plot3(racxvals2,racyvals2-2,(allmax+1)*ones(1,length(racxvals2)),'color',...
+                plot3(racxvals2,racyvals2-2-(range-1),(allmax+1)*ones(1,length(racxvals2)),'color',...
                     [branchedColor(end,:),0.5],'LineWidth',3)
-                plot3([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-2,...
+                plot3([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-2-(range-1),...
                     [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3)
             end
             if max(yC2)>=0.5
@@ -514,9 +517,9 @@ for i=1:1
                 plot3([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2*range,...
                     [allmax+1,allmax+1],'color',bundledColor(end,:),'LineWidth',3)
             else
-                plot3(rhoxvals2,rhoyvals2-2,(allmax+1)*ones(1,length(rhoxvals1)),'color',...
+                plot3(rhoxvals2,rhoyvals2-2-(range-1),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
                     [bundledColor(end,:),0.5],'LineWidth',3)
-                plot3([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2,...
+                plot3([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2-(range-1),...
                     [allmax+1,allmax+1],'color',[bundledColor(end,:),0.5],'LineWidth',3)
             end
             if adjacent==0
@@ -524,9 +527,12 @@ for i=1:1
                 ylim([-9,3])
                 set(gca,'plotBoxAspectRatio',[1 2 1]);
             else
+                % xlim([-3,3])
+                % ylim([-5,3])
+                % set(gca,'plotBoxAspectRatio',[6 8 1]);
                 xlim([-3,3])
-                ylim([-5,3])
-                set(gca,'plotBoxAspectRatio',[6 8 1]);
+                ylim([-7,3])
+                set(gca,'plotBoxAspectRatio',[6 10 1]);
             end
             % axis square
             hold off
@@ -543,7 +549,7 @@ for i=1:1
                 if adjacent==0
                     quiver(0,-2*range,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
                 else
-                    quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+                    quiver(0,-2-(range-1),Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
                 end
                 hold off;
             end
