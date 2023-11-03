@@ -3,6 +3,8 @@ close all;
 clear;
 clc;
 
+addpath('./freeze_colors')
+
 signal=0;
 
 scatvid=0;
@@ -14,9 +16,11 @@ adjacent=1;
 for i=1:1
 
     loadfile='./vid_matfiles/coalign/racupc1_rhoupc2_forces/1000aRhoOn_1000bRacOn';
-
+    % loadfile='./vid_matfiles/not_polarized/branchedupallC1_bundledupallC2/2KaC1_2KbC2_';
+    
     setnum=int2str(i);
-    savelocation='./movies/circle_scatterplot/adjacentcells/twocells_coalign';
+    savelocation='../movies/circle_scatterplot/adjacentcells2/twocells_coalign';
+    % savelocation='../movies/circle_scatterplot/adjacentcells2/twocells_notpolarized';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -271,21 +275,35 @@ for i=1:1
         % Find median for cell 1
         a1New = a1;
         a1New(a1New<1)=0;
-        if (a1New(1)~=0 && a1New(length(a1New))~=0)
+        if (a1New(1)~=0 && a1New(end)~=0)
             zeroInd1=find(a1New==0,1,'first');
             zeroInd2=find(a1New==0,1,'last');
-            dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
+            dirIndexa1=ceil((zeroInd1+zeroInd2)/2) - 50;
         else
             ind1=find(a1New~=0,1,'first');
             ind2=find(a1New~=0,1,'last');
-            dirIndex1=ceil((ind1+ind2)/2);
+            dirIndexa1=ceil((ind1+ind2)/2);
         end
-        if dirIndex1<1
-            dirIndex1=dirIndex1+101;
+        if dirIndexa1<1
+            dirIndexa1=dirIndexa1+101;
         end
-        if ~isempty(dirIndex1)
+        b1New = b1;
+        b1New(b1New<1)=0;
+        if (b1New(1)~=0 && b1New(end)~=0)
+            zeroIndb1_1=find(b1New==0,1,'first');
+            zeroIndb2_1=find(b1New==0,1,'last');
+            dirIndexb1=ceil((zeroIndb1_1+zeroIndb2_1)/2) - 50;
+        else
+            indb1_1=find(b1New~=0,1,'first');
+            indb2_1=find(b1New~=0,1,'last');
+            dirIndexb1=ceil((indb1_1+indb2_1)/2);
+        end
+        if dirIndexb1<1
+            dirIndexb1=dirIndexb1+101;
+        end
+        if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
             hold on;
-            quiver(0,0,Xsm(dirIndex1),Ysm1(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+            quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
             hold off;
         end
 
@@ -294,23 +312,38 @@ for i=1:1
         % Find median for cell 2
         a2New = a2;
         a2New(a2New<1)=0;
-        if (a2New(1)~=0 && a2New(length(a2New))~=0)
+        if (a2New(1)~=0 && a2New(end)~=0)
             zeroInd1=find(a2New==0,1,'first');
             zeroInd2=find(a2New==0,1,'last');
-            dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
+            dirIndexa2=ceil((zeroInd1+zeroInd2)/2) - 50;
         else
             ind1=find(a2New~=0,1,'first');
             ind2=find(a2New~=0,1,'last');
-            dirIndex2=ceil((ind1+ind2)/2);
+            dirIndexa2=ceil((ind1+ind2)/2);
         end
-        if dirIndex2<1
-            dirIndex2=dirIndex2+101;
+        if dirIndexa2<1
+            dirIndexa2=dirIndexa2+101;
         end
-        if ~isempty(dirIndex2)
+        b2New = b2;
+        b2New(b2New<1)=0;
+        if (b2New(1)~=0 && b2New(end)~=0)
+            zeroIndb1_2=find(b2New==0,1,'first');
+            zeroIndb2_2=find(b2New==0,1,'last');
+            dirIndexb2=ceil((zeroIndb1_2+zeroIndb2_2)/2) - 50;
+        else
+            indb1_2=find(b2New~=0,1,'first');
+            indb2_2=find(b2New~=0,1,'last');
+            dirIndexb2=ceil((indb1_2+indb2_2)/2);
+        end
+        if dirIndexb2<1
+            dirIndexb2=dirIndexb2+101;
+        end
+        if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
             hold on;
-            quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndex2),Ysm2(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+            quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
             hold off;
         end
+
 
         if branchedbundledvid==1
             % Plot signal
@@ -367,16 +400,16 @@ for i=1:1
             axis([-1 1 -3 1])
             axis equal
 
-            if ~isempty(dirIndex1)
+            if ~isempty(dirIndexa1)
                 figure(3)
                 hold on;
-                quiver(0,0,Xsm(dirIndex1),Ysm1(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+                quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
                 hold off;
             end
-            if ~isempty(dirIndex2)
+            if ~isempty(dirIndexa2)
                 figure(3)
                 hold on;
-                quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndex2),Ysm2(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
                 hold off;
             end
 
@@ -402,30 +435,36 @@ for i=1:1
             clf
             range=3;
             % subplot(1,2,1)
+            plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black','LineWidth',2)
+            hold on
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
             surf(Xcol,Ycol,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
-            hold on
+            % hold on
             colormap(branchedColor)
+            % cb=colorbar('Location','westoutside');
             freezeColors;
-            freezeColors(colorbar('Location','westoutside'));
-            clim([0,allmax])
+            % freezeColors(cb);
+            % clim([0,allmax/2])
+            % cbpos=cb.Position;
+            % set(cb,'Position',[cbpos(1) cbpos(2) cbpos(3) cbpos(4)/2])
             shading interp
             alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
             surf(Xcol,Ycol,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
             freezeColors;
-            freezeColors(jicolorbar);
-            clim([0,allmax])
+            % jcb=jicolorbar;
+            % freezeColors(jcb);
+            % clim([0,allmax/2])
             shading interp
             view(2)
             % plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black')
             % plot(2*cos(2*pi*Xa/L),2*sin(2*pi*Xa/L),'color','black')
-            if max(xC1)>=0.5
+            if max(xC1)>=(range+2)
                 racxvals1=(range-1)*xC1/max(xC1)+1;
                 racyvals1=(range-1)*xC1/max(xC1)+1;
             else
-                racxvals1=xC1;
-                racyvals1=xC1;
+                racxvals1=(range-2)*xC1/max(xC1)+1;
+                racyvals1=(range-1)*xC1/max(xC1)+1;
             end
             racxvals1=(racxvals1)'.*cos(2*pi*Xa/L);
             racyvals1=(racyvals1)'.*sin(2*pi*Xa/L);
@@ -433,12 +472,12 @@ for i=1:1
                 [branchedColor(end,:),1],'LineWidth',3)
             plot3([racxvals1(end),racxvals1(1)],[racyvals1(end),racyvals1(1)],...
                 [allmax+1,allmax+1],'color',[branchedColor(end,:),1],'LineWidth',3)
-            if max(yC1)>=0.5
+            if max(yC1)>=(range+2)
                 rhoxvals1=(range-1)*yC1/max(yC1)+1;
                 rhoyvals1=(range-1)*yC1/max(yC1)+1;
             else
-                rhoxvals1=yC1;
-                rhoyvals1=yC1;
+                rhoxvals1=(range-2)*yC1/max(yC1)+1;
+                rhoyvals1=(range-2)*yC1/max(yC1)+1;
             end
             rhoxvals1=(rhoxvals1)'.*cos(2*pi*Xa/L);
             rhoyvals1=(rhoyvals1)'.*sin(2*pi*Xa/L);
@@ -453,97 +492,114 @@ for i=1:1
 
             %cell 2
             hold on
+            if adjacent==0
+                plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L)-(2*range),'color','black','LineWidth',2)
+            else
+                plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L)-2-(range-1),'color','black','LineWidth',2)
+            end
             alphaData=ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2)));
             if adjacent==0
                 surf(Xcol,Ycol-(2*range),ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             else
-                surf(Xcol,Ycol-2,ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+                surf(Xcol,Ycol-2-(range-1),ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             end
-            hold on
+            % hold on
             colormap(branchedColor)
+            cb=colorbar('Location','eastoutside');
             freezeColors;
-            freezeColors(colorbar('Location','westoutside'));
-            clim([0,allmax])
+            freezeColors(cb);
+            clim([0,allmax/2])
+            cbpos=cb.Position;
+            set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
+            set(cb,'TickLabels',{});
+            cbpos=cb.Position;
             shading interp
             alphaData=ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2)));
             if adjacent==0
                 surf(Xcol,Ycol-(2*range),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             else
-                surf(Xcol,Ycol-2,ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+                surf(Xcol,Ycol-2-(range-1),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             end
             colormap(bundledColor)
             freezeColors;
-            freezeColors(jicolorbar);
-            clim([0,allmax])
+            jcb=jicolorbar;
+            freezeColors(jcb);
+            clim([0,allmax/2])
+            jcbpos=jcb.Position;
+            set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
+            % set(cb,'Position',[cbpos(1),cbpos(2),cbpos(3),jcbpos(4)])
             shading interp
             view(2)
             % plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black')
             % plot(2*cos(2*pi*Xa/L),2*sin(2*pi*Xa/L),'color','black')
-            if max(xC2)>=0.5
+            if max(xC2)>=(range+2)
                 racxvals2=(range-1)*xC2/max(xC2)+1;
                 racyvals2=(range-1)*xC2/max(xC2)+1;
             else
-                racxvals2=xC2;
-                racyvals2=xC2;
+                racxvals2=(range-2)*xC2/max(xC2)+1;
+                racyvals2=(range-2)*xC2/max(xC2)+1;
             end
             racxvals2=(racxvals2)'.*cos(2*pi*Xa/L);
             racyvals2=(racyvals2)'.*sin(2*pi*Xa/L);
             if adjacent==0
                 plot3(racxvals2,racyvals2-(2*range),(allmax+1)*ones(1,length(racxvals2)),'color',...
                     branchedColor(end,:),'LineWidth',3)
-                plot([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-(2*range),...
+                plot3([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-(2*range),...
                     [allmax+1,allmax+1],'color',branchedColor(end,:),'LineWidth',3)
             else
-                plot3(racxvals2,racyvals2-2,(allmax+1)*ones(1,length(racxvals2)),'color',...
+                plot3(racxvals2,racyvals2-2-(range-1),(allmax+1)*ones(1,length(racxvals2)),'color',...
                     [branchedColor(end,:),0.5],'LineWidth',3)
-                plot([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-2,...
+                plot3([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-2-(range-1),...
                     [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3)
             end
-            if max(yC2)>=0.5
+            if max(yC2)>=(range+2)
                 rhoxvals2=(range-1)*yC2/max(yC2)+1;
                 rhoyvals2=(range-1)*yC2/max(yC2)+1;
             else
-                rhoxvals2=yC2;
-                rhoyvals2=yC2;
+                rhoxvals2=(range-2)*yC2/max(yC2)+1;
+                rhoyvals2=(range-2)*yC2/max(yC2)+1;
             end
             rhoxvals2=(rhoxvals2)'.*cos(2*pi*Xa/L);
             rhoyvals2=(rhoyvals2)'.*sin(2*pi*Xa/L);
             if adjacent==0
-                plot(rhoxvals2,rhoyvals2-(2*range),(allmax+1)*ones(1,length(rhoxvals2)),'color',...
+                plot3(rhoxvals2,rhoyvals2-(2*range),(allmax+1)*ones(1,length(rhoxvals2)),'color',...
                     bundledColor(end,:),'LineWidth',3)
-                plot([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2*range,...
+                plot3([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2*range,...
                     [allmax+1,allmax+1],'color',bundledColor(end,:),'LineWidth',3)
             else
-                plot(rhoxvals2,rhoyvals2-2,(allmax+1)*ones(1,length(rhoxvals1)),'color',...
+                plot3(rhoxvals2,rhoyvals2-2-(range-1),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
                     [bundledColor(end,:),0.5],'LineWidth',3)
-                plot([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2,...
-                    [allmax+1,allmax+1'color',[bundledColor(end,:),0.5],'LineWidth',3)
+                plot3([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2-(range-1),...
+                    [allmax+1,allmax+1],'color',[bundledColor(end,:),0.5],'LineWidth',3)
             end
             if adjacent==0
                 xlim([-3,3])
                 ylim([-9,3])
                 set(gca,'plotBoxAspectRatio',[1 2 1]);
             else
+                % xlim([-3,3])
+                % ylim([-5,3])
+                % set(gca,'plotBoxAspectRatio',[6 8 1]);
                 xlim([-3,3])
-                ylim([-5,3])
-                set(gca,'plotBoxAspectRatio',[6 8 1]);
+                ylim([-7,3])
+                set(gca,'plotBoxAspectRatio',[6 10 1]);
             end
             % axis square
             hold off
 
-            if ~isempty(dirIndex1)
+            if ~isempty(dirIndexa1)
                 figure(4)
                 hold on;
-                quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7);
+                quiver(0,0,Xsm(dirIndexa1),Ysm(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7);
                 hold off;
             end
-            if ~isempty(dirIndex2)
+            if ~isempty(dirIndexa2)
                 figure(4)
                 hold on;
                 if adjacent==0
-                    quiver(0,-2*range,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+                    quiver(0,-2*range,Xsm(dirIndexa2),Ysm(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
                 else
-                    quiver(0,-2,Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+                    quiver(0,-2-(range-1),Xsm(dirIndexa2),Ysm(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
                 end
                 hold off;
             end
@@ -553,6 +609,7 @@ for i=1:1
             set(gca,'XColor','w')
             set(gca,'YColor','w')
             set(gcf,'color','w');
+            set(gcf,'Position',[209   561   682   474])
             ohf = findobj(gcf);
             figaxes = findobj(ohf(1), 'Type', 'axes');
             set(figaxes(1),'Fontsize',15)

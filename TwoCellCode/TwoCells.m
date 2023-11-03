@@ -8,7 +8,7 @@
 % Last updated: 7/10/2023
 % Katie Levandosky
 % Calina Copos
-addpath('./freeze_colors')
+addpath('./FigureAndMovieCode/freeze_colors')
 addpath('../SingleCellCode_Published')
 
 clear;
@@ -1435,7 +1435,7 @@ while (ppp<=100)
         % Check if polarized
         a1New = a1;
         a1New(a1New<1)=0;
-        if (a1New(1)~=0 && a1New(length(a1New))~=0)
+        if (a1New(1)~=0 && a1New(end)~=0)
             zeroInda1_1=find(a1New==0,1,'first');
             zeroInda2_1=find(a1New==0,1,'last');
             dirIndexa1=ceil((zeroInda1_1+zeroInda2_1)/2) - 50;
@@ -1446,7 +1446,7 @@ while (ppp<=100)
         end
         b1New = b1;
         b1New(b1New<1)=0;
-        if (b1New(1)~=0 && b1New(length(b1New))~=0)
+        if (b1New(1)~=0 && b1New(end)~=0)
             zeroIndb1_1=find(b1New==0,1,'first');
             zeroIndb2_1=find(b1New==0,1,'last');
             dirIndexb1=ceil((zeroIndb1_1+zeroIndb2_1)/2) - 50;
@@ -1457,7 +1457,7 @@ while (ppp<=100)
         end
         a2New = a2;
         a2New(a2New<1)=0;
-        if (a2New(1)~=0 && a2New(length(a2New))~=0)
+        if (a2New(1)~=0 && a2New(end)~=0)
             zeroInda1_2=find(a2New==0,1,'first');
             zeroInda2_2=find(a2New==0,1,'last');
             dirIndexa2=ceil((zeroInda1_2+zeroInda2_2)/2) - 50;
@@ -1468,7 +1468,7 @@ while (ppp<=100)
         end
         b2New = b2;
         b2New(b2New<1)=0;
-        if (b2New(1)~=0 && b2New(length(b2New))~=0)
+        if (b2New(1)~=0 && b2New(end)~=0)
             zeroIndb1_2=find(b2New==0,1,'first');
             zeroIndb2_2=find(b2New==0,1,'last');
             dirIndexb2=ceil((zeroIndb1_2+zeroIndb2_2)/2) - 50;
