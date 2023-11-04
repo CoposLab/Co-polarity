@@ -13,14 +13,12 @@ racrhovid=0;
 circlescatvid=1;
 adjacent=1;
 
-for i=1:1
+for i=1:3
 
-    % loadfile='./vid_matfiles/coalign/racupc1_rhoupc2_forces/1000aRhoOn_1000bRacOn';
-    loadfile='./vid_matfiles/not_polarized/branchedupallC1_bundledupallC2/2KaC1_2KbC2_';
+    loadfile='./vid_matfiles/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn';
     
     setnum=int2str(i);
-    % savelocation='../movies/circle_scatterplot/almost_adjacent/twocells_coalign';
-    savelocation='../movies/circle_scatterplot/almost_adjacent/twocells_notpolarized';
+    savelocation='../movies/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');

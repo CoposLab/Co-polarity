@@ -56,7 +56,7 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=3)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -651,8 +651,8 @@ while (ppp<=1)
          % end
 
 
-         Konx1(boundC1)=Konx1(boundC1)*1000;
-         Konx2(boundC2)=Konx2(boundC2)*1000;
+         % Konx1(boundC1)=Konx1(boundC1)*1000;
+         % Konx2(boundC2)=Konx2(boundC2)*1000;
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
          % Kony2(boundC2)=Kony2(boundC2)*1000;
@@ -734,10 +734,12 @@ while (ppp<=1)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        if t>1000
+        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+        end
 
         % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
         % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
@@ -1616,11 +1618,11 @@ while (ppp<=1)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        % save(strcat('./FigureAndMovieCode/vid_matfiles/collision/racup/1000RacOn',int2str(ppp),'.mat'),...
-        %     'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
-        %     'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
-        %     'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
-        %     'posn1','posn2','xC1all','yC1all','xC2all','yC2all')
+        save(strcat('./FigureAndMovieCode/vid_matfiles/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
+            'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
+            'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
+            'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
+            'posn1','posn2','xC1all','yC1all','xC2all','yC2all')
         ppp = ppp + 1;
         
         if writem==1
