@@ -47,7 +47,7 @@ num_pol_yes=0;
 num_pol_lf=0;
 num_pol_c1=0;
 num_pol_c2=0;
-countpol=1;
+countpol=0;
 
 move_cells=0;
 writem=0;
@@ -56,7 +56,7 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=100)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -652,13 +652,13 @@ while (ppp<=100)
 
 
          Konx1(boundC1)=Konx1(boundC1)*1000;
-         % Konx2(boundC2)=Konx2(boundC2)*1000;
+         Konx2(boundC2)=Konx2(boundC2)*1000;
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
          % Kony2(boundC2)=Kony2(boundC2)*1000;
          
          % Koffx1(boundC1)=Koffx1(boundC1)*10;
-         Koffx2(boundC2)=Koffx2(boundC2)*100;
+         % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
          % Koffy1(boundC1)=Koffy1(boundC1)*1000;
          % Koffy2(boundC2)=Koffy2(boundC2)*100;
@@ -1616,7 +1616,7 @@ while (ppp<=100)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        % save(strcat('./vid_matfiles/coalign/racupc1_rhoupc2_forces/1000aRhoOn_1000bRacOn',int2str(ppp),'.mat'),...
+        % save(strcat('./FigureAndMovieCode/vid_matfiles/collision/racup/1000RacOn',int2str(ppp),'.mat'),...
         %     'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
         %     'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
         %     'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
