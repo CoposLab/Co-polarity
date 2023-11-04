@@ -84,8 +84,7 @@ while (ppp<=100)
         c2_ind all_results_matrix polarize_time polarize_time_c1 ... 
         polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem ...
         ka_ind kb_ind kc_ind kd_ind ka_vals kb_vals kc_vals kd_vals coeff_vals ...
-        konx_ind koffx_ind kony_ind c1coeff_ind c2coeff_ind move_cells polarize_time_yes ...
-        num_pol_lf polarize_time_lf num_pol_yes
+        konx_ind koffx_ind kony_ind c1coeff_ind c2coeff_ind move_cells
     
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
@@ -651,14 +650,14 @@ while (ppp<=100)
          % end
 
 
-         Konx1(boundC1)=Konx1(boundC1)*1000;
+         % Konx1(boundC1)=Konx1(boundC1)*1000;
          % Konx2(boundC2)=Konx2(boundC2)*1000;
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
          % Kony2(boundC2)=Kony2(boundC2)*1000;
          
          % Koffx1(boundC1)=Koffx1(boundC1)*10;
-         Koffx2(boundC2)=Koffx2(boundC2)*100;
+         % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
          % Koffy1(boundC1)=Koffy1(boundC1)*1000;
          % Koffy2(boundC2)=Koffy2(boundC2)*100;
@@ -1587,7 +1586,7 @@ while (ppp<=100)
                         pol_lf=1;
                         num_pol_lf=num_pol_lf+1;
                         polarize_time_lf=polarize_time_lf+t-100;
-                    end
+                        en
 
                 end
             end
@@ -1685,7 +1684,6 @@ if countpol==1
     avg_steps_c2=0;
     avg_steps_total=0;
     avg_steps_samedir=0;
-    avg_steps_lf=0;
     if num_pol_c1>0
         sprintf('Average polarization time for cell 1 with %d runs: %d timesteps',num_pol_c1,polarize_time_c1/num_pol_c1)
         avg_steps_c1=polarize_time_c1/num_pol_c1;
@@ -1704,12 +1702,9 @@ if countpol==1
     else
         sprintf('None polarized in the same direction')
     end
-    if num_pol_lf>0
-        avg_steps_lf=polarize_time_lf/num_pol_lf;
-    end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
-    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,avg_steps_lf,num_pol_c1,num_pol_c2,num_pol_yes,num_pol_lf],...
-        './simulation_results/timetopolarizeresults/racupc1_racdownc2/1000RacOnC1_100RacOffC2.xls')
+    writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2,num_pol_yes],...
+        './timetopolarizeresults_signal/newversion/rhoupc1_racupc2_forces/1000aRhoOnC1_1000bRacOnC2.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
