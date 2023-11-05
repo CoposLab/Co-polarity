@@ -54,7 +54,7 @@ writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 2;
 
 while (ppp<=3)
     close all;
@@ -154,7 +154,7 @@ while (ppp<=3)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -616,12 +616,21 @@ while (ppp<=3)
         % this works
         if signal==1
             steepness = 20;
-            Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+            if t<=500
+                Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+            else
+                Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            end
         end
 
          
@@ -651,8 +660,8 @@ while (ppp<=3)
          % end
 
 
-         % Konx1(boundC1)=Konx1(boundC1)*1000;
-         % Konx2(boundC2)=Konx2(boundC2)*1000;
+         Konx1(boundC1)=Konx1(boundC1)*1000;
+         Konx2(boundC2)=Konx2(boundC2)*1000;
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
          % Kony2(boundC2)=Kony2(boundC2)*1000;
@@ -734,12 +743,12 @@ while (ppp<=3)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        if t>1000
-        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
-        end
+        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+       
 
         % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
         % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
@@ -1132,13 +1141,13 @@ while (ppp<=3)
         diffRHSb2 = Hm2*b2;
 
         kb1=zeros(length(b2),1);
-        kb1(boundC1)=0.8*ones(length(boundC1),1);
+        kb1(boundC1)=0.9*ones(length(boundC1),1);
         kc1=zeros(length(a2),1);
-        kc1(boundC1)=0.8*ones(length(boundC1),1);
+        kc1(boundC1)=0.9*ones(length(boundC1),1);
         kb2=zeros(length(b1),1);
-        kb2(boundC2)=0.8*ones(length(boundC2),1);
+        kb2(boundC2)=0.9*ones(length(boundC2),1);
         kc2=zeros(length(a1),1);
-        kc2(boundC2)=0.8*ones(length(boundC2),1);
+        kc2(boundC2)=0.9*ones(length(boundC2),1);
         abmax=50;
 
         gamma=1.5;
@@ -1618,7 +1627,7 @@ while (ppp<=3)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        save(strcat('./FigureAndMovieCode/vid_matfiles/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
+        save(strcat('./FigureAndMovieCode/vid_matfiles/signal_switches_sides/500stepsc2_2000stepsc1/racup/1000RacOn',int2str(ppp),'.mat'),...
             'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
             'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
             'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
@@ -1711,7 +1720,7 @@ if countpol==1
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
     writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,avg_steps_lf,num_pol_c1,num_pol_c2,num_pol_yes,num_pol_lf],...
-        './simulation_results/timetopolarizeresults/racupc1_racdownc2/1000RacOnC1_100RacOffC2.xls')
+        './simulation_results/timetopolarizeresults/branchedbundled/0_8kb0_8kc50max2alpha.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;

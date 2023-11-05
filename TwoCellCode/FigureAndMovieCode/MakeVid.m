@@ -13,12 +13,12 @@ racrhovid=0;
 circlescatvid=1;
 adjacent=1;
 
-for i=1:3
+for i=2:3
 
-    loadfile='./vid_matfiles/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn';
+    loadfile='./vid_matfiles/signal_switches_sides/500stepsc2_2000stepsc1/racup/1000RacOn';
     
     setnum=int2str(i);
-    savelocation='../movies/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn';
+    savelocation='../movies/signal_switches_sides/500stepsc2_2000stepsc1/racup/1000RacOn';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
