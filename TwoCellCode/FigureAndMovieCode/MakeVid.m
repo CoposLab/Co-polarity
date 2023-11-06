@@ -224,17 +224,15 @@ for i=2:3
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
             surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
+            clim([0,allmax/2])
             freezeColors;
-            freezeColors(colorbar('Location','westoutside'));
-            clim([0,allmax])
             shading interp
             hold on;
             alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
             surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
+            clim([0,allmax/2])
             freezeColors;
-            freezeColors(jicolorbar);
-            clim([0,allmax])
             shading interp
             view(2)
             grid off
@@ -243,17 +241,26 @@ for i=2:3
             % Cell 2
             surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
+            clim([0,allmax/2])
             freezeColors;
-            freezeColors(colorbar('Location','westoutside'));
-            clim([0,allmax])
+            cb=colorbar('Location','eastoutside');
+            freezeColors(cb);
+            cbpos=cb.Position;
+            set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
+            % set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
+            set(cb,'TickLabels',{});
+            cbpos=cb.Position;
             shading interp
             % end
             % if max(ZBund2)>0.5
             surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
+            clim([0,allmax/2])
             freezeColors;
-            freezeColors(jicolorbar);
-            clim([0,allmax])
+            jcb=jicolorbar;
+            freezeColors(jcb);
+            jcbpos=jcb.Position;
+            set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
             shading interp
             % end
             view(2)
@@ -439,20 +446,14 @@ for i=2:3
             surf(Xcol,Ycol,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             % hold on
             colormap(branchedColor)
-            % cb=colorbar('Location','westoutside');
+            clim([0,allmax/2])
             freezeColors;
-            % freezeColors(cb);
-            % clim([0,allmax/2])
-            % cbpos=cb.Position;
-            % set(cb,'Position',[cbpos(1) cbpos(2) cbpos(3) cbpos(4)/2])
             shading interp
             alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
             surf(Xcol,Ycol,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
+            clim([0,allmax/2])
             freezeColors;
-            % jcb=jicolorbar;
-            % freezeColors(jcb);
-            % clim([0,allmax/2])
             shading interp
             view(2)
             % plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black')
@@ -503,10 +504,10 @@ for i=2:3
             end
             % hold on
             colormap(branchedColor)
+            clim([0,allmax/2])
             cb=colorbar('Location','eastoutside');
             freezeColors;
             freezeColors(cb);
-            clim([0,allmax/2])
             cbpos=cb.Position;
             % set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
             set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
@@ -520,10 +521,10 @@ for i=2:3
                 surf(Xcol,Ycol-2-(range-1),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             end
             colormap(bundledColor)
+            clim([0,allmax/2])
             freezeColors;
             jcb=jicolorbar;
             freezeColors(jcb);
-            clim([0,allmax/2])
             jcbpos=jcb.Position;
             set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
             % set(cb,'Position',[cbpos(1),cbpos(2),cbpos(3),jcbpos(4)])

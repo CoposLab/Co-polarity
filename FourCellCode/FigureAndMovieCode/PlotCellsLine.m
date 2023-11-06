@@ -114,15 +114,13 @@ end
 surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
+clim([0,allmax/2])
 freezeColors;
-% freezeColors(colorbar('Location','eastoutside'));
-% clim([0,allmax/2])
 shading interp
 surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBund1,'AlphaData',ZBund1,'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
-% clim([0,allmax/2])
+clim([0,allmax/2])
 freezeColors;
-% freezeColors(jicolorbar);
 shading interp
 
 % Cell 2
@@ -135,15 +133,13 @@ end
 surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2,'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
+clim([0,allmax/2])
 freezeColors;
-% freezeColors(colorbar('Location','eastoutside'));
-% clim([0,allmax/2])
 shading interp
 surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBund2,'AlphaData',ZBund2,'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
+clim([0,allmax/2])
 freezeColors;
-% freezeColors(jicolorbar);
-% clim([0,allmax/2])
 shading interp
 
 % Cell 3
@@ -156,15 +152,13 @@ end
 surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
+clim([0,allmax/2])
 freezeColors;
-% freezeColors(colorbar('Location','eastoutside'));
-% clim([0,allmax])
 shading interp
 surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
+clim([0,allmax/2])
 freezeColors;
-% freezeColors(jicolorbar);
-% clim([0,allmax])
 shading interp
 
 % Cell 4
@@ -177,6 +171,7 @@ end
 surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
+clim([0,allmax/2])
 freezeColors;
 cb=colorbar('Location','eastoutside');
 freezeColors(cb);
@@ -184,15 +179,14 @@ cbpos=cb.Position;
 set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
 set(cb,'TickLabels',[])
 cbpos=cb.Position;
-clim([0,allmax/2])
 shading interp
 surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
+clim([0,allmax/2])
 freezeColors;
 jcb=jicolorbar;
 freezeColors(jcb);
 set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
-clim([0,allmax/2])
 shading interp
 grid off
 xlim([-2,2])

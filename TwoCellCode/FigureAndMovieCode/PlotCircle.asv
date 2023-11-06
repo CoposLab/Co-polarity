@@ -416,14 +416,20 @@ alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
 surf(Xcol,Ycol,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
 % hold on
 colormap(branchedColor)
-clim([0,allmax/2])
+% cb=colorbar('Location','westoutside');
 freezeColors;
+% freezeColors(cb);
+% clim([0,allmax/2])
+% cbpos=cb.Position;
+% set(cb,'Position',[cbpos(1) cbpos(2) cbpos(3) cbpos(4)/2])
 shading interp
 alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
 surf(Xcol,Ycol,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
-clim([0,allmax/2])
 freezeColors;
+% jcb=jicolorbar;
+% freezeColors(jcb);
+% clim([0,allmax/2])
 shading interp
 view(2)
 % plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black')
@@ -474,13 +480,13 @@ else
 end
 % hold on
 colormap(branchedColor)
-clim([0,allmax/2])
 cb=colorbar('Location','eastoutside');
 freezeColors;
 freezeColors(cb);
+clim([0,allmax/2])
 cbpos=cb.Position;
-set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
-% set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
+% set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
+set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
 set(cb,'TickLabels',{});
 cbpos=cb.Position;
 shading interp
@@ -491,12 +497,13 @@ else
     surf(Xcol,Ycol-2-(range-1),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
 end
 colormap(bundledColor)
-clim([0,allmax/2])
 freezeColors;
 jcb=jicolorbar;
 freezeColors(jcb);
+clim([0,allmax/2])
 jcbpos=jcb.Position;
 set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
+% set(cb,'Position',[cbpos(1),cbpos(2),cbpos(3),jcbpos(4)])
 shading interp
 view(2)
 % plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black')

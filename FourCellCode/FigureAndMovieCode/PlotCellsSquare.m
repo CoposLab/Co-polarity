@@ -120,6 +120,7 @@ end
 surf(Xcol1+xshift1(t+1),Ycol1+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
+clim([0,allmax/2])
 freezeColors;
 shading interp
 surf(Xcol1+xshift1(t+1),Ycol1+yshift1(t+1),ZBund1,'AlphaData',ZBund1,'FaceAlpha','interp','FaceColor','interp');
@@ -137,10 +138,12 @@ end
 surf(Xcol2+xshift2(t+1),Ycol2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2,'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
+clim([0,allmax/2])
 freezeColors;
 shading interp
 surf(Xcol2+xshift2(t+1),Ycol2+yshift2(t+1),ZBund2,'AlphaData',ZBund2,'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
+clim([0,allmax/2])
 freezeColors;
 shading interp
 
@@ -154,10 +157,12 @@ end
 surf(Xcol3+xshift3(t+1),Ycol3+yshift3(t+1),ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
+clim([0,allmax/2])
 freezeColors;
 shading interp
 surf(Xcol3+xshift3(t+1),Ycol3+yshift3(t+1),ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
+clim([0,allmax/2])
 freezeColors;
 shading interp
 
@@ -171,6 +176,7 @@ end
 surf(Xcol4+xshift4(t+1),Ycol4+yshift4(t+1),ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
 view(2)
 colormap(branchedColor)
+clim([0,allmax/2])
 freezeColors;
 cb=colorbar('Location','eastoutside');
 freezeColors(cb);
@@ -178,15 +184,14 @@ cbpos=cb.Position;
 set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
 set(cb,'TickLabels',[])
 cbpos=cb.Position;
-clim([0,allmax/2])
 shading interp
 surf(Xcol4+xshift4(t+1),Ycol4+yshift4(t+1),ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
 colormap(bundledColor)
+clim([0,allmax/2])
 freezeColors;
 jcb=jicolorbar;
 freezeColors(jcb);
 set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
-clim([0,allmax/2])
 shading interp
 grid off
 xlim([-4,2])
