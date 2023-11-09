@@ -23,10 +23,10 @@ adjacent=1;
 
 for i=1:3
 
-    loadfile='./vid_matfiles/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racup/1000RacOn';
+    loadfile='./vid_matfiles/uncoupled_to_coupled/500stepsuncoupled_2000stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn';
     
     setnum=int2str(i);
-    savelocation='../movies/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racup/1000RacOn';
+    savelocation='../movies/uncoupled_to_coupled/500stepsuncoupled_2000stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -591,10 +591,10 @@ for i=1:3
             % axis square
             hold off
 
-
-            timebox=annotation('textbox', [0.75, 0.1, 0.1, 0.1], 'String', "t = " + t,'FitBoxToText','on');
+            cbpos=cb.Position;
+            timebox=annotation('textbox', [0.75, 0.1, 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none');
             tbpos=timebox.Position;
-            set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.1]);
+            set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.05]);
 
             if ~isempty(dirIndexa1)
                 figure(4)

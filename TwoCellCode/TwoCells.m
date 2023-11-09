@@ -140,7 +140,7 @@ while (ppp<=3)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numRhoToRemove=0;
+    numRhoToRemove=10;
     numRacToRemove=0;
     counter1=0;
     counter2=0;
@@ -154,7 +154,7 @@ while (ppp<=3)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -660,10 +660,9 @@ while (ppp<=3)
          % end
 
 
-         if t>1000
-         Konx1(boundC1)=Konx1(boundC1)*1000;
-         Konx2(boundC2)=Konx2(boundC2)*1000;
-         end
+         
+         % Konx1(boundC1)=Konx1(boundC1)*1000;
+         % Konx2(boundC2)=Konx2(boundC2)*1000;
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
          % Kony2(boundC2)=Kony2(boundC2)*1000;
@@ -1154,17 +1153,18 @@ while (ppp<=3)
 
         gamma=1.5;
 
+        
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + 0*kb1)) - a1.*a1); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + 0*kc1)) - b1.*b1); %Cell 1 bundled
         rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + 0*kb2)) - a2.*a2); %Cell 2 branched
         rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + 0*kc2)) - b2.*b2); %Cell 2 bundled
-
+        
         % Growth term maxes out version
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
         % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + kb2.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
         % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kc2.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
-
+        
           % rxna1 = dt*( F(a1,b1) + (a1.*(1+alpha(1)*xC1 ... 
           %    + ka_vals(ka_ind) * kb1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
           %    + kb_vals(kb_ind) * kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
@@ -1629,7 +1629,7 @@ while (ppp<=3)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        save(strcat('./FigureAndMovieCode/vid_matfiles/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racup/1000RacOn',int2str(ppp),'.mat'),...
+        save(strcat('./FigureAndMovieCode/vid_matfiles/signal_switches_sides/500stepsc2_2000stepsc1/antagonism_ractorho/0_5epsilon10RhoRemoved',int2str(ppp),'.mat'),...
             'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
             'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
             'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
