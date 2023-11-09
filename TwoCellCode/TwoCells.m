@@ -54,7 +54,7 @@ writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 2;
+ppp = 1;
 
 while (ppp<=3)
     close all;
@@ -154,7 +154,7 @@ while (ppp<=3)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -660,8 +660,10 @@ while (ppp<=3)
          % end
 
 
+         if t>1000
          Konx1(boundC1)=Konx1(boundC1)*1000;
          Konx2(boundC2)=Konx2(boundC2)*1000;
+         end
          
          % Kony1(boundC1)=Kony1(boundC1)*1000;
          % Kony2(boundC2)=Kony2(boundC2)*1000;
@@ -670,7 +672,7 @@ while (ppp<=3)
          % Koffx2(boundC2)=Koffx2(boundC2)*100;
 
          % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-         % Koffy2(boundC2)=Koffy2(boundC2)*100;
+         % Koffy2(boundC2)=Koffy2(boundC2)*1000;
 
 
          % Set konx and kony away from contact region
@@ -1627,11 +1629,11 @@ while (ppp<=3)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-        save(strcat('./FigureAndMovieCode/vid_matfiles/signal_switches_sides/500stepsc2_2000stepsc1/racup/1000RacOn',int2str(ppp),'.mat'),...
+        save(strcat('./FigureAndMovieCode/vid_matfiles/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racup/1000RacOn',int2str(ppp),'.mat'),...
             'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
             'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
             'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
-            'posn1','posn2','xC1all','yC1all','xC2all','yC2all')
+            'posn1','posn2','xC1all','yC1all','xC2all','yC2all','sigBound1','sigBound2')
         ppp = ppp + 1;
         
         if writem==1
@@ -1720,7 +1722,7 @@ if countpol==1
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
     writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,avg_steps_lf,num_pol_c1,num_pol_c2,num_pol_yes,num_pol_lf],...
-        './simulation_results/timetopolarizeresults/branchedbundled/0_8kb0_8kc50max2alpha.xls')
+        './simulation_results/timetopolarizeresults/bundledupc1_branchedupc2/3Ka_3Kb.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;

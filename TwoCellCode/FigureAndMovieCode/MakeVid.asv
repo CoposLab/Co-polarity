@@ -5,7 +5,7 @@ clc;
 
 addpath('./freeze_colors')
 
-signal=0;
+signal=1;
 
 scatvid=0;
 branchedbundledvid=0;
@@ -15,10 +15,10 @@ adjacent=1;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/not_polarized/branchedupallC1_bundledupallC2/2KaC1_2KbC2_';
+    loadfile='./vid_matfiles/signal_switches_sides/500stepsc2_2000stepsc1/racup_rhodown/1000RacOn_1000RhoOff';
     
     setnum=int2str(i);
-    savelocation='../movies/circle_scatterplot/almost_adjacent/twocells_notpolarized';
+    savelocation='../movies/signal_switches_sides/500stepsc2_2000stepsc1/racup_rhodown/1000RacOn_1000RhoOff';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');

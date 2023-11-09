@@ -6,6 +6,14 @@ clc;
 addpath('./freeze_colors')
 
 signal=0;
+% Na=101;
+% sigper=0.40;
+% sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
+% sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
+% sigBound1(sigBound1>Na)=sigBound1(sigBound1>Na)-Na;
+% sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
+% sigBound2(sigBound2<=0)=sigBound2(sigBound2<=0)+Na;
+% sigBound2(sigBound2>Na)=sigBound2(sigBound2>Na)-Na;
 
 scatvid=0;
 branchedbundledvid=0;
@@ -13,12 +21,12 @@ racrhovid=0;
 circlescatvid=1;
 adjacent=1;
 
-for i=1:1
+for i=1:3
 
-    loadfile='./vid_matfiles/not_polarized/branchedupallC1_bundledupallC2/2KaC1_2KbC2_';
+    loadfile='./vid_matfiles/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racup/1000RacOn';
     
     setnum=int2str(i);
-    savelocation='../movies/circle_scatterplot/almost_adjacent/twocells_notpolarized';
+    savelocation='../movies/uncoupled_to_coupled/1000stepsuncoupled_1500stepscoupled/racup/1000RacOn';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -115,10 +123,6 @@ for i=1:1
         [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
         [Xmid,Ymid] = pol2cart(th,rad);
 
-
-        sigper=0.40;
-        sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
-        sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
         %Define colors
         colorLength = 50;
@@ -587,6 +591,11 @@ for i=1:1
             % axis square
             hold off
 
+
+            timebox=annotation('textbox', [0.75, 0.1, 0.1, 0.1], 'String', "t = " + t,'FitBoxToText','on');
+            tbpos=timebox.Position;
+            set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.1]);
+
             if ~isempty(dirIndexa1)
                 figure(4)
                 hold on;
@@ -602,6 +611,21 @@ for i=1:1
                     quiver(0,-2-(range-1),Xsm(dirIndexa2),Ysm(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
                 end
                 hold off;
+            end
+
+
+            if signal==1
+                [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+                [Xsig,Ysig] = pol2cart(th,rad);
+                if t<=500
+                    hold on;
+                    scatter(Xsig(sigBound2),Ysig(sigBound2)-2-(range-1),'black','.')
+                    hold off;
+                else
+                    hold on;
+                    scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                    hold off;
+                end
             end
 
             grid off
