@@ -20,13 +20,14 @@ branchedbundledvid=0;
 racrhovid=0;
 circlescatvid=1;
 adjacent=1;
+showtime=0;
 
-for i=1:3
+for i=1:10
 
-    loadfile='./vid_matfiles/uncoupled_to_coupled/500stepsuncoupled_2000stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn';
+    loadfile='./vid_matfiles/branchedbundled/nosignal/0_75kb0_75kc_50max_2alpha';
     
     setnum=int2str(i);
-    savelocation='../movies/uncoupled_to_coupled/500stepsuncoupled_2000stepscoupled/racupc1_rhoupc2_forces/1000bRacOn_1000aRhoOn';
+    savelocation='../movies/branchedbundled/nosignal/0_75kb0_75kc_50max_2alpha';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -592,9 +593,11 @@ for i=1:3
             hold off
 
             cbpos=cb.Position;
-            timebox=annotation('textbox', [0.75, 0.1, 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none');
-            tbpos=timebox.Position;
-            set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.05]);
+            if showtime==1
+                timebox=annotation('textbox', [0.75, 0.1, 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none');
+                tbpos=timebox.Position;
+                set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.05]);
+            end
 
             if ~isempty(dirIndexa1)
                 figure(4)
