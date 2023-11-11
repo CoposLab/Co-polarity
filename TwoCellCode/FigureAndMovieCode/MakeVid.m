@@ -24,10 +24,10 @@ showtime=0;
 
 for i=1:10
 
-    loadfile='./vid_matfiles/branchedbundled/nosignal/0_75kb0_75kc_50max_2alpha';
+    loadfile='./vid_matfiles/branchedbundled/signal/0_75kb0_75kc_50max_2alpha_40time';
     
     setnum=int2str(i);
-    savelocation='../movies/branchedbundled/nosignal/0_75kb0_75kc_50max_2alpha';
+    savelocation='../movies/branchedbundled/signal/0_75kb0_75kc_50max_2alpha_40time';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -83,7 +83,7 @@ for i=1:10
 
     allmax = max(max(max(max(a1all)),max(max(a2all))),max(max(max(b1all)),max(max(b2all))));
 
-    for t=1:50:2499
+    for t=1:50:Nt-1
     % for t=1:5:150
         a1=a1all(:,t);
         a2=a2all(:,t);
