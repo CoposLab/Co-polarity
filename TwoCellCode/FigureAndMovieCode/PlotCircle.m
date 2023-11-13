@@ -3,7 +3,7 @@ close all;
 signal=0;
 
 
-load('./vid_matfiles/collision/racup/1000RacOn1.mat')
+load('./vid_matfiles/coalign/uncoupled/uncoupled1.mat')
 a1=a1all(:,end-1);
 a2=a2all(:,end-1);
 b1=b1all(:,end-1);
