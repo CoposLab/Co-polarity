@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_signal/antagonismbranchedup/0_5epsilon1Removed1_2branched';
+filename = './simulation_results/results_signal/branchedbundledgrowth3/0_8ka0_8kb_40time';
 maxnum=100;
 
 angle=pi/4;
