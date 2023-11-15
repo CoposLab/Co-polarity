@@ -43,8 +43,8 @@ num_pol_yes=0;
 num_pol_lf=0;
 num_pol_c1=0;
 num_pol_c2=0;
-countpol=0;
-save_matfile=1;
+countpol=1;
+save_matfile=0;
 
 move_cells=0;
 writem=0;
@@ -53,7 +53,7 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=10)
+while (ppp<=100)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -125,7 +125,7 @@ while (ppp<=10)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 40.0;                  % total simulation time
+    Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -146,7 +146,7 @@ while (ppp<=10)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -191,10 +191,10 @@ while (ppp<=10)
     % kb: how does bundled affect branched
     % kc: how does branched affect bundled
     % kd: how does bundled affect bundled
-    ka_vals=0.8*[-1,0,1];
-    kb_vals=0.8*[-1,0,1];
-    kc_vals=0.8*[-1,0,1];
-    kd_vals=0.8*[-1,0,1];
+    ka_vals=0.9*[-1,0,1];
+    kb_vals=0.9*[-1,0,1];
+    kc_vals=0.9*[-1,0,1];
+    kd_vals=0.9*[-1,0,1];
     ka_ind=2; %index of ka_vals (index 2 means no interaction)
     kb_ind=3;
     kc_ind=3;
@@ -205,51 +205,6 @@ while (ppp<=10)
         kc_ind=2;
         kd_ind=2;
     end
-
-    
-    % Set rac rho coupling
-    %
-    % multiply rac rho binding and unbinding rates by a constant
-    bindunbind_rates=0; % 1 for coupled (use coeffs below), 0 for uncoupled (all coeffs are 1)
-    %
-    % coefficients for each binding/unbinding rate in contact region
-    % ex: Konx1=racon1*Konx1 in contact region
-    racon1=1;
-    racon2=1;
-    rhoon1=1;
-    rhoon2=1;
-    racoff1=1;
-    racoff2=1;
-    rhooff1=1;
-    rhooff2=1;
-    % coefficients for away from contact region
-    racon1_away=1;
-    racon2_away=1;
-    rhoon1_away=1;
-    rhoon2_away=1;
-    racoff1_away=1;
-    racoff2_away=1;
-    rhooff1_away=1;
-    rhooff2_away=1;
-
-    % binding and unbinding based on other rac/rho amounts nearby (set
-    % below)
-    racrho_crosscells_coupled=0; % 0 is uncoupled, 1 is coupled
-
-
-    % rac rho based on branched and bundled concentrations in the other
-    % cell at the contact region
-    bindunbind_forces=0; % 1 is coupled (use coeffs below), 0 is uncoupled (all coeffs are 1)
-    % binding rates: Konx1=Konx1*b2*rac1b2, etc
-    rac1b2=1;
-    rac2b1=1;
-    rho1a2=1;
-    rho2a1=1;
-    % unbinding rates: Koffx1=Koffx1*a2*rac1a2, etc
-    rac1a2=1;
-    rac2a1=1;
-    rho1b2=1;
-    rho2b1=1;
 
 
     % Set initial conditions for actin distribution
@@ -695,26 +650,26 @@ while (ppp<=10)
         end
 
 
-         % Set konx and kony in contact region
-         Konx1(boundC1)=Konx1(boundC1)*racon1;
-         Konx2(boundC2)=Konx2(boundC2)*racon2;
-         Kony1(boundC1)=Kony1(boundC1)*rhoon1;
-         Kony2(boundC2)=Kony2(boundC2)*rhoon2;
-         Koffx1(boundC1)=Koffx1(boundC1)*racoff1;
-         Koffx2(boundC2)=Koffx2(boundC2)*racoff2;
-         Koffy1(boundC1)=Koffy1(boundC1)*rhooff1;
-         Koffy2(boundC2)=Koffy2(boundC2)*rhooff2;
+        % Set konx and kony in contact region
+        % Konx1(boundC1)=Konx1(boundC1)*1000;
+        % Konx2(boundC2)=Konx2(boundC2)*1000;
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
+        % Kony2(boundC2)=Kony2(boundC2)*1000;
+        % Koffx1(boundC1)=Koffx1(boundC1)*1000;
+        % Koffx2(boundC2)=Koffx2(boundC2)*1000;
+        % Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
-         % Set konx and kony away from contact region
-         Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*racon1_away;
-         Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*racon2_away;
-         Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*rhoon1_away;
-         Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*rhoon2_away;
-         Koffx1(setdiff(1:length(Koffx1),boundC1)) = Koffx1(setdiff(1:length(Koffx1),boundC1))*racoff1_away;
-         Koffx2(setdiff(1:length(Koffx2),boundC2)) = Koffx2(setdiff(1:length(Koffx2),boundC2))*racoff2_away;
-         Koffy1(setdiff(1:length(Koffy1),boundC1)) = Koffy1(setdiff(1:length(Koffy1),boundC1))*rhooff1_away;
-         Koffy2(setdiff(1:length(Koffy2),boundC2)) = Koffy2(setdiff(1:length(Koffy2),boundC2))*rhooff2_away;
-         
+        % Set konx and kony away from contact region
+        % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
+        % Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*1000;
+        % Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*1000;
+        % Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*1000;
+        % Koffx1(setdiff(1:length(Koffx1),boundC1)) = Koffx1(setdiff(1:length(Koffx1),boundC1))*1000;
+        % Koffx2(setdiff(1:length(Koffx2),boundC2)) = Koffx2(setdiff(1:length(Koffx2),boundC2))*1000;
+        % Koffy1(setdiff(1:length(Koffy1),boundC1)) = Koffy1(setdiff(1:length(Koffy1),boundC1))*1000;
+        % Koffy2(setdiff(1:length(Koffy2),boundC2)) = Koffy2(setdiff(1:length(Koffy2),boundC2))*1000;
+
 
 
         % Set konx and kony depending on rac/rho concentrations in contact
@@ -764,16 +719,14 @@ while (ppp<=10)
 
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        if bindunbind_forces==1
-            Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*rac1b2;
-            Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*rac2b1;
-            Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*rho1a2;
-            Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*rho2a1;
-            Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*rac1a2;
-            Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*rac2a1;
-            Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*rho1b2;
-            Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*rho2b1;
-        end
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
+        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
+        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
+        % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
+        % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
+        % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
 
 
         %Cell 1
@@ -1262,11 +1215,35 @@ while (ppp<=10)
             % cell_distance = sqrt((posn1(1)-posn2(1))^2+(posn1(2)-posn2(2))^2);
         end
 
+        if t==(Nt-1)
+            % Calculate difference in direction angles
+            angTolerance=pi/4;
+            strongAngTolerance=pi/5;
+            if isempty(dirIndex1) && isempty(dirIndex2)
+                samedirection='2NP';
+                angdiff=NaN;
+            elseif isempty(dirIndex1) || isempty(dirIndex2)
+                samedirection='1NP';
+                angdiff=NaN;
+            else
+                medang1 = th(1,dirIndex1);
+                medang2 = th(1,dirIndex2);
+                angdiff = min(abs(medang1-medang2),abs(2*pi-abs(medang1-medang2)));
+                if angdiff < angTolerance
+                    samedirection='yes';
+                elseif (abs(medang1-3*pi/2)<strongAngTolerance && abs(medang2-pi/2)<strongAngTolerance)
+                    samedirection='strong no; collision';
+                else
+                    samedirection='no';
+                end
+            end
+            sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
+        end
 
 
         %% Plot the solution(s)
          % if mod(t,tplot) == 0
-         if t==(Nt-1)
+         if t==(Nt-1) && vid==1
 
             %Define colors
             colorLength = 50;
@@ -1438,33 +1415,6 @@ while (ppp<=10)
                 currframe = getframe(figcells);
                 writeVideo(vidObjCol1,currframe);
             end
-
-            % Calculate difference in direction angles
-            angTolerance=pi/4;
-            strongAngTolerance=pi/5;
-            if isempty(dirIndex1) && isempty(dirIndex2)
-                samedirection='2NP';
-                angdiff=NaN;
-            elseif isempty(dirIndex1) || isempty(dirIndex2)
-                samedirection='1NP';
-                angdiff=NaN;
-            else
-                medang1 = th(1,dirIndex1);
-                medang2 = th(1,dirIndex2);
-                angdiff = min(abs(medang1-medang2),abs(2*pi-abs(medang1-medang2)));
-                if angdiff < angTolerance
-                    samedirection='yes';
-                elseif (abs(medang1-3*pi/2)<strongAngTolerance && abs(medang2-pi/2)<strongAngTolerance)
-                    samedirection='strong no; collision';
-                else
-                    samedirection='no';
-                end
-            end
-            sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
-
-
-            %save(strcat('./vid_matfiles/sigswitch_vid_files/vars_t',int2str(t)),'a1','b1','a2','b2','Xa','s1','s2','xC1','yC1','xC2','yC2','boundC1','boundC2','sigBound1','sigBound2');
-
         end
 
         % Check if polarized
@@ -1604,10 +1554,10 @@ while (ppp<=10)
                     elseif lf_counter>0 && lf_leader==1 && abs(medang2-pi/2)<pi/4 %c1 is still the leader
                         lf_counter=lf_counter+1;
                     elseif lf_counter>0 && lf_leader==1 && abs(medang1-3*pi/2)<pi/4 %c2 is new leader
-                        lf_counter=0;
+                        lf_counter=1;
                         lf_leader=2;
                     elseif lf_counter>0 && lf_leader==2 && abs(medang2-pi/2)<pi/4 %c1 is new leader
-                        lf_counter=0;
+                        lf_counter=1;
                         lf_leader=1;
                     end
 
@@ -1616,8 +1566,11 @@ while (ppp<=10)
                         num_pol_lf=num_pol_lf+1;
                         polarize_time_lf=polarize_time_lf+t-100;
                     end
-
+                else
+                    lf_counter=0;
                 end
+            else
+                lf_counter=0;
             end
         end
         
@@ -1739,7 +1692,7 @@ if countpol==1
     end
     % sprintf('%d,%d,%d,%d,%d,%d',avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,num_pol_c1,num_pol_c2)
     writematrix([avg_steps_c1,avg_steps_c2,avg_steps_total,avg_steps_samedir,avg_steps_lf,num_pol_c1,num_pol_c2,num_pol_yes,num_pol_lf],...
-        './simulation_results/timetopolarizeresults/bundledupc1_branchedupc2/3Ka_3Kb.xls')
+        './simulation_results/timetopolarizeresults_signal/rhoupc1_rhodownc2_forces/1000aRhoOnC1_1000bRhoOffC2.xls')
 end
 
 % all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
