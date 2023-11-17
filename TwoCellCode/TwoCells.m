@@ -36,7 +36,7 @@ coeff_vals=[1,10,1000];
 
 
 
-save_matfile=0;
+save_matfile=1;
 mat_location='./simulation_results/timetopolarizeresults/branchedbundled/0_8kb0_8kc-0_9ka-0_9kd50max2alpha';
 move_cells=0;
 writem=0;
@@ -45,7 +45,7 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -74,7 +74,7 @@ while (ppp<=1)
         polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem ...
         ka_ind kb_ind kc_ind kd_ind ka_vals kb_vals kc_vals kd_vals coeff_vals ...
         konx_ind koffx_ind kony_ind c1coeff_ind c2coeff_ind move_cells polarize_time_yes ...
-        num_pol_lf polarize_time_lf num_pol_yes save_matfile
+        num_pol_lf polarize_time_lf num_pol_yes save_matfile mat_location
 
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
