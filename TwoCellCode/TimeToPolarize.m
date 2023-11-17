@@ -9,7 +9,7 @@ clear
 tic
 
 save=1;
-load_save_location='./simulation_results/timetopolarizeresults/racupc1_racdownc2/1000RacOn_1000RacOff';
+load_save_location='./simulation_results/timetopolarizeresults/branchedbundled/0_8kb0_8kc-0_9ka-0_9kd50max2alpha';
 
 num_runs=100;
 
