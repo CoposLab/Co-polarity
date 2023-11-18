@@ -9,7 +9,7 @@ squished=0;
 shifted=1;
 
 setnum='1';
-loadfile='./vid_matfiles/moving_cells_line/alt_racup_rhoup_forcedependent/1000bRacOn_1000aRhoOn';
+loadfile='./vid_matfiles/moving_cells_line/branchedbundled/0_9kb0_9kc';
 
 load(strcat(loadfile,setnum));
 t=2499;
@@ -189,9 +189,9 @@ freezeColors(jcb);
 set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
 shading interp
 grid off
-xlim([-2,2])
-ylim([-10,2])
-pbaspect([4 12 1])
+xlim([-2.5,2.5])
+ylim([-10.5,2.5])
+pbaspect([5 13 1])
 % axis equal
 
 hold off;

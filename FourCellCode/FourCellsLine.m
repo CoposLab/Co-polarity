@@ -8,7 +8,7 @@
 % Last updated: 7/10/2023
 % Katie Levandosky
 % Calina Copos
-addpath('../TwoCellCode/freeze_colors')
+addpath('../TwoCellCode/FigureAndMovieCode/freeze_colors')
 addpath('../SingleCellCode_Published')
 
 clear;
@@ -23,18 +23,9 @@ clc;
 % for c1_ind=2:length(c1_vals)
 %     for c2_ind=c1_ind:length(c2_vals)
 
-% polarize_time=0;
-% polarize_time_c1=0;
-% polarize_time_c2=0;
-% polarize_time_c3=0;
-% polarize_time_c4=0;
-% num_polarized=0;
-% num_pol_c1=0;
-% num_pol_c2=0;
-% num_pol_c3=0;
-% num_pol_c4=0;
-% countpol=0;
-% writem=0;
+save_matfile=1;
+mat_location = './FigureAndMovieCode/vid_matfiles/moving_cells_line/alt_rhoup_rhodown/1000RhoOn_1000RhoOff';
+
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
@@ -67,7 +58,8 @@ while (ppp<=1)
         filenameScatter filenameCells res_counters c1_vals c2_vals c1_ind ...
         c2_ind all_results_matrix polarize_time polarize_time_c1 ...
         polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem ...
-        polarize_time_c3 polarize_time_c4 num_pol_c3 num_pol_c4
+        polarize_time_c3 polarize_time_c4 num_pol_c3 num_pol_c4 save_matfile ...
+        mat_location
 
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
@@ -181,6 +173,17 @@ while (ppp<=1)
     Kb3(boundC3_2) = bundledConst3(2)*Kb3(boundC3_2);
     Ka4(boundC4) = branchedConst4*Ka4(boundC4);
     Kb4(boundC4) = bundledConst4*Kb4(boundC4);
+
+ 
+    ka_vals=0.9*[-1,0,1];
+    kb_vals=0.9*[-1,0,1];
+    kc_vals=0.9*[-1,0,1];
+    kd_vals=0.9*[-1,0,1];
+    ka_ind=2;
+    kb_ind=2;
+    kc_ind=2;
+    kd_ind=2;
+
 
     % Kb1(setdiff(1:length(Kb1),boundC1)) = 1.5*Kb1(setdiff(1:length(Kb1),boundC1));
 
@@ -908,12 +911,12 @@ while (ppp<=1)
         % Konx2(boundC2_2)=Konx2(boundC2_2)*1000;
         % Konx3(boundC3_2)=Konx3(boundC3_2)*1000;
         
-        % Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Kony2(boundC2_1)=Kony2(boundC2_1)*100;
-        % Kony2(boundC2_2)=Kony2(boundC2_2)*1000;
-        % Kony3(boundC3_1)=Kony3(boundC3_1)*100;
-        % Kony3(boundC3_2)=Kony3(boundC3_2)*1000;
-        % Kony4(boundC4)=Kony4(boundC4)*100;
+        Kony1(boundC1)=Kony1(boundC1)*1000;
+        % Kony2(boundC2_1)=Kony2(boundC2_1)*1000;
+        Kony2(boundC2_2)=Kony2(boundC2_2)*1000;
+        % Kony3(boundC3_1)=Kony3(boundC3_1)*1000;
+        Kony3(boundC3_2)=Kony3(boundC3_2)*1000;
+        % Kony4(boundC4)=Kony4(boundC4)*1000;
         
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2_1)=Koffx2(boundC2_1)*100;
@@ -923,11 +926,11 @@ while (ppp<=1)
         % Koffx4(boundC4)=Koffx4(boundC4)*100;
 
         % Koffy1(boundC1)=Koffy1(boundC1)*100;
-        % Koffy2(boundC2_1)=Koffy2(boundC2_1)*100;
+        Koffy2(boundC2_1)=Koffy2(boundC2_1)*1000;
         % Koffy2(boundC2_2)=Koffy2(boundC2_2)*100;
-        % Koffy3(boundC3_1)=Koffy3(boundC3_1)*100;
+        Koffy3(boundC3_1)=Koffy3(boundC3_1)*1000;
         % Koffy3(boundC3_2)=Koffy3(boundC3_2)*100;
-        % Koffy4(boundC4)=Koffy4(boundC4)*100;
+        Koffy4(boundC4)=Koffy4(boundC4)*1000;
 
 
         % Set konx and kony depending on rac/rho concentrations in contact
@@ -992,19 +995,19 @@ while (ppp<=1)
         % Kb2(Kb2==0)=1;
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2_1))*1000;
+        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2_1))*1000;
         % Konx2(boundC2_1) = Konx2(boundC2_1).*flip(b1(boundC1))*1000;
-        Konx2(boundC2_2) = Konx2(boundC2_2).*flip(b3(boundC3_1))*1000;
+        % Konx2(boundC2_2) = Konx2(boundC2_2).*flip(b3(boundC3_1))*1000;
         % Konx3(boundC3_1) = Konx3(boundC3_1).*flip(b2(boundC2_2))*1000;
-        Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b4(boundC4))*1000;
+        % Konx3(boundC3_2) = Konx3(boundC3_2).*flip(b4(boundC4))*1000;
         % Konx4(boundC4) = Konx4(boundC4).*flip(b3(boundC3_2))*1000;
         
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2_1))*1000;
-        Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1))*1000;
+        % Kony2(boundC2_1) = Kony2(boundC2_1).*flip(a1(boundC1))*1000;
         % Kony2(boundC2_2) = Kony2(boundC2_2).*flip(a3(boundC3_1))*1000;
-        Kony3(boundC3_1) = Kony3(boundC3_1).*flip(a2(boundC2_2))*1000;
+        % Kony3(boundC3_1) = Kony3(boundC3_1).*flip(a2(boundC2_2))*1000;
         % Kony3(boundC3_2) = Kony3(boundC3_2).*flip(a4(boundC4))*1000;
-        Kony4(boundC4) = Kony4(boundC4).*flip(a3(boundC3_2))*1000;
+        % Kony4(boundC4) = Kony4(boundC4).*flip(a3(boundC3_2))*1000;
 
         % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2_1))*1000;
         % Koffx2(boundC2_1) = Koffx2(boundC2_1).*flip(a1(boundC1))*1000;
@@ -1685,59 +1688,67 @@ while (ppp<=1)
 
         %kb = branched pushing on bundled
         %kc = bundled pulling on branched
-        kb1=zeros(length(a1),1);
-        kb1(boundC1)=1*ones(length(boundC1),1);
-        kc1=zeros(length(b1),1);
-        kc1(boundC1)=1*ones(length(boundC1),1);
+        cell1_bound=zeros(length(a1),1);
+        cell1_bound(boundC1)=ones(length(boundC1),1);
 
-        kb2_1=zeros(length(a2),1);
-        kb2_1(boundC2_1)=1*ones(length(boundC2_1),1);
-        kb2_2=zeros(length(a2),1);
-        kb2_2(boundC2_2)=1*ones(length(boundC2_2),1);
-        kc2_1=zeros(length(b2),1);
-        kc2_1(boundC2_1)=1*ones(length(boundC2_1),1);
-        kc2_2=zeros(length(b2),1);
-        kc2_2(boundC2_2)=1*ones(length(boundC2_2),1);
+        cell2_bound1=zeros(length(a2),1);
+        cell2_bound1(boundC2_1)=ones(length(boundC2_1),1);
+        cell2_bound2=zeros(length(a2),1);
+        cell2_bound2(boundC2_2)=ones(length(boundC2_2),1);
 
-        kb3_1=zeros(length(a3),1);
-        kb3_1(boundC3_1)=1*ones(length(boundC3_1),1);
-        kb3_2=zeros(length(a3),1);
-        kb3_2(boundC3_2)=1*ones(length(boundC3_2),1);
-        kc3_1=zeros(length(b3),1);
-        kc3_1(boundC3_1)=1*ones(length(boundC3_1),1);
-        kc3_2=zeros(length(b3),1);
-        kc3_2(boundC3_2)=1*ones(length(boundC3_2),1);
+        cell3_bound1=zeros(length(a3),1);
+        cell3_bound1(boundC3_1)=ones(length(boundC3_1),1);
+        cell3_bound2=zeros(length(a3),1);
+        cell3_bound2(boundC3_2)=ones(length(boundC3_2),1);
 
-        kb4=zeros(length(a4),1);
-        kb4(boundC4)=1*ones(length(boundC4),1);
-        kc4=zeros(length(b4),1);
-        kc4(boundC4)=1*ones(length(boundC4),1);
+        cell4_bound=zeros(length(a4),1);
+        cell4_bound(boundC4)=ones(length(boundC4),1);
         abmax=50;
 
         gamma=1.5;
 
-        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
-        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
-        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2)) - a2.*a2); %Cell 2 branched
-        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2)) - b2.*b2); %Cell 2 bundled
-        rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3)) - a3.*a3); %Cell 3 branched
-        rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3)) - b3.*b3); %Cell 3 bundled
-        rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4)) - a4.*a4); %Cell 4 branched
-        rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4)) - b4.*b4); %Cell 4 bundled
+        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
+        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
+        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2)) - a2.*a2); %Cell 2 branched
+        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2)) - b2.*b2); %Cell 2 bundled
+        % rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3)) - a3.*a3); %Cell 3 branched
+        % rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3)) - b3.*b3); %Cell 3 bundled
+        % rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4)) - a4.*a4); %Cell 4 branched
+        % rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4)) - b4.*b4); %Cell 4 bundled
 
         % Growth term maxes out version
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + kb1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + kc1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + kb2_1.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
-        %     + kb2_2.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + kc2_1.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-        %     + kc2_2.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b2.*b2)); %Cell 2 bundled
-        % rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3 + kb3_1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
-        %     + kb3_2.* (flip(b4).*(flip(b4)<=abmax) + abmax*(flip(b4)>abmax))) - a3.*a3)); %Cell 3 branched
-        % rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3 + kc3_1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-        %     + kc3_2.* (flip(a4).*(flip(a4)<=abmax) + abmax*(flip(a4)>abmax)) ) - b3.*b3)); %Cell 3 bundled
-        % rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4 + kb4.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) ) - a4.*a4)); %Cell 4 branched
-        % rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4 + kc4.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ) - b4.*b4)); %Cell 4 bundled
+        rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 ...
+            + ka_vals(ka_ind)*cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+            + kb_vals(kb_ind)*cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) )) - a1.*a1); %Cell 1 branched
+        rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 ...
+            + kc_vals(kc_ind)*cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+            + kd_vals(kd_ind)*cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) )) - b1.*b1); %Cell 1 bundled
+        rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 ...
+            + ka_vals(ka_ind)*cell2_bound1.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+            + kb_vals(kb_ind)*cell2_bound1.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
+            + ka_vals(ka_ind)*cell2_bound2.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ...
+            + kb_vals(kb_ind)*cell2_bound2.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) )) - a2.*a2); %Cell 2 branched
+        rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 ...
+            + kc_vals(kc_ind)*cell2_bound1.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
+            + kd_vals(kd_ind)*cell2_bound1.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
+            + kc_vals(kc_ind)*cell2_bound2.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ...
+            + kd_vals(kd_ind)*cell2_bound2.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) )) - b2.*b2); %Cell 2 bundled
+        rxna3 = dt*( F(a3,b3) + Ka3.*(a3.*(1+alpha(1)*xC3 ...
+            + ka_vals(ka_ind)*cell3_bound1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+            + kb_vals(kb_ind)*cell3_bound1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
+            + ka_vals(ka_ind)*cell3_bound2.* (flip(a4).*(flip(a4)<=abmax) + abmax*(flip(a4)>abmax)) ...
+            + kb_vals(kb_ind)*cell3_bound2.* (flip(b4).*(flip(b4)<=abmax) + abmax*(flip(b4)>abmax)) )) - a3.*a3); %Cell 3 branched
+        rxnb3 = dt*( F(b3,a3) + Kb3.*(b3.*(1+alpha(1)*yC3 ...
+            + kc_vals(kc_ind)*cell3_bound1.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
+            + kd_vals(kd_ind)*cell3_bound1.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
+            + kc_vals(kc_ind)*cell3_bound2.* (flip(a4).*(flip(a4)<=abmax) + abmax*(flip(a4)>abmax)) ...
+            + kd_vals(kd_ind)*cell3_bound2.* (flip(b4).*(flip(b4)<=abmax) + abmax*(flip(b4)>abmax)) )) - b3.*b3); %Cell 3 bundled
+        rxna4 = dt*( F(a4,b4) + Ka4.*(a4.*(1+alpha(1)*xC4 ...
+            + ka_vals(ka_ind)*cell4_bound.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ...
+            + kb_vals(kb_ind)*cell4_bound.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) )) - a4.*a4); %Cell 4 branched
+        rxnb4 = dt*( F(b4,a4) + Kb4.*(b4.*(1+alpha(1)*yC4 ...
+            + kc_vals(kc_ind)*cell4_bound.* (flip(a3).*(flip(a3)<=abmax) + abmax*(flip(a3)>abmax)) ...
+            + kd_vals(kd_ind)*cell4_bound.* (flip(b3).*(flip(b3)<=abmax) + abmax*(flip(b3)>abmax)) )) - b4.*b4); %Cell 4 bundled
 
         a1 = Hs1\(diffRHSa1+rxna1);
         b1 = Hs1\(diffRHSb1+rxnb1);
@@ -1847,50 +1858,16 @@ while (ppp<=1)
             %Define colors
             colorLength = 50;
             white = [1,1,1];
-            red = [1,0,0];
-            blue = [143/256,177/256,221/256];
-            maroon = [0.4,0,0];
-            navy = [33/256,81/256,127/256];
-            yellow = [1,0.9,0];
             darkyellow = [227/256,180/256,76/256];
             yellow2 = [254/256,254/256,98/256];
             pink = [211/256,95/256,183/256];
             darkpink = [141/256,45/256,113/256];
-            green = [26,255,26]/256;
-            darkgreen = [16,150,16]/256;
-            purple = [150,65,240]/256;
-            darkpurple = [65,0,136]/256;
-            orange = [230,97,0]/256;
-            darkorange = [170,27,0]/256;
-
-
-            whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-            redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
-            whiteredmaroon = [whitered;redmaroon];
-            whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-            bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
-            whitebluenavy = [whiteblue; bluenavy];
-            myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-            redblue = abs(whiteblue+whitered)./2;
-            redwhiteblue = [flip(whitered); whiteblue];
-            whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
-            yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
-            whitedarkyellow = [whiteyellow;yellowdarkyellow];
             whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
             yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
             whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
             whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
             pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
             whitedarkpink = [whitepink;pinkdarkpink];
-            whitegreen = [linspace(white(1),green(1),colorLength)',linspace(white(2),green(2),colorLength)',linspace(white(3),green(3),colorLength)'];
-            greendarkgreen = [linspace(green(1),darkgreen(1),colorLength)',linspace(green(2),darkgreen(2),colorLength)',linspace(green(3),darkgreen(3),colorLength)'];
-            whitedarkgreen = [whitegreen;greendarkgreen];
-            whitepurple = [linspace(white(1),purple(1),colorLength)',linspace(white(2),purple(2),colorLength)',linspace(white(3),purple(3),colorLength)'];
-            purpledarkpurple = [linspace(purple(1),darkpurple(1),colorLength)',linspace(purple(2),darkpurple(2),colorLength)',linspace(purple(3),darkpurple(3),colorLength)'];
-            whitedarkpurple = [whitepurple;purpledarkpurple];
-            whiteorange = [linspace(white(1),orange(1),colorLength)',linspace(white(2),orange(2),colorLength)',linspace(white(3),orange(3),colorLength)'];
-            orangedarkorange = [linspace(orange(1),darkorange(1),colorLength)',linspace(orange(2),darkorange(2),colorLength)',linspace(orange(3),darkorange(3),colorLength)'];
-            whitedarkorange = [whiteorange;orangedarkorange];
 
 
             branchedColor = whitedarkpink;
@@ -2164,12 +2141,12 @@ while (ppp<=1)
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end
-       
-        save(strcat('vid_matfiles/moving_cells_line/alt_racup_rhoup_forcedependent/1000bRacOn_1000aRhoOn',int2str(ppp),'.mat'),...
-            'boundC1','boundC2_1','boundC2_2','boundC3_1','boundC3_2','boundC4','posx1','posx2','posx3','posx4','posy1','posy2','posy3','posy4','NNx1','NNx2','NNx3','NNx4',...
-            'NNy1','NNy2','NNy3','NNy4','a1all','a2all','a3all','a4all','b1all','b2all','b3all','b4all','Xa','Xb','s1','s2','s3','s4',...
-            'xC1','xC2','xC3','xC4','yC1','yC2','yC3','yC4','xshift1','yshift1','xshift2','yshift2','xshift3','yshift3','xshift4','yshift4')
-
+        if save_matfile==1
+            save(strcat(mat_location,int2str(ppp),'.mat'),...
+                'boundC1','boundC2_1','boundC2_2','boundC3_1','boundC3_2','boundC4','posx1','posx2','posx3','posx4','posy1','posy2','posy3','posy4','NNx1','NNx2','NNx3','NNx4',...
+                'NNy1','NNy2','NNy3','NNy4','a1all','a2all','a3all','a4all','b1all','b2all','b3all','b4all','Xa','Xb','s1','s2','s3','s4',...
+                'xC1','xC2','xC3','xC4','yC1','yC2','yC3','yC4','xshift1','yshift1','xshift2','yshift2','xshift3','yshift3','xshift4','yshift4')
+        end
         ppp = ppp + 1;
     end
 end
