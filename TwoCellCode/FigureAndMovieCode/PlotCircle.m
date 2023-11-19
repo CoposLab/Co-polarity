@@ -594,11 +594,11 @@ figure(5)
 clf
 % subplot(2,1,1)
 % for j=1:2:max(max([NNx1,NNy1]))
-[X,Y,Z] = cylinder(0.99);
+[X,Y,Z] = cylinder(0.97);
 surf(Z*Tend*end_time/Nt,Y,X,ones(size(Z,1),size(Z,2),3))
 hold on
 surf(Z*Tend*end_time/Nt,Y-2,X,ones(size(Z,1),size(Z,2),3))
-alpha 0.5
+% alpha 0.5
 shading interp
 % xlabel('time')
 % ylabel('y')

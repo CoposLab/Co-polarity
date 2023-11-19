@@ -37,7 +37,7 @@ coeff_vals=[1,10,1000];
 
 
 save_matfile=0;
-mat_location='./simulation_results/timetopolarizeresults/branchedbundled/0_8kb0_8kc-0_9ka-0_9kd50max2alpha';
+mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/500stepsc2_3500stepsc1/racupnosigcell_rhoupsigcell/1000RacOn_1000RhoOn';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -45,11 +45,11 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='test';
+    savelocation='./simulation_results/results_uncoupledtocoupled/nosignal/500stepsuncoupled2000stepscoupled/branchedbundled/0_8kb0_8kc';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -74,7 +74,7 @@ while (ppp<=1)
         polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem ...
         ka_ind kb_ind kc_ind kd_ind ka_vals kb_vals kc_vals kd_vals coeff_vals ...
         konx_ind koffx_ind kony_ind c1coeff_ind c2coeff_ind move_cells polarize_time_yes ...
-        num_pol_lf polarize_time_lf num_pol_yes save_matfile
+        num_pol_lf polarize_time_lf num_pol_yes save_matfile mat_location
 
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
@@ -178,25 +178,18 @@ while (ppp<=1)
     Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
     % branched/bundled promotion/inhibition between cells
-    bb_crosscells_coupled=1; % 1 is coupled (use vals below), 0 is uncoupled (all vals are 0)
     % ka: how does branched affect branched
     % kb: how does bundled affect branched
     % kc: how does branched affect bundled
     % kd: how does bundled affect bundled
-    ka_vals=0.9*[-1,0,1];
+    ka_vals=0.8*[-1,0,1];
     kb_vals=0.8*[-1,0,1];
     kc_vals=0.8*[-1,0,1];
-    kd_vals=0.9*[-1,0,1];
-    ka_ind=1; %index of ka_vals (index 2 means no interaction)
-    kb_ind=3;
-    kc_ind=3;
-    kd_ind=1;
-    if bb_crosscells_coupled==0
-        ka_ind=2;
-        kb_ind=2;
-        kc_ind=2;
-        kd_ind=2;
-    end
+    kd_vals=0.8*[-1,0,1];
+    ka_ind=2; %index of ka_vals (index 2 means no interaction)
+    kb_ind=2;
+    kc_ind=2;
+    kd_ind=2;
 
 
     % Set initial conditions for actin distribution
@@ -418,25 +411,32 @@ while (ppp<=1)
         % this works
         if signal==1
             steepness = 20;
-            % if t<=500
+            if t<=500
             Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
             Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
             Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
             Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
             Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
             Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            % else
-            %     Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            % end
+            else
+                Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            end
         end
 
 
         % Set konx and kony in contact region
+        if t<=500
+            Konx1(boundC1)=Konx1(boundC1)*1000;
+            Kony2(boundC2)=Kony2(boundC2)*1000;
+        else
+            Kony1(boundC1)=Kony1(boundC1)*1000;
+            Konx2(boundC2)=Konx2(boundC2)*1000;
+        end
         % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
         % Kony1(boundC1)=Kony1(boundC1)*1000;
@@ -905,6 +905,14 @@ while (ppp<=1)
 
         gamma=1.5;
 
+        % if t>500
+        %     kb_ind=3;
+        %     kc_ind=3;
+        % else
+        %     kb_ind=2;
+        %     kc_ind=2;
+        % end
+
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
         % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2)) - a2.*a2); %Cell 2 branched
@@ -1095,7 +1103,7 @@ while (ppp<=1)
             branchedColName = 'Pink';
             bundledColName = 'Yellow';
 
-            allmax=max([a1 a2 b1 b2])
+            allmax=max(max([a1 a2 b1 b2]));
 
             % Make scatterplots
             scatplot=figure(ppp);
