@@ -8,8 +8,8 @@ signal=0;
 squished=0;
 shifted=1;
 
-setnum='1';
-loadfile='./vid_matfiles/moving_cells_square/coalign/rhoupracupc1_rhouprhoupc2_racuprhoupc3_racupracupc4_forces/1000bRacOn_1000aRhoOn';
+setnum='10';
+loadfile='./vid_matfiles/moving_cells_square/branchedbundled/0_9kb0_9kc';
 
 load(strcat(loadfile,setnum));
 t=2499;

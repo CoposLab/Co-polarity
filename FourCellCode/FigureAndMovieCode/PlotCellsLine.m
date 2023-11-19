@@ -9,10 +9,10 @@ squished=0;
 shifted=1;
 
 setnum='1';
-loadfile='./vid_matfiles/moving_cells_line/branchedbundled/0_9kb0_9kc';
+loadfile='./vid_matfiles/moving_cells_line/alt_rhoup_rhodown/1000RhoOn_1000RhoOff';
 
 load(strcat(loadfile,setnum));
-t=2499;
+t=1;
 
 
 allmax=max(max([a1all a2all a3all a4all b1all b2all b3all b4all]));
