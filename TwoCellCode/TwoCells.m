@@ -49,7 +49,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_uncoupledtocoupled/nosignal/500stepsuncoupled2000stepscoupled/branchedbundled/0_8kb0_8kc';
+    savelocation='./simulation_results/results_uncoupledtocoupled/nosignal/500stepsuncoupled2000stepscoupled/branchedbundled/0_9kb0_9kc';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -182,10 +182,10 @@ while (ppp<=100)
     % kb: how does bundled affect branched
     % kc: how does branched affect bundled
     % kd: how does bundled affect bundled
-    ka_vals=0.8*[-1,0,1];
-    kb_vals=0.8*[-1,0,1];
-    kc_vals=0.8*[-1,0,1];
-    kd_vals=0.8*[-1,0,1];
+    ka_vals=0.9*[-1,0,1];
+    kb_vals=0.9*[-1,0,1];
+    kc_vals=0.9*[-1,0,1];
+    kd_vals=0.9*[-1,0,1];
     ka_ind=2; %index of ka_vals (index 2 means no interaction)
     kb_ind=2;
     kc_ind=2;
