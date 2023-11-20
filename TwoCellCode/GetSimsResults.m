@@ -2,8 +2,8 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_signal/branchedbundledgrowth3/0_8ka0_8kb_40time';
-maxnum=1;
+filename = './simulation_results/results_uncoupledtocoupled/nosignal/500stepsuncoupled2000stepscoupled/branchedbundled/0_9kb0_9kc';
+maxnum=100;
 
 angle=pi/4;
 
