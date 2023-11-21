@@ -36,8 +36,8 @@ coeff_vals=[1,10,1000];
 
 
 
-save_matfile=0;
-mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/500stepsc2_3500stepsc1/racupnosigcell_rhoupsigcell/1000RacOn_1000RhoOn';
+save_matfile=1;
+mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/500stepsc2_3500stepsc1/rhodownnosigcell_racdownsigcell/1000RacOff_1000RhoOff';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -45,11 +45,11 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=100)
+while (ppp<=10)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_uncoupledtocoupled/nosignal/500stepsuncoupled2000stepscoupled/branchedbundled/0_9kb0_9kc';
+    savelocation='';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -117,7 +117,7 @@ while (ppp<=100)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 25.0;                  % total simulation time
+    Tend   = 40.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -138,7 +138,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -182,10 +182,10 @@ while (ppp<=100)
     % kb: how does bundled affect branched
     % kc: how does branched affect bundled
     % kd: how does bundled affect bundled
-    ka_vals=0.9*[-1,0,1];
-    kb_vals=0.9*[-1,0,1];
-    kc_vals=0.9*[-1,0,1];
-    kd_vals=0.9*[-1,0,1];
+    ka_vals=0.75*[-1,0,1];
+    kb_vals=0.75*[-1,0,1];
+    kc_vals=0.75*[-1,0,1];
+    kd_vals=0.75*[-1,0,1];
     ka_ind=2; %index of ka_vals (index 2 means no interaction)
     kb_ind=2;
     kc_ind=2;
@@ -430,13 +430,17 @@ while (ppp<=100)
 
 
         % Set konx and kony in contact region
-        % if t<=500
-        %     Konx1(boundC1)=Konx1(boundC1)*1000;
-        %     Kony2(boundC2)=Kony2(boundC2)*1000;
-        % else
-        %     Kony1(boundC1)=Kony1(boundC1)*1000;
-        %     Konx2(boundC2)=Konx2(boundC2)*1000;
-        % end
+        if t<=500
+            % Konx1(boundC1)=Konx1(boundC1)*1000;
+            % Kony2(boundC2)=Kony2(boundC2)*1000;
+            Koffx2(boundC2)=Koffx2(boundC2)*1000;
+            Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        else
+            Koffx1(boundC1)=Koffx1(boundC1)*1000;
+            % Kony1(boundC1)=Kony1(boundC1)*1000;
+            % Konx2(boundC2)=Konx2(boundC2)*1000;
+            Koffy2(boundC2)=Koffy2(boundC2)*1000;
+        end
         % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
         % Kony1(boundC1)=Kony1(boundC1)*1000;
@@ -905,13 +909,13 @@ while (ppp<=100)
 
         gamma=1.5;
 
-        if t<=500
-            kb_ind=2;
-            kc_ind=2;
-        else
-            kb_ind=3;
-            kc_ind=3;
-        end
+        % if t<=500
+        %     kb_ind=2;
+        %     kc_ind=2;
+        % else
+        %     kb_ind=3;
+        %     kc_ind=3;
+        % end
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1240,7 +1244,7 @@ while (ppp<=100)
     end
     sprintf('Simulation %d done',ppp)
     toc
-    if(quit_cond==0)
+    if(quit_cond==0) || (quit_cond==1)
         if savefigs==1
             % savefig(figc1,filenameC1);
             % savefig(figc2,filenameC2);

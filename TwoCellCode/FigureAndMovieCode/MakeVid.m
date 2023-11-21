@@ -5,7 +5,7 @@ clc;
 
 addpath('./freeze_colors')
 
-signal=0;
+signal=1;
 % Na=101;
 % sigper=0.40;
 % sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
@@ -16,18 +16,18 @@ signal=0;
 % sigBound2(sigBound2>Na)=sigBound2(sigBound2>Na)-Na;
 
 scatvid=0;
-branchedbundledvid=0;
-racrhovid=0;
-circlescatvid=1;
+branchedbundledvid=1;
+racrhovid=1;
+circlescatvid=0;
 adjacent=1;
-showtime=0;
+showtime=1;
 
 for i=1:10
 
-    loadfile='./vid_matfiles/branchedbundled/signal/0_75kb0_75kc_50max_2alpha_40time';
+    loadfile='./vid_matfiles/signal_switches_sides/500stepsc2_3500stepsc1/rhodownnosigcell_racdownsigcell/1000RacOff_1000RhoOff';
     
     setnum=int2str(i);
-    savelocation='../movies/branchedbundled/signal/0_75kb0_75kc_50max_2alpha_40time';
+    savelocation='../movies/signal_switches_sides/500stepsc2_3500stepsc1/rhodownnosigcell_racdownsigcell/1000RacOff_1000RhoOff';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -93,6 +93,11 @@ for i=1:10
         yC1=yC1all(:,t);
         xC2=xC2all(:,t);
         yC2=yC2all(:,t);
+
+        if sum(a1==0)==length(a1) && sum(b1==0)==length(b1) ...
+                && sum(a2==0)==length(a2) && sum(b2==0)==length(b2)
+            break
+        end
 
         L      = 10.0;
         Na=101;
@@ -243,7 +248,9 @@ for i=1:10
             set(gca,'XColor','w')
             set(gca,'YColor','w')
             set(gcf,'color','w');
-            title(strcat('t=',int2str(t)))
+            if showtime==1
+                title(strcat('t=',int2str(t)))
+            end
         end
 
 
@@ -325,9 +332,15 @@ for i=1:10
             if signal==1
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
+                if t<=500
                 hold on;
                 scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
                 hold off;
+                else
+                    hold on;
+                scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                hold off;
+                end
             end
 
             % figure(2)
@@ -372,8 +385,8 @@ for i=1:10
             set(gca,'XColor','w')
             set(gca,'YColor','w')
             set(gcf,'color','w')
-            axis([-1 1 -3 1])
-            axis equal
+            axis([-1.5 1.5 -3.5 1.5])
+            pbaspect([3,5,1])
 
             if ~isempty(dirIndexa1)
                 figure(3)
@@ -392,9 +405,18 @@ for i=1:10
             if signal==1
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
+                if t<=500
                 hold on;
                 scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
                 hold off;
+                else
+                    hold on;
+                scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                hold off;
+                end
+            end
+            if showtime==1
+                title(strcat('t=',int2str(t)))
             end
 
             figure(3)
@@ -559,9 +581,10 @@ for i=1:10
 
             cbpos=cb.Position;
             if showtime==1
-                timebox=annotation('textbox', [0.75, 0.1, 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none');
-                tbpos=timebox.Position;
-                set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.05]);
+                % timebox=annotation('textbox', [0.75, 0.1, 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none');
+                % tbpos=timebox.Position;
+                % set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.05]);
+                title(strcat('t=',int2str(t)))
             end
 
             if ~isempty(dirIndexa1)
