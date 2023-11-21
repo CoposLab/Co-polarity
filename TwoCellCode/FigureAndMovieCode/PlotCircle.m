@@ -2,8 +2,10 @@ set(0,'DefaultFigureVisible','on')
 close all;
 signal=0;
 
+addpath('./freeze_colors')
 
-load('./vid_matfiles/coalign/uncoupled/uncoupled1.mat')
+
+load('./vid_matfiles/coalign/racupc1_rhoupc2_forces/1000aRhoOn_1000bRacOn1.mat')
 a1=a1all(:,end-1);
 a2=a2all(:,end-1);
 b1=b1all(:,end-1);
@@ -12,6 +14,8 @@ t=2499;
 L=10;
 Nt=2500;
 adjacent=1;
+squished=1;
+cylinder=0;
 
 %Define colors
 colorLength = 50;
@@ -130,20 +134,27 @@ hold off;
 
 
 % Define circles
-gapsize=0.01;
+gapsize=0.01 * squished;
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
 [Xcol,Ycol] = pol2cart(th,rad);
 Ycol1=Ycol;
 Ycol2=Ycol;
-Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
-Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
-Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
+if squished==1
+    Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
+    Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
+end
+Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)));
 ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
 ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
 ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
 ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2]';
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-[Xsm,Ysm] = pol2cart(th,rad);
+[Xsm,Ysm1] = pol2cart(th,rad);
+[~,Ysm2] = pol2cart(th,rad);
+if squished==1
+    Ysm1(:,boundC1)=Ysm1(:,boundC1(1)*ones(1,length(boundC1)));
+    Ysm2(:,boundC2)=Ysm2(:,boundC2(1)*ones(1,length(boundC2)));
+end
 [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
 [Xmid,Ymid] = pol2cart(th,rad);
 
@@ -152,7 +163,18 @@ allmax = max(max(max(a1),max(a2)),max(max(b1),max(b2)));
 
 % Cell 1
 figcells=figure(2);
+clf
+hold on
 % if max(ZBranch1)>0.5
+if squished==1
+    plot3(cos(th(1,[1:boundC1(1),boundC1(end):end]))+xshift1(t+1),...
+        sin(th(1,[1:boundC1(1),boundC1(end):end]))+yshift1(t+1),...
+        ones(1,length(th(1,[1:boundC1(1),boundC1(end):end])))*(allmax+1),...
+        'color',[0.5,0.5,0.5],'LineWidth',2)
+else
+    plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),...
+        ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',2)
+end
 alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
 surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
 colormap(branchedColor)
@@ -175,6 +197,16 @@ set(gca,'XTick',[], 'YTick', [])
 
 % Cell 2
 % if max(ZBranch2)>0.5
+hold on
+if squished==1
+    plot3(cos(th(1,[1:boundC2(1),boundC2(end):end]))+xshift2(t+1),...
+        sin(th(1,[1:boundC2(1),boundC2(end):end]))-2*abs(max(max(Ycol2)))+yshift2(t+1),...
+        ones(1,length(th(1,[1:boundC2(1),boundC2(end):end])))*(allmax+1),...
+        'color',[0.5,0.5,0.5],'LineWidth',2)
+else
+    plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),...
+        ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',2)
+end
 alphaData=ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2)));
 surf(Xcol,Ycol2,ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
 colormap(branchedColor)
@@ -220,13 +252,13 @@ set(gcf,'color','w');
 if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
     figure(2)
     hold on;
-    quiver(0,0,Xsm(dirIndexa1),Ysm(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+    quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
     hold off;
 end
 if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
     figure(2)
     hold on;
-    quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+    quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
     hold off;
 end
 
@@ -587,63 +619,63 @@ camroll(90)
 
 
 
+if cylinder==1
+    end_time=2500;
+    Tend=25;
+    figure(5)
+    clf
+    % subplot(2,1,1)
+    % for j=1:2:max(max([NNx1,NNy1]))
+    [X,Y,Z] = cylinder(0.97);
+    surf(Z*Tend*end_time/Nt,Y,X,ones(size(Z,1),size(Z,2),3))
+    hold on
+    surf(Z*Tend*end_time/Nt,Y-2,X,ones(size(Z,1),size(Z,2),3))
+    % alpha 0.5
+    shading interp
+    % xlabel('time')
+    % ylabel('y')
+    % zlabel('z')
+    hold on
+    for j=1:2:200
+        scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posx1(j,1:end_time)*2*pi/10),cos(posx1(j,1:end_time)*2*pi/10),...
+            1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+        hold on;
+        scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posy1(j,1:end_time)*2*pi/10),cos(posy1(j,1:end_time)*2*pi/10),...
+            1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+        box on;
+        % set(gca,'Color','k','fontsize',20,'fontname','times');
+        % pbaspect([3 2 1]);
+        % set(gcf,'color','w');
+        % title('Cell 1')
+    end
+    hold off
+    xlabel('Time')
+    % set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
 
-end_time=2500;
-Tend=25;
-figure(5)
-clf
-% subplot(2,1,1)
-% for j=1:2:max(max([NNx1,NNy1]))
-[X,Y,Z] = cylinder(0.97);
-surf(Z*Tend*end_time/Nt,Y,X,ones(size(Z,1),size(Z,2),3))
-hold on
-surf(Z*Tend*end_time/Nt,Y-2,X,ones(size(Z,1),size(Z,2),3))
-% alpha 0.5
-shading interp
-% xlabel('time')
-% ylabel('y')
-% zlabel('z')
-hold on
-for j=1:2:200
-    scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posx1(j,1:end_time)*2*pi/10),cos(posx1(j,1:end_time)*2*pi/10),...
-        1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-    hold on;
-    scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posy1(j,1:end_time)*2*pi/10),cos(posy1(j,1:end_time)*2*pi/10),...
-        1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-    box on;
-    % set(gca,'Color','k','fontsize',20,'fontname','times');
-    % pbaspect([3 2 1]);
-    % set(gcf,'color','w');
-    % title('Cell 1')
+    % subplot(2,1,2)
+    for j=1:2:200
+        hold on;
+        scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posx2(j,1:end_time)*2*pi/10)-2,cos(posx2(j,1:end_time)*2*pi/10),...
+            1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+        % hold on;
+        scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posy2(j,1:end_time)*2*pi/10)-2,cos(posy2(j,1:end_time)*2*pi/10), ...
+            1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+        box on;
+        % set(gca,'Color','k','fontsize',20,'fontname','times');
+        % pbaspect([3 2 1]);
+        % set(gcf,'color','w');
+        % title('Cell 2')
+    end
+    hold off
+    set(gca,'Color','k','fontsize',20,'fontname','times');
+    xlim([0,Tend*end_time/Nt])
+    pbaspect([Tend*end_time/Nt (Tend*end_time/Nt)*2/3 (Tend*end_time/Nt)/3]);
+    set(gcf,'color','w');
+    xlabel('Time')
+    ylabel('y')
+    zlabel('z')
+    % set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
 end
-hold off
-xlabel('Time')
-% set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
-
-% subplot(2,1,2)
-for j=1:2:200
-    hold on;
-    scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posx2(j,1:end_time)*2*pi/10)-2,cos(posx2(j,1:end_time)*2*pi/10),...
-        1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-    % hold on;
-    scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posy2(j,1:end_time)*2*pi/10)-2,cos(posy2(j,1:end_time)*2*pi/10), ...
-        1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-    box on;
-    % set(gca,'Color','k','fontsize',20,'fontname','times');
-    % pbaspect([3 2 1]);
-    % set(gcf,'color','w');
-    % title('Cell 2')
-end
-hold off
-set(gca,'Color','k','fontsize',20,'fontname','times');
-xlim([0,Tend*end_time/Nt])
-pbaspect([Tend*end_time/Nt (Tend*end_time/Nt)*2/3 (Tend*end_time/Nt)/3]);
-set(gcf,'color','w');
-xlabel('Time')
-ylabel('y')
-zlabel('z')
-% set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
-
 
 
 % figure(6)
