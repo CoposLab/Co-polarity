@@ -15,7 +15,7 @@ L=10;
 Nt=2500;
 adjacent=1;
 squished=1;
-cylinder=0;
+make_cylinder=0;
 
 %Define colors
 colorLength = 50;
@@ -619,7 +619,7 @@ camroll(90)
 
 
 
-if cylinder==1
+if make_cylinder==1
     end_time=2500;
     Tend=25;
     figure(5)

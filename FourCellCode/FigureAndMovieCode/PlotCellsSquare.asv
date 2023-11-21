@@ -9,7 +9,7 @@ squished=0;
 shifted=1;
 
 setnum='10';
-loadfile='./vid_matfiles/moving_cells_square/alt_rhoup_rhodown/1000RhoOn_1000RhoOff';
+loadfile='./vid_matfiles/moving_cells_square/alt_racup_rhoup/1000RacOn_1000RhoOn';
 
 load(strcat(loadfile,setnum));
 t=2499;
