@@ -9,7 +9,7 @@ clear
 tic
 
 save=1;
-load_save_location='./simulation_results/timetopolarizeresults/branchedbundled/0_8kb0_8kc-0_9ka-0_9kd50max2alpha';
+load_save_location='./simulation_results/timetopolarizeresults_signal/rhodownc1_rhoupc2/1000RhoOn_1000RhoOff';
 
 num_runs=100;
 
