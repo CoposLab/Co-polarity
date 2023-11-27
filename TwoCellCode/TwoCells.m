@@ -37,7 +37,7 @@ coeff_vals=[1,10,1000];
 
 
 save_matfile=1;
-mat_location='./simulation_results/timetopolarizeresults_signal/rhodownc1_rhoupc2/1000RhoOn_1000RhoOff';
+mat_location='./simulation_results/timetopolarizeresults_signal/antagonism/0_5epsilon10RhoRemoved';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -155,7 +155,7 @@ while (ppp<=100)
 
     % set antagonism (numRhoToRemove=0 and numRacToRemove=0 --> uncoupled)
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numRhoToRemove=0;
+    numRhoToRemove=10;
     numRacToRemove=0;
     counter1=0;
     counter2=0;
@@ -444,10 +444,10 @@ while (ppp<=100)
         % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
         % Kony1(boundC1)=Kony1(boundC1)*1000;
-        Kony2(boundC2)=Kony2(boundC2)*1000;
+        % Kony2(boundC2)=Kony2(boundC2)*1000;
         % Koffx1(boundC1)=Koffx1(boundC1)*1000;
         % Koffx2(boundC2)=Koffx2(boundC2)*1000;
-        Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        % Koffy1(boundC1)=Koffy1(boundC1)*1000;
         % Koffy2(boundC2)=Koffy2(boundC2)*1000;
 
         % Set konx and kony away from contact region
