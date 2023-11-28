@@ -1,3 +1,4 @@
+clear
 set(0,'DefaultFigureVisible','on')
 close all;
 signal=0;
@@ -5,8 +6,9 @@ signal=0;
 addpath('./freeze_colors')
 
 
-load('./vid_matfiles/coalign/racupc1_rhoupc2_forces/1000aRhoOn_1000bRacOn2.mat')
-t=Nt-1;
+load('./vid_matfiles/coalign/uncoupled/uncoupled1.mat')
+Nt=2500;
+t=1;
 
 a1=a1all(:,t);
 a2=a2all(:,t);
@@ -14,13 +16,13 @@ b1=b1all(:,t);
 b2=b2all(:,t);
 L=10;
 adjacent=1;
-squished=1;
+squished=0;
 
 make_scatplot=0;
-make_branchedbundled=1;
+make_branchedbundled=0;
 make_racrho=1;
 make_circlescatter=0;
-make_cylinder=0;
+make_cylinder=1;
 
 %Define colors
 colorLength = 50;
