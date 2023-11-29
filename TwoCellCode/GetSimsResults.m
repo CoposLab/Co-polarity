@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_uncoupledtocoupled/nosignal/500stepsuncoupled2000stepscoupled/branchedbundled/0_9kb0_9kc';
+filename = './simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/antagonism/0_5epsilon10RhoRemoved';
 maxnum=100;
 
 angle=pi/4;

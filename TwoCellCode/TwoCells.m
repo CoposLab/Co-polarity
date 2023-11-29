@@ -36,8 +36,8 @@ coeff_vals=[1,10,1000];
 
 
 
-save_matfile=1;
-mat_location='./simulation_results/timetopolarizeresults_signal/antagonism/0_5epsilon10RhoRemoved';
+save_matfile=0;
+mat_location='';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -47,9 +47,9 @@ ppp = 1;
 
 while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='';
+    savelocation='./simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/antagonism/0_5epsilon10RhoRemoved';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -411,21 +411,21 @@ while (ppp<=100)
         % this works
         if signal==1
             steepness = 20;
-            % if t<=500
-            Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            % else
-            %     Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            % end
+            if t<=500
+                Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+            else
+                Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            end
         end
 
 
@@ -1244,10 +1244,173 @@ while (ppp<=100)
     end
     sprintf('Simulation %d done',ppp)
     toc
-    if(quit_cond==0)
+    if(quit_cond==0) || quit_cond==1
         if savefigs==1
-            % savefig(figc1,filenameC1);
-            % savefig(figc2,filenameC2);
+            % Define circles
+            gapsize=0.01;
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
+            [Xcol,Ycol] = pol2cart(th,rad);
+            Ycol1=Ycol;
+            Ycol2=Ycol;
+            Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
+            Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
+            Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
+            ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
+            ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
+            ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
+            ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2]';
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
+            [Xsm,Ysm] = pol2cart(th,rad);
+            Ysm1=Ysm;
+            Ysm2=Ysm;
+            Ysm1(:,boundC1)=Ysm1(:,boundC1(1)*ones(1,length(boundC1)));
+            Ysm2(:,boundC2)=Ysm2(:,boundC2(1)*ones(1,length(boundC2)));
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
+            [Xmid,Ymid] = pol2cart(th,rad);
+
+
+            %Define colors
+            colorLength = 50;
+            white = [1,1,1];
+            darkyellow = [227/256,180/256,76/256];
+            yellow2 = [254/256,254/256,98/256];
+            pink = [211/256,95/256,183/256];
+            darkpink = [141/256,45/256,113/256];
+            whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+            yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+            whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+            whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+            pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+            whitedarkpink = [whitepink;pinkdarkpink];
+
+
+            branchedColor = whitedarkpink;
+            bundledColor = whitedarkyellow2;
+            branchedColName = 'Pink';
+            bundledColName = 'Yellow';
+
+            allmax=max(max([a1 a2 b1 b2]));
+
+            % Make scatterplots
+            scatplot=figure(ppp);
+            clf
+            subplot(1,2,1); %Cell 1
+            plot(Xa,a1,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+            plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
+            plot(s1,xC1,'-.','color',branchedColor(end,:),'linewidth',1);
+            plot(s1,yC1,'-.k','color',bundledColor(end,:),'linewidth',1);
+            % xlim([0 10]); ylim([0 2]);
+            %title('Time = 0');
+            set(gca,'fontname','times','fontsize',20); box on;
+            lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+            lgd.NumColumns = 2;
+            set(gcf,'color','w');
+            title('Cell 1')
+            hold off;
+            %keyboard
+            % pause(1.0);
+
+            subplot(1,2,2); %Cell 2
+            plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+            plot(Xa,b2,'-ok','color',bundledColor(end,:),'linewidth',3);
+            plot(s2,xC2,'-.','color',branchedColor(end,:),'linewidth',1);
+            plot(s2,yC2,'-.k','color',bundledColor(end,:),'linewidth',1);
+            % xlim([0 10]); ylim([0 2]);
+            %title('Time = 0');
+            set(gca,'fontname','times','fontsize',20); box on;
+            lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+            lgd.NumColumns = 2;
+            set(gcf,'color','w');
+            title('Cell 2')
+            hold off;
+            %keyboard
+            % pause(1.0);
+
+
+            % Cell 1
+            figcells=figure(ppp+1);
+            clf
+            alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
+            surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            colormap(branchedColor)
+            clim([0,allmax/2])
+            freezeColors;
+            shading interp
+            hold on;
+            alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
+            surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            colormap(bundledColor)
+            clim([0,allmax/2])
+            freezeColors;
+            shading interp
+            view(2)
+            grid off
+            set(gca,'XTick',[], 'YTick', [])
+
+            % Cell 2
+            surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
+            colormap(branchedColor)
+            clim([0,allmax/2])
+            freezeColors;
+            cb=colorbar('Location','eastoutside');
+            freezeColors(cb);
+            cbpos=cb.Position;
+            set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
+            % set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
+            set(cb,'TickLabels',{});
+            cbpos=cb.Position;
+            shading interp
+            % end
+            % if max(ZBund2)>0.5
+            surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
+            colormap(bundledColor)
+            clim([0,allmax/2])
+            freezeColors;
+            jcb=jicolorbar;
+            freezeColors(jcb);
+            jcbpos=jcb.Position;
+            set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
+            shading interp
+            % end
+            view(2)
+            grid off
+            axis equal
+            set(gca,'XTick',[], 'YTick', [])
+            title(strcat('t=',int2str(t)))
+
+            hold off;
+            box off;
+            set(gca,'XColor','w')
+            set(gca,'YColor','w')
+            set(gcf,'color','w');
+
+            if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
+                hold on;
+                quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+                hold off;
+            end
+            if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
+                hold on;
+                quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                hold off;
+            end
+
+            % Plot signal
+            if signal==1
+                [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+                [Xsig,Ysig] = pol2cart(th,rad);
+                hold on;
+                scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
+                hold off;
+            end
+
+            ohf = findobj(gcf);
+            figaxes = findobj(ohf(1), 'Type', 'axes');
+            set(figaxes(1),'Fontsize',15)
+            set(figaxes(2),'Fontsize',14)
+            camroll(90)
+
+
             savefig(figcells,filenameCells);
             savefig(scatplot,filenameScatter);
         end

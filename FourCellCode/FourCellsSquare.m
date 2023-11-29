@@ -23,19 +23,19 @@ clc;
 % for c1_ind=2:length(c1_vals)
 %     for c2_ind=c1_ind:length(c2_vals)
 
-save_matfile=1;
-mat_location = './FigureAndMovieCode/vid_matfiles/moving_cells_square/branchedbundled/0_9kb0_9kc';
+save_matfile=0;
+mat_location = '';
 
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=10)
+while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='';
+    savelocation='./simulation_results/results_square/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -864,12 +864,13 @@ while (ppp<=10)
         % Koffx4(boundC4)=Koffx4(boundC4)*100;
 
         % Koffy1(boundC1_4)=Koffy1(boundC1_4)*1000;
-        % Koffy1(boundC1_2)=Koffy1(boundC1_2)*100;
+        % Koffy1(boundC1_2)=Koffy1(boundC1_2)*1000;
         % Koffy2(boundC2_1)=Koffy2(boundC2_1)*1000;
-        % Koffy2(boundC2_2)=Koffy2(boundC2_2)*100;
+        % Koffy2(boundC2_3)=Koffy2(boundC2_3)*1000;
         % Koffy3(boundC3_2)=Koffy3(boundC3_2)*1000;
-        % Koffy3(boundC3_2)=Koffy3(boundC3_2)*100;
+        % Koffy3(boundC3_4)=Koffy3(boundC3_4)*1000;
         % Koffy4(boundC4_3)=Koffy4(boundC4_3)*1000;
+        % Koffy4(boundC4_1)=Koffy4(boundC4_1)*1000;
 
 
         % Set konx and kony depending on rac/rho concentrations in contact

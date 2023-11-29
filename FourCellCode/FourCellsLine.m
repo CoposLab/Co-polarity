@@ -23,19 +23,19 @@ clc;
 % for c1_ind=2:length(c1_vals)
 %     for c2_ind=c1_ind:length(c2_vals)
 
-save_matfile=1;
-mat_location = './FigureAndMovieCode/vid_matfiles/moving_cells_line/alt_rhoup_rhodown/1000RhoOn_1000RhoOff';
+save_matfile=0;
+mat_location = '';
 
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='';
+    savelocation='./simulation_results/results_line/alternaterhouprhodown/1000RhoOn1000RhoOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -136,7 +136,7 @@ while (ppp<=1)
     signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
-    sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
+    sigBound4 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
     % Competition for limited resource (actin monomers) term
     %
@@ -499,50 +499,17 @@ while (ppp<=1)
     %Define colors
     colorLength = 50;
     white = [1,1,1];
-    red = [1,0,0];
-    blue = [143/256,177/256,221/256];
-    maroon = [0.4,0,0];
-    navy = [33/256,81/256,127/256];
-    yellow = [1,0.9,0];
     darkyellow = [227/256,180/256,76/256];
     yellow2 = [254/256,254/256,98/256];
     pink = [211/256,95/256,183/256];
     darkpink = [141/256,45/256,113/256];
-    green = [26,255,26]/256;
-    darkgreen = [16,150,16]/256;
-    purple = [150,65,240]/256;
-    darkpurple = [65,0,136]/256;
-    orange = [230,97,0]/256;
-    darkorange = [170,27,0]/256;
 
-
-    whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-    redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
-    whiteredmaroon = [whitered;redmaroon];
-    whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-    bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
-    whitebluenavy = [whiteblue; bluenavy];
-    myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-    redblue = abs(whiteblue+whitered)./2;
-    redwhiteblue = [flip(whitered); whiteblue];
-    whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
-    yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
-    whitedarkyellow = [whiteyellow;yellowdarkyellow];
     whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
     yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
     whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
     whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
     pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
     whitedarkpink = [whitepink;pinkdarkpink];
-    whitegreen = [linspace(white(1),green(1),colorLength)',linspace(white(2),green(2),colorLength)',linspace(white(3),green(3),colorLength)'];
-    greendarkgreen = [linspace(green(1),darkgreen(1),colorLength)',linspace(green(2),darkgreen(2),colorLength)',linspace(green(3),darkgreen(3),colorLength)'];
-    whitedarkgreen = [whitegreen;greendarkgreen];
-    whitepurple = [linspace(white(1),purple(1),colorLength)',linspace(white(2),purple(2),colorLength)',linspace(white(3),purple(3),colorLength)'];
-    purpledarkpurple = [linspace(purple(1),darkpurple(1),colorLength)',linspace(purple(2),darkpurple(2),colorLength)',linspace(purple(3),darkpurple(3),colorLength)'];
-    whitedarkpurple = [whitepurple;purpledarkpurple];
-    whiteorange = [linspace(white(1),orange(1),colorLength)',linspace(white(2),orange(2),colorLength)',linspace(white(3),orange(3),colorLength)'];
-    orangedarkorange = [linspace(orange(1),darkorange(1),colorLength)',linspace(orange(2),darkorange(2),colorLength)',linspace(orange(3),darkorange(3),colorLength)'];
-    whitedarkorange = [whiteorange;orangedarkorange];
 
 
     branchedColor = whitedarkpink;
@@ -819,7 +786,7 @@ while (ppp<=1)
             [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
             [Xsig,Ysig] = pol2cart(th,rad);
             hold on;
-            scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+            scatter(Xsig(sigBound4),Ysig(sigBound4)-6,'black','.')
             hold off;
         end
 
@@ -867,23 +834,23 @@ while (ppp<=1)
 
         % this works
         if signal==1
-            if t<=1000
+            % if t<=1000
                 steepness = 20;
-                Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            else
-                steepness = 20;
-                Konx1 = (ron*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Kony1 = (ron*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Kfbx1 = (rfb*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Kfby1 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Koffx1 = (roff*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-                Koffy1 = (roff*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
-            end
+                Konx4 = (ron*(tanh(steepness*(s4-s4(sigBound4(1)))) - tanh(steepness*(s4-s4(sigBound4(end)))) + 0.2)/2.2)';
+                Kony4 = (ron*(2 - tanh(steepness*(s4-s4(sigBound4(1)))) + tanh(steepness*(s4-s4(sigBound4(end)))) + 0.2)/2.2)';
+                Kfbx4 = (rfb*(tanh(steepness*(s4-s4(sigBound4(1)))) - tanh(steepness*(s4-s4(sigBound4(end)))) + 0.2)/2.2)';
+                Kfby4 = (rfb*(2 - tanh(steepness*(s4-s4(sigBound4(1)))) + tanh(steepness*(s4-s4(sigBound4(end)))) + 0.2)/2.2)';
+                Koffx4 = (roff*(2 - tanh(steepness*(s4-s4(sigBound4(1)))) + tanh(steepness*(s4-s4(sigBound4(end)))) + 0.2)/2.2)';
+                Koffy4 = (roff*(tanh(steepness*(s4-s4(sigBound4(1)))) - tanh(steepness*(s4-s4(sigBound4(end)))) + 0.2)/2.2)';
+            % else
+            %     steepness = 20;
+            %     Konx1 = (ron*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+            %     Kony1 = (ron*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+            %     Kfbx1 = (rfb*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+            %     Kfby1 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+            %     Koffx1 = (roff*(2 - tanh(steepness*(s2-s2(sigBound1(1)))) + tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+            %     Koffy1 = (roff*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
+            % end
         end
 
         % if signal==1
@@ -911,12 +878,12 @@ while (ppp<=1)
         % Konx2(boundC2_2)=Konx2(boundC2_2)*1000;
         % Konx3(boundC3_2)=Konx3(boundC3_2)*1000;
         
-        Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Kony2(boundC2_1)=Kony2(boundC2_1)*1000;
-        Kony2(boundC2_2)=Kony2(boundC2_2)*1000;
-        % Kony3(boundC3_1)=Kony3(boundC3_1)*1000;
-        Kony3(boundC3_2)=Kony3(boundC3_2)*1000;
-        % Kony4(boundC4)=Kony4(boundC4)*1000;
+        % Kony1(boundC1)=Kony1(boundC1)*1000;
+        Kony2(boundC2_1)=Kony2(boundC2_1)*1000;
+        % Kony2(boundC2_2)=Kony2(boundC2_2)*1000;
+        Kony3(boundC3_1)=Kony3(boundC3_1)*1000;
+        % Kony3(boundC3_2)=Kony3(boundC3_2)*1000;
+        Kony4(boundC4)=Kony4(boundC4)*1000;
         
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2_1)=Koffx2(boundC2_1)*100;
@@ -925,12 +892,12 @@ while (ppp<=1)
         % Koffx3(boundC3_2)=Koffx3(boundC3_2)*10;
         % Koffx4(boundC4)=Koffx4(boundC4)*100;
 
-        % Koffy1(boundC1)=Koffy1(boundC1)*100;
-        Koffy2(boundC2_1)=Koffy2(boundC2_1)*1000;
-        % Koffy2(boundC2_2)=Koffy2(boundC2_2)*100;
-        Koffy3(boundC3_1)=Koffy3(boundC3_1)*1000;
-        % Koffy3(boundC3_2)=Koffy3(boundC3_2)*100;
-        Koffy4(boundC4)=Koffy4(boundC4)*1000;
+        Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        % Koffy2(boundC2_1)=Koffy2(boundC2_1)*1000;
+        Koffy2(boundC2_2)=Koffy2(boundC2_2)*1000;
+        % Koffy3(boundC3_1)=Koffy3(boundC3_1)*1000;
+        Koffy3(boundC3_2)=Koffy3(boundC3_2)*1000;
+        % Koffy4(boundC4)=Koffy4(boundC4)*1000;
 
 
         % Set konx and kony depending on rac/rho concentrations in contact
@@ -2081,7 +2048,7 @@ while (ppp<=1)
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
                 hold on;
-                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+                scatter(Xsig(sigBound4),Ysig(sigBound4)-6,'black','.')
                 hold off;
             end
 
