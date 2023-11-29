@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_line/racrhopromotion_racinhibition_rhoinhibition_acrosscells/1000sumyRacOn_1000sumxRhoOn_1000sumyRhoOff_1000sumxRacOff';
+filename = './simulation_results/results_line/alternateracuprhoup/1000RacOn1000RhoOn';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes
