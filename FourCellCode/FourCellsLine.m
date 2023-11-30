@@ -29,13 +29,13 @@ mat_location = '';
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 56;
 
 while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_line/alternaterhouprhodown/1000RhoOn1000RhoOff';
+    savelocation='./simulation_results/results_line_signal/branched_bundled/0_9kb0_9kc50max2alpha';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -133,7 +133,7 @@ while (ppp<=100)
     boundC4 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
     sigBound4 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
@@ -180,8 +180,8 @@ while (ppp<=100)
     kc_vals=0.9*[-1,0,1];
     kd_vals=0.9*[-1,0,1];
     ka_ind=2;
-    kb_ind=2;
-    kc_ind=2;
+    kb_ind=3;
+    kc_ind=3;
     kd_ind=2;
 
 
@@ -879,11 +879,11 @@ while (ppp<=100)
         % Konx3(boundC3_2)=Konx3(boundC3_2)*1000;
         
         % Kony1(boundC1)=Kony1(boundC1)*1000;
-        Kony2(boundC2_1)=Kony2(boundC2_1)*1000;
+        % Kony2(boundC2_1)=Kony2(boundC2_1)*1000;
         % Kony2(boundC2_2)=Kony2(boundC2_2)*1000;
-        Kony3(boundC3_1)=Kony3(boundC3_1)*1000;
+        % Kony3(boundC3_1)=Kony3(boundC3_1)*1000;
         % Kony3(boundC3_2)=Kony3(boundC3_2)*1000;
-        Kony4(boundC4)=Kony4(boundC4)*1000;
+        % Kony4(boundC4)=Kony4(boundC4)*1000;
         
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2_1)=Koffx2(boundC2_1)*100;
@@ -892,11 +892,11 @@ while (ppp<=100)
         % Koffx3(boundC3_2)=Koffx3(boundC3_2)*10;
         % Koffx4(boundC4)=Koffx4(boundC4)*100;
 
-        Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        % Koffy1(boundC1)=Koffy1(boundC1)*1000;
         % Koffy2(boundC2_1)=Koffy2(boundC2_1)*1000;
-        Koffy2(boundC2_2)=Koffy2(boundC2_2)*1000;
+        % Koffy2(boundC2_2)=Koffy2(boundC2_2)*1000;
         % Koffy3(boundC3_1)=Koffy3(boundC3_1)*1000;
-        Koffy3(boundC3_2)=Koffy3(boundC3_2)*1000;
+        % Koffy3(boundC3_2)=Koffy3(boundC3_2)*1000;
         % Koffy4(boundC4)=Koffy4(boundC4)*1000;
 
 

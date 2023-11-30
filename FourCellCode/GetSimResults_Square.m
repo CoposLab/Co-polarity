@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './results_square/rhouprhodownforces/1000aRhoOn_1000bRhoOff';
+filename = './simulation_results/results_square/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes

@@ -29,7 +29,7 @@ mat_location = '';
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 88;
 
 while (ppp<=100)
     close all;
@@ -138,7 +138,7 @@ while (ppp<=100)
     signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
-    sigBound2 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
+    sigBound3 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
     % Competition for limited resource (actin monomers) term
     %
@@ -151,8 +151,8 @@ while (ppp<=100)
     kc_vals=0.9*[-1,0,1];
     kd_vals=0.9*[-1,0,1];
     ka_ind=2;
-    kb_ind=3;
-    kc_ind=3;
+    kb_ind=2;
+    kc_ind=2;
     kd_ind=2;
 
     % Set initial conditions for actin distribution
@@ -754,7 +754,7 @@ while (ppp<=100)
             [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
             [Xsig,Ysig] = pol2cart(th,rad);
             hold on;
-            scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+            scatter(Xsig(sigBound3),Ysig(sigBound3)-2,'black','.')
             hold off;
         end
 
@@ -804,12 +804,12 @@ while (ppp<=100)
         if signal==1
             % if t<=1000
                 steepness = 20;
-                Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-                Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
+                Konx3 = (ron*(tanh(steepness*(s3-s3(sigBound3(1)))) - tanh(steepness*(s3-s3(sigBound3(end)))) + 0.2)/2.2)';
+                Kony3 = (ron*(2 - tanh(steepness*(s3-s3(sigBound3(1)))) + tanh(steepness*(s3-s3(sigBound3(end)))) + 0.2)/2.2)';
+                Kfbx3 = (rfb*(tanh(steepness*(s3-s3(sigBound3(1)))) - tanh(steepness*(s3-s3(sigBound3(end)))) + 0.2)/2.2)';
+                Kfby3 = (rfb*(2 - tanh(steepness*(s3-s3(sigBound3(1)))) + tanh(steepness*(s3-s3(sigBound3(end)))) + 0.2)/2.2)';
+                Koffx3 = (roff*(2 - tanh(steepness*(s3-s3(sigBound3(1)))) + tanh(steepness*(s3-s3(sigBound3(end)))) + 0.2)/2.2)';
+                Koffy3 = (roff*(tanh(steepness*(s3-s3(sigBound3(1)))) - tanh(steepness*(s3-s3(sigBound3(end)))) + 0.2)/2.2)';
             % else
             %     steepness = 20;
             %     Konx1 = (ron*(tanh(steepness*(s2-s2(sigBound1(1)))) - tanh(steepness*(s2-s2(sigBound1(end)))) + 0.2)/2.2)';
@@ -847,13 +847,13 @@ while (ppp<=100)
         % Konx3(boundC3_4)=Konx3(boundC3_4)*1000;
         % Konx4(boundC4_1)=Konx4(boundC4_1)*1000;
         
-        % Kony1(boundC1_4)=Kony1(boundC1_4)*1000;
+        Kony1(boundC1_4)=Kony1(boundC1_4)*1000;
         % Kony1(boundC1_2)=Kony1(boundC1_2)*1000;
-        % Kony2(boundC2_1)=Kony2(boundC2_1)*1000;
+        Kony2(boundC2_1)=Kony2(boundC2_1)*1000;
         % Kony2(boundC2_3)=Kony2(boundC2_3)*1000;
-        % Kony3(boundC3_2)=Kony3(boundC3_2)*1000;
+        Kony3(boundC3_2)=Kony3(boundC3_2)*1000;
         % Kony3(boundC3_4)=Kony3(boundC3_4)*1000;
-        % Kony4(boundC4_3)=Kony4(boundC4_3)*1000;
+        Kony4(boundC4_3)=Kony4(boundC4_3)*1000;
         % Kony4(boundC4_1)=Kony4(boundC4_1)*1000;
         
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
@@ -864,13 +864,13 @@ while (ppp<=100)
         % Koffx4(boundC4)=Koffx4(boundC4)*100;
 
         % Koffy1(boundC1_4)=Koffy1(boundC1_4)*1000;
-        % Koffy1(boundC1_2)=Koffy1(boundC1_2)*1000;
+        Koffy1(boundC1_2)=Koffy1(boundC1_2)*1000;
         % Koffy2(boundC2_1)=Koffy2(boundC2_1)*1000;
-        % Koffy2(boundC2_3)=Koffy2(boundC2_3)*1000;
+        Koffy2(boundC2_3)=Koffy2(boundC2_3)*1000;
         % Koffy3(boundC3_2)=Koffy3(boundC3_2)*1000;
-        % Koffy3(boundC3_4)=Koffy3(boundC3_4)*1000;
+        Koffy3(boundC3_4)=Koffy3(boundC3_4)*1000;
         % Koffy4(boundC4_3)=Koffy4(boundC4_3)*1000;
-        % Koffy4(boundC4_1)=Koffy4(boundC4_1)*1000;
+        Koffy4(boundC4_1)=Koffy4(boundC4_1)*1000;
 
 
         % Set konx and kony depending on rac/rho concentrations in contact
@@ -2043,7 +2043,7 @@ while (ppp<=100)
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
                 hold on;
-                scatter(Xsig(sigBound2),Ysig(sigBound2)-2,'black','.')
+                scatter(Xsig(sigBound3),Ysig(sigBound3)-2,'black','.')
                 hold off;
             end
 

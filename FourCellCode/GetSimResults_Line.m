@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_line/alternateracuprhoup/1000RacOn1000RhoOn';
+filename = './simulation_results/results_line_signal/branched_bundled/0_9kb0_9kc50max2alpha';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes
