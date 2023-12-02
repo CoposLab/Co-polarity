@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_square/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
+filename = './simulation_results/results_square_signal/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
 maxnum=100;
 
 angletolerance=pi/4; % tolerance for yes
