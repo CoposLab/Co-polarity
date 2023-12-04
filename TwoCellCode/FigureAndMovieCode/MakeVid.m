@@ -16,19 +16,19 @@ Nt=2500;
 % sigBound2(sigBound2<=0)=sigBound2(sigBound2<=0)+Na;
 % sigBound2(sigBound2>Na)=sigBound2(sigBound2>Na)-Na;
 
-scatvid=0;
+scatvid=1;
 branchedbundledvid=0;
 racrhovid=0;
-circlescatvid=1;
+circlescatvid=0;
 adjacent=1;
 showtime=0;
 
-for i=1:1
+for i=3:3
 
-    loadfile='./vid_matfiles/collision/racup/1000RacOn';
+    loadfile='./vid_matfiles/branchedbundled/signal/0_8kb0_8kc_50max_2alpha_40time';
     
     setnum=int2str(i);
-    savelocation='../movies/circle_scatterplot/almost_adjacent/collision/racup/1000RacOn';
+    savelocation='../movies/branchedbundled/signal/0_8kb0_8kc_50max_2alpha_40time';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -284,10 +284,12 @@ for i=1:1
         if dirIndexb1<1
             dirIndexb1=dirIndexb1+101;
         end
+        if branchedbundledvid==1
         if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
             hold on;
             quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
             hold off;
+        end
         end
 
 
@@ -321,10 +323,12 @@ for i=1:1
         if dirIndexb2<1
             dirIndexb2=dirIndexb2+101;
         end
+        if branchedbundledvid==1
         if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
             hold on;
             quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
             hold off;
+        end
         end
 
 

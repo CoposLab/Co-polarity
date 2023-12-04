@@ -37,7 +37,7 @@ coeff_vals=[1,10,1000];
 
 
 save_matfile=1;
-mat_location='';
+mat_location='./FigureAndMovieCode/vid_matfiles/moving_cells/branchedbundled/nosignal/-0_8ka0_8kb0_8kc-0_8kd';
 move_cells=1;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -45,7 +45,7 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=100)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -186,10 +186,10 @@ while (ppp<=100)
     kb_vals=0.8*[-1,0,1];
     kc_vals=0.8*[-1,0,1];
     kd_vals=0.8*[-1,0,1];
-    ka_ind=2; %index of ka_vals (index 2 means no interaction)
+    ka_ind=1; %index of ka_vals (index 2 means no interaction)
     kb_ind=3;
     kc_ind=3;
-    kd_ind=2;
+    kd_ind=1;
 
 
     % Set initial conditions for actin distribution
@@ -1029,10 +1029,10 @@ while (ppp<=100)
             posn1=[0+xshift1(t+1),0+yshift1(t+1)];
             posn2=[0+xshift2(t+1),-2+yshift2(t+1)];
 
-            xshift1(t+1)=xshift1(t+1)+0.0003*(posn2(1)-posn1(1))/sqrt(sum((posn2-posn1).^2));
-            yshift1(t+1)=yshift1(t+1)+0.0003*(posn2(2)-posn1(2))/sqrt(sum((posn2-posn1).^2));
-            xshift2(t+1)=xshift2(t+1)+0.0003*(posn1(1)-posn2(1))/sqrt(sum((posn2-posn1).^2));
-            yshift2(t+1)=yshift2(t+1)+0.0003*(posn1(2)-posn2(2))/sqrt(sum((posn2-posn1).^2));
+            % xshift1(t+1)=xshift1(t+1)+0.0003*(posn2(1)-posn1(1))/sqrt(sum((posn2-posn1).^2));
+            % yshift1(t+1)=yshift1(t+1)+0.0003*(posn2(2)-posn1(2))/sqrt(sum((posn2-posn1).^2));
+            % xshift2(t+1)=xshift2(t+1)+0.0003*(posn1(1)-posn2(1))/sqrt(sum((posn2-posn1).^2));
+            % yshift2(t+1)=yshift2(t+1)+0.0003*(posn1(2)-posn2(2))/sqrt(sum((posn2-posn1).^2));
 
             % cell_distance = sqrt((posn1(1)-posn2(1))^2+(posn1(2)-posn2(2))^2);
         end

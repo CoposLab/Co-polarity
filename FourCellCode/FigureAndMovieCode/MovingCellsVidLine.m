@@ -9,10 +9,10 @@ squished=0;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/moving_cells/alt_racup_rhoup_forcedependent/1000bRacOn_1000aRhoOn';
+    loadfile='./vid_matfiles/moving_cells_line/branchedbundled/0_9kb0_9kc';
 
     setnum=int2str(i);
-    savelocation='./movies_line/moving_cells/alt_racup_rhoup_forcedependent/1000bRacOn_1000aRhoOn';
+    savelocation='../movies/movies_line/moving_cells/branchedbundled/0_9kb0_9kc';
 
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
 
@@ -147,14 +147,12 @@ for i=1:1
         view(2)
         colormap(branchedColor)
         freezeColors;
-        freezeColors(colorbar('Location','eastoutside'));
-        clim([0,allmax])
+        clim([0,allmax/2])
         shading interp
         surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBund1,'AlphaData',ZBund1,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
-        clim([0,allmax])
+        clim([0,allmax/2])
         freezeColors;
-        freezeColors(jicolorbar);
         shading interp
 
         % Cell 2
@@ -168,14 +166,12 @@ for i=1:1
         view(2)
         colormap(branchedColor)
         freezeColors;
-        freezeColors(colorbar('Location','eastoutside'));
-        clim([0,allmax])
+        clim([0,allmax/2])
         shading interp
         surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBund2,'AlphaData',ZBund2,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
-        freezeColors(jicolorbar);
-        clim([0,allmax])
+        clim([0,allmax/2])
         shading interp
 
         % Cell 3
@@ -189,14 +185,12 @@ for i=1:1
         view(2)
         colormap(branchedColor)
         freezeColors;
-        freezeColors(colorbar('Location','eastoutside'));
-        clim([0,allmax])
+        clim([0,allmax/2])
         shading interp
         surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
-        freezeColors(jicolorbar);
-        clim([0,allmax])
+        clim([0,allmax/2])
         shading interp
 
         % Cell 4
@@ -209,25 +203,33 @@ for i=1:1
         surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
+        clim([0,allmax/2])
         freezeColors;
-        freezeColors(colorbar('Location','eastoutside'));
-        clim([0,allmax])
+        cb=colorbar('Location','eastoutside');
+        freezeColors(cb);
+        cbpos=cb.Position;
+        set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
+        set(cb,'TickLabels',[])
+        cbpos=cb.Position;
         shading interp
         surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
+        clim([0,allmax/2])
         freezeColors;
-        freezeColors(jicolorbar);
-        clim([0,allmax])
+        jcb=jicolorbar;
+        freezeColors(jcb);
+        set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
         shading interp
         grid off
-        xlim([-7,7])
-        ylim([-10,4])
-        axis square
+        xlim([-5,5])
+        ylim([-8,2.5])
+        pbaspect([10, 10.5, 1])
+        % axis square
 
         hold off;
         box off;
 
-        bgColor=[0.97 0.98 0.995];
+        bgColor=[1 1 1];
         set(gca,'XTick',[],'YTick',[])
         set(gca,'color',bgColor);
         set(gcf,'color',bgColor);
@@ -335,7 +337,7 @@ for i=1:1
         ohf = findobj(gcf);
         figaxes = findobj(ohf(1), 'Type', 'axes');
         set(figaxes(1),'Fontsize',15)
-        set(figaxes(2),'Fontsize',1)
+        set(figaxes(2),'Fontsize',14)
         camroll(90)
 
 
