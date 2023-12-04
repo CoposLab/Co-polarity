@@ -36,9 +36,9 @@ coeff_vals=[1,10,1000];
 
 
 
-save_matfile=0;
+save_matfile=1;
 mat_location='';
-move_cells=0;
+move_cells=1;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
@@ -49,7 +49,7 @@ while (ppp<=100)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/antagonism/0_5epsilon10RhoRemoved';
+    savelocation='';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -138,7 +138,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -155,7 +155,7 @@ while (ppp<=100)
 
     % set antagonism (numRhoToRemove=0 and numRacToRemove=0 --> uncoupled)
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numRhoToRemove=10;
+    numRhoToRemove=0;
     numRacToRemove=0;
     counter1=0;
     counter2=0;
@@ -182,13 +182,13 @@ while (ppp<=100)
     % kb: how does bundled affect branched
     % kc: how does branched affect bundled
     % kd: how does bundled affect bundled
-    ka_vals=0.75*[-1,0,1];
-    kb_vals=0.75*[-1,0,1];
-    kc_vals=0.75*[-1,0,1];
-    kd_vals=0.75*[-1,0,1];
+    ka_vals=0.8*[-1,0,1];
+    kb_vals=0.8*[-1,0,1];
+    kc_vals=0.8*[-1,0,1];
+    kd_vals=0.8*[-1,0,1];
     ka_ind=2; %index of ka_vals (index 2 means no interaction)
-    kb_ind=2;
-    kc_ind=2;
+    kb_ind=3;
+    kc_ind=3;
     kd_ind=2;
 
 

@@ -5,7 +5,7 @@ cla
 % load('data/branched_bundled_heatmap_vals.mat')
 load('data/signal_branched_bundled_heatmap_vals.mat')
 
-lf_or_yes=yes;
+lf_or_yes=lf;
 
 dot_size=2000;
 line_width=2;
@@ -20,14 +20,15 @@ ggb=flip([gg gb]');
 f=figure(1);
 subplot(1,5,3)
 % scatter3(ka(kc==-0.9),kb(kc==-0.9),kd(kc==-0.9),1000,lf(kc==-0.9),'filled')
-scatter3(ka(kc==-kb),kb(kc==-kb),kd(kc==-kb),dot_size,lf_or_yes(kc==-kb),'filled','LineWidth',line_width)
+scatter3(ka(kc==-kb),kb(kc==-kb),kd(kc==-kb),dot_size,lf_or_yes(kc==-kb),...
+    'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
 clim([0,0.75])
-xlabel('ka')
-ylabel('kb');
-zl=zlabel('kd');
+% xlabel('ka')
+% ylabel('kb');
+% zl=zlabel('kd');
 % zl.Position(2) = zl.Position(2)-1;
 % title('kc=-0.9','Position',[0,0,2])
-title('kb=-kc','Position',[0,0,2])
+% title('kb=-kc','Position',[0,0,2])
 colormap(ggb)
 alpha 1
 view(-52.8368,30.7651)
@@ -39,13 +40,14 @@ set(gca,'BoxStyle','full','LineWidth',line_width)
 set(gca,'Ydir','reverse')
 
 subplot(1,5,4)
-scatter3(ka(kc==0),kb(kc==0),kd(kc==0),dot_size,lf_or_yes(kc==0),'filled','LineWidth',line_width)
+scatter3(ka(kc==0),kb(kc==0),kd(kc==0),dot_size,lf_or_yes(kc==0),...
+    'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
 clim([0,0.75])
-xlabel('ka')
-ylabel('kb')
-zl=zlabel('kd');
+% xlabel('ka')
+% ylabel('kb')
+% zl=zlabel('kd');
 % zl.Position(2) = zl.Position(2)-1;
-title('kc=0','Position',[0,0,2])
+% title('kc=0','Position',[0,0,2])
 colormap(ggb)
 alpha 1
 view(-52.8368,30.7651)
@@ -58,14 +60,15 @@ set(gca,'Ydir','reverse')
 
 subplot(1,5,1)
 % scatter3(ka(kc==0.9),kb(kc==0.9),kd(kc==0.9),1000,lf(kc==0.9),'filled')
-scatter3(ka(kc==kb),kb(kc==kb),kd(kc==kb),dot_size,lf_or_yes(kc==kb),'filled','LineWidth',line_width)
+scatter3(ka(kc==kb),kb(kc==kb),kd(kc==kb),dot_size,lf_or_yes(kc==kb),...
+    'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
 clim([0,0.75])
-xlabel('ka')
-ylabel('kb')
-zl=zlabel('kd');
+% xlabel('ka')
+% ylabel('kb')
+% zl=zlabel('kd');
 % zl.Position(2) = zl.Position(2)-1;
 % title('kc=0.9','Position',[0,0,2])
-title('kb=kc','Position',[0,0,2])
+% title('kb=kc','Position',[0,0,2])
 colormap(ggb)
 alpha 1
 view(-52.8368,30.7651)
@@ -77,13 +80,14 @@ set(gca,'BoxStyle','full','LineWidth',line_width)
 set(gca,'Ydir','reverse')
 
 subplot(1,5,2)
-scatter3(ka(kb==0),kc(kb==0),kd(kb==0),dot_size,lf_or_yes(kb==0),'filled','LineWidth',line_width)
+scatter3(ka(kb==0),kc(kb==0),kd(kb==0),dot_size,lf_or_yes(kb==0),...
+    'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
 clim([0,0.75])
-xlabel('ka')
-ylabel('kc')
-zl=zlabel('kd');
+% xlabel('ka')
+% ylabel('kc')
+% zl=zlabel('kd');
 % zl.Position(2) = zl.Position(2)-1;
-title('kb=0','Position',[0,0,2])
+% title('kb=0','Position',[0,0,2])
 colormap(ggb)
 alpha 1
 view(-52.8368,30.7651)

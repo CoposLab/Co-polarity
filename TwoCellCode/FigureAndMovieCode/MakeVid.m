@@ -5,7 +5,8 @@ clc;
 
 addpath('./freeze_colors')
 
-signal=1;
+signal=0;
+Nt=2500;
 % Na=101;
 % sigper=0.40;
 % sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
@@ -16,18 +17,18 @@ signal=1;
 % sigBound2(sigBound2>Na)=sigBound2(sigBound2>Na)-Na;
 
 scatvid=0;
-branchedbundledvid=1;
-racrhovid=1;
-circlescatvid=0;
+branchedbundledvid=0;
+racrhovid=0;
+circlescatvid=1;
 adjacent=1;
-showtime=1;
+showtime=0;
 
-for i=1:10
+for i=1:1
 
-    loadfile='./vid_matfiles/signal_switches_sides/500stepsc2_3500stepsc1/rhodownnosigcell_racdownsigcell/1000RacOff_1000RhoOff';
+    loadfile='./vid_matfiles/collision/racup/1000RacOn';
     
     setnum=int2str(i);
-    savelocation='../movies/signal_switches_sides/500stepsc2_3500stepsc1/rhodownnosigcell_racdownsigcell/1000RacOff_1000RhoOff';
+    savelocation='../movies/circle_scatterplot/almost_adjacent/collision/racup/1000RacOn';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
