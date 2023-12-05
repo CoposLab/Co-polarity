@@ -8,8 +8,8 @@ signal=0;
 squished=0;
 shifted=1;
 
-setnum='10';
-loadfile='./vid_matfiles/moving_cells_square/alt_rhoup_rhodown/1000RhoOn_1000RhoOff';
+setnum='7';
+loadfile='./vid_matfiles/moving_cells_square/branchedbundled/0_9kb0_9kc';
 
 load(strcat(loadfile,setnum));
 t=2499;

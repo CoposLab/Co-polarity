@@ -1244,7 +1244,7 @@ while (ppp<=1)
     end
     sprintf('Simulation %d done',ppp)
     toc
-    if(quit_cond==0) || quit_cond==1
+    if(quit_cond==0)
         if savefigs==1
             % Define circles
             gapsize=0.01;

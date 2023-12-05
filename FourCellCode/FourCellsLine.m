@@ -23,19 +23,19 @@ clc;
 % for c1_ind=2:length(c1_vals)
 %     for c2_ind=c1_ind:length(c2_vals)
 
-save_matfile=0;
-mat_location = '';
+save_matfile=1;
+mat_location = './FigureAndMovieCode/vid_matfiles/moving_cells_line/branchedbundled/0_9kb0_9kc';
 
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 56;
+ppp = 2;
 
-while (ppp<=100)
+while (ppp<=10)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_line_signal/branched_bundled/0_9kb0_9kc50max2alpha';
+    savelocation='';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -133,7 +133,7 @@ while (ppp<=100)
     boundC4 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
     sigBound4 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;

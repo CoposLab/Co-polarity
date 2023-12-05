@@ -8,11 +8,13 @@ signal=0;
 squished=0;
 shifted=1;
 
-setnum='1';
+setnum='10';
+% loadfile='./vid_matfiles/moving_cells_line/alt_racup_rhoup/1000RacOn_1000RhoOn';
 loadfile='./vid_matfiles/moving_cells_line/alt_rhoup_rhodown/1000RhoOn_1000RhoOff';
+% loadfile='./vid_matfiles/moving_cells_line/branchedbundled/0_9kb0_9kc';
 
 load(strcat(loadfile,setnum));
-t=1;
+t=2499;
 
 
 allmax=max(max([a1all a2all a3all a4all b1all b2all b3all b4all]));
