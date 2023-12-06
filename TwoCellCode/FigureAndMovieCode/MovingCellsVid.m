@@ -9,10 +9,10 @@ squished=0;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/moving_cells/branchedbundled/nosignal/-0_8ka0_8kb0_8kc-0_8kd';
+    loadfile='./vid_matfiles/moving_cells/signal/rhoup/1000RhoOn';
 
     setnum=int2str(i);
-    savelocation='../movies/moving_cells/branchedbundled/nosignal/-0_8ka0_8kb0_8kc-0_8kd';
+    savelocation='../movies/moving_cells/signal/rhoup/1000RhoOn';
 
     % vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
@@ -185,7 +185,7 @@ for i=1:1
         shading interp
         grid off
         xlim([-3,3])
-        ylim([-4,4])
+        ylim([-6,2])
         pbaspect([6 8 1])
         % axis square
         set(gca,'XTick',[], 'YTick', [])

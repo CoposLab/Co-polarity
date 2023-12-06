@@ -37,7 +37,7 @@ coeff_vals=[1,10,1000];
 
 
 save_matfile=1;
-mat_location='./FigureAndMovieCode/vid_matfiles/moving_cells/branchedbundled/nosignal/-0_8ka0_8kb0_8kc-0_8kd';
+mat_location='./FigureAndMovieCode/vid_matfiles/moving_cells/signal/racupc1_rhoupc2/1000RacOn_1000RhoOn';
 move_cells=1;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -117,7 +117,7 @@ while (ppp<=1)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 40.0;                  % total simulation time
+    Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -138,7 +138,7 @@ while (ppp<=1)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
+    signal=1;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -186,10 +186,10 @@ while (ppp<=1)
     kb_vals=0.8*[-1,0,1];
     kc_vals=0.8*[-1,0,1];
     kd_vals=0.8*[-1,0,1];
-    ka_ind=1; %index of ka_vals (index 2 means no interaction)
-    kb_ind=3;
-    kc_ind=3;
-    kd_ind=1;
+    ka_ind=2; %index of ka_vals (index 2 means no interaction)
+    kb_ind=2;
+    kc_ind=2;
+    kd_ind=2;
 
 
     % Set initial conditions for actin distribution
@@ -411,21 +411,21 @@ while (ppp<=1)
         % this works
         if signal==1
             steepness = 20;
-            if t<=500
+            % if t<=500
                 Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            else
-                Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            end
+            % else
+            %     Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            %     Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            %     Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            %     Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            %     Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            %     Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            % end
         end
 
 
@@ -441,10 +441,10 @@ while (ppp<=1)
             % Konx2(boundC2)=Konx2(boundC2)*1000;
             % Koffy2(boundC2)=Koffy2(boundC2)*1000;
         end
-        % Konx1(boundC1)=Konx1(boundC1)*1000;
+        Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
         % Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Kony2(boundC2)=Kony2(boundC2)*1000;
+        Kony2(boundC2)=Kony2(boundC2)*1000;
         % Koffx1(boundC1)=Koffx1(boundC1)*1000;
         % Koffx2(boundC2)=Koffx2(boundC2)*1000;
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;

@@ -5,8 +5,8 @@ clc;
 
 addpath('./freeze_colors')
 
-signal=0;
-Nt=2500;
+signal=1;
+% Nt=2500;
 % Na=101;
 % sigper=0.40;
 % sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
@@ -16,19 +16,19 @@ Nt=2500;
 % sigBound2(sigBound2<=0)=sigBound2(sigBound2<=0)+Na;
 % sigBound2(sigBound2>Na)=sigBound2(sigBound2>Na)-Na;
 
-scatvid=1;
-branchedbundledvid=0;
+scatvid=0;
+branchedbundledvid=1;
 racrhovid=0;
 circlescatvid=0;
 adjacent=1;
-showtime=0;
+showtime=1;
 
-for i=3:3
+for i=2:10
 
-    loadfile='./vid_matfiles/branchedbundled/signal/0_8kb0_8kc_50max_2alpha_40time';
+    loadfile='./vid_matfiles/signal_switches_sides/500stepsc2_3500stepsc1/branchedbundled/0_75kb0_75kc';
     
     setnum=int2str(i);
-    savelocation='../movies/branchedbundled/signal/0_8kb0_8kc_50max_2alpha_40time';
+    savelocation='../movies/signal_switches_sides/500stepsc2_3500stepsc1/branchedbundled/0_75kb0_75kc';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -241,7 +241,10 @@ for i=3:3
             % end
             view(2)
             grid off
-            axis equal
+            xlim([-3 3])
+            ylim([-4 2])
+            pbaspect([6 6 1])
+            % axis equal
             set(gca,'XTick',[], 'YTick', [])
 
             hold off;
@@ -250,7 +253,10 @@ for i=3:3
             set(gca,'YColor','w')
             set(gcf,'color','w');
             if showtime==1
-                title(strcat('t=',int2str(t)))
+                % title(strcat('t=',int2str(t)))
+                timebox=annotation('textbox', [0.75, 0.1, 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none');
+                tbpos=timebox.Position;
+                set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.05]);
             end
         end
 
