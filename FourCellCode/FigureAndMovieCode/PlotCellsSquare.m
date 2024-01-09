@@ -6,10 +6,10 @@ clc;
 
 signal=0;
 squished=0;
-shifted=1;
+shifted=0;
 
-setnum='7';
-loadfile='./vid_matfiles/moving_cells_square/branchedbundled/0_9kb0_9kc';
+setnum='1';
+loadfile='./vid_matfiles/moving_cells_square/alt_racup_rhoup/1000RacOn_1000RhoOn';
 
 load(strcat(loadfile,setnum));
 t=2499;

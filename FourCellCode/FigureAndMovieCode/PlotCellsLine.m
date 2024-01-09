@@ -5,8 +5,8 @@ clear;
 clc;
 
 signal=0;
-squished=0;
-shifted=1;
+squished=1;
+shifted=0;
 
 setnum='10';
 % loadfile='./vid_matfiles/moving_cells_line/alt_racup_rhoup/1000RacOn_1000RhoOn';
