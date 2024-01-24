@@ -36,20 +36,20 @@ coeff_vals=[1,10,1000];
 
 
 
-save_matfile=1;
+save_matfile=0;
 mat_location='./FigureAndMovieCode/vid_matfiles/moving_cells/signal/racupc1_rhoupc2/1000RacOn_1000RhoOn';
-move_cells=1;
+move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='';
+    savelocation='./simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/rhodownnosig_racdownsig_forces/1000BRhoOff_1000ARacOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -117,7 +117,7 @@ while (ppp<=1)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 25.0;                  % total simulation time
+    Tend   = 40.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -411,40 +411,42 @@ while (ppp<=1)
         % this works
         if signal==1
             steepness = 20;
-            % if t<=500
+            if t<=500
                 Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            % else
-            %     Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            %     Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-            % end
+            else
+                Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            end
         end
 
 
         % Set konx and kony in contact region
         if t<=500
             % Konx1(boundC1)=Konx1(boundC1)*1000;
+            % Konx2(boundC2)=Konx2(boundC2)*10;
             % Kony2(boundC2)=Kony2(boundC2)*1000;
             % Koffx2(boundC2)=Koffx2(boundC2)*1000;
             % Koffy1(boundC1)=Koffy1(boundC1)*1000;
         else
             % Koffx1(boundC1)=Koffx1(boundC1)*1000;
             % Kony1(boundC1)=Kony1(boundC1)*1000;
+            % Konx1(boundC1)=Konx1(boundC1)*10;
             % Konx2(boundC2)=Konx2(boundC2)*1000;
             % Koffy2(boundC2)=Koffy2(boundC2)*1000;
         end
-        Konx1(boundC1)=Konx1(boundC1)*1000;
+        % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
         % Kony1(boundC1)=Kony1(boundC1)*1000;
-        Kony2(boundC2)=Kony2(boundC2)*1000;
+        % Kony2(boundC2)=Kony2(boundC2)*1000;
         % Koffx1(boundC1)=Koffx1(boundC1)*1000;
         % Koffx2(boundC2)=Koffx2(boundC2)*1000;
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
@@ -507,6 +509,17 @@ while (ppp<=1)
 
 
         % Set rac/rho rates depending on branched/bundled concentrations
+        if t<=500
+            % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+            % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+            Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
+            Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
+        else
+            % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
+            % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
+            Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
+            Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
+        end
         % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
@@ -907,7 +920,7 @@ while (ppp<=1)
         cell2_bound(boundC2)=ones(length(boundC2),1);
         abmax=50;
 
-        gamma=1.5;
+        % gamma=1.5;
 
         % if t<=500
         %     kb_ind=2;
@@ -1244,7 +1257,7 @@ while (ppp<=1)
     end
     sprintf('Simulation %d done',ppp)
     toc
-    if(quit_cond==0)
+    if(quit_cond==0) || quit_cond==1
         if savefigs==1
             % Define circles
             gapsize=0.01;
