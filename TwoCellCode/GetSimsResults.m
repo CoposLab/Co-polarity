@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/racup_morenosig/1000RacOn_10RacOn';
+filename = './simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/branchedupnosig_bundledupsig/3Ka_3Kb';
 maxnum=100;
 
 angle=pi/4;

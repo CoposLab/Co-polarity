@@ -49,7 +49,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/rhodownnosig_racdownsig_forces/1000BRhoOff_1000ARacOff';
+    savelocation='./simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/branchedupnosig_bundledupsig/3Ka_3Kb';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -512,13 +512,13 @@ while (ppp<=100)
         if t<=500
             % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
             % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
-            Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
-            Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
+            % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
+            % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
         else
             % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
             % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
-            Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
-            Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
+            % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
+            % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
         end
         % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
@@ -922,13 +922,31 @@ while (ppp<=100)
 
         % gamma=1.5;
 
-        % if t<=500
-        %     kb_ind=2;
-        %     kc_ind=2;
-        % else
-        %     kb_ind=3;
-        %     kc_ind=3;
-        % end
+        if t<=500
+            % kb_ind=2;
+            % kc_ind=2;
+            branchedConst1 = 3.0;
+            bundledConst1 = 1.0;
+            branchedConst2 = 1.0;
+            bundledConst2 = 3.0;
+        else
+            % kb_ind=3;
+            % kc_ind=3;
+            branchedConst1 = 1.0;
+            bundledConst1 = 3.0;
+            branchedConst2 = 3.0;
+            bundledConst2 = 1.0;
+        end
+
+        
+        Ka1=ones(Na,1);
+        Kb1=ones(Na,1);
+        Ka2=ones(Na,1);
+        Kb2=ones(Na,1);
+        Ka1(boundC1) = branchedConst1*Ka1(boundC1);
+        Kb1(boundC1) = bundledConst1*Kb1(boundC1);
+        Ka2(boundC2) = branchedConst2*Ka2(boundC2);
+        Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
