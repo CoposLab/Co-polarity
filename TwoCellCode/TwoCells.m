@@ -49,7 +49,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/branchedupnosig_bundledupsig/3Ka_3Kb';
+    savelocation='./simulation_results/results_celldifference/1_2Ka_1_2Kb_allC2/rhoupc1_rhodownc2/1000RhoOnC1_100RhoOffC2';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -117,7 +117,7 @@ while (ppp<=100)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 40.0;                  % total simulation time
+    Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -138,7 +138,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -170,8 +170,8 @@ while (ppp<=100)
     bundledConst2 = 1.0;
     Ka1=ones(Na,1);
     Kb1=ones(Na,1);
-    Ka2=ones(Na,1);
-    Kb2=ones(Na,1);
+    Ka2=1.2*ones(Na,1);
+    Kb2=1.2*ones(Na,1);
     Ka1(boundC1) = branchedConst1*Ka1(boundC1);
     Kb1(boundC1) = bundledConst1*Kb1(boundC1);
     Ka2(boundC2) = branchedConst2*Ka2(boundC2);
@@ -445,12 +445,12 @@ while (ppp<=100)
         end
         % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
-        % Kony1(boundC1)=Kony1(boundC1)*1000;
+        Kony1(boundC1)=Kony1(boundC1)*1000;
         % Kony2(boundC2)=Kony2(boundC2)*1000;
         % Koffx1(boundC1)=Koffx1(boundC1)*1000;
         % Koffx2(boundC2)=Koffx2(boundC2)*1000;
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        % Koffy2(boundC2)=Koffy2(boundC2)*1000;
+        Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Set konx and kony away from contact region
         % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
@@ -531,37 +531,66 @@ while (ppp<=100)
 
 
         %Cell 1
-        if((t-1)*dt<Tx1(rxn_count_x1))
-            NNx1(t+1) = X1(rxn_count_x1-1);
+        if((t-1)*dt<Tx1(rxn_count_x1)) % have we reached the time of next reaction?
+            NNx1(t+1) = X1(rxn_count_x1-1); % if not, nothing happens
         else
-            nnx1 = X1(rxn_count_x1);
+            nnx1 = X1(rxn_count_x1); % number of rac on membrane at time of last reaction
             taux1 = zeros(nnx1,1);
             dnx1 = zeros(nnx1,1);
             rx1 = rand(nnx1,1);
 
-            if(nnx1==0)
+            if(nnx1==0) % no rac on membrane
                 sprintf('here 1rac')
                 counter_ppp = ppp;
                 quit_cond = 1;
                 break
             end
 
-            for j=1:nnx1          % all agents
-                konx1 = interp1(s1,Konx1,posx1(j,t));
-                koffx1 = interp1(s1,Koffx1,posx1(j,t));
-                kfbx1 = interp1(s1,Kfbx1,posx1(j,t));
-                % Sample earliest time-to-fire (tau)
-                a0_x1 = koffx1 + (konx1+kfbx1*nnx1/N)*(N/nnx1-1);
-                taux1(j) = -log(rx1(j))/a0_x1;
-                rr_x1 = rand(1,1);
-                dnx1(j) = (rr_x1<((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0_x1))*1.0 + (rr_x1>=((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0_x1))*(-1.0);
-            end
+            % if(nnx1==0) % no rac on membrane
+            %     sprintf('here 1rac')
+            %     % rx1 = rand(N,1);
+            %     % 
+            %     % for j=1:N
+            %     %     konx1 = interp1(s1,Konx1,posx1(j,t));
+            %     %     a0_x1 = konx1;
+            %     %     taux1(j) = -log(rx1(j))/a0_x1;
+            %     %     rr_x1 = rand(1,1);
+            %     %     dnx1(j)=1;
+            %     % end
+            %     % 
+            %     % [mintaux1,minidx1] = min(taux1(1:j));       % find first chemical rxn
+            %     % Tx1(rxn_count_x1+1) = Tx1(rxn_count_x1) + mintaux1;
+            %     % X1(rxn_count_x1+1) = nnx1 + dnx1(minidx1);
+            %     % rxn_count_x1 = rxn_count_x1 + 1;
+            %     % NNx1(t+1) = X1(rxn_count_x1-1);
+            % 
+            %     X1(rxn_count_x1+1) = 0.1*N; % put 20 rac on membrane
+            %     NNx1(rxn_count_x1+1) = X1(rxn_count_x1+1);
+            %     Tx1(rxn_count_x1+1) = 0.0;
+            %     nx1(1:X1(rxn_count_x1+1),1) = 1;
+            %     r1 = randperm(ceil(L/(0.0102)),X1(rxn_count_x1+1))*0.0102;
+            %     posx1(1:X1(rxn_count_x1+1),1)=r1(1:X1(rxn_count_x1+1));
+            % 
+            % 
+            % else
 
-            [mintaux1,minidx1] = min(taux1(1:j));       % find first chemical rxn
-            Tx1(rxn_count_x1+1) = Tx1(rxn_count_x1) + mintaux1;
-            X1(rxn_count_x1+1) = nnx1 + dnx1(minidx1);
-            rxn_count_x1 = rxn_count_x1 + 1;
-            NNx1(t+1) = X1(rxn_count_x1-1);
+                for j=1:nnx1          % all agents
+                    konx1 = interp1(s1,Konx1,posx1(j,t));
+                    koffx1 = interp1(s1,Koffx1,posx1(j,t));
+                    kfbx1 = interp1(s1,Kfbx1,posx1(j,t));
+                    % Sample earliest time-to-fire (tau)
+                    a0_x1 = koffx1 + (konx1+kfbx1*nnx1/N)*(N/nnx1-1);
+                    taux1(j) = -log(rx1(j))/a0_x1;
+                    rr_x1 = rand(1,1);
+                    dnx1(j) = (rr_x1<((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0_x1))*1.0 + (rr_x1>=((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0_x1))*(-1.0); %does particle bind (+1) or unbind (-1)
+                end
+
+                [mintaux1,minidx1] = min(taux1(1:j));       % find first chemical rxn
+                Tx1(rxn_count_x1+1) = Tx1(rxn_count_x1) + mintaux1;
+                X1(rxn_count_x1+1) = nnx1 + dnx1(minidx1);
+                rxn_count_x1 = rxn_count_x1 + 1;
+                NNx1(t+1) = X1(rxn_count_x1-1);
+            % end
         end
 
         %Cell 2
@@ -580,22 +609,36 @@ while (ppp<=100)
                 break
             end
 
-            for j=1:nnx2          % all agents
-                konx2 = interp1(s2,Konx2,posx2(j,t));
-                koffx2 = interp1(s2,Koffx2,posx2(j,t));
-                kfbx2 = interp1(s2,Kfbx2,posx2(j,t));
-                % Sample earliest time-to-fire (tau)
-                a0_x2 = koffx2 + (konx2+kfbx2*nnx2/N)*(N/nnx2-1);
-                taux2(j) = -log(rx2(j))/a0_x2;
-                rrx2 = rand(1,1);
-                dnx2(j) = (rrx2<((konx2+kfbx1*nnx2/N)*(N/nnx2-1)/a0_x2))*1.0 + (rrx2>=((konx2+kfbx2*nnx2/N)*(N/nnx2-1)/a0_x2))*(-1.0);
-            end
+            % if(nnx2==0) % no rac on membrane
+            %     sprintf('here 2rac')
+            % 
+            %     X2(rxn_count_x2+1) = 0.1*N; % put 20 rac on membrane
+            %     NNx2(rxn_count_x2+1) = X2(rxn_count_x2+1);
+            %     Tx2(rxn_count_x2+1) = 0.0;
+            %     nx2(1:X2(rxn_count_x2+1),1) = 1;
+            %     r2 = randperm(ceil(L/(0.0102)),X2(rxn_count_x2+1))*0.0102;
+            %     posx2(1:X2(rxn_count_x2+1),1)=r2(1:X2(rxn_count_x2+1));
+            % 
+            % 
+            % else
 
-            [mintaux2,minidx2] = min(taux2(1:j));       % find first chemical rxn
-            Tx2(rxn_count_x2+1) = Tx2(rxn_count_x2) + mintaux2;
-            X2(rxn_count_x2+1) = nnx2 + dnx2(minidx2);
-            rxn_count_x2 = rxn_count_x2 + 1;
-            NNx2(t+1) = X2(rxn_count_x2-1);
+                for j=1:nnx2          % all agents
+                    konx2 = interp1(s2,Konx2,posx2(j,t));
+                    koffx2 = interp1(s2,Koffx2,posx2(j,t));
+                    kfbx2 = interp1(s2,Kfbx2,posx2(j,t));
+                    % Sample earliest time-to-fire (tau)
+                    a0_x2 = koffx2 + (konx2+kfbx2*nnx2/N)*(N/nnx2-1);
+                    taux2(j) = -log(rx2(j))/a0_x2;
+                    rrx2 = rand(1,1);
+                    dnx2(j) = (rrx2<((konx2+kfbx1*nnx2/N)*(N/nnx2-1)/a0_x2))*1.0 + (rrx2>=((konx2+kfbx2*nnx2/N)*(N/nnx2-1)/a0_x2))*(-1.0);
+                end
+
+                [mintaux2,minidx2] = min(taux2(1:j));       % find first chemical rxn
+                Tx2(rxn_count_x2+1) = Tx2(rxn_count_x2) + mintaux2;
+                X2(rxn_count_x2+1) = nnx2 + dnx2(minidx2);
+                rxn_count_x2 = rxn_count_x2 + 1;
+                NNx2(t+1) = X2(rxn_count_x2-1);
+            % end
         end
 
         %Cell 1
@@ -614,22 +657,36 @@ while (ppp<=100)
                 break
             end
 
-            for j=1:nny1          % all agents
-                kony1 = interp1(s1,Kony1,posy1(j,t));
-                koffy1 = interp1(s1,Koffy1,posy1(j,t));
-                kfby1 = interp1(s1,Kfby1,posy1(j,t));
-                % Sample earliest time-to-fire (tau)
-                a0_y1 = koffy1 + (kony1+kfby1*nny1/N)*(N/nny1-1);
-                tauy1(j) = -log(ry1(j))/a0_y1;
-                rry1 = rand(1,1);
-                dny1(j) = (rry1<((kony1+kfby1*nny1/N)*(N/nny1-1)/a0_y1))*1.0 + (rry1>=((kony1+kfby1*nny1/N)*(N/nny1-1)/a0_y1))*(-1.0);
-            end
+            % if(nny1==0) % no rac on membrane
+            %     sprintf('here 1rho')
+            % 
+            %     Y1(rxn_count_y1+1) = 0.1*N; % put 20 rac on membrane
+            %     NNy1(rxn_count_y1+1) = Y1(rxn_count_y1+1);
+            %     Ty1(rxn_count_y1+1) = 0.0;
+            %     ny1(1:Y1(rxn_count_y1+1),1) = 1;
+            %     r1 = randperm(ceil(L/(0.0102)),Y1(rxn_count_y1+1))*0.0102;
+            %     posy1(1:Y1(rxn_count_y1+1),1)=r1(1:Y1(rxn_count_y1+1));
+            % 
+            % 
+            % else
 
-            [mintauy1,minidy1] = min(tauy1(1:j));       % find first chemical rxn
-            Ty1(rxn_count_y1+1) = Ty1(rxn_count_y1) + mintauy1;
-            Y1(rxn_count_y1+1) = nny1 + dny1(minidy1);
-            rxn_count_y1 = rxn_count_y1 + 1;
-            NNy1(t+1) = Y1(rxn_count_y1-1);
+                for j=1:nny1          % all agents
+                    kony1 = interp1(s1,Kony1,posy1(j,t));
+                    koffy1 = interp1(s1,Koffy1,posy1(j,t));
+                    kfby1 = interp1(s1,Kfby1,posy1(j,t));
+                    % Sample earliest time-to-fire (tau)
+                    a0_y1 = koffy1 + (kony1+kfby1*nny1/N)*(N/nny1-1);
+                    tauy1(j) = -log(ry1(j))/a0_y1;
+                    rry1 = rand(1,1);
+                    dny1(j) = (rry1<((kony1+kfby1*nny1/N)*(N/nny1-1)/a0_y1))*1.0 + (rry1>=((kony1+kfby1*nny1/N)*(N/nny1-1)/a0_y1))*(-1.0);
+                end
+
+                [mintauy1,minidy1] = min(tauy1(1:j));       % find first chemical rxn
+                Ty1(rxn_count_y1+1) = Ty1(rxn_count_y1) + mintauy1;
+                Y1(rxn_count_y1+1) = nny1 + dny1(minidy1);
+                rxn_count_y1 = rxn_count_y1 + 1;
+                NNy1(t+1) = Y1(rxn_count_y1-1);
+            % end
         end
 
         %Cell 2
@@ -648,22 +705,36 @@ while (ppp<=100)
                 break
             end
 
-            for j=1:nny2          % all agents
-                kony2 = interp1(s2,Kony2,posy2(j,t));
-                koffy2 = interp1(s2,Koffy2,posy2(j,t));
-                kfby2 = interp1(s2,Kfby2,posy2(j,t));
-                % Sample earliest time-to-fire (tau)
-                a0_y2 = koffy2 + (kony2+kfby2*nny2/N)*(N/nny2-1);
-                tauy2(j) = -log(ry2(j))/a0_y2;
-                rry2 = rand(1,1);
-                dny2(j) = (rry2<((kony2+kfby2*nny2/N)*(N/nny2-1)/a0_y2))*1.0 + (rry2>=((kony2+kfby2*nny2/N)*(N/nny2-1)/a0_y2))*(-1.0);
-            end
+            % if(nny2==0) % no rac on membrane
+            %     sprintf('here 2rho')
+            % 
+            %     Y2(rxn_count_y2+1) = 0.1*N; % put 20 rac on membrane
+            %     NNy2(rxn_count_y2+1) = Y2(rxn_count_y2+1);
+            %     Ty2(rxn_count_y2+1) = 0.0;
+            %     ny2(1:Y2(rxn_count_y2+1),1) = 1;
+            %     r2 = randperm(ceil(L/(0.0102)),Y2(rxn_count_y2+1))*0.0102;
+            %     posy2(1:Y2(rxn_count_y2+1),1)=r2(1:Y2(rxn_count_y2+1));
+            % 
+            % 
+            % else
 
-            [mintauy2,minidy2] = min(tauy2(1:j));       % find first chemical rxn
-            Ty2(rxn_count_y2+1) = Ty2(rxn_count_y2) + mintauy2;
-            Y2(rxn_count_y2+1) = nny2 + dny2(minidy2);
-            rxn_count_y2 = rxn_count_y2 + 1;
-            NNy2(t+1) = Y2(rxn_count_y2-1);
+                for j=1:nny2          % all agents
+                    kony2 = interp1(s2,Kony2,posy2(j,t));
+                    koffy2 = interp1(s2,Koffy2,posy2(j,t));
+                    kfby2 = interp1(s2,Kfby2,posy2(j,t));
+                    % Sample earliest time-to-fire (tau)
+                    a0_y2 = koffy2 + (kony2+kfby2*nny2/N)*(N/nny2-1);
+                    tauy2(j) = -log(ry2(j))/a0_y2;
+                    rry2 = rand(1,1);
+                    dny2(j) = (rry2<((kony2+kfby2*nny2/N)*(N/nny2-1)/a0_y2))*1.0 + (rry2>=((kony2+kfby2*nny2/N)*(N/nny2-1)/a0_y2))*(-1.0);
+                end
+
+                [mintauy2,minidy2] = min(tauy2(1:j));       % find first chemical rxn
+                Ty2(rxn_count_y2+1) = Ty2(rxn_count_y2) + mintauy2;
+                Y2(rxn_count_y2+1) = nny2 + dny2(minidy2);
+                rxn_count_y2 = rxn_count_y2 + 1;
+                NNy2(t+1) = Y2(rxn_count_y2-1);
+            % end
         end
 
         if (quit_cond==1)
@@ -922,31 +993,31 @@ while (ppp<=100)
 
         % gamma=1.5;
 
-        if t<=500
-            % kb_ind=2;
-            % kc_ind=2;
-            branchedConst1 = 3.0;
-            bundledConst1 = 1.0;
-            branchedConst2 = 1.0;
-            bundledConst2 = 3.0;
-        else
-            % kb_ind=3;
-            % kc_ind=3;
-            branchedConst1 = 1.0;
-            bundledConst1 = 3.0;
-            branchedConst2 = 3.0;
-            bundledConst2 = 1.0;
-        end
-
-        
-        Ka1=ones(Na,1);
-        Kb1=ones(Na,1);
-        Ka2=ones(Na,1);
-        Kb2=ones(Na,1);
-        Ka1(boundC1) = branchedConst1*Ka1(boundC1);
-        Kb1(boundC1) = bundledConst1*Kb1(boundC1);
-        Ka2(boundC2) = branchedConst2*Ka2(boundC2);
-        Kb2(boundC2) = bundledConst2*Kb2(boundC2);
+        % if t<=500
+        %     % kb_ind=2;
+        %     % kc_ind=2;
+        %     branchedConst1 = 3.0;
+        %     bundledConst1 = 1.0;
+        %     branchedConst2 = 1.0;
+        %     bundledConst2 = 3.0;
+        % else
+        %     % kb_ind=3;
+        %     % kc_ind=3;
+        %     branchedConst1 = 1.0;
+        %     bundledConst1 = 3.0;
+        %     branchedConst2 = 3.0;
+        %     bundledConst2 = 1.0;
+        % end
+        % 
+        % 
+        % Ka1=ones(Na,1);
+        % Kb1=ones(Na,1);
+        % Ka2=ones(Na,1);
+        % Kb2=ones(Na,1);
+        % Ka1(boundC1) = branchedConst1*Ka1(boundC1);
+        % Kb1(boundC1) = bundledConst1*Kb1(boundC1);
+        % Ka2(boundC2) = branchedConst2*Ka2(boundC2);
+        % Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1275,7 +1346,7 @@ while (ppp<=100)
     end
     sprintf('Simulation %d done',ppp)
     toc
-    if(quit_cond==0) || quit_cond==1
+    if(quit_cond==0)
         if savefigs==1
             % Define circles
             gapsize=0.01;
