@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_signal/signal_switches/500stepsc2_3500stepsc1/branchedupnosig_bundledupsig/3Ka_3Kb';
+filename = './simulation_results/results_celldifference/1_2Ka_1_2Kb_allC2/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
 maxnum=100;
 
 angle=pi/4;
