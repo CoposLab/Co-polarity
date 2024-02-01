@@ -18,17 +18,17 @@ signal=1;
 
 scatvid=0;
 branchedbundledvid=1;
-racrhovid=0;
+racrhovid=1;
 circlescatvid=0;
 adjacent=1;
 showtime=1;
 
-for i=2:10
+for i=1:1
 
-    loadfile='./vid_matfiles/signal_switches_sides/500stepsc2_3500stepsc1/branchedbundled/0_75kb0_75kc';
+    loadfile='./vid_matfiles/signal_switches_sides/resetRacRho/branchedupnosig_bundledupsig/3Ka_3Kb';
     
     setnum=int2str(i);
-    savelocation='../movies/signal_switches_sides/500stepsc2_3500stepsc1/branchedbundled/0_75kb0_75kc';
+    savelocation='../movies/signal_switches_sides/resetRacRho/branchedupnosig_bundledupsig/3Ka_3Kb';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');

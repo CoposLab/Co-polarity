@@ -37,7 +37,7 @@ coeff_vals=[1,10,1000];
 
 
 save_matfile=0;
-mat_location='./FigureAndMovieCode/vid_matfiles/moving_cells/signal/racupc1_rhoupc2/1000RacOn_1000RhoOn';
+mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/resetRacRho/racupnosig_rhoupsig/1000RacOn_1000RhoOn';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -49,7 +49,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_celldifference/1_2Ka_1_2Kb_allC2/racup/1000RacOnC1_10RacOnC2';
+    savelocation='./simulation_results/results_celldifference/1_2Ka_1_2Kb_allC2/cilcoa/10RhoOn10RacOff100RacOn';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -443,14 +443,14 @@ while (ppp<=100)
             % Konx2(boundC2)=Konx2(boundC2)*1000;
             % Koffy2(boundC2)=Koffy2(boundC2)*1000;
         end
-        % Konx1(boundC1)=Konx1(boundC1)*1000;
+        Konx1(boundC1)=Konx1(boundC1)*100;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
-        % Kony1(boundC1)=Kony1(boundC1)*1000;
-        % Kony2(boundC2)=Kony2(boundC2)*1000;
-        % Koffx1(boundC1)=Koffx1(boundC1)*1000;
-        % Koffx2(boundC2)=Koffx2(boundC2)*1000;
+        Kony1(boundC1)=Kony1(boundC1)*10;
+        Kony2(boundC2)=Kony2(boundC2)*10;
+        Koffx1(boundC1)=Koffx1(boundC1)*10;
+        Koffx2(boundC2)=Koffx2(boundC2)*10;
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        % Koffy2(boundC2)=Koffy2(boundC2)*1000;
+        % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Set konx and kony away from contact region
         % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
@@ -534,6 +534,7 @@ while (ppp<=100)
         if((t-1)*dt<Tx1(rxn_count_x1)) % have we reached the time of next reaction?
             NNx1(t+1) = X1(rxn_count_x1-1); % if not, nothing happens
         else
+            rng('shuffle');
             nnx1 = X1(rxn_count_x1); % number of rac on membrane at time of last reaction
             taux1 = zeros(nnx1,1);
             dnx1 = zeros(nnx1,1);
@@ -565,11 +566,12 @@ while (ppp<=100)
             %     % NNx1(t+1) = X1(rxn_count_x1-1);
             % 
             %     X1(rxn_count_x1+1) = 0.1*N; % put 20 rac on membrane
-            %     NNx1(rxn_count_x1+1) = X1(rxn_count_x1+1);
+            %     NNx1(t+1) = X1(rxn_count_x1+1);
             %     Tx1(rxn_count_x1+1) = 0.0;
             %     nx1(1:X1(rxn_count_x1+1),1) = 1;
             %     r1 = randperm(ceil(L/(0.0102)),X1(rxn_count_x1+1))*0.0102;
             %     posx1(1:X1(rxn_count_x1+1),1)=r1(1:X1(rxn_count_x1+1));
+            %     rxn_count_x1 = rxn_count_x1 + 1;
             % 
             % 
             % else
@@ -597,6 +599,7 @@ while (ppp<=100)
         if((t-1)*dt<Tx2(rxn_count_x2))
             NNx2(t+1) = X2(rxn_count_x2-1);
         else
+            rng('shuffle');
             nnx2 = X2(rxn_count_x2);
             taux2 = zeros(nnx2,1);
             dnx2 = zeros(nnx2,1);
@@ -613,11 +616,12 @@ while (ppp<=100)
             %     sprintf('here 2rac')
             % 
             %     X2(rxn_count_x2+1) = 0.1*N; % put 20 rac on membrane
-            %     NNx2(rxn_count_x2+1) = X2(rxn_count_x2+1);
+            %     NNx2(t+1) = X2(rxn_count_x2+1);
             %     Tx2(rxn_count_x2+1) = 0.0;
             %     nx2(1:X2(rxn_count_x2+1),1) = 1;
             %     r2 = randperm(ceil(L/(0.0102)),X2(rxn_count_x2+1))*0.0102;
             %     posx2(1:X2(rxn_count_x2+1),1)=r2(1:X2(rxn_count_x2+1));
+            %     rxn_count_x2 = rxn_count_x2 + 1;
             % 
             % 
             % else
@@ -645,6 +649,7 @@ while (ppp<=100)
         if((t-1)*dt<Ty1(rxn_count_y1))
             NNy1(t+1) = Y1(rxn_count_y1-1);
         else
+            rng('shuffle');
             nny1 = Y1(rxn_count_y1);
             tauy1 = zeros(nny1,1);
             dny1 = zeros(nny1,1);
@@ -661,11 +666,12 @@ while (ppp<=100)
             %     sprintf('here 1rho')
             % 
             %     Y1(rxn_count_y1+1) = 0.1*N; % put 20 rac on membrane
-            %     NNy1(rxn_count_y1+1) = Y1(rxn_count_y1+1);
+            %     NNy1(t+1) = Y1(rxn_count_y1+1);
             %     Ty1(rxn_count_y1+1) = 0.0;
             %     ny1(1:Y1(rxn_count_y1+1),1) = 1;
             %     r1 = randperm(ceil(L/(0.0102)),Y1(rxn_count_y1+1))*0.0102;
             %     posy1(1:Y1(rxn_count_y1+1),1)=r1(1:Y1(rxn_count_y1+1));
+            %     rxn_count_y1 = rxn_count_y1 + 1;
             % 
             % 
             % else
@@ -693,6 +699,7 @@ while (ppp<=100)
         if((t-1)*dt<Ty2(rxn_count_y2))
             NNy2(t+1) = Y2(rxn_count_y2-1);
         else
+            rng('shuffle');
             nny2 = Y2(rxn_count_y2);
             tauy2 = zeros(nny2,1);
             dny2 = zeros(nny2,1);
@@ -709,11 +716,12 @@ while (ppp<=100)
             %     sprintf('here 2rho')
             % 
             %     Y2(rxn_count_y2+1) = 0.1*N; % put 20 rac on membrane
-            %     NNy2(rxn_count_y2+1) = Y2(rxn_count_y2+1);
+            %     NNy2(t+1) = Y2(rxn_count_y2+1);
             %     Ty2(rxn_count_y2+1) = 0.0;
             %     ny2(1:Y2(rxn_count_y2+1),1) = 1;
             %     r2 = randperm(ceil(L/(0.0102)),Y2(rxn_count_y2+1))*0.0102;
             %     posy2(1:Y2(rxn_count_y2+1),1)=r2(1:Y2(rxn_count_y2+1));
+            %     rxn_count_y2 = rxn_count_y2 + 1;
             % 
             % 
             % else
@@ -813,6 +821,7 @@ while (ppp<=100)
         %% Determine if a biochemical rxn has occured - update positions
 
         % Find spontaneous association location cell 1
+        if Kx1>=1
         ss1 = sort(posx1(1:Kx1,t));
         [ijk1] = find(ss1==posx1(minidx1,t),1);
         prevind1 = (ijk1-1)*(ijk1>1) + (Kx1)*(ijk1==1);
@@ -820,6 +829,10 @@ while (ppp<=100)
         x2_1 = posx1(minidx1,t)+(ss1(prevind1)-posx1(minidx1,t))/2;
         x1_1 = posx1(minidx1,t)+(ss1(nextind1)-posx1(minidx1,t))/2;
         locx1 = (x2_1-x1_1).*rand(1,1) + x1_1; % random location halfway between the closest left/right particles
+        else
+            locx1 = rand(1,1)*L;
+        end
+        if Ky1>=1
         ss1 = sort(posy1(1:Ky1,t));
         [ijk1] = find(ss1==posy1(minidy1,t),1);
         prevind1 = (ijk1-1)*(ijk1>1) + (Ky1)*(ijk1==1);
@@ -827,11 +840,15 @@ while (ppp<=100)
         y2_1 = posy1(minidy1,t)+(ss1(prevind1)-posy1(minidy1,t))/2;
         y1_1 = posy1(minidy1,t)+(ss1(nextind1)-posy1(minidy1,t))/2;
         locy1 = (y2_1-y1_1).*rand(1,1) + y1_1; % random location halfway between the closest left/right particles
+        else
+            locy1=rand(1,1)*L;
+        end
 
         ponx1 = ron/(ron+rfb*(N-Kx1));
         pony1 = ron/(ron+rfb*(N-Ky1));
 
         % Find spontaneous association location cell 2
+        if Kx2>=1
         ss2 = sort(posx2(1:Kx2,t));
         [ijk2] = find(ss2==posx2(minidx2,t),1);
         prevind2 = (ijk2-1)*(ijk2>1) + (Kx2)*(ijk2==1);
@@ -839,6 +856,10 @@ while (ppp<=100)
         x2_2 = posx2(minidx2,t)+(ss2(prevind2)-posx2(minidx2,t))/2;
         x1_2 = posx2(minidx2,t)+(ss2(nextind2)-posx2(minidx2,t))/2;
         locx2 = (x2_2-x1_2).*rand(1,1) + x1_2; % random location halfway between the closest left/right particles
+        else
+            locx2=rand(1,1)*L;
+        end
+        if Ky2>=1
         ss2 = sort(posy2(1:Ky2,t));
         [ijk2] = find(ss2==posy2(minidy2,t),1);
         prevind2 = (ijk2-1)*(ijk2>1) + (Ky2)*(ijk2==1);
@@ -846,6 +867,9 @@ while (ppp<=100)
         y2_2 = posy2(minidy2,t)+(ss2(prevind2)-posy2(minidy2,t))/2;
         y1_2 = posy2(minidy2,t)+(ss2(nextind2)-posy2(minidy2,t))/2;
         locy2 = (y2_2-y1_2).*rand(1,1) + y1_2; % random location halfway between the closest left/right particles
+        else
+            locy2=rand(1,1)*L;
+        end
 
         ponx2 = ron/(ron+rfb*(N-Kx2));
         pony2 = ron/(ron+rfb*(N-Ky2));
