@@ -36,8 +36,8 @@ coeff_vals=[1,10,1000];
 
 
 
-save_matfile=0;
-mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/resetRacRho/branchedupnosig_bundledupsig/3Ka_3Kb';
+save_matfile=1;
+mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/branchedupnosig_bundledupsig/3Ka_3Kb';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -117,7 +117,7 @@ while (ppp<=1)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 40.0;                  % total simulation time
+    Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -418,13 +418,13 @@ while (ppp<=1)
                 Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            else
-                Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
-                Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+            else                                                                                                                                                                                                                  
+                Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(101))) + tanh(steepness*(s1-s1(1))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(101))) - tanh(steepness*(s1-s1(1))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1))))  - tanh(steepness*(s1-s1(101))) + tanh(steepness*(s1-s1(1))) -  tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Kfby1 = (rfb*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(101))) - tanh(steepness*(s1-s1(1))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffx1 = (roff*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(101))) - tanh(steepness*(s1-s1(1))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
+                Koffy1 = (roff*(tanh(steepness*(s1-s1(sigBound1(1))))  - tanh(steepness*(s1-s1(101))) + tanh(steepness*(s1-s1(1))) -  tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
             end
         end
 
@@ -544,40 +544,40 @@ while (ppp<=1)
             dnx1 = zeros(nnx1,1);
             rx1 = rand(nnx1,1);
 
-            % if(nnx1==0) % no rac on membrane
-            %     sprintf('here 1rac')
-            %     counter_ppp = ppp;
-            %     quit_cond = 1;
-            %     break
-            % end
-
             if(nnx1==0) % no rac on membrane
                 sprintf('here 1rac')
-                rx1 = rand(N,1);
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
 
-                for j=1:N
-                    konx1 = interp1(s1,Konx1,posx1(j,t));
-                    a0_x1 = konx1;
-                    taux1(j) = -log(rx1(j))/a0_x1;
-                    dnx1(j)=1;
-                end
-
-                [mintaux1,minidx1] = min(taux1(1:j));       % find first chemical rxn
-                Tx1(rxn_count_x1+1) = Tx1(rxn_count_x1) + mintaux1;
-                X1(rxn_count_x1+1) = nnx1 + dnx1(minidx1); %one rac binds
-                rxn_count_x1 = rxn_count_x1 + 1;
-                NNx1(t+1) = X1(rxn_count_x1-1);
-
-                % X1(rxn_count_x1+1) = 0.1*N; % put 20 rac on membrane
-                % NNx1(t+1) = X1(rxn_count_x1+1);
-                % Tx1(rxn_count_x1+1) = 0.0;
-                % nx1(1:X1(rxn_count_x1+1),1) = 1;
-                % r1 = randperm(ceil(L/(0.0102)),X1(rxn_count_x1+1))*0.0102;
-                % posx1(1:X1(rxn_count_x1+1),1)=r1(1:X1(rxn_count_x1+1));
-                % rxn_count_x1 = rxn_count_x1 + 1;
-
-
-            else
+            % if(nnx1==0) % no rac on membrane
+            %     sprintf('here 1rac')
+            %     rx1 = rand(N,1);
+            % 
+            %     for j=1:N
+            %         konx1 = interp1(s1,Konx1,posx1(j,t));
+            %         a0_x1 = konx1;
+            %         taux1(j) = -log(rx1(j))/a0_x1;
+            %         dnx1(j)=1;
+            %     end
+            % 
+            %     [mintaux1,minidx1] = min(taux1(1:j));       % find first chemical rxn
+            %     Tx1(rxn_count_x1+1) = Tx1(rxn_count_x1) + mintaux1;
+            %     X1(rxn_count_x1+1) = nnx1 + dnx1(minidx1); %one rac binds
+            %     rxn_count_x1 = rxn_count_x1 + 1;
+            %     NNx1(t+1) = X1(rxn_count_x1-1);
+            % 
+            %     % X1(rxn_count_x1+1) = 0.1*N; % put 20 rac on membrane
+            %     % NNx1(t+1) = X1(rxn_count_x1+1);
+            %     % Tx1(rxn_count_x1+1) = 0.0;
+            %     % nx1(1:X1(rxn_count_x1+1),1) = 1;
+            %     % r1 = randperm(ceil(L/(0.0102)),X1(rxn_count_x1+1))*0.0102;
+            %     % posx1(1:X1(rxn_count_x1+1),1)=r1(1:X1(rxn_count_x1+1));
+            %     % rxn_count_x1 = rxn_count_x1 + 1;
+            % 
+            % 
+            % else
 
                 for j=1:nnx1          % all agents
                     konx1 = interp1(s1,Konx1,posx1(j,t));
@@ -595,7 +595,7 @@ while (ppp<=1)
                 X1(rxn_count_x1+1) = nnx1 + dnx1(minidx1);
                 rxn_count_x1 = rxn_count_x1 + 1;
                 NNx1(t+1) = X1(rxn_count_x1-1);
-            end
+            % end
         end
 
         %Cell 2
@@ -608,26 +608,26 @@ while (ppp<=1)
             dnx2 = zeros(nnx2,1);
             rx2 = rand(nnx2,1);
 
-            % if(nnx2==0)
-            %     sprintf('here 2rac')
-            %     counter_ppp = ppp;
-            %     quit_cond = 1;
-            %     break
-            % end
-
-            if(nnx2==0) % no rac on membrane
+            if(nnx2==0)
                 sprintf('here 2rac')
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
 
-                X2(rxn_count_x2+1) = 0.1*N; % put 20 rac on membrane
-                NNx2(t+1) = X2(rxn_count_x2+1);
-                Tx2(rxn_count_x2+1) = 0.0;
-                nx2(1:X2(rxn_count_x2+1),1) = 1;
-                r2 = randperm(ceil(L/(0.0102)),X2(rxn_count_x2+1))*0.0102;
-                posx2(1:X2(rxn_count_x2+1),1)=r2(1:X2(rxn_count_x2+1));
-                rxn_count_x2 = rxn_count_x2 + 1;
-
-
-            else
+            % if(nnx2==0) % no rac on membrane
+            %     sprintf('here 2rac')
+            % 
+            %     X2(rxn_count_x2+1) = 0.1*N; % put 20 rac on membrane
+            %     NNx2(t+1) = X2(rxn_count_x2+1);
+            %     Tx2(rxn_count_x2+1) = 0.0;
+            %     nx2(1:X2(rxn_count_x2+1),1) = 1;
+            %     r2 = randperm(ceil(L/(0.0102)),X2(rxn_count_x2+1))*0.0102;
+            %     posx2(1:X2(rxn_count_x2+1),1)=r2(1:X2(rxn_count_x2+1));
+            %     rxn_count_x2 = rxn_count_x2 + 1;
+            % 
+            % 
+            % else
 
                 for j=1:nnx2          % all agents
                     konx2 = interp1(s2,Konx2,posx2(j,t));
@@ -645,7 +645,7 @@ while (ppp<=1)
                 X2(rxn_count_x2+1) = nnx2 + dnx2(minidx2);
                 rxn_count_x2 = rxn_count_x2 + 1;
                 NNx2(t+1) = X2(rxn_count_x2-1);
-            end
+            % end
         end
 
         %Cell 1
@@ -658,26 +658,26 @@ while (ppp<=1)
             dny1 = zeros(nny1,1);
             ry1 = rand(nny1,1);
 
-            % if(nny1==0)
-            %     sprintf('here 1rho')
-            %     counter_ppp = ppp;
-            %     quit_cond = 1;
-            %     break
-            % end
-
-            if(nny1==0) % no rac on membrane
+            if(nny1==0)
                 sprintf('here 1rho')
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
 
-                Y1(rxn_count_y1+1) = 0.1*N; % put 20 rac on membrane
-                NNy1(t+1) = Y1(rxn_count_y1+1);
-                Ty1(rxn_count_y1+1) = 0.0;
-                ny1(1:Y1(rxn_count_y1+1),1) = 1;
-                r1 = randperm(ceil(L/(0.0102)),Y1(rxn_count_y1+1))*0.0102;
-                posy1(1:Y1(rxn_count_y1+1),1)=r1(1:Y1(rxn_count_y1+1));
-                rxn_count_y1 = rxn_count_y1 + 1;
-
-
-            else
+            % if(nny1==0) % no rac on membrane
+            %     sprintf('here 1rho')
+            % 
+            %     Y1(rxn_count_y1+1) = 0.1*N; % put 20 rac on membrane
+            %     NNy1(t+1) = Y1(rxn_count_y1+1);
+            %     Ty1(rxn_count_y1+1) = 0.0;
+            %     ny1(1:Y1(rxn_count_y1+1),1) = 1;
+            %     r1 = randperm(ceil(L/(0.0102)),Y1(rxn_count_y1+1))*0.0102;
+            %     posy1(1:Y1(rxn_count_y1+1),1)=r1(1:Y1(rxn_count_y1+1));
+            %     rxn_count_y1 = rxn_count_y1 + 1;
+            % 
+            % 
+            % else
 
                 for j=1:nny1          % all agents
                     kony1 = interp1(s1,Kony1,posy1(j,t));
@@ -695,7 +695,7 @@ while (ppp<=1)
                 Y1(rxn_count_y1+1) = nny1 + dny1(minidy1);
                 rxn_count_y1 = rxn_count_y1 + 1;
                 NNy1(t+1) = Y1(rxn_count_y1-1);
-            end
+            % end
         end
 
         %Cell 2
@@ -708,26 +708,26 @@ while (ppp<=1)
             dny2 = zeros(nny2,1);
             ry2 = rand(nny2,1);
 
-            % if(nny2==0)
-            %     sprintf('here 2rho')
-            %     counter_ppp = ppp;
-            %     quit_cond = 1;
-            %     break
-            % end
-
-            if(nny2==0) % no rac on membrane
+            if(nny2==0)
                 sprintf('here 2rho')
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
 
-                Y2(rxn_count_y2+1) = 0.1*N; % put 20 rac on membrane
-                NNy2(t+1) = Y2(rxn_count_y2+1);
-                Ty2(rxn_count_y2+1) = 0.0;
-                ny2(1:Y2(rxn_count_y2+1),1) = 1;
-                r2 = randperm(ceil(L/(0.0102)),Y2(rxn_count_y2+1))*0.0102;
-                posy2(1:Y2(rxn_count_y2+1),1)=r2(1:Y2(rxn_count_y2+1));
-                rxn_count_y2 = rxn_count_y2 + 1;
-
-
-            else
+            % if(nny2==0) % no rac on membrane
+            %     sprintf('here 2rho')
+            % 
+            %     Y2(rxn_count_y2+1) = 0.1*N; % put 20 rac on membrane
+            %     NNy2(t+1) = Y2(rxn_count_y2+1);
+            %     Ty2(rxn_count_y2+1) = 0.0;
+            %     ny2(1:Y2(rxn_count_y2+1),1) = 1;
+            %     r2 = randperm(ceil(L/(0.0102)),Y2(rxn_count_y2+1))*0.0102;
+            %     posy2(1:Y2(rxn_count_y2+1),1)=r2(1:Y2(rxn_count_y2+1));
+            %     rxn_count_y2 = rxn_count_y2 + 1;
+            % 
+            % 
+            % else
 
                 for j=1:nny2          % all agents
                     kony2 = interp1(s2,Kony2,posy2(j,t));
@@ -745,7 +745,7 @@ while (ppp<=1)
                 Y2(rxn_count_y2+1) = nny2 + dny2(minidy2);
                 rxn_count_y2 = rxn_count_y2 + 1;
                 NNy2(t+1) = Y2(rxn_count_y2-1);
-            end
+            % end
         end
 
         if (quit_cond==1)
@@ -1020,31 +1020,31 @@ while (ppp<=1)
 
         % gamma=1.5;
 
-        % if t<=500
-        %     % kb_ind=2;
-        %     % kc_ind=2;
-        %     branchedConst1 = 3.0;
-        %     bundledConst1 = 1.0;
-        %     branchedConst2 = 1.0;
-        %     bundledConst2 = 3.0;
-        % else
-        %     % kb_ind=3;
-        %     % kc_ind=3;
-        %     branchedConst1 = 1.0;
-        %     bundledConst1 = 3.0;
-        %     branchedConst2 = 3.0;
-        %     bundledConst2 = 1.0;
-        % end
-        % 
-        % 
-        % Ka1=ones(Na,1);
-        % Kb1=ones(Na,1);
-        % Ka2=ones(Na,1);
-        % Kb2=ones(Na,1);
-        % Ka1(boundC1) = branchedConst1*Ka1(boundC1);
-        % Kb1(boundC1) = bundledConst1*Kb1(boundC1);
-        % Ka2(boundC2) = branchedConst2*Ka2(boundC2);
-        % Kb2(boundC2) = bundledConst2*Kb2(boundC2);
+        if t<=500
+            % kb_ind=2;
+            % kc_ind=2;
+            branchedConst1 = 3.0;
+            bundledConst1 = 1.0;
+            branchedConst2 = 1.0;
+            bundledConst2 = 3.0;
+        else
+            % kb_ind=3;
+            % kc_ind=3;
+            branchedConst1 = 1.0;
+            bundledConst1 = 3.0;
+            branchedConst2 = 3.0;
+            bundledConst2 = 1.0;
+        end
+
+
+        Ka1=ones(Na,1);
+        Kb1=ones(Na,1);
+        Ka2=ones(Na,1);
+        Kb2=ones(Na,1);
+        Ka1(boundC1) = branchedConst1*Ka1(boundC1);
+        Kb1(boundC1) = bundledConst1*Kb1(boundC1);
+        Ka2(boundC2) = branchedConst2*Ka2(boundC2);
+        Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1373,7 +1373,7 @@ while (ppp<=1)
     end
     sprintf('Simulation %d done',ppp)
     toc
-    if(quit_cond==0)
+    if(quit_cond==0)||quit_cond==1
         if savefigs==1
             % Define circles
             gapsize=0.01;

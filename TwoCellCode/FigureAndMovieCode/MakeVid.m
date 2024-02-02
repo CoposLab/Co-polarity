@@ -25,10 +25,10 @@ showtime=1;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/signal_switches_sides/resetRacRho/branchedupnosig_bundledupsig/3Ka_3Kb';
+    loadfile='./vid_matfiles/signal_switches_sides/fixedsigrates/branchedupnosig_bundledupsig/3Ka_3Kb';
     
     setnum=int2str(i);
-    savelocation='../movies/signal_switches_sides/resetRacRho/branchedupnosig_bundledupsig/3Ka_3Kb';
+    savelocation='../movies/signal_switches_sides/fixedsigrates/branchedupnosig_bundledupsig/3Ka_3Kb';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
