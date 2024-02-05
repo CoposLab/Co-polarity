@@ -23,12 +23,12 @@ circlescatvid=0;
 adjacent=1;
 showtime=1;
 
-for i=1:1
+for i=3:3
 
-    loadfile='./vid_matfiles/signal_switches_sides/fixedsigrates/branchedupnosig_bundledupsig/3Ka_3Kb';
+    loadfile='./vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/branchedupnosig_bundledupsig/3Ka_3Kb';
     
     setnum=int2str(i);
-    savelocation='../movies/signal_switches_sides/fixedsigrates/branchedupnosig_bundledupsig/3Ka_3Kb';
+    savelocation='../movies/signal_switches_sides/fixedsigrates/Tend40/branchedupnosig_bundledupsig/3Ka_3Kb';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -82,7 +82,8 @@ for i=1:1
     load(strcat(loadfile,setnum));
     set(0,'DefaultFigureVisible','off')
 
-    allmax = max(max(max(max(a1all)),max(max(a2all))),max(max(max(b1all)),max(max(b2all))));
+    % allmax = max(max(max(max(a1all)),max(max(a2all))),max(max(max(b1all)),max(max(b2all))));
+    allmax = max(max([a1all,a2all,b1all,b2all]));
 
     for t=1:50:Nt-1
     % for t=1:5:150
@@ -197,14 +198,11 @@ for i=1:1
             % Cell 1
             figcells=figure(2);
             clf
-            % Xvals=cos(th);
-            % Yvals1=sin(th);
-            % Yvals1(boundC1)=Yvals1(boundC1(1));
-            % Yvals2=sin(th);
-            % Yvals2(boundC2)=Yvals2(boundC2(1));
-            % hold on
-            % plot(Xvals,Yvals1,'black')
-            % plot(Xvals,Yvals2-2*abs(max(Yvals2))-gapsize,'black')
+            hold on;
+            plot3(cos(th(1,[1:boundC1(1),boundC1(end):end]))+xshift1(t+1),...
+                sin(th(1,[1:boundC1(1),boundC1(end):end]))+yshift1(t+1),...
+                ones(1,length(th(1,[1:boundC1(1),boundC1(end):end])))*(allmax+1),...
+                'color',[0 0 0],'LineWidth',2)
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
             surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
@@ -223,6 +221,10 @@ for i=1:1
             set(gca,'XTick',[], 'YTick', [])
 
             % Cell 2
+            plot3(cos(th(1,[1:boundC2(1),boundC2(end):end]))+xshift2(t+1),...
+                sin(th(1,[1:boundC2(1),boundC2(end):end]))-2*abs(max(max(Ycol2)))+yshift2(t+1),...
+                ones(1,length(th(1,[1:boundC2(1),boundC2(end):end])))*(allmax+1),...
+                'color',[0,0,0],'LineWidth',2)
             surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
             clim([0,allmax/2])

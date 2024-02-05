@@ -37,7 +37,7 @@ coeff_vals=[1,10,1000];
 
 
 save_matfile=1;
-mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/branchedupnosig_bundledupsig/3Ka_3Kb';
+mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/branchedupnosig_bundledupsig/3Ka_3Kb';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -45,7 +45,7 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=3)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -117,7 +117,7 @@ while (ppp<=1)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 25.0;                  % total simulation time
+    Tend   = 40.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -139,6 +139,7 @@ while (ppp<=1)
 
     % Signal
     signal=1;
+    sigswitch_time=500;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -411,7 +412,7 @@ while (ppp<=1)
         % this works
         if signal==1
             steepness = 20;
-            if t<=500
+            if t<=sigswitch_time
                 Konx2 = (ron*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kony2 = (ron*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Kfbx2 = (rfb*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
@@ -434,7 +435,7 @@ while (ppp<=1)
         % Kony2=Kony2*10;
 
         % Set konx and kony in contact region
-        if t<=500
+        if t<=sigswitch_time
             % Konx1(boundC1)=Konx1(boundC1)*1000;
             % Konx2(boundC2)=Konx2(boundC2)*10;
             % Kony2(boundC2)=Kony2(boundC2)*1000;
@@ -1020,7 +1021,7 @@ while (ppp<=1)
 
         % gamma=1.5;
 
-        if t<=500
+        if t<=sigswitch_time
             % kb_ind=2;
             % kc_ind=2;
             branchedConst1 = 3.0;
