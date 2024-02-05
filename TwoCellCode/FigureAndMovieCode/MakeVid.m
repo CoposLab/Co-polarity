@@ -197,6 +197,14 @@ for i=1:1
             % Cell 1
             figcells=figure(2);
             clf
+            % Xvals=cos(th);
+            % Yvals1=sin(th);
+            % Yvals1(boundC1)=Yvals1(boundC1(1));
+            % Yvals2=sin(th);
+            % Yvals2(boundC2)=Yvals2(boundC2(1));
+            % hold on
+            % plot(Xvals,Yvals1,'black')
+            % plot(Xvals,Yvals2-2*abs(max(Yvals2))-gapsize,'black')
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
             surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
