@@ -37,7 +37,7 @@ coeff_vals=[1,10,1000];
 
 
 save_matfile=1;
-mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/branchedupnosig_bundledupsig/3Ka_3Kb';
+mat_location='./FigureAndMovieCode/vid_matfiles/racrho_only/0alpha_0beta0_1ron';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -45,11 +45,11 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=3)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_celldifference/1_2Ka_allC1/racupc2_racdownc1/1000RacOn_1000RacOff';
+    savelocation='./simulation_results/results_signal/signal_switches2/500stepsc2_3500stepsc1/branchedupnosig_bundledupsig/3Ka_3Kb';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -104,8 +104,8 @@ while (ppp<=3)
 
     % Set feedback (or coupling) strength
     %
-    alpha = [2,2];
-    beta = [2,2]; %first argument is away from overlap, second is on overlap
+    alpha = [0,0];
+    beta = [0,0]; %first argument is away from overlap, second is on overlap
 
     % Set discretization
     %
@@ -117,7 +117,7 @@ while (ppp<=3)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 40.0;                  % total simulation time
+    Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -138,7 +138,7 @@ while (ppp<=3)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigswitch_time=500;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
@@ -825,7 +825,7 @@ while (ppp<=3)
         %% Determine if a biochemical rxn has occured - update positions
 
         % Find spontaneous association location cell 1
-        if Kx1>=1
+        % if Kx1>=1
         ss1 = sort(posx1(1:Kx1,t));
         [ijk1] = find(ss1==posx1(minidx1,t),1);
         prevind1 = (ijk1-1)*(ijk1>1) + (Kx1)*(ijk1==1);
@@ -833,10 +833,10 @@ while (ppp<=3)
         x2_1 = posx1(minidx1,t)+(ss1(prevind1)-posx1(minidx1,t))/2;
         x1_1 = posx1(minidx1,t)+(ss1(nextind1)-posx1(minidx1,t))/2;
         locx1 = (x2_1-x1_1).*rand(1,1) + x1_1; % random location halfway between the closest left/right particles
-        else
-            locx1 = rand(1,1)*L;
-        end
-        if Ky1>=1
+        % else
+        %     locx1 = rand(1,1)*L;
+        % end
+        % if Ky1>=1
         ss1 = sort(posy1(1:Ky1,t));
         [ijk1] = find(ss1==posy1(minidy1,t),1);
         prevind1 = (ijk1-1)*(ijk1>1) + (Ky1)*(ijk1==1);
@@ -844,15 +844,15 @@ while (ppp<=3)
         y2_1 = posy1(minidy1,t)+(ss1(prevind1)-posy1(minidy1,t))/2;
         y1_1 = posy1(minidy1,t)+(ss1(nextind1)-posy1(minidy1,t))/2;
         locy1 = (y2_1-y1_1).*rand(1,1) + y1_1; % random location halfway between the closest left/right particles
-        else
-            locy1=rand(1,1)*L;
-        end
+        % else
+        %     locy1=rand(1,1)*L;
+        % end
 
         ponx1 = ron/(ron+rfb*(N-Kx1));
         pony1 = ron/(ron+rfb*(N-Ky1));
 
         % Find spontaneous association location cell 2
-        if Kx2>=1
+        % if Kx2>=1
         ss2 = sort(posx2(1:Kx2,t));
         [ijk2] = find(ss2==posx2(minidx2,t),1);
         prevind2 = (ijk2-1)*(ijk2>1) + (Kx2)*(ijk2==1);
@@ -860,10 +860,10 @@ while (ppp<=3)
         x2_2 = posx2(minidx2,t)+(ss2(prevind2)-posx2(minidx2,t))/2;
         x1_2 = posx2(minidx2,t)+(ss2(nextind2)-posx2(minidx2,t))/2;
         locx2 = (x2_2-x1_2).*rand(1,1) + x1_2; % random location halfway between the closest left/right particles
-        else
-            locx2=rand(1,1)*L;
-        end
-        if Ky2>=1
+        % else
+        %     locx2=rand(1,1)*L;
+        % end
+        % if Ky2>=1
         ss2 = sort(posy2(1:Ky2,t));
         [ijk2] = find(ss2==posy2(minidy2,t),1);
         prevind2 = (ijk2-1)*(ijk2>1) + (Ky2)*(ijk2==1);
@@ -871,9 +871,9 @@ while (ppp<=3)
         y2_2 = posy2(minidy2,t)+(ss2(prevind2)-posy2(minidy2,t))/2;
         y1_2 = posy2(minidy2,t)+(ss2(nextind2)-posy2(minidy2,t))/2;
         locy2 = (y2_2-y1_2).*rand(1,1) + y1_2; % random location halfway between the closest left/right particles
-        else
-            locy2=rand(1,1)*L;
-        end
+        % else
+        %     locy2=rand(1,1)*L;
+        % end
 
         ponx2 = ron/(ron+rfb*(N-Kx2));
         pony2 = ron/(ron+rfb*(N-Ky2));
@@ -1021,31 +1021,31 @@ while (ppp<=3)
 
         % gamma=1.5;
 
-        if t<=sigswitch_time
-            % kb_ind=2;
-            % kc_ind=2;
-            branchedConst1 = 3.0;
-            bundledConst1 = 1.0;
-            branchedConst2 = 1.0;
-            bundledConst2 = 3.0;
-        else
-            % kb_ind=3;
-            % kc_ind=3;
-            branchedConst1 = 1.0;
-            bundledConst1 = 3.0;
-            branchedConst2 = 3.0;
-            bundledConst2 = 1.0;
-        end
-
-
-        Ka1=ones(Na,1);
-        Kb1=ones(Na,1);
-        Ka2=ones(Na,1);
-        Kb2=ones(Na,1);
-        Ka1(boundC1) = branchedConst1*Ka1(boundC1);
-        Kb1(boundC1) = bundledConst1*Kb1(boundC1);
-        Ka2(boundC2) = branchedConst2*Ka2(boundC2);
-        Kb2(boundC2) = bundledConst2*Kb2(boundC2);
+        % if t<=sigswitch_time
+        %     % kb_ind=2;
+        %     % kc_ind=2;
+        %     branchedConst1 = 3.0;
+        %     bundledConst1 = 1.0;
+        %     branchedConst2 = 1.0;
+        %     bundledConst2 = 3.0;
+        % else
+        %     % kb_ind=3;
+        %     % kc_ind=3;
+        %     branchedConst1 = 1.0;
+        %     bundledConst1 = 3.0;
+        %     branchedConst2 = 3.0;
+        %     bundledConst2 = 1.0;
+        % end
+        % 
+        % 
+        % Ka1=ones(Na,1);
+        % Kb1=ones(Na,1);
+        % Ka2=ones(Na,1);
+        % Kb2=ones(Na,1);
+        % Ka1(boundC1) = branchedConst1*Ka1(boundC1);
+        % Kb1(boundC1) = bundledConst1*Kb1(boundC1);
+        % Ka2(boundC2) = branchedConst2*Ka2(boundC2);
+        % Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1374,7 +1374,7 @@ while (ppp<=3)
     end
     sprintf('Simulation %d done',ppp)
     toc
-    if(quit_cond==0)||quit_cond==1
+    if(quit_cond==0)||(quit_cond==1)
         if savefigs==1
             % Define circles
             gapsize=0.01;

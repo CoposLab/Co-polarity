@@ -6,7 +6,7 @@ signal=0;
 addpath('./freeze_colors')
 
 
-load('./vid_matfiles/not_polarized/branchedupallC1_bundledupallC2/2KaC1_2KbC2_1.mat')
+load('./vid_matfiles/racrho_only/0_2alpha_0_2beta1.mat')
 Nt=2500;
 t=Nt-1;
 
@@ -21,10 +21,10 @@ racrho_dotsize=50;
 
 make_scatplot=0;
 make_branchedbundled=0;
-make_racrho=0;
+make_racrho=1;
 make_circlescatter=0;
 make_cylinder=0;
-make_combined=1;
+make_combined=0;
 
 %Define colors
 colorLength = 50;
@@ -294,6 +294,7 @@ camroll(90)
 end
 
 if make_racrho==1
+skipnum=1;
 figure(3)
 gapsize=0.1*squished;
 clf
@@ -308,35 +309,35 @@ if squished==1
 end
 plot(Xvals,Yvals1,'black')
 plot(Xvals,Yvals2-2*abs(max(Yvals2))-gapsize,'black')
-YRac1=sin(posx1(1:4:NNx1(t),t)*2*pi/L);
-YRho1=sin(posy1(1:4:NNy1(t),t)*2*pi/L);
-YRac2=sin(posx2(1:4:NNx2(t),t)*2*pi/L);
-YRho2=sin(posy2(1:4:NNy2(t),t)*2*pi/L);
+YRac1=sin(posx1(1:skipnum:NNx1(t),t)*2*pi/L);
+YRho1=sin(posy1(1:skipnum:NNy1(t),t)*2*pi/L);
+YRac2=sin(posx2(1:skipnum:NNx2(t),t)*2*pi/L);
+YRho2=sin(posy2(1:skipnum:NNy2(t),t)*2*pi/L);
 if squished==1
     YRac1(YRac1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
     YRho1(YRho1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
     YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
     YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
 end
-scatter(cos(posx1(1:4:NNx1(t),t)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-scatter(cos(posx2(1:4:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-scatter(cos(posy1(1:4:NNy1(t),t)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-scatter(cos(posy2(1:4:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+scatter(cos(posx1(1:skipnum:NNx1(t),t)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+scatter(cos(posx2(1:skipnum:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+scatter(cos(posy1(1:skipnum:NNy1(t),t)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+scatter(cos(posy2(1:skipnum:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
 
-YRac1=sin(posx1(2:4:NNx1(t),t)*2*pi/L);
-YRho1=sin(posy1(2:4:NNy1(t),t)*2*pi/L);
-YRac2=sin(posx2(2:4:NNx2(t),t)*2*pi/L);
-YRho2=sin(posy2(2:4:NNy2(t),t)*2*pi/L);
+YRac1=sin(posx1(2:skipnum:NNx1(t),t)*2*pi/L);
+YRho1=sin(posy1(2:skipnum:NNy1(t),t)*2*pi/L);
+YRac2=sin(posx2(2:skipnum:NNx2(t),t)*2*pi/L);
+YRho2=sin(posy2(2:skipnum:NNy2(t),t)*2*pi/L);
 if squished==1
     YRac1(YRac1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
     YRho1(YRho1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
     YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
     YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
 end
-scatter(cos(posy1(2:4:NNy1(t),t)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-scatter(cos(posy2(2:4:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-scatter(cos(posx1(2:4:NNx1(t),t)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-scatter(cos(posx2(2:4:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+scatter(cos(posy1(2:skipnum:NNy1(t),t)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+scatter(cos(posy2(2:skipnum:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+scatter(cos(posx1(2:skipnum:NNx1(t),t)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+scatter(cos(posx2(2:skipnum:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
 
 alpha 1
 

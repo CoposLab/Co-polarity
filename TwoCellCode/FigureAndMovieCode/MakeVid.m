@@ -5,7 +5,7 @@ clc;
 
 addpath('./freeze_colors')
 
-signal=1;
+signal=0;
 % Nt=2500;
 % Na=101;
 % sigper=0.40;
@@ -17,18 +17,19 @@ signal=1;
 % sigBound2(sigBound2>Na)=sigBound2(sigBound2>Na)-Na;
 
 scatvid=0;
-branchedbundledvid=1;
+branchedbundledvid=0;
 racrhovid=1;
 circlescatvid=0;
 adjacent=1;
 showtime=1;
+squished=1;
 
-for i=3:3
+for i=1:1
 
-    loadfile='./vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/branchedupnosig_bundledupsig/3Ka_3Kb';
-    
+    loadfile='./vid_matfiles/racrho_only/0alpha_0beta0_1ron';
+
     setnum=int2str(i);
-    savelocation='../movies/signal_switches_sides/fixedsigrates/Tend40/branchedupnosig_bundledupsig/3Ka_3Kb';
+    savelocation='../movies/racrho_only/0alpha_0beta0_1ron';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -86,7 +87,7 @@ for i=3:3
     allmax = max(max([a1all,a2all,b1all,b2all]));
 
     for t=1:50:Nt-1
-    % for t=1:5:150
+        % for t=1:5:150
         a1=a1all(:,t);
         a2=a2all(:,t);
         b1=b1all(:,t);
@@ -301,11 +302,11 @@ for i=3:3
             dirIndexb1=dirIndexb1+101;
         end
         if branchedbundledvid==1
-        if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
-            hold on;
-            quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
-            hold off;
-        end
+            if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
+                hold on;
+                quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+                hold off;
+            end
         end
 
 
@@ -340,11 +341,11 @@ for i=3:3
             dirIndexb2=dirIndexb2+101;
         end
         if branchedbundledvid==1
-        if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
-            hold on;
-            quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
-            hold off;
-        end
+            if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
+                hold on;
+                quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                hold off;
+            end
         end
 
 
@@ -354,13 +355,13 @@ for i=3:3
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
                 if t<=500
-                hold on;
-                scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
-                hold off;
+                    hold on;
+                    scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
+                    hold off;
                 else
                     hold on;
-                scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
-                hold off;
+                    scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                    hold off;
                 end
             end
 
@@ -378,6 +379,7 @@ for i=3:3
 
 
         if racrhovid==1
+            skipnum=1;
             figracrho=figure(3);
             gapsize=0.05;
             clf
@@ -385,40 +387,88 @@ for i=3:3
             th = (0:3.6:360)*pi/180;
             Xvals=cos(th);
             Yvals1=sin(th);
-            Yvals1(boundC1)=Yvals1(boundC1(1));
             Yvals2=sin(th);
-            Yvals2(boundC2)=Yvals2(boundC2(1));
+            if squished==1
+                Yvals1(boundC1)=Yvals1(boundC1(1));
+                Yvals2(boundC2)=Yvals2(boundC2(1));
+            end
             plot(Xvals,Yvals1,'black')
             plot(Xvals,Yvals2-2*abs(max(Yvals2))-gapsize,'black')
-            YRac1=sin(posx1(1:NNx1(t),1)*2*pi/L);
-            YRac1(YRac1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
-            YRho1=sin(posy1(1:NNy1(t),1)*2*pi/L);
-            YRho1(YRho1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
-            YRac2=sin(posx2(1:NNx2(t),1)*2*pi/L)-gapsize;
-            YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1))-gapsize;
-            YRho2=sin(posy2(1:NNy2(t),1)*2*pi/L)-gapsize;
-            YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1))-gapsize;
-            scatter(cos(posx1(1:NNx1(t),1)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'linewidth',2)
-            scatter(cos(posx2(1:NNx2(t),1)*2*pi/L),YRac2-2*abs(max(Yvals2)),'MarkerEdgeColor',branchedColor(end,:),'linewidth',2)
-            scatter(cos(posy1(1:NNy1(t),1)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'linewidth',2)
-            scatter(cos(posy2(1:NNy2(t),1)*2*pi/L),YRho2-2*abs(max(Yvals2)),'MarkerEdgeColor',bundledColor(end,:),'linewidth',2)
+            YRac1=sin(posx1(1:skipnum:NNx1(t),t)*2*pi/L);
+            YRho1=sin(posy1(1:skipnum:NNy1(t),t)*2*pi/L);
+            YRac2=sin(posx2(1:skipnum:NNx2(t),t)*2*pi/L);
+            YRho2=sin(posy2(1:skipnum:NNy2(t),t)*2*pi/L);
+            if squished==1
+                YRac1(YRac1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
+                YRho1(YRho1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
+                YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
+                YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
+            end
+            scatter(cos(posx1(1:skipnum:NNx1(t),t)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+            scatter(cos(posx2(1:skipnum:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+            scatter(cos(posy1(1:skipnum:NNy1(t),t)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+            scatter(cos(posy2(1:skipnum:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+
+            YRac1=sin(posx1(2:skipnum:NNx1(t),t)*2*pi/L);
+            YRho1=sin(posy1(2:skipnum:NNy1(t),t)*2*pi/L);
+            YRac2=sin(posx2(2:skipnum:NNx2(t),t)*2*pi/L);
+            YRho2=sin(posy2(2:skipnum:NNy2(t),t)*2*pi/L);
+            if squished==1
+                YRac1(YRac1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
+                YRho1(YRho1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
+                YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
+                YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
+            end
+            scatter(cos(posy1(2:skipnum:NNy1(t),t)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+            scatter(cos(posy2(2:skipnum:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+            scatter(cos(posx1(2:skipnum:NNx1(t),t)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+            scatter(cos(posx2(2:skipnum:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+
+            alpha 1
+
             hold off;
             set(gca,'XColor','w')
             set(gca,'YColor','w')
             set(gcf,'color','w')
-            axis([-1.5 1.5 -3.5 1.5])
-            pbaspect([3,5,1])
+            axis([-1 1 -3 1])
+            axis equal
+            % th = (0:3.6:360)*pi/180;
+            % Xvals=cos(th);
+            % Yvals1=sin(th);
+            % Yvals1(boundC1)=Yvals1(boundC1(1));
+            % Yvals2=sin(th);
+            % Yvals2(boundC2)=Yvals2(boundC2(1));
+            % plot(Xvals,Yvals1,'black')
+            % plot(Xvals,Yvals2-2*abs(max(Yvals2))-gapsize,'black')
+            % YRac1=sin(posx1(1:NNx1(t),1)*2*pi/L);
+            % YRac1(YRac1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
+            % YRho1=sin(posy1(1:NNy1(t),1)*2*pi/L);
+            % YRho1(YRho1<Yvals1(boundC1(1)))=Yvals1(boundC1(1));
+            % YRac2=sin(posx2(1:NNx2(t),1)*2*pi/L)-gapsize;
+            % YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1))-gapsize;
+            % YRho2=sin(posy2(1:NNy2(t),1)*2*pi/L)-gapsize;
+            % YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1))-gapsize;
+            % scatter(cos(posx1(1:NNx1(t),1)*2*pi/L),YRac1,'MarkerEdgeColor',branchedColor(end,:),'linewidth',2)
+            % scatter(cos(posx2(1:NNx2(t),1)*2*pi/L),YRac2-2*abs(max(Yvals2)),'MarkerEdgeColor',branchedColor(end,:),'linewidth',2)
+            % scatter(cos(posy1(1:NNy1(t),1)*2*pi/L),YRho1,'MarkerEdgeColor',bundledColor(end,:),'linewidth',2)
+            % scatter(cos(posy2(1:NNy2(t),1)*2*pi/L),YRho2-2*abs(max(Yvals2)),'MarkerEdgeColor',bundledColor(end,:),'linewidth',2)
+            % hold off;
+            % set(gca,'XColor','w')
+            % set(gca,'YColor','w')
+            % set(gcf,'color','w')
+            % axis([-1.5 1.5 -3.5 1.5])
+            % pbaspect([3,5,1])
 
-            if ~isempty(dirIndexa1)
-                figure(3)
-                hold on;
-                quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
-                hold off;
-            end
             if ~isempty(dirIndexa2)
                 figure(3)
                 hold on;
                 quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                hold off;
+            end
+            if ~isempty(dirIndexa1)
+                figure(3)
+                hold on;
+                quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
                 hold off;
             end
 
@@ -427,13 +477,13 @@ for i=3:3
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
                 if t<=500
-                hold on;
-                scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
-                hold off;
+                    hold on;
+                    scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
+                    hold off;
                 else
                     hold on;
-                scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
-                hold off;
+                    scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                    hold off;
                 end
             end
             if showtime==1
@@ -444,6 +494,8 @@ for i=3:3
             camroll(90)
             racrhoframe = getframe(figracrho);
             writeVideo(vidObj3,racrhoframe);
+
+            
         end
 
 
