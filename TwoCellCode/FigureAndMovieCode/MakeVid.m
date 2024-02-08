@@ -1,11 +1,11 @@
-set(0,'DefaultFigureVisible','off')
 close all;
 clear;
 clc;
+set(0,'DefaultFigureVisible','off')
 
 addpath('./freeze_colors')
 
-signal=0;
+signal=1;
 % Nt=2500;
 % Na=101;
 % sigper=0.40;
@@ -17,19 +17,19 @@ signal=0;
 % sigBound2(sigBound2>Na)=sigBound2(sigBound2>Na)-Na;
 
 scatvid=0;
-branchedbundledvid=0;
+branchedbundledvid=1;
 racrhovid=1;
 circlescatvid=0;
 adjacent=1;
 showtime=1;
 squished=1;
 
-for i=2:2
+for i=1:3
 
-    loadfile='./vid_matfiles/racrho_only/0alpha_0beta0_09roff';
+    loadfile='./vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/branchedupnosig_bundledupsig/3Ka_3Kb';
 
     setnum=int2str(i);
-    savelocation='../movies/racrho_only/0alpha_0beta0_09roff';
+    savelocation='../movies/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/branchedupnosig_bundledupsig/3Ka_3Kb';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -85,6 +85,7 @@ for i=2:2
 
     % allmax = max(max(max(max(a1all)),max(max(a2all))),max(max(max(b1all)),max(max(b2all))));
     allmax = max(max([a1all,a2all,b1all,b2all]));
+    cbmax = allmax/4;
 
     for t=1:50:Nt-1
         % for t=1:5:150
@@ -211,14 +212,14 @@ for i=2:2
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
             surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            clim([0,allmax/2])
+            clim([0,cbmax])
             freezeColors;
             shading interp
             hold on;
             alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
             surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            clim([0,allmax/2])
+            clim([0,cbmax])
             freezeColors;
             shading interp
             view(2)
@@ -232,7 +233,7 @@ for i=2:2
                 'color',[0,0,0],'LineWidth',2)
             surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            clim([0,allmax/2])
+            clim([0,cbmax])
             freezeColors;
             cb=colorbar('Location','eastoutside');
             freezeColors(cb);
@@ -246,7 +247,7 @@ for i=2:2
             % if max(ZBund2)>0.5
             surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            clim([0,allmax/2])
+            clim([0,cbmax])
             freezeColors;
             jcb=jicolorbar;
             freezeColors(jcb);
@@ -434,7 +435,7 @@ for i=2:2
             set(gca,'XColor','w')
             set(gca,'YColor','w')
             set(gcf,'color','w')
-            axis([-1 1 -3 1])
+            axis([-1.5 1.5 -3.5 1.5])
             axis equal
             % th = (0:3.6:360)*pi/180;
             % Xvals=cos(th);
