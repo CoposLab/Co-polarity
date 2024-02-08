@@ -37,15 +37,15 @@ coeff_vals=[1,10,1000];
 
 
 save_matfile=1;
-mat_location='./FigureAndMovieCode/vid_matfiles/racrho_only/0alpha_0beta0_1ron';
+mat_location='./FigureAndMovieCode/vid_matfiles/racrho_only/0alpha_0beta0_09roff';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 2;
 
-while (ppp<=1)
+while (ppp<=2)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
@@ -97,9 +97,9 @@ while (ppp<=1)
     % Set polarity protein parameters
     %
     N       = 200;                  % total number of molecules in the cell (conserved)
-    ron     = 0.001;                % spontaneous association
+    ron     = 0.001;                            % spontaneous association
     rfb     = 1.0;                  % enhanced association
-    roff    = 0.9;                  % disaassociation
+    roff    = 0.09;                  % disaassociation
     D       = Da;                   % diffusion coefficient for membrane-bound particles
 
     % Set feedback (or coupling) strength
@@ -367,6 +367,11 @@ while (ppp<=1)
     yC1all(:,1)=yC1;
     xC2all(:,1)=xC2;
     yC2all(:,1)=yC2;
+
+    posx1saved=posx1;
+    posy1saved=posy1;
+    posx2saved=posx2;
+    posy2saved=posy2;
 
     aic1 = a1;
     bic1 = b1;
@@ -1082,6 +1087,11 @@ while (ppp<=1)
         b1all(:,t)=b1;
         b2all(:,t)=b2;
 
+        posx1saved(:,t+1)=posx1(:,t+1);
+        posy1saved(:,t+1)=posy1(:,t+1);
+        posx2saved(:,t+1)=posx2(:,t+1);
+        posy2saved(:,t+1)=posy2(:,t+1);
+
         %Calculate direction angles
         a1New = a1;
         a1New(a1New<1)=0;
@@ -1546,7 +1556,7 @@ while (ppp<=1)
         end
         if save_matfile==1
             save(strcat(mat_location,int2str(ppp),'.mat'),...
-                'boundC1','boundC2','posx1','posx2','posy1','posy2','NNx1','NNx2',...
+                'boundC1','boundC2','posx1saved','posx2saved','posy1saved','posy2saved','NNx1','NNx2',...
                 'NNy1','NNy2','a1all','a2all','b1all','b2all','Xa','Xb','s1','s2',...
                 'xC1','xC2','yC1','yC2','xshift1','yshift1','xshift2','yshift2',...
                 'posn1','posn2','xC1all','yC1all','xC2all','yC2all','sigBound1','sigBound2','Nt','Tend')

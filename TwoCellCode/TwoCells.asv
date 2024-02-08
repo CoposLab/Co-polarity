@@ -37,7 +37,7 @@ coeff_vals=[1,10,1000];
 
 
 save_matfile=1;
-mat_location='./FigureAndMovieCode/vid_matfiles/racrho_only/0alpha_0beta0_1ron';
+mat_location='./FigureAndMovieCode/vid_matfiles/racrho_only/2alpha_2beta';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -97,15 +97,15 @@ while (ppp<=1)
     % Set polarity protein parameters
     %
     N       = 200;                  % total number of molecules in the cell (conserved)
-    ron     = 0.001;                % spontaneous association
+    ron     = 0.001;                            % spontaneous association
     rfb     = 1.0;                  % enhanced association
     roff    = 0.9;                  % disaassociation
     D       = Da;                   % diffusion coefficient for membrane-bound particles
 
     % Set feedback (or coupling) strength
     %
-    alpha = [0,0];
-    beta = [0,0]; %first argument is away from overlap, second is on overlap
+    alpha = [2,2];
+    beta = [2,2]; %first argument is away from overlap, second is on overlap
 
     % Set discretization
     %

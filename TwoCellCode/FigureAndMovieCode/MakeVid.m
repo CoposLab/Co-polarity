@@ -24,12 +24,12 @@ adjacent=1;
 showtime=1;
 squished=1;
 
-for i=1:1
+for i=2:2
 
-    loadfile='./vid_matfiles/racrho_only/0alpha_0beta0_1ron';
+    loadfile='./vid_matfiles/racrho_only/0alpha_0beta0_09roff';
 
     setnum=int2str(i);
-    savelocation='../movies/racrho_only/0alpha_0beta0_1ron';
+    savelocation='../movies/racrho_only/0alpha_0beta0_09roff';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -94,8 +94,12 @@ for i=1:1
         b2=b2all(:,t);
         xC1=xC1all(:,t);
         yC1=yC1all(:,t);
-        xC2=xC2all(:,t);
+        xC2=xC2all(:,t);    
         yC2=yC2all(:,t);
+        posx1=posx1saved;
+        posy1=posy1saved;
+        posx2=posx2saved;
+        posy2=posy2saved;
 
         if sum(a1==0)==length(a1) && sum(b1==0)==length(b1) ...
                 && sum(a2==0)==length(a2) && sum(b2==0)==length(b2)
@@ -379,7 +383,7 @@ for i=1:1
 
 
         if racrhovid==1
-            skipnum=1;
+            skipnum=4;
             figracrho=figure(3);
             gapsize=0.05;
             clf
