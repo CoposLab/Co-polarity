@@ -2,12 +2,13 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_signal/signal_switches2/500stepsc2_3500stepsc1/branchedupracupnosig_bundleduprhoupsig/1000RacOn_1000RhoOn_3Ka_3Kb';
+filename = './simulation_results/results_signal/signal_switches2/500stepsc2_3500stepsc1/uncoupled/uncoupled';
 maxnum=100;
 
 angle=pi/4;
 
-siglocation = 5*pi/4;
+% siglocation = 5*pi/4;
+siglocation = pi/4;
 sigper = 0.4;
 
 
@@ -19,7 +20,8 @@ counter2np=0;
 counterlf=0;
 counterdist=0;
 
-signal_polarized = 0;
+signal_polarized_c1 = 0;
+signal_polarized_c2 = 0;
 both_sig_pol = 0;
 countbund1=0;
 countbund2=0;
@@ -184,10 +186,17 @@ for i=1:maxnum
         counterdist=counterdist+1;
     end
 
+    if ~isempty(dirIndexa1)
+        medang1 = th(1,dirIndexa1);
+        if abs(medang1 - siglocation)<(sigper*2*pi)/2
+            signal_polarized_c1=signal_polarized_c1+1;
+        end
+    end
+
     if ~isempty(dirIndexa2)
         medang2 = th(1,dirIndexa2);
         if abs(medang2 - siglocation)<(sigper*2*pi)/2
-            signal_polarized=signal_polarized+1;
+            signal_polarized_c2=signal_polarized_c2+1;
         end
     end
 
@@ -209,9 +218,9 @@ for i=1:maxnum
 end
 toc
 sprintf(['%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\n' ...
-    'Number dist. effort: %d\nC2 polarized: %d\nBoth polarized: %d\n' ...
+    'Number dist. effort: %d\nC1 Polarized: %d\nC2 polarized: %d\nBoth polarized: %d\n' ...
     'Number CW: %d, Number CCW: %d'], ...
-    counteryes, countersn, counter1np, counter2np, counterlf,counterdist,signal_polarized,both_sig_pol,countcw,countccw)
+    counteryes, countersn, counter1np, counter2np, counterlf,counterdist,signal_polarized_c1,signal_polarized_c2,both_sig_pol,countcw,countccw)
 
 % sprintf('Number where bundled took over cell 1: %d\nNumber where bundled took over cell 2: %d', countbund1, countbund2)
 
