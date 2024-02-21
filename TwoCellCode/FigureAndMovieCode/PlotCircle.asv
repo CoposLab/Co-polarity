@@ -5,7 +5,7 @@ signal=0;
 
 addpath('./freeze_colors')
 
-for i=10:10
+for i=3:3
     path=strcat('./vid_matfiles/branchedbundled/nosignal/0_8kb0_8kc_50max_2alpha',int2str(i),'.mat');
 
     load(path)
@@ -562,76 +562,127 @@ for i=10:10
 
 
     if make_cylinder==1
-        end_time=2500;
+        end_time= 500;
         Tend=25;
+        Na=101;
 
-        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-        R = [cos(-th(dirIndexa1)), -sin(-th(dirIndexa1));sin(-th(dirIndexa1)), cos(-th(dirIndexa1))];
-        I = [1,0;0,1];
-        
-        
         figure(5)
+        yrac1=zeros(101,end_time);
+        zrac1=zeros(101,end_time);
+        yrho1=zeros(101,end_time);
+        zrho1=zeros(101,end_time);
+        ycombined=zeros(101,end_time);
+        zcombined=zeros(101,end_time);
+        for j=1:end_time
+            [~,rac1_interp,rho1_interp] = resamplePolarityMolecules(posx1(:,j),posy1(:,j),200,200,L,Na);
+            yrac1(:,j)=sin(rac1_interp(:,1)*2*pi/10);
+            zrac1(:,j)=cos(rac1_interp(:,1)*2*pi/10);
+            yrho1(:,j)=sin(rho1_interp(:,1)*2*pi/10);
+            zrho1(:,j)=cos(rho1_interp(:,1)*2*pi/10);
+            ycombined(:,j)=sin((rac1_interp(:,1)-rho1_interp(:,1))*2*pi/10);
+            zcombined(:,j)=cos((rac1_interp(:,1)-rho1_interp(:,1))*2*pi/10);
+            % yrac1=sin(posx1(1:200,1:end_time)*2*pi/10);
+            % zrac1=cos(posx1(1:200,1:end_time)*2*pi/10);
+            % yrho1=sin(posy1(1:200,1:end_time)*2*pi/10);
+            % zrho1=cos(posy1(1:200,1:end_time)*2*pi/10);
+
+            
+            
+        end
+        % surf(linspace(0,10,10),zrac1,yrac1)
         hold on
-        % clf
-        % subplot(2,1,1)
-        % for j=1:2:max(max([NNx1,NNy1]))
-        [X,Y,Z] = cylinder(0.97);
+        % [X,Y,Z] = cylinder(0.97);
         % surf(Z*Tend*end_time/Nt,Y,X,ones(size(Z,1),size(Z,2),3))
-        hold on
-        % surf(Z*Tend*end_time/Nt,Y-2,X,ones(size(Z,1),size(Z,2),3))
+        s=surf(linspace(0,end_time/100,end_time),zcombined,ycombined,'FaceAlpha',0.5);
+        colormap([flip(bundledColor);branchedColor])
+        colorbar
         % alpha 0.5
+        % freezeColors;
+        % % clim([0,allmax/2])
+        % cb=colorbar();
+        % freezeColors(cb);
+        % surf(linspace(0,25,2500),zrho1,yrho1)
+        % colormap(bundledColor)
+        % % clim([0,allmax/2])
+        % freezeColors;
+        % jcb=jicolorbar;
+        % freezeColors(jcb);
+        hold off
+        
         shading interp
-        % xlabel('time')
+        pbaspect([3,1,1])
+        xlabel('time')
+        ylabel('x')
+        zlabel('y')
+        set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
+
+        % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
+        % R = [cos(-th(dirIndexa1)), -sin(-th(dirIndexa1));sin(-th(dirIndexa1)), cos(-th(dirIndexa1))];
+        % I = [1,0;0,1];
+        
+        
+        % figure(5)
+        % hold on
+        % % clf
+        % % subplot(2,1,1)
+        % % for j=1:2:max(max([NNx1,NNy1]))
+        % [X,Y,Z] = cylinder(0.97);
+        % % surf(Z*Tend*end_time/Nt,Y,X,ones(size(Z,1),size(Z,2),3))
+        % hold on
+        % % surf(Z*Tend*end_time/Nt,Y-2,X,ones(size(Z,1),size(Z,2),3))
+        % % alpha 0.5
+        % shading interp
+        % % xlabel('time')
+        % % ylabel('y')
+        % % zlabel('z')
+        % for j=1:20:200
+        %     yrac1=sin(posx1(j,1:end_time)*2*pi/10);
+        %     zrac1=cos(posx1(j,1:end_time)*2*pi/10);
+        %     yrho1=sin(posy1(j,1:end_time)*2*pi/10);
+        %     zrho1=cos(posy1(j,1:end_time)*2*pi/10);
+        %     dirAngley=sin(th(dirIndexa1))*ones(1,2500);
+        %     dirAnglez=cos(th(dirIndexa1))*ones(1,2500);
+        %     rac_rotate=R*[zrac1;yrac1];
+        %     rho_rotate=R*[zrho1;yrho1];
+        %     dir_rotate=R*[dirAnglez;dirAngley];
+        %     hold on
+        %     scatter3(linspace(0,Tend*end_time/Nt,end_time),rac_rotate(2,:),rac_rotate(1,:),...
+        %         1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+        %     hold on;
+        %     scatter3(linspace(0,Tend*end_time/Nt,end_time),rho_rotate(2,:),rho_rotate(1,:),...
+        %         1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+        %     scatter3(linspace(0,Tend*end_time/Nt,end_time),dir_rotate(2,:),dir_rotate(1,:),...
+        %         1,'MarkerEdgeColor','blue','MarkerFaceColor','blue')
+        %     box on;
+        % end
+        % hold off
+        % xlabel('Time')
+        % % set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
+        % 
+        % % subplot(2,1,2)
+        % % for j=1:2:200
+        % %     hold on;
+        % %     scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posx2(j,1:end_time)*2*pi/10)-2,cos(posx2(j,1:end_time)*2*pi/10),...
+        % %         1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+        % %     % hold on;
+        % %     scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posy2(j,1:end_time)*2*pi/10)-2,cos(posy2(j,1:end_time)*2*pi/10), ...
+        % %         1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+        % %     box on;
+        % %     % set(gca,'Color','k','fontsize',20,'fontname','times');
+        % %     % pbaspect([3 2 1]);
+        % %     % set(gcf,'color','w');
+        % %     % title('Cell 2')
+        % % end
+        % hold off
+        % set(gca,'Color','k','fontsize',20,'fontname','times');
+        % xlim([0,Tend*end_time/Nt])
+        % % pbaspect([Tend*end_time/Nt (Tend*end_time/Nt)*2/3 (Tend*end_time/Nt)/3]);
+        % pbaspect([3,1,1])
+        % set(gcf,'color','w');
+        % xlabel('Time')
         % ylabel('y')
         % zlabel('z')
-        for j=1:20:200
-            yrac1=sin(posx1(j,1:end_time)*2*pi/10);
-            zrac1=cos(posx1(j,1:end_time)*2*pi/10);
-            yrho1=sin(posy1(j,1:end_time)*2*pi/10);
-            zrho1=cos(posy1(j,1:end_time)*2*pi/10);
-            dirAngley=sin(th(dirIndexa1))*ones(1,2500);
-            dirAnglez=cos(th(dirIndexa1))*ones(1,2500);
-            rac_rotate=I*[zrac1;yrac1];
-            rho_rotate=I*[zrho1;yrho1];
-            dir_rotate=I*[dirAnglez;dirAngley];
-            hold on
-            scatter3(linspace(0,Tend*end_time/Nt,end_time),rac_rotate(1,:),rac_rotate(2,:),...
-                1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-            hold on;
-            scatter3(linspace(0,Tend*end_time/Nt,end_time),rho_rotate(1,:),rho_rotate(2,:),...
-                1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-            scatter3(linspace(0,Tend*end_time/Nt,end_time),dir_rotate(1,:),dir_rotate(2,:),...
-                1,'MarkerEdgeColor','blue','MarkerFaceColor','blue')
-            box on;
-        end
-        hold off
-        xlabel('Time')
         % set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
-
-        % subplot(2,1,2)
-        % for j=1:2:200
-        %     hold on;
-        %     scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posx2(j,1:end_time)*2*pi/10)-2,cos(posx2(j,1:end_time)*2*pi/10),...
-        %         1,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-        %     % hold on;
-        %     scatter3(linspace(0,Tend*end_time/Nt,end_time),sin(posy2(j,1:end_time)*2*pi/10)-2,cos(posy2(j,1:end_time)*2*pi/10), ...
-        %         1,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-        %     box on;
-        %     % set(gca,'Color','k','fontsize',20,'fontname','times');
-        %     % pbaspect([3 2 1]);
-        %     % set(gcf,'color','w');
-        %     % title('Cell 2')
-        % end
-        hold off
-        set(gca,'Color','k','fontsize',20,'fontname','times');
-        xlim([0,Tend*end_time/Nt])
-        % pbaspect([Tend*end_time/Nt (Tend*end_time/Nt)*2/3 (Tend*end_time/Nt)/3]);
-        pbaspect([3,1,1])
-        set(gcf,'color','w');
-        xlabel('Time')
-        ylabel('y')
-        zlabel('z')
-        set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
     end
 
 
