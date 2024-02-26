@@ -36,8 +36,8 @@ coeff_vals=[1,10,1000];
 
 
 
-save_matfile=1;
-mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/uncoupled';
+save_matfile=0;
+mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/branchedbundled/0_8kb0_8kc';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
@@ -45,11 +45,11 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_signal/signal_switches2/500stepsc2_3500stepsc1/branchedupnosig_bundledupsig/3Ka_3Kb';
+    savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/uncoupled/uncoupled';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -117,7 +117,7 @@ while (ppp<=1)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 40.0;                  % total simulation time
+    Tend   = 100.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -183,10 +183,10 @@ while (ppp<=1)
     % kb: how does bundled affect branched
     % kc: how does branched affect bundled
     % kd: how does bundled affect bundled
-    ka_vals=0.9*[-1,0,1];
-    kb_vals=0.9*[-1,0,1];
-    kc_vals=0.9*[-1,0,1];
-    kd_vals=0.9*[-1,0,1];
+    ka_vals=0.8*[-1,0,1];
+    kb_vals=0.8*[-1,0,1];
+    kc_vals=0.8*[-1,0,1];
+    kd_vals=0.8*[-1,0,1];
     ka_ind=2; %index of ka_vals (index 2 means no interaction)
     kb_ind=2;
     kc_ind=2;
@@ -862,12 +862,12 @@ while (ppp<=1)
         % else
         %     locy1=rand(1,1)*L;
         % end
-        
+
         pony1 = ron/(ron+rfb*(N-Ky1));
         end
 
         % Find spontaneous association location cell 2
-        if resetc2==0
+        if resetc2x==0
         % if Kx2>=1
         ss2 = sort(posx2(1:Kx2,t));
         [ijk2] = find(ss2==posx2(minidx2,t),1);
@@ -876,10 +876,14 @@ while (ppp<=1)
         x2_2 = posx2(minidx2,t)+(ss2(prevind2)-posx2(minidx2,t))/2;
         x1_2 = posx2(minidx2,t)+(ss2(nextind2)-posx2(minidx2,t))/2;
         locx2 = (x2_2-x1_2).*rand(1,1) + x1_2; % random location halfway between the closest left/right particles
+
+        ponx2 = ron/(ron+rfb*(N-Kx2));
+        end
         % else
         %     locx2=rand(1,1)*L;
         % end
         % if Ky2>=1
+        if resetc2y==0
         ss2 = sort(posy2(1:Ky2,t));
         [ijk2] = find(ss2==posy2(minidy2,t),1);
         prevind2 = (ijk2-1)*(ijk2>1) + (Ky2)*(ijk2==1);
@@ -891,11 +895,12 @@ while (ppp<=1)
         %     locy2=rand(1,1)*L;
         % end
 
-        ponx2 = ron/(ron+rfb*(N-Kx2));
+        
         pony2 = ron/(ron+rfb*(N-Ky2));
         end
 
         %Cell 1 rac
+        if resetc1x==0
         if(NNx1(t+1) < NNx1(t))                % diassociation event (particle off)
             oldcolx1 = posx1(minidx1,1:end); % Find the particle to be removed
             othercolsx1 = posx1([1:minidx1-1,minidx1+1:Kx1],1:end); % Gather other "on" particles
@@ -925,8 +930,10 @@ while (ppp<=1)
                 end
             end
         end
+        end
 
         %Cell 2 rac
+        if resetc2x==0
         if(NNx2(t+1) < NNx2(t))                % diassociation event (particle off)
             oldcolx2 = posx2(minidx2,1:end);
             othercolsx2 = posx2([1:minidx2-1,minidx2+1:Kx2],1:end);
@@ -956,8 +963,10 @@ while (ppp<=1)
                 end
             end
         end
+        end
 
         %Cell 1 rho
+        if resetc1y==0
         if (NNy1(t+1) < NNy1(t))                % diassociation event (particle off)
             oldcoly1 = posy1(minidy1,1:end);
             othercolsy1 = posy1([1:minidy1-1,minidy1+1:Ky1],1:end);
@@ -985,8 +994,10 @@ while (ppp<=1)
                 end
             end
         end
+        end
 
         %Cell 2 rho
+        if resetc2y==0
         if (NNy2(t+1) < NNy2(t))                % diassociation event (particle off)
             oldcoly2 = posy2(minidy2,1:end);
             othercolsy2 = posy2([1:minidy2-1,minidy2+1:Ky2],1:end);
@@ -1013,6 +1024,7 @@ while (ppp<=1)
                     nx2(Kx2-numFoundx2+1:Kx2,t+1) = 0;
                 end
             end
+        end
         end
 
         [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:Kx1,t+1),posy1(1:Ky1,t+1),Kx1,Ky1,L,Na);
@@ -1396,7 +1408,7 @@ while (ppp<=1)
     end
     sprintf('Simulation %d done',ppp)
     toc
-    if(quit_cond==0)||(quit_cond==1)
+    if(quit_cond==0)
         if savefigs==1
             % Define circles
             gapsize=0.01;

@@ -36,7 +36,7 @@ coeff_vals=[1,10,1000];
 
 
 
-save_matfile=1;
+save_matfile=0;
 mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/branchedbundled/0_8kb0_8kc';
 move_cells=0;
 writem=0;
@@ -45,11 +45,11 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=3)
+while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_signal/signal_switches2/500stepsc2_3500stepsc1/branchedupnosig_bundledupsig/3Ka_3Kb';
+    savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/branchedupracupnosig_bundleduprhoupsig/1000RacOn_1000RhoOn_3Ka_3Kb';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -117,7 +117,7 @@ while (ppp<=3)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 40.0;                  % total simulation time
+    Tend   = 100.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -188,8 +188,8 @@ while (ppp<=3)
     kc_vals=0.8*[-1,0,1];
     kd_vals=0.8*[-1,0,1];
     ka_ind=2; %index of ka_vals (index 2 means no interaction)
-    kb_ind=3;
-    kc_ind=3;
+    kb_ind=2;
+    kc_ind=2;
     kd_ind=2;
 
 
@@ -441,16 +441,16 @@ while (ppp<=3)
 
         % Set konx and kony in contact region
         if t<=sigswitch_time
-            % Konx1(boundC1)=Konx1(boundC1)*1000;
+            Konx1(boundC1)=Konx1(boundC1)*1000;
             % Konx2(boundC2)=Konx2(boundC2)*10;
-            % Kony2(boundC2)=Kony2(boundC2)*1000;
+            Kony2(boundC2)=Kony2(boundC2)*1000;
             % Koffx2(boundC2)=Koffx2(boundC2)*1000;
             % Koffy1(boundC1)=Koffy1(boundC1)*1000;
         else
             % Koffx1(boundC1)=Koffx1(boundC1)*1000;
-            % Kony1(boundC1)=Kony1(boundC1)*1000;
+            Kony1(boundC1)=Kony1(boundC1)*1000;
             % Konx1(boundC1)=Konx1(boundC1)*10;
-            % Konx2(boundC2)=Konx2(boundC2)*1000;
+            Konx2(boundC2)=Konx2(boundC2)*1000;
             % Koffy2(boundC2)=Koffy2(boundC2)*1000;
         end
         % Konx1(boundC1)=Konx1(boundC1)*1000;
@@ -560,20 +560,6 @@ while (ppp<=3)
 
             if(nnx1==0) % no rac on membrane
                 sprintf('here 1rac')
-                % rx1 = rand(N,1);
-                % 
-                % for j=1:N
-                %     konx1 = interp1(s1,Konx1,posx1(j,t));
-                %     a0_x1 = konx1;
-                %     taux1(j) = -log(rx1(j))/a0_x1;
-                %     dnx1(j)=1;
-                % end
-                % 
-                % [mintaux1,minidx1] = min(taux1(1:j));       % find first chemical rxn
-                % Tx1(rxn_count_x1+1) = Tx1(rxn_count_x1) + mintaux1;
-                % X1(rxn_count_x1+1) = nnx1 + dnx1(minidx1); %one rac binds
-                % rxn_count_x1 = rxn_count_x1 + 1;
-                % NNx1(t+1) = X1(rxn_count_x1-1);
 
                 X1(rxn_count_x1+1) = 0.1*N; % put 20 rac on membrane
                 NNx1(t+1) = X1(rxn_count_x1+1);
@@ -1050,31 +1036,31 @@ while (ppp<=3)
 
         % gamma=1.5;
 
-        % if t<=sigswitch_time
-        %     % kb_ind=2;
-        %     % kc_ind=2;
-        %     branchedConst1 = 3.0;
-        %     bundledConst1 = 1.0;
-        %     branchedConst2 = 1.0;
-        %     bundledConst2 = 3.0;
-        % else
-        %     % kb_ind=3;
-        %     % kc_ind=3;
-        %     branchedConst1 = 1.0;
-        %     bundledConst1 = 3.0;
-        %     branchedConst2 = 3.0;
-        %     bundledConst2 = 1.0;
-        % end
-        % 
-        % 
-        % Ka1=ones(Na,1);
-        % Kb1=ones(Na,1);
-        % Ka2=ones(Na,1);
-        % Kb2=ones(Na,1);
-        % Ka1(boundC1) = branchedConst1*Ka1(boundC1);
-        % Kb1(boundC1) = bundledConst1*Kb1(boundC1);
-        % Ka2(boundC2) = branchedConst2*Ka2(boundC2);
-        % Kb2(boundC2) = bundledConst2*Kb2(boundC2);
+        if t<=sigswitch_time
+            % kb_ind=2;
+            % kc_ind=2;
+            branchedConst1 = 3.0;
+            bundledConst1 = 1.0;
+            branchedConst2 = 1.0;
+            bundledConst2 = 3.0;
+        else
+            % kb_ind=3;
+            % kc_ind=3;
+            branchedConst1 = 1.0;
+            bundledConst1 = 3.0;
+            branchedConst2 = 3.0;
+            bundledConst2 = 1.0;
+        end
+
+
+        Ka1=ones(Na,1);
+        Kb1=ones(Na,1);
+        Ka2=ones(Na,1);
+        Kb2=ones(Na,1);
+        Ka1(boundC1) = branchedConst1*Ka1(boundC1);
+        Kb1(boundC1) = bundledConst1*Kb1(boundC1);
+        Ka2(boundC2) = branchedConst2*Ka2(boundC2);
+        Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
