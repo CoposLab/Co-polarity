@@ -5,7 +5,7 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 7/10/2023
+% Last updated: 3/11/2024
 % Katie Levandosky
 % Calina Copos
 addpath('./FigureAndMovieCode/freeze_colors')
@@ -16,30 +16,34 @@ close all;
 clc;
 
 
-ka_vals=[-0.9,0,0.9];
-kb_vals=[-0.9,0,0.9];
-kc_vals=[-0.9,0,0.9];
-kd_vals=[-0.9,0,0.9];
+kaa_vals=[0,7.5];
+kbb_vals=[0,7.5];
+kcc_vals=[0,7.5];
+kdd_vals=[0,7.5];
 coeff_vals=[1,10,1000];
 
 % branched bundled parameter search
-% for ka_ind=1:3 %-0.9,0,0.9
-%     for kb_ind=1:3 %-0.9,0,0.9
-%         for kc_ind=1:3 %-0.9,0,0.9
-%             for kd_ind=1:3 %-0.9,0,0.9
+% for ka_ind=1:1 %-0.9,0,0.9
+%     for kb_ind=1:1 %-0.9,0,0.9
+%         for kc_ind=1:2 %-0.9,0,0.9
+%             for kd_ind=1:2 %-0.9,0,0.9
+% for kaa_ind=2:2
+%     for kbb_ind=2:2
+%         for kcc_ind=1:2
+%             for kdd_ind=1:2
 
 % rac rho parameter search
-% for c1_ind=1:4 %koffx,koffy,konx,kony
-%    for c2_ind=1:4 %koffx,koffy,konx,kony
-%        for c1coeff_ind=1:3 %1,10,1000
-%            for c2coeff_ind=1:3 %1,10,1000
+for c1_ind=1:1 %koffx,koffy,konx,kony
+   for c2_ind=1:1 %koffx,koffy,konx,kony
+       for c1coeff_ind=2:3 %1,10,1000
+           for c2coeff_ind=c1coeff_ind:3 %1,10,1000
 
 
 
 save_matfile=0;
 mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/branchedbundled/0_8kb0_8kc';
 move_cells=0;
-writem=0;
+writem=1;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
@@ -47,9 +51,9 @@ ppp = 1;
 
 while (ppp<=100)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/uncoupled/uncoupled';
+    savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/branchedupracupnosig_bundleduprhoupsig/1000RacOn_1000RhoOn_3Ka_3Kb';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -74,7 +78,8 @@ while (ppp<=100)
         polarize_time_c2 num_polarized num_pol_c1 num_pol_c2 countpol writem ...
         ka_ind kb_ind kc_ind kd_ind ka_vals kb_vals kc_vals kd_vals coeff_vals ...
         konx_ind koffx_ind kony_ind c1coeff_ind c2coeff_ind move_cells polarize_time_yes ...
-        num_pol_lf polarize_time_lf num_pol_yes save_matfile mat_location
+        num_pol_lf polarize_time_lf num_pol_yes save_matfile mat_location ...
+        kaa_vals kbb_vals kcc_vals kdd_vals kaa_ind kbb_ind kcc_ind kdd_ind
 
     rng('shuffle');
     set(0,'DefaultFigureVisible','on')
@@ -117,7 +122,7 @@ while (ppp<=100)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 100.0;                  % total simulation time
+    Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -138,7 +143,7 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
+    signal=0;
     sigswitch_time=500;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
@@ -440,19 +445,20 @@ while (ppp<=100)
         % Kony2=Kony2*10;
 
         % Set konx and kony in contact region
-        if t<=sigswitch_time
-            % Konx1(boundC1)=Konx1(boundC1)*1000;
-            % Konx2(boundC2)=Konx2(boundC2)*10;
-            % Kony2(boundC2)=Kony2(boundC2)*1000;
-            % Koffx2(boundC2)=Koffx2(boundC2)*1000;
-            % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        else
-            % Koffx1(boundC1)=Koffx1(boundC1)*1000;
-            % Kony1(boundC1)=Kony1(boundC1)*1000;
-            % Konx1(boundC1)=Konx1(boundC1)*10;
-            % Konx2(boundC2)=Konx2(boundC2)*1000;
-            % Koffy2(boundC2)=Koffy2(boundC2)*1000;
-        end
+        % if t<=sigswitch_time
+        %     Konx1(boundC1)=Konx1(boundC1)*1000;
+        %     % Konx2(boundC2)=Konx2(boundC2)*10;
+        %     Kony2(boundC2)=Kony2(boundC2)*1000;
+        %     % Koffx2(boundC2)=Koffx2(boundC2)*1000;
+        %     % Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        % else
+        %     % Koffx1(boundC1)=Koffx1(boundC1)*1000;
+        %     Kony1(boundC1)=Kony1(boundC1)*1000;
+        %     % Konx1(boundC1)=Konx1(boundC1)*10;
+        %     Konx2(boundC2)=Konx2(boundC2)*1000;
+        %     % Koffy2(boundC2)=Koffy2(boundC2)*1000;
+        % end
+
         % Konx1(boundC1)=Konx1(boundC1)*1000;
         % Konx2(boundC2)=Konx2(boundC2)*1000;
         % Kony1(boundC1)=Kony1(boundC1)*10;
@@ -515,21 +521,73 @@ while (ppp<=100)
                 % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
                 % Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*1000);
             end
+
+            if c1_ind==1 %koffx1
+                if (c2_ind==1 || c2_ind==3) && sumx2>0
+                    Koffx1(boundC1(i)) = Koffx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
+                elseif (c2_ind==2 || c2_ind==4) && sumy2>0
+                    Koffx1(boundC1(i)) = Koffx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+                end
+            elseif c1_ind==2 %koffy1
+                if (c2_ind==1 || c2_ind==3) && sumx2>0
+                    Koffy1(boundC1(i)) = Koffy1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
+                elseif (c2_ind==2 || c2_ind==4) && sumy2>0
+                    Koffy1(boundC1(i)) = Koffy1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+                end
+            elseif c1_ind==3 %konx1
+                if (c2_ind==1 || c2_ind==3) && sumx2>0
+                    Konx1(boundC1(i)) = Konx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
+                elseif (c2_ind==2 || c2_ind==4) && sumy2>0
+                    Konx1(boundC1(i)) = Konx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+                end
+            elseif c1_ind==4 %kony1
+                if (c2_ind==1 || c2_ind==3) && sumx2>0
+                    Kony1(boundC1(i)) = Kony1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
+                elseif (c2_ind==2 || c2_ind==4) && sumy2>0
+                    Kony1(boundC1(i)) = Kony1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+                end
+            end
+
+            if c2_ind==1 %koffx2
+                if (c1_ind==1 || c1_ind==3) && sumx1>0
+                    Koffx2(flipc2(i)) = Koffx1(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
+                elseif (c1_ind==2 || c1_ind==4) && sumy1>0
+                    Koffx2(flipc2(i)) = Koffx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
+                end
+            elseif c2_ind==2 %koffy2
+                if (c1_ind==1 || c1_ind==3) && sumx1>0
+                    Koffy2(flipc2(i)) = Koffy2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
+                elseif (c1_ind==2 || c1_ind==4) && sumy1>0
+                    Koffy2(flipc2(i)) = Koffy2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
+                end
+            elseif c2_ind==3 %konx2
+                if (c1_ind==1 || c1_ind==3) && sumx1>0
+                    Konx2(flipc2(i)) = Konx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
+                elseif (c1_ind==2 || c1_ind==4) && sumy1>0
+                    Konx2(flipc2(i)) = Konx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
+                end
+            elseif c2_ind==4 %kony2
+                if (c1_ind==1 || c1_ind==3) && sumx1>0
+                    Kony2(flipc2(i)) = Kony2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
+                elseif (c1_ind==2 || c1_ind==4) && sumy1>0
+                    Kony2(flipc2(i)) = Kony2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
+                end
+            end
         end
 
 
         % Set rac/rho rates depending on branched/bundled concentrations
-        if t<=500
-            % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
-            % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
-            % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
-            % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
-        else
-            % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-            % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
-            % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
-            % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
-        end
+        % if t<=sigswitch_time
+        %     % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        %     % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+        %     % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
+        %     % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
+        % else
+        %     % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
+        %     % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
+        %     % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
+        %     % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
+        % end
         % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
         % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
         % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
@@ -560,20 +618,6 @@ while (ppp<=100)
 
             if(nnx1==0) % no rac on membrane
                 sprintf('here 1rac')
-                % rx1 = rand(N,1);
-                % 
-                % for j=1:N
-                %     konx1 = interp1(s1,Konx1,posx1(j,t));
-                %     a0_x1 = konx1;
-                %     taux1(j) = -log(rx1(j))/a0_x1;
-                %     dnx1(j)=1;
-                % end
-                % 
-                % [mintaux1,minidx1] = min(taux1(1:j));       % find first chemical rxn
-                % Tx1(rxn_count_x1+1) = Tx1(rxn_count_x1) + mintaux1;
-                % X1(rxn_count_x1+1) = nnx1 + dnx1(minidx1); %one rac binds
-                % rxn_count_x1 = rxn_count_x1 + 1;
-                % NNx1(t+1) = X1(rxn_count_x1-1);
 
                 X1(rxn_count_x1+1) = 0.1*N; % put 20 rac on membrane
                 NNx1(t+1) = X1(rxn_count_x1+1);
@@ -1049,7 +1093,7 @@ while (ppp<=100)
         abmax=50;
 
         % gamma=1.5;
-
+        % 
         % if t<=sigswitch_time
         %     % kb_ind=2;
         %     % kc_ind=2;
@@ -1065,8 +1109,8 @@ while (ppp<=100)
         %     branchedConst2 = 3.0;
         %     bundledConst2 = 1.0;
         % end
-        % 
-        % 
+
+
         % Ka1=ones(Na,1);
         % Kb1=ones(Na,1);
         % Ka2=ones(Na,1);
@@ -1075,6 +1119,12 @@ while (ppp<=100)
         % Kb1(boundC1) = bundledConst1*Kb1(boundC1);
         % Ka2(boundC2) = branchedConst2*Ka2(boundC2);
         % Kb2(boundC2) = bundledConst2*Kb2(boundC2);
+
+        % add 0
+        kaa_ind=1;
+        kbb_ind=1;
+        kcc_ind=1;
+        kdd_ind=1;
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1089,16 +1139,16 @@ while (ppp<=100)
 
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 ...
             + ka_vals(ka_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) )) - a1.*a1); %Cell 1 branched
+            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + kaa_vals(kaa_ind) )) - a1.*a1); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 ...
             + kc_vals(kc_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) )) - b1.*b1); %Cell 1 bundled
+            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + kbb_vals(kbb_ind) )) - b1.*b1); %Cell 1 bundled
         rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 ...
             + ka_vals(ka_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) )) - a2.*a2); %Cell 2 branched
+            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + kcc_vals(kcc_ind) )) - a2.*a2); %Cell 2 branched
         rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 ...
             + kc_vals(kc_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) )) - b2.*b2); %Cell 2 bundled
+            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + kdd_vals(kdd_ind) )) - b2.*b2); %Cell 2 bundled
 
 
         a1 = Hs1\(diffRHSa1+rxna1);
@@ -1601,42 +1651,42 @@ while (ppp<=100)
             end
 
             anglelf=pi/4;
-            if ~isempty(dirIndex1) && ~isempty(dirIndex2)
+            if ~isempty(dirIndexa1) && ~isempty(dirIndexa2) && ~isempty(dirIndexb1) && ~isempty(dirIndexb2)
                 if xor(abs(medang1-3*pi/2)<anglelf, abs(medang2-pi/2)<anglelf)
                     res_counters(6)=res_counters(6)+1;
                 end
             end
 
             angledist=pi/4;
-            if isempty(dirIndex1) && ~isempty(dirIndex2) && max(b1)>1
+            if isempty(dirIndexa1) && ~isempty(dirIndexa2) && max(b1)>1
                 medang2 = th(1,dirIndex2);
                 if abs(medang2-pi/2)>angledist
                     res_counters(7)=res_counters(7)+1;
                 end
             end
-            if isempty(dirIndex2) && ~isempty(dirIndex1) && max(b2)>1
+            if isempty(dirIndexa2) && ~isempty(dirIndexa1) && max(b2)>1
                 medang1 = th(1,dirIndex1);
                 if abs(medang1-3*pi/2)>angledist
                     res_counters(7)=res_counters(7)+1;
                 end
             end
-            if isempty(dirIndex1) && isempty(dirIndex2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
+            if isempty(dirIndexa1) && isempty(dirIndexa2) && ((max(b1)>1 && max(a2)>1) || (max(b2)>1 && max(a1)>1))
                 res_counters(7)=res_counters(7)+1;
             end
         end
     end
 
     if writem==1
-        % writematrix(res_counters,strcat('./allparamsresults/signal_branchedbundled/',...
-        %     string(ka_vals(ka_ind)),'ka_',string(kb_vals(kb_ind)),'kb_',...
-        %     string(kc_vals(kc_ind)),'kc_',string(kd_vals(kd_ind)),'kd.xls'))
+        % writematrix(res_counters,strcat('./simulation_results/parametersearch_results/branchedbundled_independent/',...
+        %     string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+        %     string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
         % options=["Bkonx","Akony","Akoffx","Bkoffy"];
         % writematrix(res_counters,strcat('./allparamsresults/forcedependent/',...
         %     '1000',options(c1_ind),'C1_','1000',options(c2_ind),'C2.xls'))
-        % options=["koffx","koffy","konx","kony"];
-        % writematrix(res_counters,strcat('./allparamsresults/signal_allracrho/',...
-        %       string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
-        %       string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
+        options=["koffx","koffy","konx","kony"];
+        writematrix(res_counters,strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
+              string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+              string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
         sprintf(int2str(res_counters))
     end
 end
@@ -1685,8 +1735,8 @@ end
 %end
 
 
-%            end
-%        end
-%    end
-% end
+           end
+       end
+   end
+end
 

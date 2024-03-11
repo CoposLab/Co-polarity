@@ -3,7 +3,7 @@
 set(0,'DefaultFigureVisible','off')
 
 filename = './simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/branchedupracupnosig_bundleduprhoupsig/1000RacOn_1000RhoOn_3Ka_3Kb';
-maxnum=25;
+maxnum=100;
 
 angle=pi/4;
 
