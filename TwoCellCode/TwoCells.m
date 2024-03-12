@@ -33,8 +33,8 @@ for kaa_ind=1:2
             for kdd_ind=1:2
 
 % rac rho parameter search
-% for c1_ind=4:4 %koffx,koffy,konx,kony
-%    for c2_ind=1:4 %koffx,koffy,konx,kony
+% for c1_ind=3:4 %koffx,koffy,konx,kony
+%    for c2_ind=4:4 %koffx,koffy,konx,kony
 %        for c1coeff_ind=2:3 %1,10,1000
 %            for c2coeff_ind=c1coeff_ind:3 %1,10,1000
 
@@ -48,6 +48,30 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 
 counter_ppp = 1;
 ppp = 1;
+
+% options=["koffx","koffy","konx","kony"];
+% if isfile(strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
+%               string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+%               string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
+% 
+%     res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
+%               string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+%               string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls')));
+%     counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5);
+%     ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5);
+% end
+
+
+if isfile(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
+            string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+            string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
+
+    res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
+            string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+            string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls')));
+    counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5);
+    ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5);
+end
 
 while (ppp<=100)
     close all;
