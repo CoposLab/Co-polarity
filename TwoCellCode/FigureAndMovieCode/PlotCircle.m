@@ -5,7 +5,7 @@ signal=0;
 
 addpath('./freeze_colors')
 
-for i=3:3
+for i=1:1
     path=strcat('./vid_matfiles/branchedbundled/nosignal/0_8kb0_8kc_50max_2alpha',int2str(i),'.mat');
 
     load(path)
@@ -571,20 +571,39 @@ for i=3:3
         zrac1=zeros(101,end_time);
         yrho1=zeros(101,end_time);
         zrho1=zeros(101,end_time);
-        ycombined=zeros(101,end_time);
-        zcombined=zeros(101,end_time);
+        ycombined1=zeros(101,end_time);
+        zcombined1=zeros(101,end_time);
+        color1=zeros(101,end_time);
+
+        yrac2=zeros(101,end_time);
+        zrac2=zeros(101,end_time);
+        yrho2=zeros(101,end_time);
+        zrho2=zeros(101,end_time);
+        ycombined2=zeros(101,end_time);
+        zcombined2=zeros(101,end_time);
+
         for j=1:end_time
             [~,rac1_interp,rho1_interp] = resamplePolarityMolecules(posx1(:,j),posy1(:,j),200,200,L,Na);
             yrac1(:,j)=sin(rac1_interp(:,1)*2*pi/10);
             zrac1(:,j)=cos(rac1_interp(:,1)*2*pi/10);
             yrho1(:,j)=sin(rho1_interp(:,1)*2*pi/10);
             zrho1(:,j)=cos(rho1_interp(:,1)*2*pi/10);
-            ycombined(:,j)=sin((rac1_interp(:,1)-rho1_interp(:,1))*2*pi/10);
-            zcombined(:,j)=cos((rac1_interp(:,1)-rho1_interp(:,1))*2*pi/10);
+            % ycombined1(:,j)=sin((rac1_interp(:,1)-rho1_interp(:,1))*2*pi/10);
+            % zcombined1(:,j)=cos((rac1_interp(:,1)-rho1_interp(:,1))*2*pi/10);
+            color1(:,j)=rac1_interp-rho1_interp;
+
             % yrac1=sin(posx1(1:200,1:end_time)*2*pi/10);
             % zrac1=cos(posx1(1:200,1:end_time)*2*pi/10);
             % yrho1=sin(posy1(1:200,1:end_time)*2*pi/10);
             % zrho1=cos(posy1(1:200,1:end_time)*2*pi/10);
+
+            [~,rac2_interp,rho2_interp] = resamplePolarityMolecules(posx2(:,j),posy2(:,j),200,200,L,Na);
+            yrac2(:,j)=sin(rac2_interp(:,1)*2*pi/10);
+            zrac2(:,j)=cos(rac2_interp(:,1)*2*pi/10);
+            yrho2(:,j)=sin(rho2_interp(:,1)*2*pi/10);
+            zrho2(:,j)=cos(rho2_interp(:,1)*2*pi/10);
+            ycombined2(:,j)=sin((rac2_interp(:,1)-rho2_interp(:,1))*2*pi/10);
+            zcombined2(:,j)=cos((rac2_interp(:,1)-rho2_interp(:,1))*2*pi/10);
 
             
             
@@ -593,9 +612,13 @@ for i=3:3
         hold on
         % [X,Y,Z] = cylinder(0.97);
         % surf(Z*Tend*end_time/Nt,Y,X,ones(size(Z,1),size(Z,2),3))
-        s=surf(linspace(0,end_time/100,end_time),zcombined,ycombined,'FaceAlpha',0.5);
+        xplot=linspace(0,end_time/100,end_time);
+        surf(xplot,zrac1,yrac1,color1,'FaceAlpha',0.5);
         colormap([flip(bundledColor);branchedColor])
         colorbar
+
+        % surf(linspace(0,end_time/100,end_time),zcombined2,ycombined2-2,'FaceAlpha',0.5);
+        % colormap([flip(bundledColor);branchedColor])
         % alpha 0.5
         % freezeColors;
         % % clim([0,allmax/2])
@@ -609,11 +632,11 @@ for i=3:3
         % freezeColors(jcb);
         hold off
         
-        shading interp
+        shading flat
         pbaspect([3,1,1])
         xlabel('time')
-        ylabel('x')
-        zlabel('y')
+        % ylabel('y')
+        % zlabel('z')
         set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
 
         % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
