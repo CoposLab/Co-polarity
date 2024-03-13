@@ -27,15 +27,15 @@ coeff_vals=[1,10,1000];
 %     for kb_ind=1:1 %-0.9,0,0.9
 %         for kc_ind=1:2 %-0.9,0,0.9
 %             for kd_ind=1:2 %-0.9,0,0.9
-% for kaa_ind=2:2
-%     for kbb_ind=2:2
+% for kaa_ind=1:2
+%     for kbb_ind=1:2
 %         for kcc_ind=1:2
 %             for kdd_ind=1:2
 
 % rac rho parameter search
-for c1_ind=1:1 %koffx,koffy,konx,kony
-   for c2_ind=1:1 %koffx,koffy,konx,kony
-       for c1coeff_ind=2:3 %1,10,1000
+for c1_ind=1:4 %koffx,koffy,konx,kony
+   for c2_ind=1:4 %koffx,koffy,konx,kony
+       for c1coeff_ind=1:1 %1,10,1000
            for c2coeff_ind=c1coeff_ind:3 %1,10,1000
 
 
@@ -48,6 +48,30 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 
 counter_ppp = 1;
 ppp = 1;
+
+options=["koffx","koffy","konx","kony"];
+if isfile(strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
+              string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+              string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
+
+    res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
+              string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+              string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls')));
+    counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
+    ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
+end
+
+
+% if isfile(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
+%             string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+%             string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
+% 
+%     res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
+%             string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+%             string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls')));
+%     counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
+%     ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
+% end
 
 while (ppp<=100)
     close all;
@@ -1659,13 +1683,13 @@ while (ppp<=100)
 
             angledist=pi/4;
             if isempty(dirIndexa1) && ~isempty(dirIndexa2) && max(b1)>1
-                medang2 = th(1,dirIndex2);
+                medang2 = th(1,dirIndexa2);
                 if abs(medang2-pi/2)>angledist
                     res_counters(7)=res_counters(7)+1;
                 end
             end
             if isempty(dirIndexa2) && ~isempty(dirIndexa1) && max(b2)>1
-                medang1 = th(1,dirIndex1);
+                medang1 = th(1,dirIndexa1);
                 if abs(medang1-3*pi/2)>angledist
                     res_counters(7)=res_counters(7)+1;
                 end
@@ -1677,7 +1701,7 @@ while (ppp<=100)
     end
 
     if writem==1
-        % writematrix(res_counters,strcat('./simulation_results/parametersearch_results/branchedbundled_independent/',...
+        % writematrix(res_counters,strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
         %     string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
         %     string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
         % options=["Bkonx","Akony","Akoffx","Bkoffy"];
