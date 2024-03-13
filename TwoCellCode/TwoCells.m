@@ -27,16 +27,16 @@ coeff_vals=[1,10,1000];
 %     for kb_ind=1:1 %-0.9,0,0.9
 %         for kc_ind=1:2 %-0.9,0,0.9
 %             for kd_ind=1:2 %-0.9,0,0.9
-% for kaa_ind=1:2
-%     for kbb_ind=1:2
-%         for kcc_ind=1:2
-%             for kdd_ind=1:2
+for kaa_ind=2:2
+    for kbb_ind=1:2
+        for kcc_ind=1:2
+            for kdd_ind=1:2
 
 % rac rho parameter search
-for c1_ind=3:4 %koffx,koffy,konx,kony
-   for c2_ind=c1_ind:c1_ind %koffx,koffy,konx,kony
-       for c1coeff_ind=2:3 %1,10,1000
-           for c2coeff_ind=1:1 %1,10,1000
+% for c1_ind=1:1 %koffx,koffy,konx,kony
+%    for c2_ind=1:4 %koffx,koffy,konx,kony
+%        for c1coeff_ind=2:3 %1,10,1000
+%            for c2coeff_ind=c1coeff_ind:3 %1,10,1000
 
 
 
@@ -49,29 +49,29 @@ res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort
 counter_ppp = 1;
 ppp = 1;
 
-options=["koffx","koffy","konx","kony"];
-if isfile(strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
-              string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
-              string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
-
-    res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
-              string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
-              string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls')));
-    counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
-    ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
-end
-
-
-% if isfile(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
-%             string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
-%             string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
+% options=["koffx","koffy","konx","kony"];
+% if isfile(strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
+%               string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+%               string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
 % 
-%     res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
-%             string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
-%             string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls')));
+%     res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
+%               string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+%               string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls')));
 %     counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
 %     ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
 % end
+
+
+if isfile(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
+            string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+            string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
+
+    res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
+            string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+            string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls')));
+    counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
+    ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
+end
 
 while (ppp<=100)
     close all;
@@ -546,57 +546,57 @@ while (ppp<=100)
                 % Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*1000);
             end
 
-            if c1_ind==1 %koffx1
-                if (c2_ind==1 || c2_ind==3) && sumx2>0
-                    Koffx1(boundC1(i)) = Koffx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
-                elseif (c2_ind==2 || c2_ind==4) && sumy2>0
-                    Koffx1(boundC1(i)) = Koffx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
-                end
-            elseif c1_ind==2 %koffy1
-                if (c2_ind==1 || c2_ind==3) && sumx2>0
-                    Koffy1(boundC1(i)) = Koffy1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
-                elseif (c2_ind==2 || c2_ind==4) && sumy2>0
-                    Koffy1(boundC1(i)) = Koffy1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
-                end
-            elseif c1_ind==3 %konx1
-                if (c2_ind==1 || c2_ind==3) && sumx2>0
-                    Konx1(boundC1(i)) = Konx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
-                elseif (c2_ind==2 || c2_ind==4) && sumy2>0
-                    Konx1(boundC1(i)) = Konx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
-                end
-            elseif c1_ind==4 %kony1
-                if (c2_ind==1 || c2_ind==3) && sumx2>0
-                    Kony1(boundC1(i)) = Kony1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
-                elseif (c2_ind==2 || c2_ind==4) && sumy2>0
-                    Kony1(boundC1(i)) = Kony1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
-                end
-            end
-
-            if c2_ind==1 %koffx2
-                if (c1_ind==1 || c1_ind==3) && sumx1>0
-                    Koffx2(flipc2(i)) = Koffx1(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
-                elseif (c1_ind==2 || c1_ind==4) && sumy1>0
-                    Koffx2(flipc2(i)) = Koffx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
-                end
-            elseif c2_ind==2 %koffy2
-                if (c1_ind==1 || c1_ind==3) && sumx1>0
-                    Koffy2(flipc2(i)) = Koffy2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
-                elseif (c1_ind==2 || c1_ind==4) && sumy1>0
-                    Koffy2(flipc2(i)) = Koffy2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
-                end
-            elseif c2_ind==3 %konx2
-                if (c1_ind==1 || c1_ind==3) && sumx1>0
-                    Konx2(flipc2(i)) = Konx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
-                elseif (c1_ind==2 || c1_ind==4) && sumy1>0
-                    Konx2(flipc2(i)) = Konx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
-                end
-            elseif c2_ind==4 %kony2
-                if (c1_ind==1 || c1_ind==3) && sumx1>0
-                    Kony2(flipc2(i)) = Kony2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
-                elseif (c1_ind==2 || c1_ind==4) && sumy1>0
-                    Kony2(flipc2(i)) = Kony2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
-                end
-            end
+            % if c1_ind==1 %koffx1
+            %     if (c2_ind==1 || c2_ind==3) && sumx2>0
+            %         Koffx1(boundC1(i)) = Koffx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
+            %     elseif (c2_ind==2 || c2_ind==4) && sumy2>0
+            %         Koffx1(boundC1(i)) = Koffx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+            %     end
+            % elseif c1_ind==2 %koffy1
+            %     if (c2_ind==1 || c2_ind==3) && sumx2>0
+            %         Koffy1(boundC1(i)) = Koffy1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
+            %     elseif (c2_ind==2 || c2_ind==4) && sumy2>0
+            %         Koffy1(boundC1(i)) = Koffy1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+            %     end
+            % elseif c1_ind==3 %konx1
+            %     if (c2_ind==1 || c2_ind==3) && sumx2>0
+            %         Konx1(boundC1(i)) = Konx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
+            %     elseif (c2_ind==2 || c2_ind==4) && sumy2>0
+            %         Konx1(boundC1(i)) = Konx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+            %     end
+            % elseif c1_ind==4 %kony1
+            %     if (c2_ind==1 || c2_ind==3) && sumx2>0
+            %         Kony1(boundC1(i)) = Kony1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
+            %     elseif (c2_ind==2 || c2_ind==4) && sumy2>0
+            %         Kony1(boundC1(i)) = Kony1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+            %     end
+            % end
+            % 
+            % if c2_ind==1 %koffx2
+            %     if (c1_ind==1 || c1_ind==3) && sumx1>0
+            %         Koffx2(flipc2(i)) = Koffx1(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
+            %     elseif (c1_ind==2 || c1_ind==4) && sumy1>0
+            %         Koffx2(flipc2(i)) = Koffx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
+            %     end
+            % elseif c2_ind==2 %koffy2
+            %     if (c1_ind==1 || c1_ind==3) && sumx1>0
+            %         Koffy2(flipc2(i)) = Koffy2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
+            %     elseif (c1_ind==2 || c1_ind==4) && sumy1>0
+            %         Koffy2(flipc2(i)) = Koffy2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
+            %     end
+            % elseif c2_ind==3 %konx2
+            %     if (c1_ind==1 || c1_ind==3) && sumx1>0
+            %         Konx2(flipc2(i)) = Konx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
+            %     elseif (c1_ind==2 || c1_ind==4) && sumy1>0
+            %         Konx2(flipc2(i)) = Konx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
+            %     end
+            % elseif c2_ind==4 %kony2
+            %     if (c1_ind==1 || c1_ind==3) && sumx1>0
+            %         Kony2(flipc2(i)) = Kony2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
+            %     elseif (c1_ind==2 || c1_ind==4) && sumy1>0
+            %         Kony2(flipc2(i)) = Kony2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
+            %     end
+            % end
         end
 
 
@@ -1145,10 +1145,10 @@ while (ppp<=100)
         % Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
         % add 0
-        kaa_ind=1;
-        kbb_ind=1;
-        kcc_ind=1;
-        kdd_ind=1;
+        % kaa_ind=1;
+        % kbb_ind=1;
+        % kcc_ind=1;
+        % kdd_ind=1;
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1701,16 +1701,16 @@ while (ppp<=100)
     end
 
     if writem==1
-        % writematrix(res_counters,strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
-        %     string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
-        %     string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
+        writematrix(res_counters,strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
+            string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+            string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
         % options=["Bkonx","Akony","Akoffx","Bkoffy"];
         % writematrix(res_counters,strcat('./allparamsresults/forcedependent/',...
         %     '1000',options(c1_ind),'C1_','1000',options(c2_ind),'C2.xls'))
-        options=["koffx","koffy","konx","kony"];
-        writematrix(res_counters,strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
-              string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
-              string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
+        % options=["koffx","koffy","konx","kony"];
+        % writematrix(res_counters,strcat('./simulation_results/parameter_search_results/concentration_dependent_racrho/',...
+        %       string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+        %       string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
         sprintf(int2str(res_counters))
     end
 end
