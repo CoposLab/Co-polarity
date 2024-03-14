@@ -4,7 +4,8 @@ set(0,'DefaultFigureVisible','on')
 
 % load('data/racrho_binding_unbinding.mat') %lf
 % bindunbind=vals1;
-load('data/nosignal_racrho_yes.mat');
+% load('data/nosignal_racrho_yes.mat');
+load('data/concdependent_racrho_nosignal.mat')
 
 
 green=[0,1,0.5];
@@ -19,7 +20,8 @@ xvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding 
 
 figure(1)
 % h=heatmap(xvals,yvals,bindunbind); %lf
-h=heatmap(xvals,yvals,bindunbindyes'); %yes
+% h=heatmap(xvals,yvals,bindunbindyes'); %yes
+h=heatmap(xvals,yvals,bindingunbindingyes');
 % h.Title='Proportion Leader/Follower';
 h.Title='Proportion Yes';
 h.YLabel='Cell 1';
@@ -44,7 +46,8 @@ yvals={'Rho binding times 1000','Rho binding times 10','No change','Rac binding 
 
 figure(2)
 % h=heatmap(xvals,yvals,bindingvals); %lf
-h=heatmap(xvals,yvals,bindingyes'); %yes
+% h=heatmap(xvals,yvals,bindingyes'); %yes
+h=heatmap(xvals,yvals,bindingyes');
 % h.Title='Proportion Leader/Follower';
 h.Title='Proportion Yes';
 h.YLabel='Cell 1';
@@ -60,7 +63,8 @@ yvals={'Rac unbinding times 1000','Rac unbinding times 10','No change','Rho unbi
 
 figure(3)
 % h=heatmap(xvals,yvals,unbindingvals'); %lf
-h=heatmap(xvals,yvals,unbindingyes); %yes
+% h=heatmap(xvals,yvals,unbindingyes); %yes
+h=heatmap(xvals,yvals,unbindingyes');
 % h.Title='Proportion Leader/Follower';
 h.Title='Proportion Yes';
 h.YLabel='Cell 1';
