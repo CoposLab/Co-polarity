@@ -16,10 +16,10 @@ close all;
 clc;
 
 
-kaa_vals=[0,7.5];
-kbb_vals=[0,7.5];
-kcc_vals=[0,7.5];
-kdd_vals=[0,7.5];
+kaa_vals=[0,7.5,-7.5];
+kbb_vals=[0,7.5,-7.5];
+kcc_vals=[0,7.5,-7.5];
+kdd_vals=[0,7.5,-7.5];
 coeff_vals=[1,10,1000];
 
 % branched bundled parameter search
@@ -27,10 +27,10 @@ coeff_vals=[1,10,1000];
 %     for kb_ind=1:1 %-0.9,0,0.9
 %         for kc_ind=1:2 %-0.9,0,0.9
 %             for kd_ind=1:2 %-0.9,0,0.9
-for kaa_ind=2:2
+for kaa_ind=1:2
     for kbb_ind=1:2
         for kcc_ind=1:2
-            for kdd_ind=1:2
+            for kdd_ind=3:3
 
 % rac rho parameter search
 % for c1_ind=1:1 %koffx,koffy,konx,kony
@@ -1163,16 +1163,16 @@ while (ppp<=100)
 
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 ...
             + ka_vals(ka_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + kaa_vals(kaa_ind) )) - a1.*a1); %Cell 1 branched
+            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + cell1_bound*kaa_vals(kaa_ind) )) - a1.*a1); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 ...
             + kc_vals(kc_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + kbb_vals(kbb_ind) )) - b1.*b1); %Cell 1 bundled
+            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + cell1_bound*kbb_vals(kbb_ind) )) - b1.*b1); %Cell 1 bundled
         rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 ...
             + ka_vals(ka_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + kcc_vals(kcc_ind) )) - a2.*a2); %Cell 2 branched
+            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + cell2_bound*kcc_vals(kcc_ind) )) - a2.*a2); %Cell 2 branched
         rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 ...
             + kc_vals(kc_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + kdd_vals(kdd_ind) )) - b2.*b2); %Cell 2 bundled
+            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + cell2_bound*kdd_vals(kdd_ind) )) - b2.*b2); %Cell 2 bundled
 
 
         a1 = Hs1\(diffRHSa1+rxna1);
