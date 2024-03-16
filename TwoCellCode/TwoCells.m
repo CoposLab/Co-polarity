@@ -27,10 +27,10 @@ coeff_vals=[1,10,1000];
 %     for kb_ind=1:1 %-0.9,0,0.9
 %         for kc_ind=1:2 %-0.9,0,0.9
 %             for kd_ind=1:2 %-0.9,0,0.9
-for kaa_ind=1:2
-    for kbb_ind=1:2
-        for kcc_ind=1:2
-            for kdd_ind=3:3
+for kaa_ind=2:2
+    for kbb_ind=3:3
+        for kcc_ind=3:3
+            for kdd_ind=1:3
 
 % rac rho parameter search
 % for c1_ind=1:1 %koffx,koffy,konx,kony
