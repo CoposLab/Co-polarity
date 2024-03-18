@@ -2,13 +2,13 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/branchedupracupnosig_bundleduprhoupsig/1000RacOn_1000RhoOn_3Ka_3Kb';
+filename = './simulation_results/results_signal/branchedbundled_branchedrho_bundledrac/0ka_0_9kb_0kc_0kd_1000ARhoOn_1000BRacOn';
 maxnum=100;
 
 angle=pi/4;
 
-% siglocation = 5*pi/4;
-siglocation = pi/4;
+siglocation = 5*pi/4; % cell 2 signal location
+% siglocation = pi/4; % cell 1 signal location
 sigper = 0.4;
 
 

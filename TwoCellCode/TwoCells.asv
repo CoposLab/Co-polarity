@@ -27,10 +27,10 @@ coeff_vals=[1,10,1000];
 %     for kb_ind=1:1 %-0.9,0,0.9
 %         for kc_ind=1:2 %-0.9,0,0.9
 %             for kd_ind=1:2 %-0.9,0,0.9
-for kaa_ind=2:2
-    for kbb_ind=3:3
-        for kcc_ind=1:3
-            for kdd_ind=1:3
+% for kaa_ind=2:2
+%     for kbb_ind=3:3
+%         for kcc_ind=3:3
+%             for kdd_ind=1:3
 
 % rac rho parameter search
 % for c1_ind=1:1 %koffx,koffy,konx,kony
@@ -43,7 +43,7 @@ for kaa_ind=2:2
 save_matfile=0;
 mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/branchedbundled/0_8kb0_8kc';
 move_cells=0;
-writem=1;
+writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
@@ -62,22 +62,22 @@ ppp = 1;
 % end
 
 
-if isfile(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
-            string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
-            string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
-
-    res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
-            string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
-            string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls')));
-    counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
-    ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
-end
+% if isfile(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
+%             string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+%             string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
+% 
+%     res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/independent_branchedbundled/',...
+%             string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+%             string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls')));
+%     counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
+%     ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
+% end
 
 while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/branchedupracupnosig_bundleduprhoupsig/1000RacOn_1000RhoOn_3Ka_3Kb';
+    savelocation='./simulation_results/results_signal/branchedbundled_branchedrho_bundledrac/0ka_0_9kb_0_9kc_-0_9kd_1000ARhoOn_1000BRacOn';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -167,8 +167,8 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
-    sigswitch_time=500;
+    signal=1;
+    sigswitch_time=5000;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -212,14 +212,14 @@ while (ppp<=100)
     % kb: how does bundled affect branched
     % kc: how does branched affect bundled
     % kd: how does bundled affect bundled
-    ka_vals=0.8*[-1,0,1];
-    kb_vals=0.8*[-1,0,1];
-    kc_vals=0.8*[-1,0,1];
-    kd_vals=0.8*[-1,0,1];
+    ka_vals=0.9*[-1,0,1];
+    kb_vals=0.9*[-1,0,1];
+    kc_vals=0.9*[-1,0,1];
+    kd_vals=0.9*[-1,0,1];
     ka_ind=2; %index of ka_vals (index 2 means no interaction)
-    kb_ind=2;
-    kc_ind=2;
-    kd_ind=2;
+    kb_ind=3;
+    kc_ind=3;
+    kd_ind=1;
 
 
     % Set initial conditions for actin distribution
@@ -612,10 +612,10 @@ while (ppp<=100)
         %     % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
         %     % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
         % end
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
-        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
-        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
+        Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
+        Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
+        Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
+        Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
         % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
         % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
         % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
@@ -1145,10 +1145,10 @@ while (ppp<=100)
         % Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
         % add 0
-        % kaa_ind=1;
-        % kbb_ind=1;
-        % kcc_ind=1;
-        % kdd_ind=1;
+        kaa_ind=1;
+        kbb_ind=1;
+        kcc_ind=1;
+        kdd_ind=1;
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1759,8 +1759,8 @@ end
 %end
 
 
-           end
-       end
-   end
-end
+%            end
+%        end
+%    end
+% end
 
