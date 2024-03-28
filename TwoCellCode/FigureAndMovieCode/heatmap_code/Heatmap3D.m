@@ -3,11 +3,11 @@ close all;
 cla
 
 % load('data/branched_bundled_heatmap_vals.mat')
-% load('data/signal_branched_bundled_heatmap_vals.mat')
-load('data/independentbranchedbundled.mat')
+load('data/signal_branched_bundled_heatmap_vals.mat')
+% load('data/independentbranchedbundled.mat')
 
 
-lf_or_yes=yes;
+lf_or_yes=lf;
 labels_on=0;
 title_on=1;
 
@@ -24,24 +24,23 @@ ggb=flip([gg gb]');
 f=figure(1);
 subplot(1,5,3)
 % scatter3(ka(kc==-0.9),kb(kc==-0.9),kd(kc==-0.9),1000,lf(kc==-0.9),'filled')
-% scatter3(ka(kc==-kb),kb(kc==-kb),kd(kc==-kb),dot_size,lf_or_yes(kc==-kb),...
-%     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
-scatter3(kaa(kaa==kcc),kbb(kaa==kcc),kdd(kaa==kcc),dot_size,lf_or_yes(kaa==kcc),...
+scatter3(ka(kc==-kb),kb(kc==-kb),kd(kc==-kb),dot_size,lf_or_yes(kc==-kb),...
     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
+% scatter3(kaa(kaa==kcc),kbb(kaa==kcc),kdd(kaa==kcc),dot_size,lf_or_yes(kaa==kcc),...
+%     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
 clim([0,0.75])
 if labels_on==1
-% xlabel('ka')
-% ylabel('kb');
-% zl=zlabel('kd');
-xlabel('kaa')
-ylabel('kbb');
-zl=zlabel('kdd');
+xlabel('ka')
+ylabel('kb');
+zl=zlabel('kd');
+% xlabel('kaa')
+% ylabel('kbb');
+% zl=zlabel('kdd');
 % zl.Position(2) = zl.Position(2)-1;
-% title('kc=-0.9','Position',[0,0,2])
-% title('kb=-kc','Position',[0,0,2])
 end
 if title_on==1
-    title('kaa=kcc','Position',[0,0,20])
+    title('kb=-kc','Position',[0,0,3])
+    % title('kaa=kcc','Position',[0,0,20])
 end
 colormap(ggb)
 alpha 1
@@ -54,23 +53,23 @@ set(gca,'BoxStyle','full','LineWidth',line_width)
 set(gca,'Ydir','reverse')
 
 subplot(1,5,4)
-% scatter3(ka(kc==0),kb(kc==0),kd(kc==0),dot_size,lf_or_yes(kc==0),...
-%     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
-scatter3(kaa(kaa==-kcc),kbb(kaa==-kcc),kdd(kaa==-kcc),dot_size,lf_or_yes(kaa==-kcc),...
+scatter3(ka(kc==0),kb(kc==0),kd(kc==0),dot_size,lf_or_yes(kc==0),...
     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
+% scatter3(kaa(kaa==-kcc),kbb(kaa==-kcc),kdd(kaa==-kcc),dot_size,lf_or_yes(kaa==-kcc),...
+%     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
 clim([0,0.75])
 if labels_on==1
-% xlabel('ka')
-% ylabel('kb')
-% zl=zlabel('kd');
-xlabel('kaa')
-ylabel('kbb');
-zl=zlabel('kdd');
+xlabel('ka')
+ylabel('kb')
+zl=zlabel('kd');
+% xlabel('kaa')
+% ylabel('kbb');
+% zl=zlabel('kdd');
 % zl.Position(2) = zl.Position(2)-1;
-% title('kc=0','Position',[0,0,2])
 end
 if title_on==1
-    title('kaa=-kcc','Position',[0,0,20])
+    title('kc=0','Position',[0,0,3])
+    % title('kaa=-kcc','Position',[0,0,20])
 end
 colormap(ggb)
 alpha 1
@@ -84,24 +83,24 @@ set(gca,'Ydir','reverse')
 
 subplot(1,5,1)
 % scatter3(ka(kc==0.9),kb(kc==0.9),kd(kc==0.9),1000,lf(kc==0.9),'filled')
-% scatter3(ka(kc==kb),kb(kc==kb),kd(kc==kb),dot_size,lf_or_yes(kc==kb),...
-%     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
-scatter3(kcc(kaa==0),kbb(kaa==0),kdd(kaa==0),dot_size,lf_or_yes(kaa==0),...
+scatter3(ka(kc==kb),kb(kc==kb),kd(kc==kb),dot_size,lf_or_yes(kc==kb),...
     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
+% scatter3(kcc(kaa==0),kbb(kaa==0),kdd(kaa==0),dot_size,lf_or_yes(kaa==0),...
+%     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
 clim([0,0.75])
 if labels_on==1
-% xlabel('ka')
-% ylabel('kb')
-% zl=zlabel('kd');
-xlabel('kcc')
-ylabel('kbb');
-zl=zlabel('kdd');
+xlabel('ka')
+ylabel('kb')
+zl=zlabel('kd');
+% xlabel('kcc')
+% ylabel('kbb');
+% zl=zlabel('kdd');
 % zl.Position(2) = zl.Position(2)-1;
 % title('kc=0.9','Position',[0,0,2])
-% title('kb=kc','Position',[0,0,2])
 end
 if title_on==1
-    title('kaa=0','Position',[0,0,20])
+    title('kb=kc','Position',[0,0,3])
+    % title('kaa=0','Position',[0,0,20])
 end
 colormap(ggb)
 alpha 1
@@ -114,22 +113,23 @@ set(gca,'BoxStyle','full','LineWidth',line_width)
 set(gca,'Ydir','reverse')
 
 subplot(1,5,2)
-% scatter3(ka(kb==0),kc(kb==0),kd(kb==0),dot_size,lf_or_yes(kb==0),...
-%     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
-scatter3(kaa(kcc==0),kbb(kcc==0),kdd(kcc==0),dot_size,lf_or_yes(kcc==0),...
+scatter3(ka(kb==0),kc(kb==0),kd(kb==0),dot_size,lf_or_yes(kb==0),...
     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
+% scatter3(kaa(kcc==0),kbb(kcc==0),kdd(kcc==0),dot_size,lf_or_yes(kcc==0),...
+%     'filled','LineWidth',line_width, 'MarkerEdgeColor',[0 0 0])
 clim([0,0.75])
 if labels_on==1
-% xlabel('ka')
-% ylabel('kc')
-% zl=zlabel('kd');
-xlabel('kaa')
-ylabel('kbb');
-zl=zlabel('kdd');
+xlabel('ka')
+ylabel('kc')
+zl=zlabel('kd');
+% xlabel('kaa')
+% ylabel('kbb');
+% zl=zlabel('kdd');
 % zl.Position(2) = zl.Position(2)-1;
 end
 if title_on==1
-    title('kcc=0','Position',[0,0,20])
+    title('kb=0','Position',[0,0,3])
+    % title('kcc=0','Position',[0,0,20])
 end
 colormap(ggb)
 alpha 1
