@@ -11,8 +11,8 @@ shifted=0;
 linewidth=2;
 linecolor=[0 0 0];
 
-setnum='1';
-loadfile='./vid_matfiles/moving_cells_square/alt_rhoup_rhodown/1000RhoOn_1000RhoOff';
+setnum='8';
+loadfile='./vid_matfiles/moving_cells_square/alt_racup_rhoup/1000RacOn_1000RhoOn';
 
 load(strcat(loadfile,setnum));
 t=2499;
