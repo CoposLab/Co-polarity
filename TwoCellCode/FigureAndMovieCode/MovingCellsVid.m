@@ -9,10 +9,10 @@ squished=0;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/moving_cells/signal/rhoup/1000RhoOn';
+    loadfile='./vid_matfiles/moving_cells/uncoupled/uncoupled';
 
     setnum=int2str(i);
-    savelocation='../movies/moving_cells/signal/rhoup/1000RhoOn';
+    savelocation='../movies/moving_cells/uncoupled/uncoupled';
 
     % vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
@@ -29,8 +29,12 @@ for i=1:1
     open(vidObj2);
     % open(vidObj3);
 
-    load(strcat(loadfile,setnum));
+    load(strcat(loadfile,setnum,'.mat'));
     set(0,'DefaultFigureVisible','off')
+
+    linewidth=2;
+    linecolor=[0 0 0];
+    showtime=1;
 
     allmax = max(max(max(max(a1all)),max(max(a2all))),max(max(max(b1all)),max(max(b2all))));
 
@@ -134,9 +138,9 @@ for i=1:1
         clf
         hold on;
         if squished==1
-            plot3(cos(th(1,[1:boundC1(1),boundC1(end):end]))+xshift1(t+1),sin(th(1,[1:boundC1(1),boundC1(end):end]))+yshift1(t+1),ones(1,length(th(1,[1:boundC1(1),boundC1(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,[1:boundC1(1),boundC1(end):end]))+xshift1(t+1),sin(th(1,[1:boundC1(1),boundC1(end):end]))+yshift1(t+1),ones(1,length(th(1,[1:boundC1(1),boundC1(end):end])))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         else
-            plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         end
         surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1))),'FaceAlpha','interp','FaceColor','interp');
         view(2)
@@ -156,9 +160,9 @@ for i=1:1
 
         % Cell 2
         if squished==1
-            plot3(cos(th(1,[1:boundC2(1),boundC2(end):end]))+xshift2(t+1),sin(th(1,[1:boundC2(1),boundC2(end):end]))-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),ones(1,length(th(1,[1:boundC2(1),boundC2(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,[1:boundC2(1),boundC2(end):end]))+xshift2(t+1),sin(th(1,[1:boundC2(1),boundC2(end):end]))-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),ones(1,length(th(1,[1:boundC2(1),boundC2(end):end])))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         else
-            plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         end
         % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
@@ -184,11 +188,18 @@ for i=1:1
         set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
         shading interp
         grid off
-        xlim([-3,3])
+        xlim([-4,4])
         ylim([-6,2])
-        pbaspect([6 8 1])
+        pbaspect([8 8 1])
         % axis square
         set(gca,'XTick',[], 'YTick', [])
+
+        if showtime==1
+            % title(strcat('t=',int2str(t)))
+            timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+            % tbpos=timebox.Position;
+            % set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.05]);
+        end
 
         hold off;
         % box off;
@@ -214,7 +225,7 @@ for i=1:1
         end
         if ~isempty(dirIndex1)
             hold on;
-            quiver(0+xshift1(t+1),0+yshift1(t+1),Xsm(dirIndex1),Ysm1(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7);
+            quiver(0+xshift1(t+1),0+yshift1(t+1),Xsm(dirIndex1),Ysm1(dirIndex1),0,'color',linecolor,'LineWidth',linewidth,'MaxHeadSize',0.7);
             hold off;
         end
 
@@ -235,7 +246,7 @@ for i=1:1
         end
         if ~isempty(dirIndex2)
             hold on;
-            quiver(0+xshift2(t+1),-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),Xsm(dirIndex2),Ysm2(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+            quiver(0+xshift2(t+1),-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),Xsm(dirIndex2),Ysm2(dirIndex2),0,'color',linecolor,'LineWidth',linewidth,'MaxHeadSize',0.7)
             hold off;
         end
 

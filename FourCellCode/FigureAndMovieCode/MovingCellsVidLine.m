@@ -7,12 +7,12 @@ clc;
 signal=0;
 squished=0;
 
-for i=1:1
+for i=2:2
 
-    loadfile='./vid_matfiles/moving_cells_line/branchedbundled/0_9kb0_9kc';
+    loadfile='./vid_matfiles/moving_cells_line/alt_racup_rhoup/1000RacOn_1000RhoOn';
 
     setnum=int2str(i);
-    savelocation='../movies/movies_line/moving_cells/branchedbundled/0_9kb0_9kc';
+    savelocation='../../movies_for_paper/4cellsline_alternate1000RacOn1000RhoOn';
 
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
 
@@ -26,6 +26,10 @@ for i=1:1
 
     % allmax = max(max(max(max(max(a1all)),max(max(a2all))),max(max(max(b1all)),max(max(b2all)))), max(max(max(max(a3all)),max(max(a4all))),max(max(max(b3all)),max(max(b4all)))));
     allmax=max(max([a1all a2all a3all a4all b1all b2all b3all b4all]));
+
+    linewidth=2;
+    linecolor=[0 0 0];
+    showtime=1;
 
 
     for t=1:50:2499
@@ -139,13 +143,14 @@ for i=1:1
         clf
         hold on;
         if squished==1
-            plot3(cos(th(1,[1:boundC1(1),boundC1(end):end]))+xshift1(t+1),sin(th(1,[1:boundC1(1),boundC1(end):end]))+yshift1(t+1),ones(1,length(th(1,[1:boundC1(1),boundC1(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,[1:boundC1(1),boundC1(end):end]))+xshift1(t+1),sin(th(1,[1:boundC1(1),boundC1(end):end]))+yshift1(t+1),ones(1,length(th(1,[1:boundC1(1),boundC1(end):end])))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         else
-            plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         end
         surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
+        clim([0,allmax/2])
         freezeColors;
         clim([0,allmax/2])
         shading interp
@@ -153,13 +158,14 @@ for i=1:1
         colormap(bundledColor)
         clim([0,allmax/2])
         freezeColors;
+        clim([0,allmax/2])
         shading interp
 
         % Cell 2
         if squished==1
-            plot3(cos(th(1,[1:boundC2(1),boundC2(end):end]))+xshift2(t+1),sin(th(1,[1:boundC2(1),boundC2(end):end]))-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),ones(1,length(th(1,[1:boundC2(1),boundC2(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,[1:boundC2(1),boundC2(end):end]))+xshift2(t+1),sin(th(1,[1:boundC2(1),boundC2(end):end]))-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),ones(1,length(th(1,[1:boundC2(1),boundC2(end):end])))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         else
-            plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         end
         % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2,'FaceAlpha','interp','FaceColor','interp');
@@ -176,9 +182,9 @@ for i=1:1
 
         % Cell 3
         if squished==1
-            plot3(cos(th(1,[1:boundC3(1),boundC3(end):end]))+xshift3(t+1),sin(th(1,[1:boundC3(1),boundC3(end):end]))-4*abs(max(max(Ycol3)))-gapsize+yshift3(t+1),ones(1,length(th(1,[1:boundC3(1),boundC3(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,[1:boundC3(1),boundC3(end):end]))+xshift3(t+1),sin(th(1,[1:boundC3(1),boundC3(end):end]))-4*abs(max(max(Ycol3)))-gapsize+yshift3(t+1),ones(1,length(th(1,[1:boundC3(1),boundC3(end):end])))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         else
-            plot3(cos(th(1,:))+xshift3(t+1),sin(th(1,:))-4+yshift3(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,:))+xshift3(t+1),sin(th(1,:))-4+yshift3(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         end
         % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
@@ -195,9 +201,9 @@ for i=1:1
 
         % Cell 4
         if squished==1
-            plot3(cos(th(1,[1:boundC4(1),boundC4(end):end]))+xshift4(t+1),sin(th(1,[1:boundC4(1),boundC4(end):end]))-6*abs(max(max(Ycol4)))-gapsize+yshift4(t+1),ones(1,length(th(1,[1:boundC4(1),boundC4(end):end])))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,[1:boundC4(1),boundC4(end):end]))+xshift4(t+1),sin(th(1,[1:boundC4(1),boundC4(end):end]))-6*abs(max(max(Ycol4)))-gapsize+yshift4(t+1),ones(1,length(th(1,[1:boundC4(1),boundC4(end):end])))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         else
-            plot3(cos(th(1,:))+xshift4(t+1),sin(th(1,:))-6+yshift4(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+            plot3(cos(th(1,:))+xshift4(t+1),sin(th(1,:))-6+yshift4(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
         end
         % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
         surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
@@ -329,8 +335,13 @@ for i=1:1
             [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
             [Xsig,Ysig] = pol2cart(th,rad);
             hold on;
-            scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
+            scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,50,'black','.')
             hold off;
+        end
+
+        if showtime==1
+            timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+            
         end
 
         % figure(2)

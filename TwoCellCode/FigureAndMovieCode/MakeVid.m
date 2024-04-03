@@ -6,7 +6,7 @@ set(0,'DefaultFigureVisible','off')
 addpath('./freeze_colors')
 
 signal=1;
-% Nt=2500;
+Nt=2500;
 % Na=101;
 % sigper=0.40;
 % sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
@@ -17,19 +17,19 @@ signal=1;
 % sigBound2(sigBound2>Na)=sigBound2(sigBound2>Na)-Na;
 
 scatvid=0;
-branchedbundledvid=1;
-racrhovid=1;
-circlescatvid=0;
+branchedbundledvid=0;
+racrhovid=0;
+circlescatvid=1;
 adjacent=1;
 showtime=1;
-squished=1;
+squished=0;
 
-for i=1:3
+for i=1:1
 
-    loadfile='./vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/branchedbundled/0_8kb0_8kc';
+    loadfile='./vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/racupnosig_rhoupsig/1000RacOn_1000RhoOn';
 
     setnum=int2str(i);
-    savelocation='../movies/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/branchedbundled/0_8kb0_8kc';
+    savelocation='../movies/movies_for_paper/signalswitch_circlescatterplot_1000RacOnNoSig_1000RhoOnSig';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -97,10 +97,10 @@ for i=1:3
         yC1=yC1all(:,t);
         xC2=xC2all(:,t);    
         yC2=yC2all(:,t);
-        posx1=posx1saved;
-        posy1=posy1saved;
-        posx2=posx2saved;
-        posy2=posy2saved;
+        % posx1=posx1saved;
+        % posy1=posy1saved;
+        % posx2=posx2saved;
+        % posy2=posy2saved;
 
         if sum(a1==0)==length(a1) && sum(b1==0)==length(b1) ...
                 && sum(a2==0)==length(a2) && sum(b2==0)==length(b2)
@@ -662,7 +662,8 @@ for i=1:3
                 % timebox=annotation('textbox', [0.75, 0.1, 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none');
                 % tbpos=timebox.Position;
                 % set(timebox,'Position',[cbpos(1)-tbpos(3), cbpos(2), 0.1, 0.05]);
-                title(strcat('t=',int2str(t)))
+                % title(strcat('t=',int2str(t)))
+                timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none','FontSize',20);
             end
 
             if ~isempty(dirIndexa1)
@@ -688,11 +689,11 @@ for i=1:3
                 [Xsig,Ysig] = pol2cart(th,rad);
                 if t<=500
                     hold on;
-                    scatter(Xsig(sigBound2),Ysig(sigBound2)-2-(range-1),'black','.')
+                    scatter(Xsig(sigBound2),Ysig(sigBound2)-2-(range-1),50,'black','.')
                     hold off;
                 else
                     hold on;
-                    scatter(Xsig(sigBound1),Ysig(sigBound1),'black','.')
+                    scatter(Xsig(sigBound1),Ysig(sigBound1),50,'black','.')
                     hold off;
                 end
             end
