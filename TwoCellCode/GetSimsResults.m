@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_signal/branchedbundled_branchedrho_bundledrac/0ka_0_9kb_0kc_0kd_1000ARhoOn_1000BRacOn';
+filename = './simulation_results/results_celldifference/1kcc_allC2/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
 maxnum=100;
 
 angle=pi/4;

@@ -78,7 +78,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_celldifference/1kcc_allC2/racupc1_racdownc2/1000RacOn_1000RacOff';
+    savelocation='./simulation_results/results_celldifference/1kdd_allC2/racupc1_racdownc2/1000RacOn_1000RacOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -486,11 +486,11 @@ while (ppp<=100)
         % end
 
         Konx1(boundC1)=Konx1(boundC1)*1000;
-        % Konx2(boundC2)=Konx2(boundC2)*1000;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
         % Kony1(boundC1)=Kony1(boundC1)*10;
         % Kony2(boundC2)=Kony2(boundC2)*10;
-        % Koffx1(boundC1)=Koffx1(boundC1)*1000;
-        Koffx2(boundC2)=Koffx2(boundC2)*1000;
+        % Koffx1(boundC1)=Koffx1(boundC1)*10;
+        % Koffx2(boundC2)=Koffx2(boundC2)*10;
         % Koffy1(boundC1)=Koffy1(boundC1)*100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
@@ -1149,12 +1149,21 @@ while (ppp<=100)
         % Kb2(boundC2) = bundledConst2*Kb2(boundC2);
 
         % add 0
-        if add_actin_growth==0
-            kaa_ind=1;
-            kbb_ind=1;
-            kcc_ind=1;
-            kdd_ind=1;
-        end
+        % if add_actin_growth==0
+        %     kaa_ind=1;
+        %     kbb_ind=1;
+        %     kcc_ind=1;
+        %     kdd_ind=1;
+        % end
+
+        kaa_vals=[0,1];
+        kbb_vals=[0,1];
+        kcc_vals=[0,1];
+        kdd_vals=[0,1];
+        kaa_ind=1;
+        kbb_ind=1;
+        kcc_ind=2;
+        kdd_ind=1;
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1707,20 +1716,20 @@ while (ppp<=100)
     end
 
     if writem==1
-        if add_actin_growth==1
-            writematrix(res_counters,strcat('./simulation_results/parameter_search_results/signal_independent_branchedbundled/',...
-                string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
-                string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
-        end
+        % if add_actin_growth==1
+        %     writematrix(res_counters,strcat('./simulation_results/parameter_search_results/signal_independent_branchedbundled/',...
+        %         string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
+        %         string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
+        % end
         % options=["Bkonx","Akony","Akoffx","Bkoffy"];
         % writematrix(res_counters,strcat('./allparamsresults/forcedependent/',...
         %     '1000',options(c1_ind),'C1_','1000',options(c2_ind),'C2.xls'))
-        if conc_dependent_racrho==1
-            options=["koffx","koffy","konx","kony"];
-            writematrix(res_counters,strcat('./simulation_results/parameter_search_results/signal_concentration_dependent_racrho/',...
-                string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
-                string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
-        end
+        % if conc_dependent_racrho==1
+        %     options=["koffx","koffy","konx","kony"];
+        %     writematrix(res_counters,strcat('./simulation_results/parameter_search_results/signal_concentration_dependent_racrho/',...
+        %         string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
+        %         string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
+        % end
         sprintf(int2str(res_counters))
     end
 end
