@@ -4,7 +4,7 @@ set(0,'DefaultFigureVisible','on')
 
 % load('./data/signal_racrho_lf.mat')
 % load('./data/signal_racrho_yes.mat')
-load('./data/signal_concdependent_racrho_yes.mat')
+load('./data/signal_concdependent_racrho_lf.mat')
 
 green=[0,1,0.5];
 grey=[0.4,0.6,0.7];

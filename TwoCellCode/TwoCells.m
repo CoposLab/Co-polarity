@@ -78,7 +78,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_celldifference/1kdd_allC2/rhoupc1_rhodownc2/1000RhoOnC1_100RhoOffC2';
+    savelocation='./simulation_results/results_celldifference/1kcc_1kdd_allC2/rhoupc1_racupc2/1000RhoOnC1_1000RacOnC2';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -486,13 +486,13 @@ while (ppp<=100)
         % end
 
         % Konx1(boundC1)=Konx1(boundC1)*1000;
-        % Konx2(boundC2)=Konx2(boundC2)*1000;
+        Konx2(boundC2)=Konx2(boundC2)*1000;
         Kony1(boundC1)=Kony1(boundC1)*1000;
         % Kony2(boundC2)=Kony2(boundC2)*10;
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
         % Koffx2(boundC2)=Koffx2(boundC2)*1000;
         % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        Koffy2(boundC2)=Koffy2(boundC2)*100;
+        % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Set konx and kony away from contact region
         % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
@@ -1162,7 +1162,7 @@ while (ppp<=100)
         kdd_vals=[0,1];
         kaa_ind=1;
         kbb_ind=1;
-        kcc_ind=1;
+        kcc_ind=2;
         kdd_ind=2;
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
