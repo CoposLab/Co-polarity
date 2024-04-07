@@ -5,7 +5,7 @@ set(0,'DefaultFigureVisible','off')
 
 addpath('./freeze_colors')
 
-signal=1;
+signal=0;
 Nt=2500;
 % Na=101;
 % sigper=0.40;
@@ -26,10 +26,10 @@ squished=0;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/racupnosig_rhoupsig/1000RacOn_1000RhoOn';
+    loadfile='./vid_matfiles/leader_follower/racupc2/1000RacOn';
 
     setnum=int2str(i);
-    savelocation='../movies/movies_for_paper/signalswitch_circlescatterplot_1000RacOnNoSig_1000RhoOnSig';
+    savelocation='../../movies_for_paper/signalswitch_circlescatterplot_1000RacOnNoSig_1000RhoOnSig';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -510,7 +510,7 @@ for i=1:1
             clf
             range=3;
             % subplot(1,2,1)
-            plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black','LineWidth',2)
+            plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black','LineWidth',1)
             hold on
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
             surf(Xcol,Ycol,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
@@ -613,14 +613,14 @@ for i=1:1
             racyvals2=(racyvals2)'.*sin(2*pi*Xa/L);
             if adjacent==0
                 plot3(racxvals2,racyvals2-(2*range),(allmax+1)*ones(1,length(racxvals2)),'color',...
-                    branchedColor(end,:),'LineWidth',3)
+                    branchedColor(end,:),'LineWidth',3,'LineStyle','-.')
                 plot3([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-(2*range),...
-                    [allmax+1,allmax+1],'color',branchedColor(end,:),'LineWidth',3)
+                    [allmax+1,allmax+1],'color',branchedColor(end,:),'LineWidth',3,'LineStyle','-.')
             else
                 plot3(racxvals2,racyvals2-2-(range-1),(allmax+1)*ones(1,length(racxvals2)),'color',...
-                    [branchedColor(end,:),0.5],'LineWidth',3)
+                    [branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
                 plot3([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-2-(range-1),...
-                    [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3)
+                    [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
             end
             if max(yC2)>=(range+2)
                 rhoxvals2=(range-1)*yC2/max(yC2)+1;
@@ -633,14 +633,14 @@ for i=1:1
             rhoyvals2=(rhoyvals2)'.*sin(2*pi*Xa/L);
             if adjacent==0
                 plot3(rhoxvals2,rhoyvals2-(2*range),(allmax+1)*ones(1,length(rhoxvals2)),'color',...
-                    bundledColor(end,:),'LineWidth',3)
+                    bundledColor(end,:),'LineWidth',3,'LineStyle','-.')
                 plot3([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2*range,...
-                    [allmax+1,allmax+1],'color',bundledColor(end,:),'LineWidth',3)
+                    [allmax+1,allmax+1],'color',bundledColor(end,:),'LineWidth',3,'LineStyle','-.')
             else
                 plot3(rhoxvals2,rhoyvals2-2-(range-1),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
-                    [bundledColor(end,:),0.5],'LineWidth',3)
+                    [bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
                 plot3([rhoxvals2(end),rhoxvals2(1)],[rhoyvals2(end),rhoyvals2(1)]-2-(range-1),...
-                    [allmax+1,allmax+1],'color',[bundledColor(end,:),0.5],'LineWidth',3)
+                    [allmax+1,allmax+1],'color',[bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
             end
             if adjacent==0
                 xlim([-3,3])
@@ -684,19 +684,19 @@ for i=1:1
             end
 
 
-            if signal==1
-                [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
-                [Xsig,Ysig] = pol2cart(th,rad);
-                if t<=500
-                    hold on;
-                    scatter(Xsig(sigBound2),Ysig(sigBound2)-2-(range-1),50,'black','.')
-                    hold off;
-                else
-                    hold on;
-                    scatter(Xsig(sigBound1),Ysig(sigBound1),50,'black','.')
-                    hold off;
-                end
-            end
+            % if signal==1
+            %     [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+            %     [Xsig,Ysig] = pol2cart(th,rad);
+            %     if t<=500
+            %         hold on;
+            %         scatter(Xsig(sigBound2),Ysig(sigBound2)-2-(range-1),50,'black','.')
+            %         hold off;
+            %     else
+            %         hold on;
+            %         scatter(Xsig(sigBound1),Ysig(sigBound1),50,'black','.')
+            %         hold off;
+            %     end
+            % end
 
             grid off
             set(gca,'XTick',[],'YTick',[])
