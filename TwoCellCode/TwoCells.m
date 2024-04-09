@@ -78,7 +78,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_celldifference/1kcc_1kdd_allC2/rhoupc1_racupc2/1000RhoOnC1_1000RacOnC2';
+    savelocation='./simulation_results/results_celldifference/1kdd_allC2/antagonism/0_5epsilon_10RhoRemoved';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -187,7 +187,7 @@ while (ppp<=100)
 
     % set antagonism (numRhoToRemove=0 and numRacToRemove=0 --> uncoupled)
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
-    numRhoToRemove=0;
+    numRhoToRemove=10;
     numRacToRemove=0;
     counter1=0;
     counter2=0;
@@ -485,13 +485,13 @@ while (ppp<=100)
         %     % Koffy2(boundC2)=Koffy2(boundC2)*1000;
         % end
 
-        % Konx1(boundC1)=Konx1(boundC1)*1000;
-        Konx2(boundC2)=Konx2(boundC2)*1000;
-        Kony1(boundC1)=Kony1(boundC1)*1000;
+        % Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
+        % Kony1(boundC1)=Kony1(boundC1)*10;
         % Kony2(boundC2)=Kony2(boundC2)*10;
         % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        % Koffx2(boundC2)=Koffx2(boundC2)*1000;
-        % Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        % Koffx2(boundC2)=Koffx2(boundC2)*10;
+        % Koffy1(boundC1)=Koffy1(boundC1)*100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Set konx and kony away from contact region
@@ -1162,7 +1162,7 @@ while (ppp<=100)
         kdd_vals=[0,1];
         kaa_ind=1;
         kbb_ind=1;
-        kcc_ind=2;
+        kcc_ind=1;
         kdd_ind=2;
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
@@ -1178,16 +1178,16 @@ while (ppp<=100)
 
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 ...
             + ka_vals(ka_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + cell1_bound*kaa_vals(kaa_ind) )) - a1.*a1); %Cell 1 branched
+            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + kaa_vals(kaa_ind) )) - a1.*a1); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 ...
             + kc_vals(kc_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + cell1_bound*kbb_vals(kbb_ind) )) - b1.*b1); %Cell 1 bundled
+            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + kbb_vals(kbb_ind) )) - b1.*b1); %Cell 1 bundled
         rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 ...
             + ka_vals(ka_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + cell2_bound*kcc_vals(kcc_ind) )) - a2.*a2); %Cell 2 branched
+            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + kcc_vals(kcc_ind) )) - a2.*a2); %Cell 2 branched
         rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 ...
             + kc_vals(kc_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + cell2_bound*kdd_vals(kdd_ind) )) - b2.*b2); %Cell 2 bundled
+            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + kdd_vals(kdd_ind) )) - b2.*b2); %Cell 2 bundled
 
 
         a1 = Hs1\(diffRHSa1+rxna1);

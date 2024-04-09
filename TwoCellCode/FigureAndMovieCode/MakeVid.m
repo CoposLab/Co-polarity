@@ -23,13 +23,16 @@ circlescatvid=1;
 adjacent=1;
 showtime=1;
 squished=0;
+movingcells=0;
+
+timeskip=50;
 
 for i=1:1
 
     loadfile='./vid_matfiles/leader_follower/racupc2/1000RacOn';
 
     setnum=int2str(i);
-    savelocation='../../movies_for_paper/signalswitch_circlescatterplot_1000RacOnNoSig_1000RhoOnSig';
+    savelocation='../../movies_for_paper/celldoublet_1000RacOnC1';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -83,11 +86,18 @@ for i=1:1
     load(strcat(loadfile,setnum));
     set(0,'DefaultFigureVisible','off')
 
+    if movingcells==0
+        xshift1=zeros(1,Nt);
+        yshift1=zeros(1,Nt);
+        xshift2=zeros(1,Nt);
+        yshift2=zeros(1,Nt);
+    end
+
     % allmax = max(max(max(max(a1all)),max(max(a2all))),max(max(max(b1all)),max(max(b2all))));
     allmax = max(max([a1all,a2all,b1all,b2all]));
     cbmax = allmax/4;
 
-    for t=1:50:Nt-1
+    for t=1:timeskip:Nt-1
         % for t=1:5:150
         a1=a1all(:,t);
         a2=a2all(:,t);
@@ -510,17 +520,16 @@ for i=1:1
             clf
             range=3;
             % subplot(1,2,1)
-            plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black','LineWidth',1)
             hold on
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
-            surf(Xcol,Ycol,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol+xshift1(t+1),Ycol+yshift1(t+1),ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             % hold on
             colormap(branchedColor)
             clim([0,allmax/2])
             freezeColors;
             shading interp
             alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
-            surf(Xcol,Ycol,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol+xshift1(t+1),Ycol+yshift1(t+1),ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
             clim([0,allmax/2])
             freezeColors;
@@ -537,9 +546,9 @@ for i=1:1
             end
             racxvals1=(racxvals1)'.*cos(2*pi*Xa/L);
             racyvals1=(racyvals1)'.*sin(2*pi*Xa/L);
-            plot3(racxvals1,racyvals1,(allmax+1)*ones(1,length(racxvals1)),'color',...
+            plot3(racxvals1+xshift1(t+1),racyvals1+yshift1(t+1),(allmax+1)*ones(1,length(racxvals1)),'color',...
                 [branchedColor(end,:),1],'LineWidth',3)
-            plot3([racxvals1(end),racxvals1(1)],[racyvals1(end),racyvals1(1)],...
+            plot3([racxvals1(end)+xshift1(t+1),racxvals1(1)+xshift1(t+1)],[racyvals1(end)+yshift1(t+1),racyvals1(1)+yshift1(t+1)],...
                 [allmax+1,allmax+1],'color',[branchedColor(end,:),1],'LineWidth',3)
             if max(yC1)>=(range+2)
                 rhoxvals1=(range-1)*yC1/max(yC1)+1;
@@ -550,13 +559,14 @@ for i=1:1
             end
             rhoxvals1=(rhoxvals1)'.*cos(2*pi*Xa/L);
             rhoyvals1=(rhoyvals1)'.*sin(2*pi*Xa/L);
-            plot3(rhoxvals1,rhoyvals1,(allmax+1)*ones(1,length(rhoxvals1)),'color',...
+            plot3(rhoxvals1+xshift1(t+1),rhoyvals1+yshift1(t+1),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
                 [bundledColor(end,:),1],'LineWidth',3)
-            plot3([rhoxvals1(end),rhoxvals1(1)],[rhoyvals1(end),rhoyvals1(1)],...
+            plot3([rhoxvals1(end)+xshift1(t+1),rhoxvals1(1)+xshift1(t+1)],[rhoyvals1(end)+yshift1(t+1),rhoyvals1(1)+yshift1(t+1)],...
                 [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3)
             % xlim([-3,3])
             % ylim([-3,3])
             % axis square
+            plot3(cos(2*pi*Xa/L)+xshift1(t+1),sin(2*pi*Xa/L)+yshift1(t+1),allmax+2,'color','black','LineWidth',1)
             hold off
 
             %cell 2
@@ -669,7 +679,7 @@ for i=1:1
             if ~isempty(dirIndexa1)
                 figure(4)
                 hold on;
-                quiver(0,0,Xsm(dirIndexa1),Ysm(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7);
+                quiver(0,0,Xsm(dirIndexa1)+xshift1(t+1),Ysm(dirIndexa1)+yshift1(t+1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7);
                 hold off;
             end
             if ~isempty(dirIndexa2)
@@ -681,6 +691,23 @@ for i=1:1
                     quiver(0,-2-(range-1),Xsm(dirIndexa2),Ysm(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
                 end
                 hold off;
+            end
+
+
+            if movingcells==0
+                xshift1(t+1:t+timeskip)=xshift1(t);
+                yshift1(t+1:t+timeskip)=yshift1(t);
+                xshift2(t+1:t+timeskip)=xshift2(t);
+                yshift2(t+1:t+timeskip)=yshift2(t);
+
+                if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
+                    xshift1(t+1:t+timeskip)=xshift1(t+1:t+timeskip)+cos(th(dirIndexa1))*0.001*timeskip;
+                    yshift1(t+1:t+timeskip)=yshift1(t+1:t+timeskip)+sin(th(dirIndexa1))*0.001*timeskip;
+                end
+                if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
+                    xshift2(t+1:t+timeskip)=xshift2(t+1:t+timeskip)+cos(th(dirIndexa2))*0.001*timeskip;
+                    yshift2(t+1:t+timeskip)=yshift2(t+1:t+timeskip)+sin(th(dirIndexa2))*0.001*timeskip;
+                end
             end
 
 
