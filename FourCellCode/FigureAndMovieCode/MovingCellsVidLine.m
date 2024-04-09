@@ -7,12 +7,12 @@ clc;
 signal=0;
 squished=0;
 
-for i=2:2
+for i=4:4
 
     loadfile='./vid_matfiles/moving_cells_line/alt_racup_rhoup/1000RacOn_1000RhoOn';
 
     setnum=int2str(i);
-    savelocation='../../movies_for_paper/4cellsline_alternate1000RacOn1000RhoOn';
+    savelocation='../../movies_for_paper/fourcellsline_1000RacOn1000RhoOn';
 
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
 
@@ -27,7 +27,7 @@ for i=2:2
     % allmax = max(max(max(max(max(a1all)),max(max(a2all))),max(max(max(b1all)),max(max(b2all)))), max(max(max(max(a3all)),max(max(a4all))),max(max(max(b3all)),max(max(b4all)))));
     allmax=max(max([a1all a2all a3all a4all b1all b2all b3all b4all]));
 
-    linewidth=2;
+    linewidth=1;
     linecolor=[0 0 0];
     showtime=1;
 
@@ -150,15 +150,15 @@ for i=2:2
         surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
-        clim([0,allmax/2])
+        clim([0,12])
         freezeColors;
-        clim([0,allmax/2])
+        clim([0,12])
         shading interp
         surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBund1,'AlphaData',ZBund1,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
-        clim([0,allmax/2])
+        clim([0,12])
         freezeColors;
-        clim([0,allmax/2])
+        clim([0,12])
         shading interp
 
         % Cell 2
@@ -172,12 +172,12 @@ for i=2:2
         view(2)
         colormap(branchedColor)
         freezeColors;
-        clim([0,allmax/2])
+        clim([0,12])
         shading interp
         surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBund2,'AlphaData',ZBund2,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
-        clim([0,allmax/2])
+        clim([0,12])
         shading interp
 
         % Cell 3
@@ -191,12 +191,12 @@ for i=2:2
         view(2)
         colormap(branchedColor)
         freezeColors;
-        clim([0,allmax/2])
+        clim([0,12])
         shading interp
         surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
         freezeColors;
-        clim([0,allmax/2])
+        clim([0,12])
         shading interp
 
         % Cell 4
@@ -209,7 +209,7 @@ for i=2:2
         surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
         view(2)
         colormap(branchedColor)
-        clim([0,allmax/2])
+        clim([0,12])
         freezeColors;
         cb=colorbar('Location','eastoutside');
         freezeColors(cb);
@@ -220,16 +220,16 @@ for i=2:2
         shading interp
         surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
-        clim([0,allmax/2])
+        clim([0,12])
         freezeColors;
         jcb=jicolorbar;
         freezeColors(jcb);
         set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
         shading interp
         grid off
-        xlim([-5,5])
-        ylim([-8,2.5])
-        pbaspect([10, 10.5, 1])
+        xlim([-4,4])
+        ylim([-9,2])
+        pbaspect([8, 11, 1])
         % axis square
 
         hold off;
@@ -311,22 +311,22 @@ for i=2:2
         % Plot arrows
         if ~isempty(dirIndex1)
             hold on;
-            quiver(0+xshift1(t+1),0+yshift1(t+1),Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7);
+            quiver(0+xshift1(t+1),0+yshift1(t+1),Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2);
             hold off;
         end
         if ~isempty(dirIndex2)
             hold on;
-            quiver(0+xshift2(t+1),-2+yshift2(t+1),Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+            quiver(0+xshift2(t+1),-2+yshift2(t+1),Xsm(dirIndex2),Ysm(dirIndex2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2)
             hold off;
         end
         if ~isempty(dirIndex3)
             hold on;
-            quiver(0+xshift3(t+1),-4+yshift3(t+1),Xsm(dirIndex3),Ysm(dirIndex3),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+            quiver(0+xshift3(t+1),-4+yshift3(t+1),Xsm(dirIndex3),Ysm(dirIndex3),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2)
             hold off;
         end
         if ~isempty(dirIndex4)
             hold on;
-            quiver(0+xshift4(t+1),-6+yshift4(t+1),Xsm(dirIndex4),Ysm(dirIndex4),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.7)
+            quiver(0+xshift4(t+1),-6+yshift4(t+1),Xsm(dirIndex4),Ysm(dirIndex4),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2)
             hold off;
         end
 
@@ -340,7 +340,7 @@ for i=2:2
         end
 
         if showtime==1
-            timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + t,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+            timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + (t-1)*0.01,'FitBoxToText','on','EdgeColor','none','FontSize',20);
             
         end
 
