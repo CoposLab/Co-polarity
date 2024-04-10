@@ -6,8 +6,8 @@ signal=0;
 addpath('./freeze_colors')
 addpath '/Users/katielevandosky/Desktop/HonorsProject/PairPolarity/SingleCellCode_Published'
 
-for i=6:6
-    path=strcat('./vid_matfiles/branchedbundled/nosignal/0_8kb0_8kc_50max_2alpha',int2str(i),'.mat');
+for i=1:1
+    path=strcat('./vid_matfiles/misaligned/uncoupled/uncoupled',int2str(i),'.mat');
 
     load(path)
     Nt=2500;
@@ -618,8 +618,8 @@ for i=6:6
         % xplot=linspace(0,end_time/100,end_time);
         % surf(xplot,zrac1,yrac1,color1,'FaceAlpha',0.5);
         [th,time]=meshgrid((0:3.6:360)*pi/180,1:end_time);
-        surf(time,cos(th),sin(th),color1')
-        surf(time,cos(th),sin(th)-2,color2')
+        surf(time,sin(th),cos(th),color1')
+        % surf(time,sin(th)-2,cos(th),color2')
         view(3)
         colormap([flip(bundledColor);branchedColor])
         colorbar
@@ -641,10 +641,13 @@ for i=6:6
         hold off
         
         shading interp
-        pbaspect([3,1,2])
+        pbaspect([3,1,1])
         xlabel('time')
+
+        % view(90,0)
         % ylabel('y')
         % zlabel('z')
+        % camroll(90)
         % set(gca,'CameraPosition',[-9.629901052021953,-7.569863519089166,5.073854444144635])
 
         % [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);

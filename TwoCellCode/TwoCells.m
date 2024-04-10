@@ -48,7 +48,7 @@ writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 1;
+ppp = 20;
 
 % options=["koffx","koffy","konx","kony"];
 % if isfile(strcat('./simulation_results/parameter_search_results/signal_concentration_dependent_racrho/',...
@@ -78,7 +78,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/forceindependent_branchedupnosig_bundledupsig/7_5kaa_7_5kbb_7_5kcc_7_5kdd';
+    savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/concdependent_rhodownnosig_racdownsig/1000xRhoOff_10yRacOff';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -518,9 +518,9 @@ while (ppp<=100)
             sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
             sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
             if sumx1>0
-                % if t > sigswitch_time
-                %     Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumx1*1000);
-                % end
+                if t > sigswitch_time
+                    Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumx1*1000);
+                end
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*1000);
                 % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*1000);
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
@@ -529,9 +529,9 @@ while (ppp<=100)
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
             end
             if sumx2>0
-                % if t<= sigswitch_time
-                %     Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumx2*1000);
-                % end
+                if t<= sigswitch_time
+                    Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumx2*1000);
+                end
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*1000);
                 % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*1000);
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
@@ -540,9 +540,9 @@ while (ppp<=100)
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
             end
             if sumy1>0
-                % if t<= sigswitch_time
-                %     Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumy1*10);
-                % end
+                if t<= sigswitch_time
+                    Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumy1*10);
+                end
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumy1*1000);
                 % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*1000);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
@@ -550,9 +550,9 @@ while (ppp<=100)
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*1000);
             end
             if sumy2>0
-                % if t>sigswitch_time
-                %     Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumy2*10);
-                % end
+                if t>sigswitch_time
+                    Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumy2*10);
+                end
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumy2*1000);
                 % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*1000);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
@@ -1177,13 +1177,13 @@ while (ppp<=100)
         kcc_ind=1;
         kdd_ind=1;
 
-        if t<=sigswitch_time
-            kaa_ind=2;
-            kdd_ind=2;
-        else
-            kbb_ind=2;
-            kcc_ind=2;
-        end
+        % if t<=sigswitch_time
+        %     kaa_ind=2;
+        %     kdd_ind=2;
+        % else
+        %     kbb_ind=2;
+        %     kcc_ind=2;
+        % end
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1424,14 +1424,14 @@ while (ppp<=100)
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
             surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            clim([0,allmax/2])
+            clim([0,12])
             freezeColors;
             shading interp
             hold on;
             alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
             surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            clim([0,allmax/2])
+            clim([0,12])
             freezeColors;
             shading interp
             view(2)
@@ -1441,7 +1441,7 @@ while (ppp<=100)
             % Cell 2
             surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            clim([0,allmax/2])
+            clim([0,12])
             freezeColors;
             cb=colorbar('Location','eastoutside');
             freezeColors(cb);
@@ -1455,7 +1455,7 @@ while (ppp<=100)
             % if max(ZBund2)>0.5
             surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            clim([0,allmax/2])
+            clim([0,12])
             freezeColors;
             jcb=jicolorbar;
             freezeColors(jcb);

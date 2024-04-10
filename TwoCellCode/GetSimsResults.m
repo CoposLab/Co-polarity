@@ -2,13 +2,13 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_celldifference/1kcc_1kdd_allC2/branchedbundledpromotion/0_9kb0_9kc2alpha50max';
+filename = './simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/concdependent_rhodownnosig_racdownsig/1000xRhoOff_10yRacOff';
 maxnum=100;
 
 angle=pi/4;
 
-siglocation = 5*pi/4; % cell 2 signal location
-% siglocation = pi/4; % cell 1 signal location
+% siglocation = 5*pi/4; % cell 2 signal location
+siglocation = pi/4; % cell 1 signal location
 sigper = 0.4;
 
 
