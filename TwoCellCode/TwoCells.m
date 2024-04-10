@@ -78,7 +78,7 @@ while (ppp<=100)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_celldifference/1kcc_1kdd_allC2/cilcoa/10RhoOn10RacOff100RacOn';
+    savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/forceindependent_branchedupnosig_bundledupsig/7_5kaa_7_5kbb_7_5kcc_7_5kdd';
     if savefigs==1
         % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
         % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
@@ -148,7 +148,7 @@ while (ppp<=100)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 25.0;                  % total simulation time
+    Tend   = 100.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -169,8 +169,8 @@ while (ppp<=100)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=0;
-    sigswitch_time=5000;
+    signal=1;
+    sigswitch_time=500;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -471,27 +471,27 @@ while (ppp<=100)
         % Kony2=Kony2*10;
 
         % Set konx and kony in contact region
-        % if t<=sigswitch_time
-        %     Konx1(boundC1)=Konx1(boundC1)*1000;
-        %     % Konx2(boundC2)=Konx2(boundC2)*10;
-        %     Kony2(boundC2)=Kony2(boundC2)*1000;
-        %     % Koffx2(boundC2)=Koffx2(boundC2)*1000;
-        %     % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        % else
-        %     % Koffx1(boundC1)=Koffx1(boundC1)*1000;
-        %     Kony1(boundC1)=Kony1(boundC1)*1000;
-        %     % Konx1(boundC1)=Konx1(boundC1)*10;
-        %     Konx2(boundC2)=Konx2(boundC2)*1000;
-        %     % Koffy2(boundC2)=Koffy2(boundC2)*1000;
-        % end
+        if t<=sigswitch_time
+            % Konx1(boundC1)=Konx1(boundC1)*1000;
+            % Konx2(boundC2)=Konx2(boundC2)*10;
+            % Kony2(boundC2)=Kony2(boundC2)*1000;
+            % Koffx2(boundC2)=Koffx2(boundC2)*1000;
+            % Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        else
+            % Koffx1(boundC1)=Koffx1(boundC1)*1000;
+            % Kony1(boundC1)=Kony1(boundC1)*1000;
+            % Konx1(boundC1)=Konx1(boundC1)*10;
+            % Konx2(boundC2)=Konx2(boundC2)*1000;
+            % Koffy2(boundC2)=Koffy2(boundC2)*1000;
+        end
 
-        Konx1(boundC1)=Konx1(boundC1)*100;
-        Konx2(boundC2)=Konx2(boundC2)*100;
-        Kony1(boundC1)=Kony1(boundC1)*10;
-        Kony2(boundC2)=Kony2(boundC2)*10;
-        Koffx1(boundC1)=Koffx1(boundC1)*10;
-        Koffx2(boundC2)=Koffx2(boundC2)*10;
-        % Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        % Konx1(boundC1)=Konx1(boundC1)*100;
+        % Konx2(boundC2)=Konx2(boundC2)*100;
+        % Kony1(boundC1)=Kony1(boundC1)*10;
+        % Kony2(boundC2)=Kony2(boundC2)*10;
+        % Koffx1(boundC1)=Koffx1(boundC1)*10;
+        % Koffx2(boundC2)=Koffx2(boundC2)*10;
+        % Koffy1(boundC1)=Koffy1(boundC1)*100;
         % Koffy2(boundC2)=Koffy2(boundC2)*100;
 
         % Set konx and kony away from contact region
@@ -518,6 +518,9 @@ while (ppp<=100)
             sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
             sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
             if sumx1>0
+                % if t > sigswitch_time
+                %     Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumx1*1000);
+                % end
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*1000);
                 % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*1000);
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
@@ -526,6 +529,9 @@ while (ppp<=100)
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
             end
             if sumx2>0
+                % if t<= sigswitch_time
+                %     Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumx2*1000);
+                % end
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*1000);
                 % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*1000);
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
@@ -534,6 +540,9 @@ while (ppp<=100)
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
             end
             if sumy1>0
+                % if t<= sigswitch_time
+                %     Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumy1*10);
+                % end
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumy1*1000);
                 % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*1000);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
@@ -541,6 +550,9 @@ while (ppp<=100)
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*1000);
             end
             if sumy2>0
+                % if t>sigswitch_time
+                %     Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumy2*10);
+                % end
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumy2*1000);
                 % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*1000);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
@@ -1156,14 +1168,22 @@ while (ppp<=100)
         %     kdd_ind=1;
         % end
 
-        kaa_vals=[0,1];
-        kbb_vals=[0,1];
-        kcc_vals=[0,1];
-        kdd_vals=[0,1];
+        kaa_vals=[0,7.5];
+        kbb_vals=[0,7.5];
+        kcc_vals=[0,7.5];
+        kdd_vals=[0,7.5];
         kaa_ind=1;
         kbb_ind=1;
-        kcc_ind=2;
-        kdd_ind=2;
+        kcc_ind=1;
+        kdd_ind=1;
+
+        if t<=sigswitch_time
+            kaa_ind=2;
+            kdd_ind=2;
+        else
+            kbb_ind=2;
+            kcc_ind=2;
+        end
 
         % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
         % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
@@ -1178,16 +1198,16 @@ while (ppp<=100)
 
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 ...
             + ka_vals(ka_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + kaa_vals(kaa_ind) )) - a1.*a1); %Cell 1 branched
+            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + cell1_bound.*kaa_vals(kaa_ind) )) - a1.*a1); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 ...
             + kc_vals(kc_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + kbb_vals(kbb_ind) )) - b1.*b1); %Cell 1 bundled
+            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + cell1_bound.*kbb_vals(kbb_ind) )) - b1.*b1); %Cell 1 bundled
         rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 ...
             + ka_vals(ka_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + kcc_vals(kcc_ind) )) - a2.*a2); %Cell 2 branched
+            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + cell2_bound.*kcc_vals(kcc_ind) )) - a2.*a2); %Cell 2 branched
         rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 ...
             + kc_vals(kc_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + kdd_vals(kdd_ind) )) - b2.*b2); %Cell 2 bundled
+            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + cell2_bound.*kdd_vals(kdd_ind) )) - b2.*b2); %Cell 2 bundled
 
 
         a1 = Hs1\(diffRHSa1+rxna1);

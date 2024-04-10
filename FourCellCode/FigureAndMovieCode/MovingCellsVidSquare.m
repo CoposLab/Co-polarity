@@ -8,12 +8,12 @@ signal=0;
 squished=0;
 showtime=1;
 
-for i=4:4
+for i=2:2
 
-    loadfile='./vid_matfiles/moving_cells_square/branchedbundled/0_9kb0_9kc';
+    loadfile='./vid_matfiles/moving_cells_square/alt_racup_rhoup/1000RacOn_1000RhoOn';
 
     setnum=int2str(i);
-    savelocation='../../movies_for_paper/fourcellssquare_0_9kb0_9kc';
+    savelocation='../../movies_for_paper/fourcellssquare_1000RacOn_1000RhoOn_rotation';
 
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
 

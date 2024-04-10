@@ -23,16 +23,17 @@ circlescatvid=1;
 adjacent=1;
 showtime=1;
 squished=0;
+set_shift=0;
 movingcells=0;
 
 timeskip=50;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/misaligned/uncoupled/uncoupled';
+    loadfile='./vid_matfiles/coalign/uncoupled/uncoupled';
 
     setnum=int2str(i);
-    savelocation='../../movies_for_paper/celldoublet_uncoupled_misalignment';
+    savelocation='../../movies_for_paper/celldoublet_branchedbundledracrhovid_uncoupled_coalignment';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -86,7 +87,7 @@ for i=1:1
     load(strcat(loadfile,setnum));
     set(0,'DefaultFigureVisible','off')
 
-    if movingcells==0
+    if set_shift==1 || movingcells==0
         xshift1=zeros(1,Nt);
         yshift1=zeros(1,Nt);
         xshift2=zeros(1,Nt);
@@ -97,7 +98,7 @@ for i=1:1
     allmax = max(max([a1all,a2all,b1all,b2all]));
     cbmax = allmax/4;
 
-    % Nt=2500;
+    Nt=2500;
 
     for t=1:timeskip:Nt-1
         % for t=1:5:150
@@ -565,9 +566,6 @@ for i=1:1
                 [bundledColor(end,:),1],'LineWidth',3)
             plot3([rhoxvals1(end)+xshift1(t),rhoxvals1(1)+xshift1(t)],[rhoyvals1(end)+yshift1(t),rhoyvals1(1)+yshift1(t)],...
                 [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3)
-            % xlim([-3,3])
-            % ylim([-3,3])
-            % axis square
             plot3(cos(2*pi*Xa/L)+xshift1(t),sin(2*pi*Xa/L)+yshift1(t),(allmax+2)*ones(1,Na),'color','black','LineWidth',1)
             hold off
 
@@ -662,9 +660,9 @@ for i=1:1
                 % xlim([-3,3])
                 % ylim([-5,3])
                 % set(gca,'plotBoxAspectRatio',[6 8 1]);
-                xlim([-5,5])
-                ylim([-9,5])
-                set(gca,'plotBoxAspectRatio',[10 14 1]);
+                xlim([-3,3])
+                ylim([-8,4])
+                set(gca,'plotBoxAspectRatio',[6 12 1]);
             end
             % axis square
             hold off
@@ -696,7 +694,7 @@ for i=1:1
             end
 
 
-            if movingcells==0
+            if set_shift==1
            [th,rad] = meshgrid((0:3.6:360)*pi/180,1);
                 xshift1(t+1:t+timeskip)=xshift1(t);
                 yshift1(t+1:t+timeskip)=yshift1(t);
@@ -725,15 +723,15 @@ for i=1:1
             if signal==1
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
-                if t<=500
+                % if t<=500
                     hold on;
-                    scatter(Xsig(sigBound2)+xshift2(t),Ysig(sigBound2)+yshift2(t)-2-(range-1),50,'black','.')
+                    scatter3(Xsig(sigBound2)+xshift2(t),Ysig(sigBound2)+yshift2(t)-2-(range-1),(allmax+3)*ones(1,length(sigBound2)),50,'black','.')
                     hold off;
-                else
-                    hold on;
-                    scatter(Xsig(sigBound1)+xshift1(t),Ysig(sigBound1)+yshift1(t),50,'black','.')
-                    hold off;
-                end
+                % else
+                %     hold on;
+                %     scatter3(Xsig(sigBound1)+xshift1(t),Ysig(sigBound1)+yshift1(t),(allmax+3)*ones(1,length(sigBound1)),50,'black','.')
+                %     hold off;
+                % end
             end
 
             figure(4)

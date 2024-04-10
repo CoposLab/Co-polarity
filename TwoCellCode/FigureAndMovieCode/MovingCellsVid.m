@@ -6,13 +6,17 @@ clc;
 
 signal=0;
 squished=0;
+add_shift=1;
+timeskip=50;
+
+Nt=2500;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/moving_cells/racupc1_rhoupc2_forcedependent/1000bRacOn_1000aRhoOn';
+    loadfile='./vid_matfiles/leader_follower/racupc2/1000RacOn';
 
     setnum=int2str(i);
-    savelocation='../../movies_for_paper/celldoublet_branchedbundledvid_1000bRacOnC1_1000aRhoOnC2';
+    savelocation='../../movies_for_paper/celldoublet_branchedbundledvid_1000RacOnC1_supracellular';
 
     % vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
     vidObj2 = VideoWriter(strcat(savelocation,'_BranchedBundledVid_',setnum,'.mp4'),'MPEG-4');
@@ -38,8 +42,15 @@ for i=1:1
 
     allmax = max(max(max(max(a1all)),max(max(a2all))),max(max(max(b1all)),max(max(b2all))));
 
+    if add_shift==1
+        xshift1=zeros(1,Nt);
+        yshift1=zeros(1,Nt);
+        xshift2=zeros(1,Nt);
+        yshift2=zeros(1,Nt);
+    end
 
-    for t=1:50:2499
+
+    for t=1:timeskip:Nt-1
         a1=a1all(:,t);
         a2=a2all(:,t);
         b1=b1all(:,t);
@@ -50,6 +61,82 @@ for i=1:1
         % [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:NNx1(t+1),t+1),posy1(1:NNy1(t+1),t+1),NNx1(t+1),NNy1(t+1),L,Na);
         % [s2,xC2,yC2] = resamplePolarityMolecules(posx2(1:NNx2(t+1),t+1),posy2(1:NNy2(t+1),t+1),NNx2(t+1),NNy2(t+1),L,Na);
 
+        % Find median for cell 1
+        a1New = a1;
+        a1New(a1New<1)=0;
+        if (a1New(1)~=0 && a1New(end)~=0)
+            zeroInd1=find(a1New==0,1,'first');
+            zeroInd2=find(a1New==0,1,'last');
+            dirIndexa1=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a1New~=0,1,'first');
+            ind2=find(a1New~=0,1,'last');
+            dirIndexa1=ceil((ind1+ind2)/2);
+        end
+        if dirIndexa1<1
+            dirIndexa1=dirIndexa1+101;
+        end
+        b1New = b1;
+        b1New(b1New<1)=0;
+        if (b1New(1)~=0 && b1New(end)~=0)
+            zeroIndb1_1=find(b1New==0,1,'first');
+            zeroIndb2_1=find(b1New==0,1,'last');
+            dirIndexb1=ceil((zeroIndb1_1+zeroIndb2_1)/2) - 50;
+        else
+            indb1_1=find(b1New~=0,1,'first');
+            indb2_1=find(b1New~=0,1,'last');
+            dirIndexb1=ceil((indb1_1+indb2_1)/2);
+        end
+        if dirIndexb1<1
+            dirIndexb1=dirIndexb1+101;
+        end
+
+        % Find median for cell 2
+        a2New = a2;
+        a2New(a2New<1)=0;
+        if (a2New(1)~=0 && a2New(end)~=0)
+            zeroInd1=find(a2New==0,1,'first');
+            zeroInd2=find(a2New==0,1,'last');
+            dirIndexa2=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a2New~=0,1,'first');
+            ind2=find(a2New~=0,1,'last');
+            dirIndexa2=ceil((ind1+ind2)/2);
+        end
+        if dirIndexa2<1
+            dirIndexa2=dirIndexa2+101;
+        end
+        b2New = b2;
+        b2New(b2New<1)=0;
+        if (b2New(1)~=0 && b2New(end)~=0)
+            zeroIndb1_2=find(b2New==0,1,'first');
+            zeroIndb2_2=find(b2New==0,1,'last');
+            dirIndexb2=ceil((zeroIndb1_2+zeroIndb2_2)/2) - 50;
+        else
+            indb1_2=find(b2New~=0,1,'first');
+            indb2_2=find(b2New~=0,1,'last');
+            dirIndexb2=ceil((indb1_2+indb2_2)/2);
+        end
+        if dirIndexb2<1
+            dirIndexb2=dirIndexb2+101;
+        end
+        
+        if add_shift==1
+            [th,~] = meshgrid((0:3.6:360)*pi/180,1);
+            xshift1(t+1:t+timeskip)=xshift1(t);
+            yshift1(t+1:t+timeskip)=yshift1(t);
+            xshift2(t+1:t+timeskip)=xshift2(t);
+            yshift2(t+1:t+timeskip)=yshift2(t);
+
+            if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
+                xshift1(t+1:t+timeskip)=xshift1(t+1:t+timeskip)+cos(th(dirIndexa1))*0.001*timeskip;
+                yshift1(t+1:t+timeskip)=yshift1(t+1:t+timeskip)+sin(th(dirIndexa1))*0.001*timeskip;
+            end
+            if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
+                xshift2(t+1:t+timeskip)=xshift2(t+1:t+timeskip)+cos(th(dirIndexa2))*0.001*timeskip;
+                yshift2(t+1:t+timeskip)=yshift2(t+1:t+timeskip)+sin(th(dirIndexa2))*0.001*timeskip;
+            end
+        end
         
 
         % Define circles
@@ -209,45 +296,15 @@ for i=1:1
         set(gcf,'color','w');
 
 
-        % Find median for cell 1
-        a1New = a1;
-        a1New(a1New<1)=0;
-        if (a1New(1)~=0 && a1New(length(a1New))~=0)
-            zeroInd1=find(a1New==0,1,'first');
-            zeroInd2=find(a1New==0,1,'last');
-            dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-        else
-            ind1=find(a1New~=0,1,'first');
-            ind2=find(a1New~=0,1,'last');
-            dirIndex1=ceil((ind1+ind2)/2);
-        end
-        if dirIndex1<1
-            dirIndex1=dirIndex1+101;
-        end
-        if ~isempty(dirIndex1)
+       
+        if ~isempty(dirIndexa1)
             hold on;
-            quiver(0+xshift1(t+1),0+yshift1(t+1),Xsm(dirIndex1),Ysm1(dirIndex1),0,'color',linecolor,'LineWidth',2,'MaxHeadSize',2);
+            quiver(0+xshift1(t+1),0+yshift1(t+1),Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',linecolor,'LineWidth',2,'MaxHeadSize',2);
             hold off;
         end
-
-        % Find median for cell 2
-        a2New = a2;
-        a2New(a2New<1)=0;
-        if (a2New(1)~=0 && a2New(length(a2New))~=0)
-            zeroInd1=find(a2New==0,1,'first');
-            zeroInd2=find(a2New==0,1,'last');
-            dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
-        else
-            ind1=find(a2New~=0,1,'first');
-            ind2=find(a2New~=0,1,'last');
-            dirIndex2=ceil((ind1+ind2)/2);
-        end
-        if dirIndex2<1
-            dirIndex2=dirIndex2+101;
-        end
-        if ~isempty(dirIndex2)
+        if ~isempty(dirIndexa2)
             hold on;
-            quiver(0+xshift2(t+1),-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),Xsm(dirIndex2),Ysm2(dirIndex2),0,'color',linecolor,'LineWidth',2,'MaxHeadSize',2)
+            quiver(0+xshift2(t+1),-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',linecolor,'LineWidth',2,'MaxHeadSize',2)
             hold off;
         end
 
