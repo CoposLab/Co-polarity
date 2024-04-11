@@ -48,7 +48,7 @@ writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 20;
+ppp = 61;
 
 % options=["koffx","koffy","konx","kony"];
 % if isfile(strcat('./simulation_results/parameter_search_results/signal_concentration_dependent_racrho/',...
@@ -74,7 +74,7 @@ ppp = 20;
 %     ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
 % end
 
-while (ppp<=100)
+while (ppp<=61)
     close all;
     savefigs=1;
     setnum=int2str(ppp);
@@ -1424,14 +1424,14 @@ while (ppp<=100)
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
             surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            clim([0,12])
+            % clim([0,12])
             freezeColors;
             shading interp
             hold on;
             alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
             surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            clim([0,12])
+            % clim([0,12])
             freezeColors;
             shading interp
             view(2)
@@ -1441,7 +1441,7 @@ while (ppp<=100)
             % Cell 2
             surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            clim([0,12])
+            % clim([0,12])
             freezeColors;
             cb=colorbar('Location','eastoutside');
             freezeColors(cb);
@@ -1455,7 +1455,7 @@ while (ppp<=100)
             % if max(ZBund2)>0.5
             surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            clim([0,12])
+            % clim([0,12])
             freezeColors;
             jcb=jicolorbar;
             freezeColors(jcb);
@@ -1606,14 +1606,14 @@ while (ppp<=100)
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
             surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            clim([0,allmax/2])
+            % clim([0,allmax/2])
             freezeColors;
             shading interp
             hold on;
             alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
             surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            clim([0,allmax/2])
+            % clim([0,allmax/2])
             freezeColors;
             shading interp
             view(2)
@@ -1623,7 +1623,7 @@ while (ppp<=100)
             % Cell 2
             surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            clim([0,allmax/2])
+            % clim([0,allmax/2])
             freezeColors;
             cb=colorbar('Location','eastoutside');
             freezeColors(cb);
@@ -1637,7 +1637,7 @@ while (ppp<=100)
             % if max(ZBund2)>0.5
             surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            clim([0,allmax/2])
+            % clim([0,allmax/2])
             freezeColors;
             jcb=jicolorbar;
             freezeColors(jcb);

@@ -617,12 +617,15 @@ for i=1:1
         % surf(Z*Tend*end_time/Nt,Y,X,ones(size(Z,1),size(Z,2),3))
         % xplot=linspace(0,end_time/100,end_time);
         % surf(xplot,zrac1,yrac1,color1,'FaceAlpha',0.5);
+        alphadata1=abs(color1);
+        alphadata1(alphadata1>5)=max(max(alphadata1));
         [th,time]=meshgrid((0:3.6:360)*pi/180,1:end_time);
-        surf(time,sin(th),cos(th),color1')
+        surf(time,sin(th),cos(th),color1','AlphaData',alphadata1','FaceAlpha','flat')
         % surf(time,sin(th)-2,cos(th),color2')
         view(3)
         colormap([flip(bundledColor);branchedColor])
-        colorbar
+        cb=colorbar;
+        cb.Color='white';
         clim([-10,10])
 
         % surf(linspace(0,end_time/100,end_time),zcombined2,ycombined2-2,'FaceAlpha',0.5);
@@ -643,6 +646,9 @@ for i=1:1
         shading interp
         pbaspect([3,1,1])
         xlabel('time')
+        set(gcf,'color','black')
+        set(gca,'color','black')
+        set(gca,'XColor','white', 'YColor', 'white', 'ZColor', 'white')
 
         % view(90,0)
         % ylabel('y')
