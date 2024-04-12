@@ -33,7 +33,7 @@ for i=1:1
     loadfile='./vid_matfiles/coalign/uncoupled/uncoupled';
 
     setnum=int2str(i);
-    savelocation='../../movies_for_paper/celldoublet_branchedbundledracrhovid_uncoupled_coalignment';
+    savelocation='../../../circlescatterdfghkjl';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -642,7 +642,7 @@ for i=1:1
                 plot3([rhoxvals2(end)+xshift2(t),rhoxvals2(1)+xshift2(t)],[rhoyvals2(end)+yshift2(t),rhoyvals2(1)+yshift2(t)]-2*range,...
                     [allmax+1,allmax+1],'color',bundledColor(end,:),'LineWidth',3,'LineStyle','-.')
             else
-                plot3(rhoxvals2+xshift2(t),rhoyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
+                plot3(rhoxvals2+xshift2(t),rhoyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(rhoxvals2)),'color',...
                     [bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
                 plot3([rhoxvals2(end)+xshift2(t),rhoxvals2(1)+xshift2(t)],[rhoyvals2(end)+yshift2(t),rhoyvals2(1)+yshift2(t)]-2-(range-1),...
                     [allmax+1,allmax+1],'color',[bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
@@ -664,7 +664,6 @@ for i=1:1
                 ylim([-8,4])
                 set(gca,'plotBoxAspectRatio',[6 12 1]);
             end
-            % axis square
             hold off
 
             cbpos=cb.Position;

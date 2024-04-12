@@ -1,6 +1,8 @@
+clear
 clf
 cla
 close all
+set(0,'DefaultFigureVisible','on')
 
 Da      = 0.5;                  % diffusion coefficient for actin
 m0      = 2.0;                  % competition for actin monomers
@@ -9,7 +11,7 @@ K       = 1.0;
 Tend    = 40.0;
 dt      = 0.1; %0.05
 Nt      = Tend/dt; % number of time steps
-Na      = 101; % number of space steps
+Na      = 4; %101; % number of space steps
 dxa     = 5.0/((Na-1)/2);
 L       = 10.0;
 Xa      = 0:dxa:L;
@@ -45,7 +47,7 @@ Kb(setdiff(1:length(Kb),bound)) = Kb(setdiff(1:length(Kb),bound))*4;
 vid = 0;
 vidObj = VideoWriter('PDESolver1','MPEG-4');
 
-method = 'crank-nicolsona';
+method = 'crank-nicolson';
 
 switch method
     case{'crank-nicolson'}
@@ -83,7 +85,7 @@ switch method
                 set(gcf,'color','w');
                 legend('branched','bundled');
                 ylim([-1 1])
-                plot(Xa(bound),0.5*ones(length(bound),1));
+                % plot(Xa(bound),0.5*ones(length(bound),1));
                 hold off;
 
                 if vid==1

@@ -5,7 +5,7 @@ set(0,'DefaultFigureVisible','off')
 
 addpath('./freeze_colors')
 
-signal=1;
+signal=0;
 Nt=2500;
 % Na=101;
 % sigper=0.40;
@@ -30,10 +30,10 @@ timeskip=50;
 
 for i=1:1
 
-    loadfile='./vid_matfiles/coalign/uncoupled/uncoupled';
+    loadfile='./vid_matfiles/misaligned/uncoupled/uncoupled';
 
     setnum=int2str(i);
-    savelocation='../../movies_for_paper/celldoublet_br';
+    savelocation='../../../circlescatterdfghkjl';
 
     if scatvid==1
         vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
@@ -98,7 +98,7 @@ for i=1:1
     allmax = max(max([a1all,a2all,b1all,b2all]));
     cbmax = allmax/4;
 
-    % Nt=2500;
+    Nt=2500;
 
     for t=1:timeskip:Nt-1
         % for t=1:5:150
@@ -524,50 +524,50 @@ for i=1:1
             range=3;
             % subplot(1,2,1)
             hold on
-            alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
-            surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
-            % hold on
-            colormap(branchedColor)
-            clim([0,12])
-            freezeColors;
-            shading interp
-            alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
-            surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
-            colormap(bundledColor)
-            clim([0,12])
-            freezeColors;
-            shading interp
-            view(2)
-            % plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black')
-            % plot(2*cos(2*pi*Xa/L),2*sin(2*pi*Xa/L),'color','black')
-            if max(xC1)>=(range+2)
-                racxvals1=(range-1)*xC1/max(xC1)+1;
-                racyvals1=(range-1)*xC1/max(xC1)+1;
-            else
-                racxvals1=(range-2)*xC1/max(xC1)+1;
-                racyvals1=(range-1)*xC1/max(xC1)+1;
-            end
-            racxvals1=(racxvals1)'.*cos(2*pi*Xa/L);
-            racyvals1=(racyvals1)'.*sin(2*pi*Xa/L);
-            plot3(racxvals1+xshift1(t),racyvals1+yshift1(t),(allmax+1)*ones(1,length(racxvals1)),'color',...
-                [branchedColor(end,:),1],'LineWidth',3)
-            plot3([racxvals1(end)+xshift1(t),racxvals1(1)+xshift1(t)],[racyvals1(end)+yshift1(t),racyvals1(1)+yshift1(t)],...
-                [allmax+1,allmax+1],'color',[branchedColor(end,:),1],'LineWidth',3)
-            if max(yC1)>=(range+2)
-                rhoxvals1=(range-1)*yC1/max(yC1)+1;
-                rhoyvals1=(range-1)*yC1/max(yC1)+1;
-            else
-                rhoxvals1=(range-2)*yC1/max(yC1)+1;
-                rhoyvals1=(range-2)*yC1/max(yC1)+1;
-            end
-            rhoxvals1=(rhoxvals1)'.*cos(2*pi*Xa/L);
-            rhoyvals1=(rhoyvals1)'.*sin(2*pi*Xa/L);
-            plot3(rhoxvals1+xshift1(t),rhoyvals1+yshift1(t),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
-                [bundledColor(end,:),1],'LineWidth',3)
-            plot3([rhoxvals1(end)+xshift1(t),rhoxvals1(1)+xshift1(t)],[rhoyvals1(end)+yshift1(t),rhoyvals1(1)+yshift1(t)],...
-                [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3)
-            plot3(cos(2*pi*Xa/L)+xshift1(t),sin(2*pi*Xa/L)+yshift1(t),(allmax+2)*ones(1,Na),'color','black','LineWidth',1)
-            hold off
+            % alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
+            % surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            % % hold on
+            % colormap(branchedColor)
+            % clim([0,12])
+            % freezeColors;
+            % shading interp
+            % alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
+            % surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            % colormap(bundledColor)
+            % clim([0,12])
+            % freezeColors;
+            % shading interp
+            % view(2)
+            % % plot(cos(2*pi*Xa/L),sin(2*pi*Xa/L),'color','black')
+            % % plot(2*cos(2*pi*Xa/L),2*sin(2*pi*Xa/L),'color','black')
+            % if max(xC1)>=(range+2)
+            %     racxvals1=(range-1)*xC1/max(xC1)+1;
+            %     racyvals1=(range-1)*xC1/max(xC1)+1;
+            % else
+            %     racxvals1=(range-2)*xC1/max(xC1)+1;
+            %     racyvals1=(range-1)*xC1/max(xC1)+1;
+            % end
+            % racxvals1=(racxvals1)'.*cos(2*pi*Xa/L);
+            % racyvals1=(racyvals1)'.*sin(2*pi*Xa/L);
+            % plot3(racxvals1+xshift1(t),racyvals1+yshift1(t),(allmax+1)*ones(1,length(racxvals1)),'color',...
+            %     [branchedColor(end,:),1],'LineWidth',3)
+            % plot3([racxvals1(end)+xshift1(t),racxvals1(1)+xshift1(t)],[racyvals1(end)+yshift1(t),racyvals1(1)+yshift1(t)],...
+            %     [allmax+1,allmax+1],'color',[branchedColor(end,:),1],'LineWidth',3)
+            % if max(yC1)>=(range+2)
+            %     rhoxvals1=(range-1)*yC1/max(yC1)+1;
+            %     rhoyvals1=(range-1)*yC1/max(yC1)+1;
+            % else
+            %     rhoxvals1=(range-2)*yC1/max(yC1)+1;
+            %     rhoyvals1=(range-2)*yC1/max(yC1)+1;
+            % end
+            % rhoxvals1=(rhoxvals1)'.*cos(2*pi*Xa/L);
+            % rhoyvals1=(rhoyvals1)'.*sin(2*pi*Xa/L);
+            % plot3(rhoxvals1+xshift1(t),rhoyvals1+yshift1(t),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
+            %     [bundledColor(end,:),1],'LineWidth',3)
+            % plot3([rhoxvals1(end)+xshift1(t),rhoxvals1(1)+xshift1(t)],[rhoyvals1(end)+yshift1(t),rhoyvals1(1)+yshift1(t)],...
+            %     [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3)
+            % plot3(cos(2*pi*Xa/L)+xshift1(t),sin(2*pi*Xa/L)+yshift1(t),(allmax+2)*ones(1,Na),'color','black','LineWidth',1)
+            % hold off
 
             %cell 2
             hold on
@@ -623,9 +623,9 @@ for i=1:1
                     [allmax+1,allmax+1],'color',branchedColor(end,:),'LineWidth',3,'LineStyle','-.')
             else
                 plot3(racxvals2+xshift2(t),racyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(racxvals2)),'color',...
-                    [branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+                    [branchedColor(end,:),1],'LineWidth',3)
                 plot3([racxvals2(end)+xshift2(t),racxvals2(1)+xshift2(t)],[racyvals2(end)+yshift2(t),racyvals2(1)+yshift2(t)]-2-(range-1),...
-                    [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+                    [allmax+1,allmax+1],'color',[branchedColor(end,:),1],'LineWidth',3)
             end
             if max(yC2)>=(range+2)
                 rhoxvals2=(range-1)*yC2/max(yC2)+1;
@@ -642,10 +642,10 @@ for i=1:1
                 plot3([rhoxvals2(end)+xshift2(t),rhoxvals2(1)+xshift2(t)],[rhoyvals2(end)+yshift2(t),rhoyvals2(1)+yshift2(t)]-2*range,...
                     [allmax+1,allmax+1],'color',bundledColor(end,:),'LineWidth',3,'LineStyle','-.')
             else
-                plot3(rhoxvals2+xshift2(t),rhoyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
-                    [bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+                plot3(rhoxvals2+xshift2(t),rhoyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(rhoxvals2)),'color',...
+                    [bundledColor(end,:),1],'LineWidth',3)
                 plot3([rhoxvals2(end)+xshift2(t),rhoxvals2(1)+xshift2(t)],[rhoyvals2(end)+yshift2(t),rhoyvals2(1)+yshift2(t)]-2-(range-1),...
-                    [allmax+1,allmax+1],'color',[bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+                    [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3)
             end
             if adjacent==0
                 plot(cos(2*pi*Xa/L)+xshift2(t),sin(2*pi*Xa/L)+yshift2(t)-(2*range),'color','black','LineWidth',1)
@@ -664,7 +664,6 @@ for i=1:1
                 ylim([-8,4])
                 set(gca,'plotBoxAspectRatio',[6 12 1]);
             end
-            % axis square
             hold off
 
             cbpos=cb.Position;
