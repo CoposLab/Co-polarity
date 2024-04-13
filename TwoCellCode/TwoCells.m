@@ -41,14 +41,14 @@ conc_dependent_racrho=0;
 %            for c2coeff_ind=2:3 %1,10,1000
 
 
-save_matfile=0;
-mat_location='./FigureAndMovieCode/vid_matfiles/signal_switches_sides/fixedsigrates/Tend40/resetRacRho/branchedbundled/0_8kb0_8kc';
+save_matfile=1;
+mat_location='./FigureAndMovieCode/vid_matfiles/misaligned/uncoupled/uncoupled';
 move_cells=0;
 writem=0;
 res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 61;
+ppp = 2;
 
 % options=["koffx","koffy","konx","kony"];
 % if isfile(strcat('./simulation_results/parameter_search_results/signal_concentration_dependent_racrho/',...
@@ -74,9 +74,9 @@ ppp = 61;
 %     ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
 % end
 
-while (ppp<=61)
+while (ppp<=2)
     close all;
-    savefigs=1;
+    savefigs=0;
     setnum=int2str(ppp);
     savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/concdependent_rhodownnosig_racdownsig/1000xRhoOff_10yRacOff';
     if savefigs==1
@@ -148,7 +148,7 @@ while (ppp<=61)
     Xa     = 0:dxa:L;
     Xb     = 0:dxa:L;
     pa     = dt*Da/(dxa^2);
-    Tend   = 100.0;                  % total simulation time
+    Tend   = 25.0;                  % total simulation time
     Nt     = Tend/dt;
     dx     = sqrt(2*D*dt);
     tplot  = 50;
@@ -169,8 +169,8 @@ while (ppp<=61)
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
     % Signal
-    signal=1;
-    sigswitch_time=500;
+    signal=0;
+    sigswitch_time=5000;
     sigper=0.40;
     sigBound1 = (floor((Na-1)*1/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*1/8 + floor((Na-1)*sigper/2)))+1;
     sigBound1(sigBound1<=0)=sigBound1(sigBound1<=0)+Na;
@@ -518,9 +518,9 @@ while (ppp<=61)
             sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
             sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
             if sumx1>0
-                if t > sigswitch_time
-                    Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumx1*1000);
-                end
+                % if t > sigswitch_time
+                %     Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumx1*1000);
+                % end
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*1000);
                 % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*1000);
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
@@ -529,9 +529,9 @@ while (ppp<=61)
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
             end
             if sumx2>0
-                if t<= sigswitch_time
-                    Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumx2*1000);
-                end
+                % if t<= sigswitch_time
+                %     Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumx2*1000);
+                % end
                 % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*1000);
                 % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*1000);
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
@@ -540,9 +540,9 @@ while (ppp<=61)
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
             end
             if sumy1>0
-                if t<= sigswitch_time
-                    Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumy1*10);
-                end
+                % if t<= sigswitch_time
+                %     Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumy1*10);
+                % end
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumy1*1000);
                 % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*1000);
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
@@ -550,9 +550,9 @@ while (ppp<=61)
                 % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*1000);
             end
             if sumy2>0
-                if t>sigswitch_time
-                    Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumy2*10);
-                end
+                % if t>sigswitch_time
+                %     Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumy2*10);
+                % end
                 % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumy2*1000);
                 % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*1000);
                 % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
@@ -649,12 +649,12 @@ while (ppp<=61)
             dnx1 = zeros(nnx1,1);
             rx1 = rand(nnx1,1);
 
-            % if(nnx1==0) % no rac on membrane
-            %     sprintf('here 1rac')
-            %     counter_ppp = ppp;
-            %     quit_cond = 1;
-            %     break
-            % end
+            if(nnx1==0) % no rac on membrane
+                sprintf('here 1rac')
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
 
             if(nnx1==0) % no rac on membrane
                 sprintf('here 1rac')
@@ -701,12 +701,12 @@ while (ppp<=61)
             dnx2 = zeros(nnx2,1);
             rx2 = rand(nnx2,1);
 
-            % if(nnx2==0)
-            %     sprintf('here 2rac')
-            %     counter_ppp = ppp;
-            %     quit_cond = 1;
-            %     break
-            % end
+            if(nnx2==0)
+                sprintf('here 2rac')
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
 
             if(nnx2==0) % no rac on membrane
                 sprintf('here 2rac')
@@ -752,12 +752,12 @@ while (ppp<=61)
             dny1 = zeros(nny1,1);
             ry1 = rand(nny1,1);
 
-            % if(nny1==0)
-            %     sprintf('here 1rho')
-            %     counter_ppp = ppp;
-            %     quit_cond = 1;
-            %     break
-            % end
+            if(nny1==0)
+                sprintf('here 1rho')
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
 
             if(nny1==0) % no rac on membrane
                 sprintf('here 1rho')
@@ -803,12 +803,12 @@ while (ppp<=61)
             dny2 = zeros(nny2,1);
             ry2 = rand(nny2,1);
 
-            % if(nny2==0)
-            %     sprintf('here 2rho')
-            %     counter_ppp = ppp;
-            %     quit_cond = 1;
-            %     break
-            % end
+            if(nny2==0)
+                sprintf('here 2rho')
+                counter_ppp = ppp;
+                quit_cond = 1;
+                break
+            end
 
             if(nny2==0) % no rac on membrane
                 sprintf('here 2rho')
