@@ -16,11 +16,7 @@ close all;
 clc;
 
 
-kaa_vals=[0,7.5,-7.5];
-kbb_vals=[0,7.5,-7.5];
-kcc_vals=[0,7.5,-7.5];
-kdd_vals=[0,7.5,-7.5];
-add_actin_growth=0;
+
 coeff_vals=[1,10,1000];
 conc_dependent_racrho=0;
 
@@ -41,58 +37,30 @@ conc_dependent_racrho=0;
 %            for c2coeff_ind=2:3 %1,10,1000
 
 
-save_matfile=1;
-mat_location='./FigureAndMovieCode/vid_matfiles/misaligned/uncoupled/uncoupled';
+save_matfile=0;
+mat_location='';
 move_cells=0;
 writem=0;
-res_counters = [0,0,0,0,0,0,0]; %[yes, strong no, 1NP, 2NP, no, LF, dist. effort]
+res_counters = [0,0,0,0,0,0,0]; %[coalign, collision, 1NP, 2NP, no, LF, dist. effort]
 
 counter_ppp = 1;
-ppp = 2;
+ppp = 1;
 
-% options=["koffx","koffy","konx","kony"];
-% if isfile(strcat('./simulation_results/parameter_search_results/signal_concentration_dependent_racrho/',...
-%               string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
-%               string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls'))
-% 
-%     res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/signal_concentration_dependent_racrho/',...
-%               string(coeff_vals(c1coeff_ind)), options(c1_ind), 'C1_',...
-%               string(coeff_vals(c2coeff_ind)), options(c2_ind), 'C2.xls')));
-%     counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
-%     ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
-% end
-
-
-% if isfile(strcat('./simulation_results/parameter_search_results/signal_independent_branchedbundled/',...
-%             string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
-%             string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls'))
-% 
-%     res_counters=table2array(readtable(strcat('./simulation_results/parameter_search_results/signal_independent_branchedbundled/',...
-%             string(kaa_vals(kaa_ind)),'kaa_',string(kbb_vals(kbb_ind)),'kbb_',...
-%             string(kcc_vals(kcc_ind)),'kcc_',string(kdd_vals(kdd_ind)),'kdd.xls')));
-%     counter_ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
-%     ppp = res_counters(1)+res_counters(2)+res_counters(3)+res_counters(4)+res_counters(5)+1;
-% end
-
-while (ppp<=2)
+while (ppp<=1)
     close all;
     savefigs=0;
     setnum=int2str(ppp);
-    savelocation='./simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/concdependent_rhodownnosig_racdownsig/1000xRhoOff_10yRacOff';
+    savelocation='';
     if savefigs==1
-        % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
-        % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
         filenameCells=strcat(savelocation,'Cells_',setnum);
         filenameScatter=strcat(savelocation,'Scatter_',setnum);
     end
 
     vid = 0;
-    % vidObj1 = VideoWriter(strcat(savelocation,'ScatterVid',setnum,'.mp4'),'MPEG-4');
-    % vidObjCol1 = VideoWriter(strcat(savelocation,'Colorvid',setnum,'.mp4'),'MPEG-4');
-    % vidObjRR1 = VideoWriter('colorplotrr1.mp4','MPEG-4');
-    % vidObj2 = VideoWriter('lineplot2.mp4','MPEG-4');
-    % vidObjCol2 = VideoWriter('colorplot2.mp4','MPEG-4');
-    % vidObjRR2 = VideoWriter('colorplotrr2.mp4','MPEG-4');
+    if vid==1
+        vidObjCells = VideoWriter(strcat(savelocation,'CellsVid_',setnum,'.mp4'),'MPEG-4');
+        vidObjScatter = VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
+    end
 
     counter_ppp = counter_ppp+1;
 
@@ -160,11 +128,14 @@ while (ppp<=2)
     posy2 = zeros(N,Nt);              % array of positions of Y(t) cell 2
 
 
+    % Competition for limited resource (actin monomers) term
+    %
+    %F = @(U,V) -U.*U - m0*U.*V;
+    F = @(U,V) -m0*U.*V;
+
+
     % Boundary between cells
     blen = floor(bper * L); % length of overlap between cell membranes
-    % boundC1 = (ceil(3*Na/4 - ((Na-1)*bper)/2)):((ceil(3*Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 1
-    % boundC2 = (floor(Na/4 - ((Na-1)*bper)/2)):((floor(Na/4 - ((Na-1)*bper)/2))+(Na-1)*bper); %boundary region in cell 2
-
     boundC1 = (floor((Na-1)*3/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*3/4 + floor((Na-1)*bper/2)))+1;
     boundC2 = (floor((Na-1)*1/4 - floor((Na-1)*bper/2)))+1:(floor((Na-1)*1/4 + floor((Na-1)*bper/2)))+1;
 
@@ -179,10 +150,13 @@ while (ppp<=2)
     sigBound2(sigBound2<=0)=sigBound2(sigBound2<=0)+Na;
     sigBound2(sigBound2>Na)=sigBound2(sigBound2>Na)-Na;
 
-    % Competition for limited resource (actin monomers) term
-    %
-    %F = @(U,V) -U.*U - m0*U.*V;
-    F = @(U,V) -m0*U.*V;
+
+    % options: 'uncoupled', 'racupc1-rhoupc2', 'rhoupc1-rhodownc2',
+    % 'racupc1-rhoupc2-concdependent', 'rhoupc1-rhodownc2-forcedependent',
+    % 'bundledupc1-branchedupc2', 'branched-bundled-crosspromotion',
+    % 'ractorho-antagonism'
+    pathway='uncoupled';
+
 
 
     % set antagonism (numRhoToRemove=0 and numRacToRemove=0 --> uncoupled)
@@ -214,14 +188,25 @@ while (ppp<=2)
     % kb: how does bundled affect branched
     % kc: how does branched affect bundled
     % kd: how does bundled affect bundled
-    ka_vals=0.9*[-1,0,1];
-    kb_vals=0.9*[-1,0,1];
-    kc_vals=0.9*[-1,0,1];
-    kd_vals=0.9*[-1,0,1];
-    ka_ind=2; %index of ka_vals (index 2 means no interaction)
-    kb_ind=2;
-    kc_ind=2;
-    kd_ind=2;
+    ka_vals=0.9*[0,1,-1];
+    kb_vals=0.9*[0,1,-1];
+    kc_vals=0.9*[0,1,-1];
+    kd_vals=0.9*[0,1,-1];
+    ka_ind=1; %index of ka_vals
+    kb_ind=1;
+    kc_ind=1;
+    kd_ind=1;
+
+
+    % branched/bundled add/subtract in growth term
+    kaa_vals=[0,7.5,-7.5];
+    kbb_vals=[0,7.5,-7.5];
+    kcc_vals=[0,7.5,-7.5];
+    kdd_vals=[0,7.5,-7.5];
+    kaa_ind=1;
+    kbb_ind=1;
+    kcc_ind=1;
+    kdd_ind=1;
 
 
     % Set initial conditions for actin distribution
@@ -455,7 +440,7 @@ while (ppp<=2)
                 Kfby2 = (rfb*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Koffx2 = (roff*(2 - tanh(steepness*(s2-s2(sigBound2(1)))) + tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
                 Koffy2 = (roff*(tanh(steepness*(s2-s2(sigBound2(1)))) - tanh(steepness*(s2-s2(sigBound2(end)))) + 0.2)/2.2)';
-            else                                                                                                                                                                                                                  
+            else
                 Konx1 = (ron*(tanh(steepness*(s1-s1(sigBound1(1)))) - tanh(steepness*(s1-s1(101))) + tanh(steepness*(s1-s1(1))) - tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
                 Kony1 = (ron*(2 - tanh(steepness*(s1-s1(sigBound1(1)))) + tanh(steepness*(s1-s1(101))) - tanh(steepness*(s1-s1(1))) + tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
                 Kfbx1 = (rfb*(tanh(steepness*(s1-s1(sigBound1(1))))  - tanh(steepness*(s1-s1(101))) + tanh(steepness*(s1-s1(1))) -  tanh(steepness*(s1-s1(sigBound1(end)))) + 0.2)/2.2)';
@@ -465,177 +450,45 @@ while (ppp<=2)
             end
         end
 
+        switch pathway
+            case 'uncoupled'
 
-
-        % Konx2=Konx2*10;
-        % Kony2=Kony2*10;
-
-        % Set konx and kony in contact region
-        if t<=sigswitch_time
-            % Konx1(boundC1)=Konx1(boundC1)*1000;
-            % Konx2(boundC2)=Konx2(boundC2)*10;
-            % Kony2(boundC2)=Kony2(boundC2)*1000;
-            % Koffx2(boundC2)=Koffx2(boundC2)*1000;
-            % Koffy1(boundC1)=Koffy1(boundC1)*1000;
-        else
-            % Koffx1(boundC1)=Koffx1(boundC1)*1000;
-            % Kony1(boundC1)=Kony1(boundC1)*1000;
-            % Konx1(boundC1)=Konx1(boundC1)*10;
-            % Konx2(boundC2)=Konx2(boundC2)*1000;
-            % Koffy2(boundC2)=Koffy2(boundC2)*1000;
-        end
-
-        % Konx1(boundC1)=Konx1(boundC1)*100;
-        % Konx2(boundC2)=Konx2(boundC2)*100;
-        % Kony1(boundC1)=Kony1(boundC1)*10;
-        % Kony2(boundC2)=Kony2(boundC2)*10;
-        % Koffx1(boundC1)=Koffx1(boundC1)*10;
-        % Koffx2(boundC2)=Koffx2(boundC2)*10;
-        % Koffy1(boundC1)=Koffy1(boundC1)*100;
-        % Koffy2(boundC2)=Koffy2(boundC2)*100;
-
-        % Set konx and kony away from contact region
-        % Konx1(setdiff(1:length(Konx1),boundC1)) = Konx1(setdiff(1:length(Konx1),boundC1))*1000;
-        % Konx2(setdiff(1:length(Konx2),boundC2)) = Konx2(setdiff(1:length(Konx2),boundC2))*1000;
-        % Kony1(setdiff(1:length(Kony1),boundC1)) = Kony1(setdiff(1:length(Kony1),boundC1))*1000;
-        % Kony2(setdiff(1:length(Kony2),boundC2)) = Kony2(setdiff(1:length(Kony2),boundC2))*1000;
-        % Koffx1(setdiff(1:length(Koffx1),boundC1)) = Koffx1(setdiff(1:length(Koffx1),boundC1))*1000;
-        % Koffx2(setdiff(1:length(Koffx2),boundC2)) = Koffx2(setdiff(1:length(Koffx2),boundC2))*1000;
-        % Koffy1(setdiff(1:length(Koffy1),boundC1)) = Koffy1(setdiff(1:length(Koffy1),boundC1))*1000;
-        % Koffy2(setdiff(1:length(Koffy2),boundC2)) = Koffy2(setdiff(1:length(Koffy2),boundC2))*1000;
-
-
-
-        % Set konx and kony depending on rac/rho concentrations in contact
-        % region
-        epsilon1 = 0.1;
-        flipc2=flip(boundC2);
-        scaledC1 = (L*boundC1/Na);
-        scaledC2 = L*flipc2/Na;
-        for i=1:length(boundC1)
-            sumx1 = sum(abs(posx1(:,t)-scaledC1(i))<=epsilon1);
-            sumx2 = sum(abs(posx2(:,t)-scaledC2(i))<=epsilon1);
-            sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
-            sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
-            if sumx1>0
-                % if t > sigswitch_time
-                %     Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumx1*1000);
-                % end
-                % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumx1*1000);
-                % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx1*1000);
-                % Konx1(boundC1(i)) = Konx1(boundC1(i))/(sumx1*100);
-                % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx1*100);
-                % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumx1*1000);
-                % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumx1*100);
-            end
-            if sumx2>0
-                % if t<= sigswitch_time
-                %     Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumx2*1000);
-                % end
-                % Konx1(boundC1(i)) = Konx1(boundC1(i))*(sumx2*1000);
-                % Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumx2*1000);
-                % Konx2(flipc2(i)) = Konx2(flipc2(i))/(sumx2*100);
-                % Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumx2*100);
-                % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumx2*1000);
-                % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumx2*100);
-            end
-            if sumy1>0
-                % if t<= sigswitch_time
-                %     Koffx2(flipc2(i)) = Koffx2(flipc2(i))*(sumy1*10);
-                % end
-                % Kony2(flipc2(i)) = Kony2(flipc2(i))*(sumy1*1000);
-                % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy1*1000);
-                % Kony1(boundC1(i)) = Kony1(boundC1(i))/(sumy1*100);
-                % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy1*100);
-                % Konx2(flipc2(i)) = Konx2(flipc2(i))*(sumy1*1000);
-            end
-            if sumy2>0
-                % if t>sigswitch_time
-                %     Koffx1(boundC1(i)) = Koffx1(boundC1(i))*(sumy2*10);
-                % end
-                % Kony1(boundC1(i)) = Kony1(boundC1(i))*(sumy2*1000);
-                % Koffy1(boundC1(i)) = Koffy1(boundC1(i))*(sumy2*1000);
-                % Kony2(flipc2(i)) = Kony2(flipc2(i))/(sumy2*100);
-                % Koffy2(flipc2(i)) = Koffy2(flipc2(i))*(sumy2*100);
-                % Konx1(flipc2(i)) = Konx1(flipc2(i))*(sumy2*1000);
-            end
-
-            if conc_dependent_racrho==1
-                if c1_ind==1 %koffx1
-                    if (c2_ind==1 || c2_ind==3) && sumx2>0
-                        Koffx1(boundC1(i)) = Koffx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
-                    elseif (c2_ind==2 || c2_ind==4) && sumy2>0
-                        Koffx1(boundC1(i)) = Koffx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+            case 'racupc1-rhoupc2'
+                Konx1(boundC1)=Konx1(boundC1)*1000;
+                Kony2(boundC2)=Kony2(boundC2)*1000;
+            case 'rhoupc1-rhodownc2'
+                Kony1(boundC1)=Kony1(boundC1)*1000;
+                Koffy2(boundC2)=Koffy2(boundC2)*1000;
+            case 'racupc1-rhoupc2-concdependent'
+                epsilon1 = 0.1;
+                flipc2=flip(boundC2);
+                scaledC1 = (L*boundC1/Na);
+                scaledC2 = L*flipc2/Na;
+                for i=1:length(boundC1)
+                    sumx1 = sum(abs(posx1(:,t)-scaledC1(i))<=epsilon1);
+                    sumx2 = sum(abs(posx2(:,t)-scaledC2(i))<=epsilon1);
+                    sumy1 = sum(abs(posy1(:,t)-scaledC1(i))<=epsilon1);
+                    sumy2 = sum(abs(posy2(:,t)-scaledC2(i))<=epsilon1);
+                    if sumx1>0
+                        Kony2(flipc2(i)) = Kony2(flipc2(i))*sumx1*1000;
                     end
-                elseif c1_ind==2 %koffy1
-                    if (c2_ind==1 || c2_ind==3) && sumx2>0
-                        Koffy1(boundC1(i)) = Koffy1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
-                    elseif (c2_ind==2 || c2_ind==4) && sumy2>0
-                        Koffy1(boundC1(i)) = Koffy1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
-                    end
-                elseif c1_ind==3 %konx1
-                    if (c2_ind==1 || c2_ind==3) && sumx2>0
-                        Konx1(boundC1(i)) = Konx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
-                    elseif (c2_ind==2 || c2_ind==4) && sumy2>0
-                        Konx1(boundC1(i)) = Konx1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
-                    end
-                elseif c1_ind==4 %kony1
-                    if (c2_ind==1 || c2_ind==3) && sumx2>0
-                        Kony1(boundC1(i)) = Kony1(boundC1(i))*coeff_vals(c1coeff_ind)*sumx2;
-                    elseif (c2_ind==2 || c2_ind==4) && sumy2>0
-                        Kony1(boundC1(i)) = Kony1(boundC1(i))*coeff_vals(c1coeff_ind)*sumy2;
+                    if sumy2>0
+                        Konx1(flipc2(i)) = Konx1(flipc2(i))*sumy2*1000;
                     end
                 end
-
-                if c2_ind==1 %koffx2
-                    if (c1_ind==1 || c1_ind==3) && sumx1>0
-                        Koffx2(flipc2(i)) = Koffx1(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
-                    elseif (c1_ind==2 || c1_ind==4) && sumy1>0
-                        Koffx2(flipc2(i)) = Koffx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
-                    end
-                elseif c2_ind==2 %koffy2
-                    if (c1_ind==1 || c1_ind==3) && sumx1>0
-                        Koffy2(flipc2(i)) = Koffy2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
-                    elseif (c1_ind==2 || c1_ind==4) && sumy1>0
-                        Koffy2(flipc2(i)) = Koffy2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
-                    end
-                elseif c2_ind==3 %konx2
-                    if (c1_ind==1 || c1_ind==3) && sumx1>0
-                        Konx2(flipc2(i)) = Konx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
-                    elseif (c1_ind==2 || c1_ind==4) && sumy1>0
-                        Konx2(flipc2(i)) = Konx2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
-                    end
-                elseif c2_ind==4 %kony2
-                    if (c1_ind==1 || c1_ind==3) && sumx1>0
-                        Kony2(flipc2(i)) = Kony2(flipc2(i))*coeff_vals(c2coeff_ind)*sumx1;
-                    elseif (c1_ind==2 || c1_ind==4) && sumy1>0
-                        Kony2(flipc2(i)) = Kony2(flipc2(i))*coeff_vals(c2coeff_ind)*sumy1;
-                    end
-                end
-            end
+            case 'rhoupc1-rhodownc2-forcedependent'
+                Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
+                Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
+            case 'bundledupc1-branchedupc2'
+                kbb_ind=2;
+                kcc_ind=2;
+            case 'branched-bundled-crosspromotion'
+                kb_ind=2;
+                kc_ind=2;
+            case 'ractorho-antagonism'
+                epsilon=0.5;
+                numRhoToRemove=10;
         end
-
-
-        % Set rac/rho rates depending on branched/bundled concentrations
-        % if t<=sigswitch_time
-        %     % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
-        %     % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
-        %     % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
-        %     % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
-        % else
-        %     % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        %     % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
-        %     % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
-        %     % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
-        % end
-        % Konx1(boundC1) = Konx1(boundC1).*flip(b2(boundC2))*1000;
-        % Konx2(boundC2) = Konx2(boundC2).*flip(b1(boundC1))*1000;
-        % Kony1(boundC1) = Kony1(boundC1).*flip(a2(boundC2))*1000;
-        % Kony2(boundC2) = Kony2(boundC2).*flip(a1(boundC1))*1000;
-        % Koffx1(boundC1) = Koffx1(boundC1).*flip(a2(boundC2))*1000;
-        % Koffx2(boundC2) = Koffx2(boundC2).*flip(a1(boundC1))*1000;
-        % Koffy1(boundC1) = Koffy1(boundC1).*flip(b2(boundC2))*1000;
-        % Koffy2(boundC2) = Koffy2(boundC2).*flip(b1(boundC1))*1000;
 
 
         %Cell 1
@@ -920,195 +773,195 @@ while (ppp<=2)
 
         % Find spontaneous association location cell 1
         if resetc1x==0
-        % if Kx1>=1
-        ss1 = sort(posx1(1:Kx1,t));
-        [ijk1] = find(ss1==posx1(minidx1,t),1);
-        prevind1 = (ijk1-1)*(ijk1>1) + (Kx1)*(ijk1==1);
-        nextind1 = (ijk1+1)*(ijk1<Kx1) + 1*(ijk1==Kx1);
-        x2_1 = posx1(minidx1,t)+(ss1(prevind1)-posx1(minidx1,t))/2;
-        x1_1 = posx1(minidx1,t)+(ss1(nextind1)-posx1(minidx1,t))/2;
-        locx1 = (x2_1-x1_1).*rand(1,1) + x1_1; % random location halfway between the closest left/right particles
+            % if Kx1>=1
+            ss1 = sort(posx1(1:Kx1,t));
+            [ijk1] = find(ss1==posx1(minidx1,t),1);
+            prevind1 = (ijk1-1)*(ijk1>1) + (Kx1)*(ijk1==1);
+            nextind1 = (ijk1+1)*(ijk1<Kx1) + 1*(ijk1==Kx1);
+            x2_1 = posx1(minidx1,t)+(ss1(prevind1)-posx1(minidx1,t))/2;
+            x1_1 = posx1(minidx1,t)+(ss1(nextind1)-posx1(minidx1,t))/2;
+            locx1 = (x2_1-x1_1).*rand(1,1) + x1_1; % random location halfway between the closest left/right particles
 
-        ponx1 = ron/(ron+rfb*(N-Kx1));
+            ponx1 = ron/(ron+rfb*(N-Kx1));
         end
         % else
         %     locx1 = rand(1,1)*L;
         % end
         if resetc1y==0
-        % if Ky1>=1
-        ss1 = sort(posy1(1:Ky1,t));
-        [ijk1] = find(ss1==posy1(minidy1,t),1);
-        prevind1 = (ijk1-1)*(ijk1>1) + (Ky1)*(ijk1==1);
-        nextind1 = (ijk1+1)*(ijk1<Ky1) + 1*(ijk1==Ky1);
-        y2_1 = posy1(minidy1,t)+(ss1(prevind1)-posy1(minidy1,t))/2;
-        y1_1 = posy1(minidy1,t)+(ss1(nextind1)-posy1(minidy1,t))/2;
-        locy1 = (y2_1-y1_1).*rand(1,1) + y1_1; % random location halfway between the closest left/right particles
-        % else
-        %     locy1=rand(1,1)*L;
-        % end
+            % if Ky1>=1
+            ss1 = sort(posy1(1:Ky1,t));
+            [ijk1] = find(ss1==posy1(minidy1,t),1);
+            prevind1 = (ijk1-1)*(ijk1>1) + (Ky1)*(ijk1==1);
+            nextind1 = (ijk1+1)*(ijk1<Ky1) + 1*(ijk1==Ky1);
+            y2_1 = posy1(minidy1,t)+(ss1(prevind1)-posy1(minidy1,t))/2;
+            y1_1 = posy1(minidy1,t)+(ss1(nextind1)-posy1(minidy1,t))/2;
+            locy1 = (y2_1-y1_1).*rand(1,1) + y1_1; % random location halfway between the closest left/right particles
+            % else
+            %     locy1=rand(1,1)*L;
+            % end
 
-        pony1 = ron/(ron+rfb*(N-Ky1));
+            pony1 = ron/(ron+rfb*(N-Ky1));
         end
 
         % Find spontaneous association location cell 2
         if resetc2x==0
-        % if Kx2>=1
-        ss2 = sort(posx2(1:Kx2,t));
-        [ijk2] = find(ss2==posx2(minidx2,t),1);
-        prevind2 = (ijk2-1)*(ijk2>1) + (Kx2)*(ijk2==1);
-        nextind2 = (ijk2+1)*(ijk2<Kx2) + 1*(ijk2==Kx2);
-        x2_2 = posx2(minidx2,t)+(ss2(prevind2)-posx2(minidx2,t))/2;
-        x1_2 = posx2(minidx2,t)+(ss2(nextind2)-posx2(minidx2,t))/2;
-        locx2 = (x2_2-x1_2).*rand(1,1) + x1_2; % random location halfway between the closest left/right particles
+            % if Kx2>=1
+            ss2 = sort(posx2(1:Kx2,t));
+            [ijk2] = find(ss2==posx2(minidx2,t),1);
+            prevind2 = (ijk2-1)*(ijk2>1) + (Kx2)*(ijk2==1);
+            nextind2 = (ijk2+1)*(ijk2<Kx2) + 1*(ijk2==Kx2);
+            x2_2 = posx2(minidx2,t)+(ss2(prevind2)-posx2(minidx2,t))/2;
+            x1_2 = posx2(minidx2,t)+(ss2(nextind2)-posx2(minidx2,t))/2;
+            locx2 = (x2_2-x1_2).*rand(1,1) + x1_2; % random location halfway between the closest left/right particles
 
-        ponx2 = ron/(ron+rfb*(N-Kx2));
+            ponx2 = ron/(ron+rfb*(N-Kx2));
         end
         % else
         %     locx2=rand(1,1)*L;
         % end
         % if Ky2>=1
         if resetc2y==0
-        ss2 = sort(posy2(1:Ky2,t));
-        [ijk2] = find(ss2==posy2(minidy2,t),1);
-        prevind2 = (ijk2-1)*(ijk2>1) + (Ky2)*(ijk2==1);
-        nextind2 = (ijk2+1)*(ijk2<Ky2) + 1*(ijk2==Ky2);
-        y2_2 = posy2(minidy2,t)+(ss2(prevind2)-posy2(minidy2,t))/2;
-        y1_2 = posy2(minidy2,t)+(ss2(nextind2)-posy2(minidy2,t))/2;
-        locy2 = (y2_2-y1_2).*rand(1,1) + y1_2; % random location halfway between the closest left/right particles
-        % else
-        %     locy2=rand(1,1)*L;
-        % end
+            ss2 = sort(posy2(1:Ky2,t));
+            [ijk2] = find(ss2==posy2(minidy2,t),1);
+            prevind2 = (ijk2-1)*(ijk2>1) + (Ky2)*(ijk2==1);
+            nextind2 = (ijk2+1)*(ijk2<Ky2) + 1*(ijk2==Ky2);
+            y2_2 = posy2(minidy2,t)+(ss2(prevind2)-posy2(minidy2,t))/2;
+            y1_2 = posy2(minidy2,t)+(ss2(nextind2)-posy2(minidy2,t))/2;
+            locy2 = (y2_2-y1_2).*rand(1,1) + y1_2; % random location halfway between the closest left/right particles
+            % else
+            %     locy2=rand(1,1)*L;
+            % end
 
-        
-        pony2 = ron/(ron+rfb*(N-Ky2));
+
+            pony2 = ron/(ron+rfb*(N-Ky2));
         end
 
         %Cell 1 rac
         if resetc1x==0
-        if(NNx1(t+1) < NNx1(t))                % diassociation event (particle off)
-            oldcolx1 = posx1(minidx1,1:end); % Find the particle to be removed
-            othercolsx1 = posx1([1:minidx1-1,minidx1+1:Kx1],1:end); % Gather other "on" particles
-            otherothercolsx1 = posx1(Kx1+1:end,1:end); % Gather "off" particles
-            newposx1 = [othercolsx1;oldcolx1;otherothercolsx1]; % Put removed particle at the end of "on" particles
-            posx1 = newposx1;
-            nx1(Kx1,t+1) = 0; % Set the removed particle to inactive
-        elseif(NNx1(t+1) > NNx1(t))             % association event (on or recruitment)
-            rrx1 = rand(1,1);
-            posx1(Kx1,t+1) = posx1(Kx1,t)+(rrx1<ponx1)*locx1; % on event
-            posx1(Kx1,t+1) = posx1(Kx1,t)+(rrx1>=ponx1)*posx1(minidx1,t);   % recruitment event
-            nx1(Kx1,t+1) = 1;
-            % Look for nearby rho (posy1), take them off
-            % posx1(K1_1,t+1)=location of rac binding
-            if numRhoToRemove>0
-                boundC1Scaled=(L*boundC1/Na);
-                locRemovey1 = find(abs(posy1(:,t+1)-posx1(Kx1,t+1))<epsilon,numRhoToRemove);
-                numFoundy1 = length(locRemovey1);
-                if ~isempty(locRemovey1) && boundC1Scaled(1)<=posx1(Kx1,t+1) && boundC1Scaled(end)>=posx1(Kx1,t+1)
-                    % posy1(locRemovey1,t+1)=0;
-                    oldcoly1 = posy1(locRemovey1,1:end); % Find the particle(s) to be removed
-                    othercolsy1 = posy1(setdiff(1:Ky1,locRemovey1),1:end); % Gather other "on" particles
-                    otherothercolsy1 = posy1(Ky1+1:end,1:end); % Gather "off" particles
-                    newposy1 = [othercolsy1;oldcoly1;otherothercolsy1]; % Put removed particle at the end of "on" particles
-                    posy1 = newposy1;
-                    ny1(Ky1-numFoundy1+1:Ky1,t+1) = 0;
+            if(NNx1(t+1) < NNx1(t))                % diassociation event (particle off)
+                oldcolx1 = posx1(minidx1,1:end); % Find the particle to be removed
+                othercolsx1 = posx1([1:minidx1-1,minidx1+1:Kx1],1:end); % Gather other "on" particles
+                otherothercolsx1 = posx1(Kx1+1:end,1:end); % Gather "off" particles
+                newposx1 = [othercolsx1;oldcolx1;otherothercolsx1]; % Put removed particle at the end of "on" particles
+                posx1 = newposx1;
+                nx1(Kx1,t+1) = 0; % Set the removed particle to inactive
+            elseif(NNx1(t+1) > NNx1(t))             % association event (on or recruitment)
+                rrx1 = rand(1,1);
+                posx1(Kx1,t+1) = posx1(Kx1,t)+(rrx1<ponx1)*locx1; % on event
+                posx1(Kx1,t+1) = posx1(Kx1,t)+(rrx1>=ponx1)*posx1(minidx1,t);   % recruitment event
+                nx1(Kx1,t+1) = 1;
+                % Look for nearby rho (posy1), take them off
+                % posx1(K1_1,t+1)=location of rac binding
+                if numRhoToRemove>0
+                    boundC1Scaled=(L*boundC1/Na);
+                    locRemovey1 = find(abs(posy1(:,t+1)-posx1(Kx1,t+1))<epsilon,numRhoToRemove);
+                    numFoundy1 = length(locRemovey1);
+                    if ~isempty(locRemovey1) && boundC1Scaled(1)<=posx1(Kx1,t+1) && boundC1Scaled(end)>=posx1(Kx1,t+1)
+                        % posy1(locRemovey1,t+1)=0;
+                        oldcoly1 = posy1(locRemovey1,1:end); % Find the particle(s) to be removed
+                        othercolsy1 = posy1(setdiff(1:Ky1,locRemovey1),1:end); % Gather other "on" particles
+                        otherothercolsy1 = posy1(Ky1+1:end,1:end); % Gather "off" particles
+                        newposy1 = [othercolsy1;oldcoly1;otherothercolsy1]; % Put removed particle at the end of "on" particles
+                        posy1 = newposy1;
+                        ny1(Ky1-numFoundy1+1:Ky1,t+1) = 0;
+                    end
                 end
             end
-        end
         end
 
         %Cell 2 rac
         if resetc2x==0
-        if(NNx2(t+1) < NNx2(t))                % diassociation event (particle off)
-            oldcolx2 = posx2(minidx2,1:end);
-            othercolsx2 = posx2([1:minidx2-1,minidx2+1:Kx2],1:end);
-            otherothercolsx2 = posx2(Kx2+1:end,1:end);
-            newposx2 = [othercolsx2;oldcolx2;otherothercolsx2];
-            posx2 = newposx2;
-            nx2(Kx2,t+1) = 0;
-        elseif(NNx2(t+1) > NNx2(t))             % association event (on or recruitment)
-            rrx2 = rand(1,1);
-            posx2(Kx2,t+1) = posx2(Kx2,t)+(rrx2<ponx2)*locx2;              % on event
-            posx2(Kx2,t+1) = posx2(Kx2,t)+(rrx2>=ponx2)*posx2(minidx2,t);   % recruitment event
-            nx2(Kx2,t+1) = 1;
-            % Look for nearby rho (posy2), take them off
-            % locx2=location of rac binding
-            if numRhoToRemove>0
-                boundC2Scaled=(L*boundC2/Na);
-                locRemovey2 = find(abs(posy2(:,t+1)-posx2(Kx2,t+1))<epsilon,numRhoToRemove);
-                numFoundy2 = length(locRemovey2);
-                if ~isempty(locRemovey2) && boundC2Scaled(1)<=posx2(Kx2,t+1) && boundC2Scaled(end)>=posx2(Kx2,t+1)
-                    % posy2(locRemovey2,t+1)=0;
-                    oldcoly2 = posy2(locRemovey2,1:end); % Find the particle to be removed
-                    othercolsy2 = posy2(setdiff(1:Ky2,locRemovey2),1:end); % Gather other "on" particles
-                    otherothercolsy2 = posy2(Ky2+1:end,1:end); % Gather "off" particles
-                    newposy2 = [othercolsy2;oldcoly2;otherothercolsy2]; % Put removed particle at the end of "on" particles
-                    posy2 = newposy2;
-                    ny2(Ky2-numFoundy2+1:Ky2,t+1) = 0;
+            if(NNx2(t+1) < NNx2(t))                % diassociation event (particle off)
+                oldcolx2 = posx2(minidx2,1:end);
+                othercolsx2 = posx2([1:minidx2-1,minidx2+1:Kx2],1:end);
+                otherothercolsx2 = posx2(Kx2+1:end,1:end);
+                newposx2 = [othercolsx2;oldcolx2;otherothercolsx2];
+                posx2 = newposx2;
+                nx2(Kx2,t+1) = 0;
+            elseif(NNx2(t+1) > NNx2(t))             % association event (on or recruitment)
+                rrx2 = rand(1,1);
+                posx2(Kx2,t+1) = posx2(Kx2,t)+(rrx2<ponx2)*locx2;              % on event
+                posx2(Kx2,t+1) = posx2(Kx2,t)+(rrx2>=ponx2)*posx2(minidx2,t);   % recruitment event
+                nx2(Kx2,t+1) = 1;
+                % Look for nearby rho (posy2), take them off
+                % locx2=location of rac binding
+                if numRhoToRemove>0
+                    boundC2Scaled=(L*boundC2/Na);
+                    locRemovey2 = find(abs(posy2(:,t+1)-posx2(Kx2,t+1))<epsilon,numRhoToRemove);
+                    numFoundy2 = length(locRemovey2);
+                    if ~isempty(locRemovey2) && boundC2Scaled(1)<=posx2(Kx2,t+1) && boundC2Scaled(end)>=posx2(Kx2,t+1)
+                        % posy2(locRemovey2,t+1)=0;
+                        oldcoly2 = posy2(locRemovey2,1:end); % Find the particle to be removed
+                        othercolsy2 = posy2(setdiff(1:Ky2,locRemovey2),1:end); % Gather other "on" particles
+                        otherothercolsy2 = posy2(Ky2+1:end,1:end); % Gather "off" particles
+                        newposy2 = [othercolsy2;oldcoly2;otherothercolsy2]; % Put removed particle at the end of "on" particles
+                        posy2 = newposy2;
+                        ny2(Ky2-numFoundy2+1:Ky2,t+1) = 0;
+                    end
                 end
             end
-        end
         end
 
         %Cell 1 rho
         if resetc1y==0
-        if (NNy1(t+1) < NNy1(t))                % diassociation event (particle off)
-            oldcoly1 = posy1(minidy1,1:end);
-            othercolsy1 = posy1([1:minidy1-1,minidy1+1:Ky1],1:end);
-            otherothercolsy1 = posy1(Ky1+1:end,1:end);
-            newposy1 = [othercolsy1;oldcoly1;otherothercolsy1];
-            posy1 = newposy1;
-            ny1(Ky1,t+1) = 0;
-        elseif(NNy1(t+1) > NNy1(t))             % association event (on or recruitment)
-            rry1 = rand(1,1);
-            posy1(Ky1,t+1) = posy1(Ky1,t)+(rry1<pony1)*locy1;               % on event
-            posy1(Ky1,t+1) = posy1(Ky1,t)+(rry1>=pony1)*posy1(minidy1,t);    % recruitment event
-            ny1(Ky1,t+1) = 1;
+            if (NNy1(t+1) < NNy1(t))                % diassociation event (particle off)
+                oldcoly1 = posy1(minidy1,1:end);
+                othercolsy1 = posy1([1:minidy1-1,minidy1+1:Ky1],1:end);
+                otherothercolsy1 = posy1(Ky1+1:end,1:end);
+                newposy1 = [othercolsy1;oldcoly1;otherothercolsy1];
+                posy1 = newposy1;
+                ny1(Ky1,t+1) = 0;
+            elseif(NNy1(t+1) > NNy1(t))             % association event (on or recruitment)
+                rry1 = rand(1,1);
+                posy1(Ky1,t+1) = posy1(Ky1,t)+(rry1<pony1)*locy1;               % on event
+                posy1(Ky1,t+1) = posy1(Ky1,t)+(rry1>=pony1)*posy1(minidy1,t);    % recruitment event
+                ny1(Ky1,t+1) = 1;
 
-            if numRacToRemove>0
-                boundC1Scaled=(L*boundC1/Na);
-                locRemovex1 = find(abs(posx1(:,t+1)-posy1(Ky1,t+1))<epsilon,numRacToRemove);
-                numFoundx1 = length(locRemovex1);
-                if ~isempty(locRemovex1) && boundC1Scaled(1)<=posy1(Ky1,t+1) && boundC1Scaled(end)>=posy1(Ky1,t+1)
-                    oldcolx1 = posx1(locRemovex1,1:end); % Find the particle(s) to be removed
-                    othercolsx1 = posx1(setdiff(1:Kx1,locRemovex1),1:end); % Gather other "on" particles
-                    otherothercolsx1 = posx1(Kx1+1:end,1:end); % Gather "off" particles
-                    newposx1 = [othercolsx1;oldcolx1;otherothercolsx1]; % Put removed particle at the end of "on" particles
-                    posx1 = newposx1;
-                    nx1(Kx1-numFoundx1+1:Kx1,t+1) = 0;
+                if numRacToRemove>0
+                    boundC1Scaled=(L*boundC1/Na);
+                    locRemovex1 = find(abs(posx1(:,t+1)-posy1(Ky1,t+1))<epsilon,numRacToRemove);
+                    numFoundx1 = length(locRemovex1);
+                    if ~isempty(locRemovex1) && boundC1Scaled(1)<=posy1(Ky1,t+1) && boundC1Scaled(end)>=posy1(Ky1,t+1)
+                        oldcolx1 = posx1(locRemovex1,1:end); % Find the particle(s) to be removed
+                        othercolsx1 = posx1(setdiff(1:Kx1,locRemovex1),1:end); % Gather other "on" particles
+                        otherothercolsx1 = posx1(Kx1+1:end,1:end); % Gather "off" particles
+                        newposx1 = [othercolsx1;oldcolx1;otherothercolsx1]; % Put removed particle at the end of "on" particles
+                        posx1 = newposx1;
+                        nx1(Kx1-numFoundx1+1:Kx1,t+1) = 0;
+                    end
                 end
             end
-        end
         end
 
         %Cell 2 rho
         if resetc2y==0
-        if (NNy2(t+1) < NNy2(t))                % diassociation event (particle off)
-            oldcoly2 = posy2(minidy2,1:end);
-            othercolsy2 = posy2([1:minidy2-1,minidy2+1:Ky2],1:end);
-            otherothercolsy2 = posy2(Ky2+1:end,1:end);
-            newposy2 = [othercolsy2;oldcoly2;otherothercolsy2];
-            posy2 = newposy2;
-            ny2(Ky2,t+1) = 0;
-        elseif(NNy2(t+1) > NNy2(t))             % association event (on or recruitment)
-            rry2 = rand(1,1);
-            posy2(Ky2,t+1) = posy2(Ky2,t)+(rry2<pony2)*locy2;               % on event
-            posy2(Ky2,t+1) = posy2(Ky2,t)+(rry2>=pony2)*posy2(minidy2,t);    % recruitment event
-            ny2(Ky2,t+1) = 1;
+            if (NNy2(t+1) < NNy2(t))                % diassociation event (particle off)
+                oldcoly2 = posy2(minidy2,1:end);
+                othercolsy2 = posy2([1:minidy2-1,minidy2+1:Ky2],1:end);
+                otherothercolsy2 = posy2(Ky2+1:end,1:end);
+                newposy2 = [othercolsy2;oldcoly2;otherothercolsy2];
+                posy2 = newposy2;
+                ny2(Ky2,t+1) = 0;
+            elseif(NNy2(t+1) > NNy2(t))             % association event (on or recruitment)
+                rry2 = rand(1,1);
+                posy2(Ky2,t+1) = posy2(Ky2,t)+(rry2<pony2)*locy2;               % on event
+                posy2(Ky2,t+1) = posy2(Ky2,t)+(rry2>=pony2)*posy2(minidy2,t);    % recruitment event
+                ny2(Ky2,t+1) = 1;
 
-            if numRacToRemove>0
-                boundC2Scaled=(L*boundC2/Na);
-                locRemovex2 = find(abs(posx2(:,t+1)-posy2(Ky2,t+1))<epsilon,numRacToRemove);
-                numFoundx2 = length(locRemovex2);
-                if ~isempty(locRemovex2) && boundC2Scaled(1)<=posy2(Ky2,t+1) && boundC2Scaled(end)>=posy2(Ky2,t+1)
-                    oldcolx2 = posx2(locRemovex2,1:end); % Find the particle(s) to be removed
-                    othercolsx2 = posx2(setdiff(1:Kx2,locRemovex2),1:end); % Gather other "on" particles
-                    otherothercolsx2 = posx2(Kx2+1:end,1:end); % Gather "off" particles
-                    newposx2 = [othercolsx2;oldcolx2;otherothercolsx2]; % Put removed particle at the end of "on" particles
-                    posx2 = newposx2;
-                    nx2(Kx2-numFoundx2+1:Kx2,t+1) = 0;
+                if numRacToRemove>0
+                    boundC2Scaled=(L*boundC2/Na);
+                    locRemovex2 = find(abs(posx2(:,t+1)-posy2(Ky2,t+1))<epsilon,numRacToRemove);
+                    numFoundx2 = length(locRemovex2);
+                    if ~isempty(locRemovex2) && boundC2Scaled(1)<=posy2(Ky2,t+1) && boundC2Scaled(end)>=posy2(Ky2,t+1)
+                        oldcolx2 = posx2(locRemovex2,1:end); % Find the particle(s) to be removed
+                        othercolsx2 = posx2(setdiff(1:Kx2,locRemovex2),1:end); % Gather other "on" particles
+                        otherothercolsx2 = posx2(Kx2+1:end,1:end); % Gather "off" particles
+                        newposx2 = [othercolsx2;oldcolx2;otherothercolsx2]; % Put removed particle at the end of "on" particles
+                        posx2 = newposx2;
+                        nx2(Kx2-numFoundx2+1:Kx2,t+1) = 0;
+                    end
                 end
             end
-        end
         end
 
         [s1,xC1,yC1] = resamplePolarityMolecules(posx1(1:Kx1,t+1),posy1(1:Ky1,t+1),Kx1,Ky1,L,Na);
@@ -1132,69 +985,6 @@ while (ppp<=2)
         cell2_bound(boundC2)=ones(length(boundC2),1);
         abmax=50;
 
-        % gamma=1.5;
-        % 
-        % if t<=sigswitch_time
-        %     % kb_ind=2;
-        %     % kc_ind=2;
-        %     branchedConst1 = 3.0;
-        %     bundledConst1 = 1.0;
-        %     branchedConst2 = 1.0;
-        %     bundledConst2 = 3.0;
-        % else
-        %     % kb_ind=3;
-        %     % kc_ind=3;
-        %     branchedConst1 = 1.0;
-        %     bundledConst1 = 3.0;
-        %     branchedConst2 = 3.0;
-        %     bundledConst2 = 1.0;
-        % end
-
-
-        % Ka1=ones(Na,1);
-        % Kb1=ones(Na,1);
-        % Ka2=ones(Na,1);
-        % Kb2=ones(Na,1);
-        % Ka1(boundC1) = branchedConst1*Ka1(boundC1);
-        % Kb1(boundC1) = bundledConst1*Kb1(boundC1);
-        % Ka2(boundC2) = branchedConst2*Ka2(boundC2);
-        % Kb2(boundC2) = bundledConst2*Kb2(boundC2);
-
-        % add 0
-        % if add_actin_growth==0
-        %     kaa_ind=1;
-        %     kbb_ind=1;
-        %     kcc_ind=1;
-        %     kdd_ind=1;
-        % end
-
-        kaa_vals=[0,7.5];
-        kbb_vals=[0,7.5];
-        kcc_vals=[0,7.5];
-        kdd_vals=[0,7.5];
-        kaa_ind=1;
-        kbb_ind=1;
-        kcc_ind=1;
-        kdd_ind=1;
-
-        % if t<=sigswitch_time
-        %     kaa_ind=2;
-        %     kdd_ind=2;
-        % else
-        %     kbb_ind=2;
-        %     kcc_ind=2;
-        % end
-
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1)) - a1.*a1); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1)) - b1.*b1); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2)) - a2.*a2); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2)) - b2.*b2); %Cell 2 bundled
-
-        % Growth term maxes out version
-        % rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 + cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ) - a1.*a1)); %Cell 1 branched
-        % rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 + cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ) - b1.*b1)); %Cell 1 bundled
-        % rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 + cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ) - a2.*a2)); %Cell 2 branched
-        % rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 + cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ) - b2.*b2)); %Cell 2 bundled
 
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 ...
             + ka_vals(ka_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
@@ -1301,13 +1091,6 @@ while (ppp<=2)
 
             posn1=[0+xshift1(t+1),0+yshift1(t+1)];
             posn2=[0+xshift2(t+1),-2+yshift2(t+1)];
-
-            % xshift1(t+1)=xshift1(t+1)+0.0003*(posn2(1)-posn1(1))/sqrt(sum((posn2-posn1).^2));
-            % yshift1(t+1)=yshift1(t+1)+0.0003*(posn2(2)-posn1(2))/sqrt(sum((posn2-posn1).^2));
-            % xshift2(t+1)=xshift2(t+1)+0.0003*(posn1(1)-posn2(1))/sqrt(sum((posn2-posn1).^2));
-            % yshift2(t+1)=yshift2(t+1)+0.0003*(posn1(2)-posn2(2))/sqrt(sum((posn2-posn1).^2));
-
-            % cell_distance = sqrt((posn1(1)-posn2(1))^2+(posn1(2)-posn2(2))^2);
         end
 
         if t==(Nt-1)
@@ -1335,8 +1118,8 @@ while (ppp<=2)
             sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
         end
 
-        % Plot result
-        if t==(Nt-1) && savefigs==1
+        % Make plots
+        if mod(t-1,tplot)==0
             % Define circles
             gapsize=0.01;
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
@@ -1380,8 +1163,6 @@ while (ppp<=2)
             branchedColName = 'Pink';
             bundledColName = 'Yellow';
 
-            allmax=max(max([a1 a2 b1 b2]));
-
             % Make scatterplots
             scatplot=figure(ppp);
             clf
@@ -1390,117 +1171,351 @@ while (ppp<=2)
             plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
             plot(s1,xC1,'-.','color',branchedColor(end,:),'linewidth',1);
             plot(s1,yC1,'-.k','color',bundledColor(end,:),'linewidth',1);
-            % xlim([0 10]); ylim([0 2]);
-            %title('Time = 0');
             set(gca,'fontname','times','fontsize',20); box on;
             lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
             lgd.NumColumns = 2;
             set(gcf,'color','w');
             title('Cell 1')
             hold off;
-            %keyboard
-            % pause(1.0);
 
             subplot(1,2,2); %Cell 2
             plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
             plot(Xa,b2,'-ok','color',bundledColor(end,:),'linewidth',3);
             plot(s2,xC2,'-.','color',branchedColor(end,:),'linewidth',1);
             plot(s2,yC2,'-.k','color',bundledColor(end,:),'linewidth',1);
-            % xlim([0 10]); ylim([0 2]);
-            %title('Time = 0');
             set(gca,'fontname','times','fontsize',20); box on;
             lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
             lgd.NumColumns = 2;
             set(gcf,'color','w');
             title('Cell 2')
             hold off;
-            %keyboard
-            % pause(1.0);
 
+            if vid==1
+                scatframe = getframe(scatplot);
+                writeVideo(vidObjScatter,scatframe);
+            end
 
-            % Cell 1
-            figcells=figure(ppp+1);
+            % Plot cells
+            allmax=12;
+            showtime=1;
+            cellsplot=figure(ppp+1);
             clf
+            range=3;
+            hold on
             alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
-            surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            % clim([0,12])
+            clim([0,12])
             freezeColors;
             shading interp
-            hold on;
             alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
-            surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            % clim([0,12])
+            clim([0,12])
             freezeColors;
             shading interp
             view(2)
-            grid off
-            set(gca,'XTick',[], 'YTick', [])
+            if max(xC1)>=(range+2)
+                racxvals1=(range-1)*xC1/max(xC1)+1;
+                racyvals1=(range-1)*xC1/max(xC1)+1;
+            else
+                racxvals1=(range-2)*xC1/max(xC1)+1;
+                racyvals1=(range-1)*xC1/max(xC1)+1;
+            end
+            racxvals1=(racxvals1)'.*cos(2*pi*Xa/L);
+            racyvals1=(racyvals1)'.*sin(2*pi*Xa/L);
+            plot3(racxvals1+xshift1(t),racyvals1+yshift1(t),(allmax+1)*ones(1,length(racxvals1)),'color',...
+                [branchedColor(end,:),1],'LineWidth',3)
+            plot3([racxvals1(end)+xshift1(t),racxvals1(1)+xshift1(t)],[racyvals1(end)+yshift1(t),racyvals1(1)+yshift1(t)],...
+                [allmax+1,allmax+1],'color',[branchedColor(end,:),1],'LineWidth',3)
+            if max(yC1)>=(range+2)
+                rhoxvals1=(range-1)*yC1/max(yC1)+1;
+                rhoyvals1=(range-1)*yC1/max(yC1)+1;
+            else
+                rhoxvals1=(range-2)*yC1/max(yC1)+1;
+                rhoyvals1=(range-2)*yC1/max(yC1)+1;
+            end
+            rhoxvals1=(rhoxvals1)'.*cos(2*pi*Xa/L);
+            rhoyvals1=(rhoyvals1)'.*sin(2*pi*Xa/L);
+            plot3(rhoxvals1+xshift1(t),rhoyvals1+yshift1(t),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
+                [bundledColor(end,:),1],'LineWidth',3)
+            plot3([rhoxvals1(end)+xshift1(t),rhoxvals1(1)+xshift1(t)],[rhoyvals1(end)+yshift1(t),rhoyvals1(1)+yshift1(t)],...
+                [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3)
+            plot3(cos(2*pi*Xa/L)+xshift1(t),sin(2*pi*Xa/L)+yshift1(t),(allmax+2)*ones(1,Na),'color','black','LineWidth',1)
+            hold off
 
-            % Cell 2
-            surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
+            %cell 2
+            hold on
+            alphaData=ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2)));
+            surf(Xcol+xshift2(t),Ycol+yshift2(t)-2-(range-1),ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(branchedColor)
-            % clim([0,12])
-            freezeColors;
+            clim([0,12])
             cb=colorbar('Location','eastoutside');
+            freezeColors;
             freezeColors(cb);
             cbpos=cb.Position;
-            set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
-            % set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
+            % set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
+            set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
             set(cb,'TickLabels',{});
             cbpos=cb.Position;
             shading interp
-            % end
-            % if max(ZBund2)>0.5
-            surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
+            alphaData=ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2)));
+            surf(Xcol+xshift2(t),Ycol+yshift2(t)-2-(range-1),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
             colormap(bundledColor)
-            % clim([0,12])
+            clim([0,12])
             freezeColors;
             jcb=jicolorbar;
             freezeColors(jcb);
             jcbpos=jcb.Position;
             set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
             shading interp
-            % end
             view(2)
-            grid off
-            axis equal
-            set(gca,'XTick',[], 'YTick', [])
+            if max(xC2)>=(range+2)
+                racxvals2=(range-1)*xC2/max(xC2)+1;
+                racyvals2=(range-1)*xC2/max(xC2)+1;
+            else
+                racxvals2=(range-2)*xC2/max(xC2)+1;
+                racyvals2=(range-2)*xC2/max(xC2)+1;
+            end
+            racxvals2=(racxvals2)'.*cos(2*pi*Xa/L);
+            racyvals2=(racyvals2)'.*sin(2*pi*Xa/L);
+            plot3(racxvals2+xshift2(t),racyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(racxvals2)),'color',...
+                [branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+            plot3([racxvals2(end)+xshift2(t),racxvals2(1)+xshift2(t)],[racyvals2(end)+yshift2(t),racyvals2(1)+yshift2(t)]-2-(range-1),...
+                [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+            if max(yC2)>=(range+2)
+                rhoxvals2=(range-1)*yC2/max(yC2)+1;
+                rhoyvals2=(range-1)*yC2/max(yC2)+1;
+            else
+                rhoxvals2=(range-2)*yC2/max(yC2)+1;
+                rhoyvals2=(range-2)*yC2/max(yC2)+1;
+            end
+            rhoxvals2=(rhoxvals2)'.*cos(2*pi*Xa/L);
+            rhoyvals2=(rhoyvals2)'.*sin(2*pi*Xa/L);
+            plot3(rhoxvals2+xshift2(t),rhoyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(rhoxvals2)),'color',...
+                [bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+            plot3([rhoxvals2(end)+xshift2(t),rhoxvals2(1)+xshift2(t)],[rhoyvals2(end)+yshift2(t),rhoyvals2(1)+yshift2(t)]-2-(range-1),...
+                [allmax+1,allmax+1],'color',[bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+            plot(cos(2*pi*Xa/L)+xshift2(t),sin(2*pi*Xa/L)+yshift2(t)-2-(range-1),'color','black','LineWidth',1)
 
-            hold off;
-            box off;
-            set(gca,'XColor','w')
-            set(gca,'YColor','w')
-            set(gcf,'color','w');
+            xlim([-3,3])
+            ylim([-8,4])
+            set(gca,'plotBoxAspectRatio',[6 12 1]);
+            hold off
 
-            if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
+            cbpos=cb.Position;
+            if showtime==1
+                timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + (t-1)*0.01,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+            end
+
+            if ~isempty(dirIndexa1)
                 hold on;
-                quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+                quiver(0+xshift1(t),0+yshift1(t),Xsm(dirIndexa1),Ysm(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2);
                 hold off;
             end
-            if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
+            if ~isempty(dirIndexa2)
                 hold on;
-                quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+                quiver(0+xshift2(t),-2-(range-1)+yshift2(t),Xsm(dirIndexa2),Ysm(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2)
                 hold off;
             end
 
-            % Plot signal
             if signal==1
                 [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
                 [Xsig,Ysig] = pol2cart(th,rad);
-                hold on;
-                scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
-                hold off;
+                if t<=sigswitch_time
+                    hold on;
+                    scatter3(Xsig(sigBound2)+xshift2(t),Ysig(sigBound2)+yshift2(t)-2-(range-1),(allmax+3)*ones(1,length(sigBound2)),50,'black','.')
+                    hold off;
+                else
+                    hold on;
+                    scatter3(Xsig(sigBound1)+xshift1(t),Ysig(sigBound1)+yshift1(t),(allmax+3)*ones(1,length(sigBound1)),50,'black','.')
+                    hold off;
+                end
             end
 
+            grid off
+            set(gca,'XTick',[],'YTick',[])
+            set(gca,'XColor','w')
+            set(gca,'YColor','w')
+            set(gcf,'color','w');
+            set(gcf,'Position',[209   561   682   474])
             ohf = findobj(gcf);
             figaxes = findobj(ohf(1), 'Type', 'axes');
             set(figaxes(1),'Fontsize',15)
             set(figaxes(2),'Fontsize',14)
             camroll(90)
 
+            if vid==1
+                cellsframe = getframe(cellsplot);
+                writeVideo(vidObjCells,cellsframe);
+            end
         end
+
+        % % Plot result
+        % if t==(Nt-1) && savefigs==1
+        %     % Define circles
+        %     gapsize=0.01;
+        %     [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
+        %     [Xcol,Ycol] = pol2cart(th,rad);
+        %     Ycol1=Ycol;
+        %     Ycol2=Ycol;
+        %     Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
+        %     Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
+        %     Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
+        %     ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
+        %     ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
+        %     ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
+        %     ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2]';
+        %     [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
+        %     [Xsm,Ysm] = pol2cart(th,rad);
+        %     Ysm1=Ysm;
+        %     Ysm2=Ysm;
+        %     Ysm1(:,boundC1)=Ysm1(:,boundC1(1)*ones(1,length(boundC1)));
+        %     Ysm2(:,boundC2)=Ysm2(:,boundC2(1)*ones(1,length(boundC2)));
+        %     [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
+        %     [Xmid,Ymid] = pol2cart(th,rad);
+        %
+        %
+        %     %Define colors
+        %     colorLength = 50;
+        %     white = [1,1,1];
+        %     darkyellow = [227/256,180/256,76/256];
+        %     yellow2 = [254/256,254/256,98/256];
+        %     pink = [211/256,95/256,183/256];
+        %     darkpink = [141/256,45/256,113/256];
+        %     whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+        %     yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+        %     whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+        %     whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+        %     pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+        %     whitedarkpink = [whitepink;pinkdarkpink];
+        %
+        %
+        %     branchedColor = whitedarkpink;
+        %     bundledColor = whitedarkyellow2;
+        %     branchedColName = 'Pink';
+        %     bundledColName = 'Yellow';
+        %
+        %     allmax=max(max([a1 a2 b1 b2]));
+        %
+        %     % Make scatterplots
+        %     scatplot=figure(ppp);
+        %     clf
+        %     subplot(1,2,1); %Cell 1
+        %     plot(Xa,a1,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+        %     plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
+        %     plot(s1,xC1,'-.','color',branchedColor(end,:),'linewidth',1);
+        %     plot(s1,yC1,'-.k','color',bundledColor(end,:),'linewidth',1);
+        %     % xlim([0 10]); ylim([0 2]);
+        %     %title('Time = 0');
+        %     set(gca,'fontname','times','fontsize',20); box on;
+        %     lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+        %     lgd.NumColumns = 2;
+        %     set(gcf,'color','w');
+        %     title('Cell 1')
+        %     hold off;
+        %     %keyboard
+        %     % pause(1.0);
+        %
+        %     subplot(1,2,2); %Cell 2
+        %     plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+        %     plot(Xa,b2,'-ok','color',bundledColor(end,:),'linewidth',3);
+        %     plot(s2,xC2,'-.','color',branchedColor(end,:),'linewidth',1);
+        %     plot(s2,yC2,'-.k','color',bundledColor(end,:),'linewidth',1);
+        %     % xlim([0 10]); ylim([0 2]);
+        %     %title('Time = 0');
+        %     set(gca,'fontname','times','fontsize',20); box on;
+        %     lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+        %     lgd.NumColumns = 2;
+        %     set(gcf,'color','w');
+        %     title('Cell 2')
+        %     hold off;
+        %     %keyboard
+        %     % pause(1.0);
+        %
+        %
+        %     % Cell 1
+        %     figcells=figure(ppp+1);
+        %     clf
+        %     alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
+        %     surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+        %     colormap(branchedColor)
+        %     % clim([0,12])
+        %     freezeColors;
+        %     shading interp
+        %     hold on;
+        %     alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
+        %     surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+        %     colormap(bundledColor)
+        %     % clim([0,12])
+        %     freezeColors;
+        %     shading interp
+        %     view(2)
+        %     grid off
+        %     set(gca,'XTick',[], 'YTick', [])
+        %
+        %     % Cell 2
+        %     surf(Xcol,Ycol2,ZBranch2,'AlphaData',ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2))),'FaceAlpha','interp','FaceColor','interp');
+        %     colormap(branchedColor)
+        %     % clim([0,12])
+        %     freezeColors;
+        %     cb=colorbar('Location','eastoutside');
+        %     freezeColors(cb);
+        %     cbpos=cb.Position;
+        %     set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
+        %     % set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
+        %     set(cb,'TickLabels',{});
+        %     cbpos=cb.Position;
+        %     shading interp
+        %     % end
+        %     % if max(ZBund2)>0.5
+        %     surf(Xcol,Ycol2,ZBund2,'AlphaData',ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2))),'FaceAlpha','interp','FaceColor','interp');
+        %     colormap(bundledColor)
+        %     % clim([0,12])
+        %     freezeColors;
+        %     jcb=jicolorbar;
+        %     freezeColors(jcb);
+        %     jcbpos=jcb.Position;
+        %     set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
+        %     shading interp
+        %     % end
+        %     view(2)
+        %     grid off
+        %     axis equal
+        %     set(gca,'XTick',[], 'YTick', [])
+        %
+        %     hold off;
+        %     box off;
+        %     set(gca,'XColor','w')
+        %     set(gca,'YColor','w')
+        %     set(gcf,'color','w');
+        %
+        %     if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
+        %         hold on;
+        %         quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+        %         hold off;
+        %     end
+        %     if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
+        %         hold on;
+        %         quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+        %         hold off;
+        %     end
+        %
+        %     % Plot signal
+        %     if signal==1
+        %         [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+        %         [Xsig,Ysig] = pol2cart(th,rad);
+        %         hold on;
+        %         scatter(Xsig(sigBound2),Ysig(sigBound2)-2*abs(max(max(Ycol2)))-gapsize,'black','.')
+        %         hold off;
+        %     end
+        %
+        %     ohf = findobj(gcf);
+        %     figaxes = findobj(ohf(1), 'Type', 'axes');
+        %     set(figaxes(1),'Fontsize',15)
+        %     set(figaxes(2),'Fontsize',14)
+        %     camroll(90)
+        % end
     end
 
     % measure of polarized state (1 if polarized and 0 otherwise)
@@ -1508,7 +1523,7 @@ while (ppp<=2)
 
     if vid==1
         close(vidObj1);
-        close(vidObjCol1);
+        close(vidObjCells);
         % close(vidObjRR1);
         %
         % close(vidObj2);
