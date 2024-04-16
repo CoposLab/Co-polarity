@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_signal/signal_switches2/resetRacRho/500stepsc2_9500stepsc1/concdependent_rhodownnosig_racdownsig/1000xRhoOff_10yRacOff';
+filename = './simulation_results/results_nosignal/uncoupled2/uncoupled';
 maxnum=100;
 
 angle=pi/4;
