@@ -6,8 +6,8 @@ signal=0;
 addpath('./freeze_colors')
 addpath '/Users/katielevandosky/Desktop/HonorsProject/PairPolarity/SingleCellCode_Published'
 
-for i=1:1
-    path=strcat('./vid_matfiles/leader_follower/racupc2/1000RacOn',int2str(i),'.mat');
+for i=2:2
+    path=strcat('./vid_matfiles/misaligned/uncoupled/uncoupled',int2str(i),'.mat');
 
     load(path)
     Nt=2500;
