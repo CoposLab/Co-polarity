@@ -1343,9 +1343,11 @@ while (ppp<=1)
             strongAngTolerance=pi/5;
             if (isempty(dirIndexa1) || isempty(dirIndexb1)) && (isempty(dirIndexa2) || isempty(dirIndexb2))
                 samedirection='2NP';
+                outcome='Non-polarized';
                 angdiff=NaN;
             elseif (isempty(dirIndexa1) || isempty(dirIndexb1)) || (isempty(dirIndexa2) || isempty(dirIndexb2))
                 samedirection='1NP';
+                outcome='Non-polarized';
                 angdiff=NaN;
             else
                 medang1 = th(1,dirIndexa1);
@@ -1353,13 +1355,17 @@ while (ppp<=1)
                 angdiff = min(abs(medang1-medang2),abs(2*pi-abs(medang1-medang2)));
                 if angdiff < angTolerance
                     samedirection='yes';
+                    outcome='Co-alignment';
                 elseif (abs(medang1-3*pi/2)<strongAngTolerance && abs(medang2-pi/2)<strongAngTolerance)
                     samedirection='strong no; collision';
+                    outcome='Collision';
                 else
                     samedirection='no';
+                    outcome='No alignment';
                 end
             end
-            sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
+            % sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
+            sprintf('Angle difference: %d\nOutcome: %s',angdiff,outcome);
         end
 
         % Make plots

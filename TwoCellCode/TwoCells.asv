@@ -762,7 +762,8 @@ while (ppp<=1)
                     a0_x1 = koffx1 + (konx1+kfbx1*nnx1/N)*(N/nnx1-1);
                     taux1(j) = -log(rx1(j))/a0_x1;
                     rr_x1 = rand(1,1);
-                    dnx1(j) = (rr_x1<((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0_x1))*1.0 + (rr_x1>=((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0_x1))*(-1.0); %does particle bind (+1) or unbind (-1)
+                    dnx1(j) = (rr_x1<((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0_x1))*1.0 ...
+                        + (rr_x1>=((konx1+kfbx1*nnx1/N)*(N/nnx1-1)/a0_x1))*(-1.0); %does particle bind (+1) or unbind (-1)
                 end
 
                 [mintaux1,minidx1] = min(taux1(1:j));       % find first chemical rxn
@@ -813,7 +814,8 @@ while (ppp<=1)
                     a0_x2 = koffx2 + (konx2+kfbx2*nnx2/N)*(N/nnx2-1);
                     taux2(j) = -log(rx2(j))/a0_x2;
                     rrx2 = rand(1,1);
-                    dnx2(j) = (rrx2<((konx2+kfbx1*nnx2/N)*(N/nnx2-1)/a0_x2))*1.0 + (rrx2>=((konx2+kfbx2*nnx2/N)*(N/nnx2-1)/a0_x2))*(-1.0);
+                    dnx2(j) = (rrx2<((konx2+kfbx1*nnx2/N)*(N/nnx2-1)/a0_x2))*1.0 ...
+                        + (rrx2>=((konx2+kfbx2*nnx2/N)*(N/nnx2-1)/a0_x2))*(-1.0);
                 end
 
                 [mintaux2,minidx2] = min(taux2(1:j));       % find first chemical rxn
@@ -864,7 +866,8 @@ while (ppp<=1)
                     a0_y1 = koffy1 + (kony1+kfby1*nny1/N)*(N/nny1-1);
                     tauy1(j) = -log(ry1(j))/a0_y1;
                     rry1 = rand(1,1);
-                    dny1(j) = (rry1<((kony1+kfby1*nny1/N)*(N/nny1-1)/a0_y1))*1.0 + (rry1>=((kony1+kfby1*nny1/N)*(N/nny1-1)/a0_y1))*(-1.0);
+                    dny1(j) = (rry1<((kony1+kfby1*nny1/N)*(N/nny1-1)/a0_y1))*1.0 ...
+                        + (rry1>=((kony1+kfby1*nny1/N)*(N/nny1-1)/a0_y1))*(-1.0);
                 end
 
                 [mintauy1,minidy1] = min(tauy1(1:j));       % find first chemical rxn
@@ -915,7 +918,8 @@ while (ppp<=1)
                     a0_y2 = koffy2 + (kony2+kfby2*nny2/N)*(N/nny2-1);
                     tauy2(j) = -log(ry2(j))/a0_y2;
                     rry2 = rand(1,1);
-                    dny2(j) = (rry2<((kony2+kfby2*nny2/N)*(N/nny2-1)/a0_y2))*1.0 + (rry2>=((kony2+kfby2*nny2/N)*(N/nny2-1)/a0_y2))*(-1.0);
+                    dny2(j) = (rry2<((kony2+kfby2*nny2/N)*(N/nny2-1)/a0_y2))*1.0 ...
+                        + (rry2>=((kony2+kfby2*nny2/N)*(N/nny2-1)/a0_y2))*(-1.0);
                 end
 
                 [mintauy2,minidy2] = min(tauy2(1:j));       % find first chemical rxn
@@ -989,15 +993,21 @@ while (ppp<=1)
         end
 
         % Enforce periodic boundary conditions
-        posx1(1:Kx1,t+1) = posx1(1:Kx1,t+1) + (-L).*(posx1(1:Kx1,t+1)>L) + (L).*(posx1(1:Kx1,t+1)<0.0);
-        posy1(1:Ky1,t+1) = posy1(1:Ky1,t+1) + (-L).*(posy1(1:Ky1,t+1)>L) + (L).*(posy1(1:Ky1,t+1)<0.0);
+        posx1(1:Kx1,t+1) = posx1(1:Kx1,t+1) + (-L).*(posx1(1:Kx1,t+1)>L) ...
+            + (L).*(posx1(1:Kx1,t+1)<0.0);
+        posy1(1:Ky1,t+1) = posy1(1:Ky1,t+1) + (-L).*(posy1(1:Ky1,t+1)>L) ...
+            + (L).*(posy1(1:Ky1,t+1)<0.0);
 
-        posx2(1:Kx2,t+1) = posx2(1:Kx2,t+1) + (-L).*(posx2(1:Kx2,t+1)>L) + (L).*(posx2(1:Kx2,t+1)<0.0);
-        posy2(1:Ky2,t+1) = posy2(1:Ky2,t+1) + (-L).*(posy2(1:Ky2,t+1)>L) + (L).*(posy2(1:Ky2,t+1)<0.0);
+        posx2(1:Kx2,t+1) = posx2(1:Kx2,t+1) + (-L).*(posx2(1:Kx2,t+1)>L) ...
+            + (L).*(posx2(1:Kx2,t+1)<0.0);
+        posy2(1:Ky2,t+1) = posy2(1:Ky2,t+1) + (-L).*(posy2(1:Ky2,t+1)>L) ...
+            + (L).*(posy2(1:Ky2,t+1)<0.0);
 
         % Enforce no-flux boundary conditions
-        %posx(1:K1,t+1) = posx(1:K1,t+1) + (posx(1:K1,t)-posx(1:K1,t+1)).*(posx(1:K1,t+1)>L) + (posx(1:K1,t)-posx(1:K1,t+1)).*(posx(1:K1,t+1)<0.0);
-        %posy(1:K2,t+1) = posy(1:K2,t+1) + (posy(1:K2,t)-posy(1:K2,t+1)).*(posy(1:K2,t+1)>L) + (posy(1:K2,t)-posy(1:K2,t+1)).*(posy(1:K2,t+1)<0.0);
+        % posx(1:K1,t+1) = posx(1:K1,t+1) + (posx(1:K1,t)-posx(1:K1,t+1)).*(posx(1:K1,t+1)>L) ...
+        %     + (posx(1:K1,t)-posx(1:K1,t+1)).*(posx(1:K1,t+1)<0.0);
+        % posy(1:K2,t+1) = posy(1:K2,t+1) + (posy(1:K2,t)-posy(1:K2,t+1)).*(posy(1:K2,t+1)>L) ...
+        %     + (posy(1:K2,t)-posy(1:K2,t+1)).*(posy(1:K2,t+1)<0.0);
 
         %% Determine if a biochemical rxn has occured - update positions
 
@@ -1086,7 +1096,7 @@ while (ppp<=1)
                     boundC1Scaled=(L*boundC1/Na);
                     locRemovey1 = find(abs(posy1(:,t+1)-posx1(Kx1,t+1))<epsilon,numRhoToRemove);
                     numFoundy1 = length(locRemovey1);
-                    if ~isempty(locRemovey1) && boundC1Scaled(1)<=posx1(Kx1,t+1) && boundC1Scaled(end)>=posx1(Kx1,t+1)
+                    if ~isempty(locRemovey1) && boundC1Scaled(1)<=posx1(Kx1,t+1) ...&& boundC1Scaled(end)>=posx1(Kx1,t+1)
                         % posy1(locRemovey1,t+1)=0;
                         oldcoly1 = posy1(locRemovey1,1:end); % Find the particle(s) to be removed
                         othercolsy1 = posy1(setdiff(1:Ky1,locRemovey1),1:end); % Gather other "on" particles
@@ -1218,16 +1228,20 @@ while (ppp<=1)
 
         rxna1 = dt*( F(a1,b1) + Ka1.*(a1.*(1+alpha(1)*xC1 ...
             + ka_vals(ka_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + cell1_bound.*kaa_vals(kaa_ind) )) - a1.*a1); %Cell 1 branched
+            + kb_vals(kb_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
+            + cell1_bound.*kaa_vals(kaa_ind) )) - a1.*a1); %Cell 1 branched
         rxnb1 = dt*( F(b1,a1) + Kb1.*(b1.*(1+alpha(1)*yC1 ...
             + kc_vals(kc_ind) * cell1_bound.* (flip(a2).*(flip(a2)<=abmax) + abmax*(flip(a2)>abmax)) ...
-            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) + cell1_bound.*kbb_vals(kbb_ind) )) - b1.*b1); %Cell 1 bundled
+            + kd_vals(kd_ind) * cell1_bound.* (flip(b2).*(flip(b2)<=abmax) + abmax*(flip(b2)>abmax)) ...
+            + cell1_bound.*kbb_vals(kbb_ind) )) - b1.*b1); %Cell 1 bundled
         rxna2 = dt*( F(a2,b2) + Ka2.*(a2.*(1+alpha(1)*xC2 ...
             + ka_vals(ka_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + cell2_bound.*kcc_vals(kcc_ind) )) - a2.*a2); %Cell 2 branched
+            + kb_vals(kb_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
+            + cell2_bound.*kcc_vals(kcc_ind) )) - a2.*a2); %Cell 2 branched
         rxnb2 = dt*( F(b2,a2) + Kb2.*(b2.*(1+alpha(1)*yC2 ...
             + kc_vals(kc_ind) * cell2_bound.* (flip(a1).*(flip(a1)<=abmax) + abmax*(flip(a1)>abmax)) ...
-            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) + cell2_bound.*kdd_vals(kdd_ind) )) - b2.*b2); %Cell 2 bundled
+            + kd_vals(kd_ind) * cell2_bound.* (flip(b1).*(flip(b1)<=abmax) + abmax*(flip(b1)>abmax)) ...
+            + cell2_bound.*kdd_vals(kdd_ind) )) - b2.*b2); %Cell 2 bundled
 
 
         a1 = Hs1\(diffRHSa1+rxna1);
@@ -1329,9 +1343,11 @@ while (ppp<=1)
             strongAngTolerance=pi/5;
             if (isempty(dirIndexa1) || isempty(dirIndexb1)) && (isempty(dirIndexa2) || isempty(dirIndexb2))
                 samedirection='2NP';
+                outcome='Non-polarized';
                 angdiff=NaN;
             elseif (isempty(dirIndexa1) || isempty(dirIndexb1)) || (isempty(dirIndexa2) || isempty(dirIndexb2))
                 samedirection='1NP';
+                outcome='Non-polarized';
                 angdiff=NaN;
             else
                 medang1 = th(1,dirIndexa1);
@@ -1339,13 +1355,17 @@ while (ppp<=1)
                 angdiff = min(abs(medang1-medang2),abs(2*pi-abs(medang1-medang2)));
                 if angdiff < angTolerance
                     samedirection='yes';
+                    outcome='Co-alignment';
                 elseif (abs(medang1-3*pi/2)<strongAngTolerance && abs(medang2-pi/2)<strongAngTolerance)
                     samedirection='strong no; collision';
+                    outcome='Collision';
                 else
                     samedirection='no';
+                    outcome='No alignment';
                 end
             end
-            sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
+            % sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
+            sprintf('Angle difference')
         end
 
         % Make plots
