@@ -5,7 +5,7 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 3/11/2024
+% Last updated: 4/17/2024
 % Katie Levandosky
 % Calina Copos
 addpath('./FigureAndMovieCode/freeze_colors')
@@ -15,26 +15,6 @@ clear;
 close all;
 clc;
 
-
-
-coeff_vals=[1,10,1000];
-conc_dependent_racrho=0;
-
-% branched bundled parameter search
-% for ka_ind=1:1 %-0.9,0,0.9
-%     for kb_ind=1:1 %-0.9,0,0.9
-%         for kc_ind=1:2 %-0.9,0,0.9
-%             for kd_ind=1:2 %-0.9,0,0.9
-% for kaa_ind=3:3
-%     for kbb_ind=1:3
-%         for kcc_ind=1:3
-%             for kdd_ind=1:3
-
-% rac rho parameter search
-% for c2_ind=1:4 %koffx,koffy,konx,kony
-%    for c1_ind=c2_ind:c2_ind %koffx,koffy,konx,kony
-%        for c1coeff_ind=1:1 %1,10,1000
-%            for c2coeff_ind=2:3 %1,10,1000
 
 
 save_matfile=0;
@@ -1649,53 +1629,4 @@ while (ppp<=1)
         sprintf(int2str(res_counters))
     end
 end
-
-% all_results_matrix((c1_ind-1)*length(c1_vals)+c2_ind,:) = res_counters;
-
-
-%% Plot all particle trajectories
-% ccx = [0 0 255]/256.*ones(Nt,1);     % blue
-% ccy = [255 219 88]/256.*ones(Nt,1);  % mustard yellow
-% time = linspace(0,Tend,Nt);
-% figure(10);
-% subplot(1,2,1);
-% for j=1:2:max(max([NNx1,NNy1]))
-%     hold on;
-%     %plot(linspace(0,Tend,Nt),pos(j,:));
-%     scatter(linspace(0,Tend,Nt),posx1(j,:),1,ccx);
-%     scatter(linspace(0,Tend,Nt),posy1(j,:),1,ccy);
-%     box on;
-%     set(gca,'Color','k','fontsize',20,'fontname','times');
-%     pbaspect([3 1 1]);
-%     set(gcf,'color','w');
-%     title('Cell 1')
-%     %xlabel('Time');
-%     %ylabel('Location on cell membrane');
-%     %yticks([0 0.5 1 1.5 2]);
-%     %yticklabels({'0','0.25','0.5','0.75','1'});
-% end
-%
-% subplot(1,2,2);
-% for j=1:2:max(max([NNx2,NNy2]))
-%     hold on;
-%     %plot(linspace(0,Tend,Nt),pos(j,:));
-%     scatter(linspace(0,Tend,Nt),posx2(j,:),1,ccx);
-%     scatter(linspace(0,Tend,Nt),posy2(j,:),1,ccy);
-%     box on;
-%     set(gca,'Color','k','fontsize',20,'fontname','times');
-%     pbaspect([3 1 1]);
-%     set(gcf,'color','w');
-%     title('Cell 2')
-%     %xlabel('Time');
-%     %ylabel('Location on cell membrane');
-%     %yticks([0 0.5 1 1.5 2]);
-%     %yticklabels({'0','0.25','0.5','0.75','1'});
-% end
-%end
-
-
-%            end
-%        end
-%    end
-% end
 

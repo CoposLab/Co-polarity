@@ -107,7 +107,7 @@ bundledColor = whitedarkyellow2;
 branchedColName = 'Pink';
 bundledColName = 'Yellow';
 
-% Concentric circles
+% Plot cells
 % Cell 1
 figcells=figure(1);
 clf
