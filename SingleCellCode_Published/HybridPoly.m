@@ -5,10 +5,10 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 7/21/2023
+% Last updated: 4/19/2024
 % Katie Levandosky
 % Calina Copos
-addpath('../TwoCellCode/freeze_colors')
+addpath('../TwoCellCode/FigureAndMovieCode/freeze_colors')
 
 clear;
 close all;
@@ -17,20 +17,9 @@ clc;
 polarize_time=0;
 num_polarized=0;
 
-savefigs = 0;
-setnum='100';
-savelocation='singlecellresults/';
-if savefigs==1
-    % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
-    % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
-    filenameCells=strcat(savelocation,'Cell_',setnum);
-    filenameScatter=strcat(savelocation,'Scatter_',setnum);
-end
+
 
 vid = 0;
-% vidObj = VideoWriter('stronglycoupled.mp4','MPEG-4');
-% vidObjCol = VideoWriter('colorplot.mp4','MPEG-4');
-% vidObjRR = VideoWriter('colorplotrr.mp4','MPEG-4');
 
 counter_ppp = 1;
 ppp = 1;
@@ -38,7 +27,21 @@ ppp = 1;
 while (ppp<=100)
     counter_ppp = counter_ppp+1;
 
-    clearvars -except counter_ppp vid vidObj ppp vidObjCol vidObjRR savefigs filenameCells filenameScatter polarize_time num_polarized
+    savefigs = 1;
+    setnum=int2str(ppp);
+    savelocation='singlecellresults/RhoStopsT=10/20RhoLeft_NoBind_NoUnbind_NoFB_NoDiffusion';
+    if savefigs==1
+        % filenameC1=strcat('savedgraphs/doubleRhoOnCell1_',setnum);
+        % filenameC2=strcat('savedgraphs/doubleRhoOnCell2_',setnum);
+        filenameCells=strcat(savelocation,'Cell_',setnum);
+        filenameScatter=strcat(savelocation,'Scatter_',setnum);
+    end
+
+    clearvars -except counter_ppp vid vidObj ppp vidObjCol vidObjRR ...
+        savefigs filenameCells filenameScatter polarize_time num_polarized...
+        savelocation setnum
+
+    rng('shuffle');
     % Set actin filament parameters
     %
     Da      = 0.5;                  % diffusion coefficient for actin
@@ -200,168 +203,118 @@ while (ppp<=100)
     end
 
     if vid ==1
-        % Plot the initial condition
-        figure(ppp);
-        plot(Xa,a,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
-        plot(Xa,b,'-ok','markerfacecolor','k','linewidth',3);
-        plot(s,xC,'-.','color',[0 0.45 0.75],'linewidth',1);
-        plot(s,yC,'-.k','linewidth',1);
-        xlim([0 10]); ylim([0 2]);
-        %title('Time = 0');
+        %Define colors
+        colorLength = 50;
+        white = [1,1,1];
+        darkyellow = [227/256,180/256,76/256];
+        yellow2 = [254/256,254/256,98/256];
+        pink = [211/256,95/256,183/256];
+        darkpink = [141/256,45/256,113/256];
+        whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+        yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+        whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+        whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+        pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+        whitedarkpink = [whitepink;pinkdarkpink];
+
+
+        branchedColor = whitedarkpink;
+        bundledColor = whitedarkyellow2;
+        branchedColName = 'Pink';
+        bundledColName = 'Yellow';
+        % Define circles
+        gapsize=0.01;
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
+        [Xcol,Ycol] = pol2cart(th,rad);
+        Ycol1=Ycol;
+        ZBranch1 = [a a a a a a a a a a a a a a a a]';
+        ZBund1 = [b b b b b b b b b b b b b b b b]';
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
+        [Xsm,Ysm] = pol2cart(th,rad);
+        Ysm1=Ysm;
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
+        [Xmid,Ymid] = pol2cart(th,rad);
+
+        % Make scatterplots
+        scatplot=figure(ppp);
+        clf
+        % subplot(1,2,1);
+        plot(Xa,a,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+        plot(Xa,b,'-ok','color',bundledColor(end,:),'linewidth',3);
+        plot(s,xC,'-.','color',branchedColor(end,:),'linewidth',1);
+        plot(s,yC,'-.k','color',bundledColor(end,:),'linewidth',1);
         set(gca,'fontname','times','fontsize',20); box on;
         lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
         lgd.NumColumns = 2;
         set(gcf,'color','w');
+        title('Cell 1')
         hold off;
-        %keyboard
-        pause(1.0);
 
-        if vid==1
-            currFrame = getframe(gcf);
-            writeVideo(vidObj,currFrame);
+        % Plot cell
+        allmax=12;
+        showtime=1;
+        cellplot=figure(ppp+1);
+        clf
+        range=3;
+        hold on
+        alphaData=ZBranch1;
+        surf(Xcol,Ycol,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+        colormap(branchedColor)
+        clim([0,12])
+        freezeColors;
+        shading interp
+        alphaData=ZBund1;
+        surf(Xcol,Ycol,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+        colormap(bundledColor)
+        cb=colorbar;
+        clim([0,12])
+        freezeColors;
+        cbpos=cb.Position;
+        set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
+        set(cb,'TickLabels',{});
+        cbpos=cb.Position;
+        shading interp
+        view(2)
+        plot3(cos(2*pi*Xa/L),sin(2*pi*Xa/L),(allmax+2)*ones(1,Na),'color','black','LineWidth',1)
+        hold off
+
+
+        xlim([-3,3])
+        ylim([-8,4])
+        set(gca,'plotBoxAspectRatio',[6 12 1]);
+        hold off
+
+        cbpos=cb.Position;
+        if showtime==1
+            if t==Nt-1
+                timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + (Nt)*0.01,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+            else
+                timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + (t)*0.01,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+            end
         end
 
-        %Plot on circle
-        %Define colors
-        colorLength = 50;
-        white = [1,1,1];
-        red = [1,0,0];
-        blue = [0,0.5,1];
-        whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-        whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-        myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-        redblue = abs(whiteblue+whitered)./2;
-        redwhiteblue = [flip(whitered); whiteblue];
+        if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
+            hold on;
+            quiver(0,0,Xsm(dirIndexa1),Ysm(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2);
+            hold off;
+        end
 
-        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.96:0.01:1);
-        [Xcol,Ycol] = pol2cart(th,rad);
-        Z1 = [a a a a a]';
-        Z2 = [b b b b b]';
 
-        % figure(11); %Branched
-        % % subplot(1,2,1);
-        % contourf(Xcol,Ycol,Z1,100,'LineStyle','none')
-        % axis square
-        % col=colorbar;
-        % colormap(whiteblue);
-        % clim([0,max(max(a),max(b))])
-        % title('Branched Actin')
-        % ylabel(col,'Concentration')
-        % set(gca,'XTick',[], 'YTick', [])
-        %
-        % figure(12); %Bundled
-        % % subplot(1,2,2);
-        % contourf(Xcol,Ycol,Z2,100,'LineStyle','none')
-        % axis square
-        % col=colorbar;
-        % colormap(whitered);
-        % clim([0,max(max(a),max(b))])
-        % title('Bundled Actin')
-        % ylabel(col,'Concentration')
-        % set(gca,'XTick',[], 'YTick', [])
-
-        %Plot both circles together
-        colFrame = figure(13);
-        % subplot(1,3,3);
-        contourf(Xcol,Ycol,Z1-Z2,100,'LineStyle','none')
-        axis square
-        col=colorbar;
-        colormap(redwhiteblue);
-        clim([-max(max(a),max(b)),max(max(a),max(b))])
-        title('Combined: Blue=Branched, Red=Bundled')
-        ylabel(col,'Concentration Branched - Concentration Bundled')
-        set(gca,'XTick',[], 'YTick', [])
-
-        allred = [linspace(red(1),red(1),colorLength)',linspace(red(2),red(2),colorLength)',linspace(red(3),red(3),colorLength)'];
-        allblue = [linspace(blue(1),blue(1),colorLength)',linspace(blue(2),blue(2),colorLength)',linspace(blue(3),blue(3),colorLength)'];
-
-        figure(15)
-        clf
-        h1=surf(Xcol,Ycol,Z1,'FaceAlpha',0.4);
-        view(2)
-        colormap(whiteblue) % colormap(allblue)
-        freezeColors
-        % freezeColors(colorbar)
-        clim([-max(max(a),max(b)),max(max(a),max(b))])
-        shading interp
-        % h1.AlphaData=gradient(Z1)./2;
-        % h1.FaceAlpha = 'interp';
-        hold on;
-        h2=surf(Xcol,Ycol,Z2,'FaceAlpha',0.4);
-        colormap(whitered) % colormap(allred)
-        freezeColors
-        % freezeColors(colorbar)
-        shading interp
-        % h2.AlphaData=gradient(Z2)./2;
-        % h2.FaceAlpha = 'interp';
-        title('Combined: Blue=Branched, Red=Bundled')
-        hold off;
-
-        % [Ma,Ia] = max(a);
-        % [Mb,Ib] = max(b);
-        %
-        % hold on;
-        % plot([Xcol(3,Ia) Xcol(3,Ib)],[Ycol(3,Ia) Ycol(3,Ib)],"black")
-        % plot([0 Xcol(3,Ia)],[0 Ycol(3,Ia)],"black")
-        % plot([0 Xcol(3,Ib)],[0 Ycol(3,Ib)],"black")
-        % hold off;
-
-        % Concentric circles
-        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.76:0.01:0.8);
-        [Xsm,Ysm] = pol2cart(th,rad);
-
-        figure(16)
-        clf
-        ax1=axes;
-        ax2=axes;
-        s1=surf(ax2,Xcol,Ycol,Z1);
-        view(2)
-        colormap(whiteblue);
-        % cb1=colorbar(ax1,'Position',[.88 .11 .0675 .815]);
-        freezeColors
-        freezeColors(colorbar)
-        hold on;
-        s2=surf(ax2,Xsm,Ysm,Z2);
-        colormap(whitered);
-        freezeColors
-        cb2=colorbar(ax1,'Position',[.05 .11 .0675 .815]);
-        clim([0,max(max(a),max(b))])
-        linkaxes([ax1,ax2])
-        ax1.Visible = 'off';
-        ax1.XTick = [];
-        ax1.YTick = [];
-        ax2.XTick = [];
-        ax2.YTick = [];
-        shading interp
-        axis square
         grid off
-        title('Combined: Blue=Branched, Red=Bundled')
-        hold off;
-
-        if vid==1
-            currFrame = getframe(colFrame);
-            writeVideo(vidObjCol,currFrame);
-        end
-
+        set(gca,'XTick',[],'YTick',[])
+        set(gca,'XColor','w')
+        set(gca,'YColor','w')
+        set(gcf,'color','w');
+        set(gcf,'Position',[209   561   682   474])
+        ohf = findobj(gcf);
+        figaxes = findobj(ohf(1), 'Type', 'axes');
+        set(figaxes(1),'Fontsize',15)
+        set(figaxes(2),'Fontsize',14)
+        camroll(90)
     end
 
-    % Plot Rac and Rho
-    % colRRFrame = figure(14);
-    % ZRac = [xC xC xC xC xC]';
-    % ZRho = [yC yC yC yC yC]';
-    % contourf(Xcol,Ycol,ZRac-ZRho,100,'LineStyle','none');
-    % axis square
-    % col=colorbar;
-    % colormap(redwhiteblue);
-    % clim([-max(max(xC),max(yC)),max(max(xC),max(yC))])
-    % title('Combined: Blue=Rac, Red=Rho')
-    % ylabel(col,'Concentration Rac - Concentration Rho')
-    % set(gca,'XTick',[], 'YTick', [])
 
-    % if vid==1
-    %     currFrame = getframe(colRRFrame);
-    %     writeVideo(vidObjRR,currFrame);
-    % end
+    resetrho=0;
 
     %% Run simulation
     %
@@ -373,22 +326,33 @@ while (ppp<=100)
         %% Run biochemisty
         [Konx,Kony,Kfbx,Kfby,Koffx,Koffy] = spatialrates(ron,rfb,roff,a,b,s,beta,cond,[]); % set rates
 
-        % sigper=0.25;
-        % sigBound = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
-        
-        % Konx=ones(Na,1)*ron/10;
-        % Kony=ones(Na,1)*ron;
-        % Koffx=ones(Na,1)*roff;
-        % Koffy=ones(Na,1)*roff/10;
-        % Kfbx=ones(Na,1)*rfb/10;
-        % Kfby=ones(Na,1)*rfb;
-        % 
-        % Konx(sigBound) = ron;
-        % Kony(sigBound) = ron/10;
-        % Koffx(sigBound) = roff/10;
-        % Koffy(sigBound) = roff;
-        % Kfbx(sigBound) = rfb;
-        % Kfby(sigBound) = rfb/10;
+        if t==1000
+            resetrho=1;
+            sprintf('%d, %d',NNy(t), K2)
+            if K2>20
+                NNy(t+1)=20;
+                posy(21:end,t+1)=0;
+                K2=NNy(t+1);
+            else
+                NNy(t+1)=NNy(t);
+                posy(:,t+1)=posy(:,t);
+                K2=NNy(t+1);
+            end
+            Kony=0*Kony;
+            Koffy=0*Koffy;
+            Kfby=0*Kfby;
+
+        elseif t>1000
+            % sprintf('%d, %d',NNy(t), K2)
+            
+            NNy(t+1)=NNy(t);
+            posy(:,t+1)=posy(:,t);
+            K2=NNy(t+1);
+
+            Kony=0*Kony;
+            Koffy=0*Koffy;
+            Kfby=0*Kfby;
+        end
 
         if((t-1)*dt<Tx(rxn_count_x))
             NNx(t+1) = X(rxn_count_x-1);
@@ -422,37 +386,40 @@ while (ppp<=100)
             NNx(t+1) = X(rxn_count_x-1);
         end
 
-        if((t-1)*dt<Ty(rxn_count_y))
-            NNy(t+1) = Y(rxn_count_y-1);
-        else
-            nny = Y(rxn_count_y);
-            tauy = zeros(nny,1);
-            dn = zeros(nny,1);
-            r = rand(nny,1);
+        if resetrho==0
+            if((t-1)*dt<Ty(rxn_count_y))
+                NNy(t+1) = Y(rxn_count_y-1);
+            else
+                nny = Y(rxn_count_y);
+                tauy = zeros(nny,1);
+                dn = zeros(nny,1);
+                r = rand(nny,1);
 
-            if(nny==0)
-                counter_ppp = ppp;
-                quit_cond = 1;
-                break
+                if(nny==0)
+                    counter_ppp = ppp;
+                    quit_cond = 1;
+                    break
+                end
+
+                for j=1:nny          % all agents
+                    kony = interp1(s,Kony,posy(j,t));
+                    koffy = interp1(s,Koffy,posy(j,t));
+                    kfby = interp1(s,Kfby,posy(j,t));
+                    % Sample earliest time-to-fire (tau)
+                    a0 = koffy + (kony+kfby*nny/N)*(N/nny-1);
+                    tauy(j) = -log(r(j))/a0;
+                    rr = rand(1,1);
+                    dn(j) = (rr<((kony+kfby*nny/N)*(N/nny-1)/a0))*1.0 + (rr>=((kony+kfby*nny/N)*(N/nny-1)/a0))*(-1.0);
+                end
+
+                [mintauy,minidy] = min(tauy(1:j));       % find first chemical rxn
+                Ty(rxn_count_y+1) = Ty(rxn_count_y) + mintauy;
+                Y(rxn_count_y+1) = nny + dn(minidy);
+                rxn_count_y = rxn_count_y + 1;
+                NNy(t+1) = Y(rxn_count_y-1);
             end
-
-            for j=1:nny          % all agents
-                kony = interp1(s,Kony,posy(j,t));
-                koffy = interp1(s,Koffy,posy(j,t));
-                kfby = interp1(s,Kfby,posy(j,t));
-                % Sample earliest time-to-fire (tau)
-                a0 = koffy + (kony+kfby*nny/N)*(N/nny-1);
-                tauy(j) = -log(r(j))/a0;
-                rr = rand(1,1);
-                dn(j) = (rr<((kony+kfby*nny/N)*(N/nny-1)/a0))*1.0 + (rr>=((kony+kfby*nny/N)*(N/nny-1)/a0))*(-1.0);
-            end
-
-            [mintauy,minidy] = min(tauy(1:j));       % find first chemical rxn
-            Ty(rxn_count_y+1) = Ty(rxn_count_y) + mintauy;
-            Y(rxn_count_y+1) = nny + dn(minidy);
-            rxn_count_y = rxn_count_y + 1;
-            NNy(t+1) = Y(rxn_count_y-1);
         end
+
 
         if (quit_cond==1)
             sprintf("It's happening at kk = %d, ppp = %d\n",kk,ppp)
@@ -472,9 +439,15 @@ while (ppp<=100)
         nx(1:K1,t+1) = 1;
         posx(1:K1,t+1) = posx(1:K1,t) + dx*((r<p)*1.0 + (r>(1-p))*(-1.0));
 
+
         r = rand(K2,1);    % coin flip
         ny(1:K2,t+1) = 1;
-        posy(1:K2,t+1) = posy(1:K2,t) + dx*((r<p)*1.0 + (r>(1-p))*(-1.0));
+        if resetrho==0
+            posy(1:K2,t+1) = posy(1:K2,t) + dx*((r<p)*1.0 + (r>(1-p))*(-1.0));
+        else
+            posy(1:K2,t+1) = posy(1:K2,t);
+        end
+
 
         % Check for collision(s) and resolve any collisions
         % Resolution strategy: No one advances
@@ -509,13 +482,16 @@ while (ppp<=100)
         x2 = posx(minidx,t)+(ss(prevind)-posx(minidx,t))/2;
         x1 = posx(minidx,t)+(ss(nextind)-posx(minidx,t))/2;
         locx = (x2-x1).*rand(1,1) + x1; % random location halfway between the closest left/right particles
-        ss = sort(posy(1:K2,t));
-        [ijk] = find(ss==posy(minidy,t),1);
-        prevind = (ijk-1)*(ijk>1) + (K2)*(ijk==1);
-        nextind = (ijk+1)*(ijk<K2) + 1*(ijk==K2);
-        y2 = posy(minidy,t)+(ss(prevind)-posy(minidy,t))/2;
-        y1 = posy(minidy,t)+(ss(nextind)-posy(minidy,t))/2;
-        locy = (y2-y1).*rand(1,1) + y1; % random location halfway between the closest left/right particles
+
+        if resetrho==0
+            ss = sort(posy(1:K2,t));
+            [ijk] = find(ss==posy(minidy,t),1);
+            prevind = (ijk-1)*(ijk>1) + (K2)*(ijk==1);
+            nextind = (ijk+1)*(ijk<K2) + 1*(ijk==K2);
+            y2 = posy(minidy,t)+(ss(prevind)-posy(minidy,t))/2;
+            y1 = posy(minidy,t)+(ss(nextind)-posy(minidy,t))/2;
+            locy = (y2-y1).*rand(1,1) + y1; % random location halfway between the closest left/right particles
+        end
 
         ponx = ron/(ron+rfb*(N-K1));
         pony = ron/(ron+rfb*(N-K2));
@@ -531,21 +507,23 @@ while (ppp<=100)
             rr = rand(1,1);
             posx(K1,t+1) = posx(K1,t)+(rr<ponx)*locx;              % on event
             posx(K1,t+1) = posx(K1,t)+(rr>=ponx)*posx(minidx,t);   % recruitment event
-            nx(K1+1,t+1) = 1;
+            nx(K1,t+1) = 1;
         end
 
-        if (NNy(t+1) < NNy(t))                % diassociation event (particle off)
-            oldcol = posy(minidy,1:end);
-            othercols = posy([1:minidy-1,minidy+1:K2],1:end);
-            otherothercols = posy(K2+1:end,1:end);
-            newpos = [othercols;oldcol;otherothercols];
-            posy = newpos;
-            ny(K2,t+1) = 0;
-        elseif(NNy(t+1) > NNy(t))             % association event (on or recruitment)
-            rr = rand(1,1);
-            posy(K2,t+1) = posy(K2,t)+(rr<pony)*locy;               % on event
-            posy(K2,t+1) = posy(K2,t)+(rr>=pony)*posy(minidy,t);    % recruitment event
-            ny(K2,t+1) = 1;
+        if resetrho==0
+            if (NNy(t+1) < NNy(t))                % diassociation event (particle off)
+                oldcol = posy(minidy,1:end);
+                othercols = posy([1:minidy-1,minidy+1:K2],1:end);
+                otherothercols = posy(K2+1:end,1:end);
+                newpos = [othercols;oldcol;otherothercols];
+                posy = newpos;
+                ny(K2,t+1) = 0;
+            elseif(NNy(t+1) > NNy(t))             % association event (on or recruitment)
+                rr = rand(1,1);
+                posy(K2,t+1) = posy(K2,t)+(rr<pony)*locy;               % on event
+                posy(K2,t+1) = posy(K2,t)+(rr>=pony)*posy(minidy,t);    % recruitment event
+                ny(K2,t+1) = 1;
+            end
         end
 
         [s,xC,yC] = resamplePolarityMolecules(posx(1:K1,t+1),posy(1:K2,t+1),K1,K2,L,Na);
@@ -560,148 +538,174 @@ while (ppp<=100)
         a = Hs\(diffRHSa+rxna);
         b = Hs\(diffRHSb+rxnb);
 
+
+        a1New = a;
+        a1New(a1New<1)=0;
+        if (a1New(1)~=0 && a1New(length(a1New))~=0)
+            zeroInd1=find(a1New==0,1,'first');
+            zeroInd2=find(a1New==0,1,'last');
+            dirIndexa1=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(a1New~=0,1,'first');
+            ind2=find(a1New~=0,1,'last');
+            dirIndexa1=ceil((ind1+ind2)/2);
+        end
+        b1New = b;
+        b1New(b1New<1)=0;
+        if (b1New(1)~=0 && b1New(length(b1New))~=0)
+            zeroInd1=find(b1New==0,1,'first');
+            zeroInd2=find(b1New==0,1,'last');
+            dirIndexb1=ceil((zeroInd1+zeroInd2)/2) - 50;
+        else
+            ind1=find(b1New~=0,1,'first');
+            ind2=find(b1New~=0,1,'last');
+            dirIndexb1=ceil((ind1+ind2)/2);
+        end
+        if dirIndexa1<1
+            dirIndexa1=dirIndexa1+101;
+        end
+        if dirIndexb1<1
+            dirIndexb1=dirIndexb1+101;
+        end
+        if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
+            % sprintf('Polarized after %d steps', t)
+            polarize_time=polarize_time+t;
+            num_polarized=num_polarized+1;
+            % break
+        end
+
         %% Plot the solution(s)
-        % if mod(t,tplot) == 0
-        if t==(Nt-1)
-            scatplot=figure(ppp);
-            %titfig = sprintf('D = %.2f, m0 = %.2f, beta = %.2f, alpha = %.2f, k_{on} = %.4f, k_{off} = %.2f, k_{fb} = %.4f',D,m0,beta,alpha,ron,roff,rfb);
-            %sgtitle(titfig);
-            %subplot(5,4,ppp);
-            %figure(ppp);
-            plot(Xa,a,'-o','markerfacecolor',[159 219 229]/255,'linewidth',3); hold on;
-            plot(Xa,b,'-ok','markerfacecolor','k','linewidth',3);
-            plot(s,xC,'-.','color',[0 0.45 0.75],'linewidth',1);
-            plot(s,yC,'-.k','linewidth',1);
-            %title(['Time = ',num2str(t*dt,'%.2f')]);
-            set(gca,'fontname','times','fontsize',20); box on;
-            lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-            lgd.NumColumns = 2;
-            xlim([0 10]);
-            set(gcf,'color','w');
-            drawnow;
-            %keyboard;
-            hold off;
-
-            if vid==1
-                currFrame = getframe(gcf);
-                writeVideo(vidObj,currFrame);
-            end
-
-            %Plot on circle
+        if mod(t,tplot) == 0 || t==Nt-1 || t==10
+            % if t==(Nt-1)
             %Define colors
             colorLength = 50;
             white = [1,1,1];
-            red = [1,0,0];
-            blue = [143/256,177/256,221/256];
-            maroon = [0.4,0,0];
-            navy = [33/256,81/256,127/256];
-            yellow = [1,0.9,0];
             darkyellow = [227/256,180/256,76/256];
-            whitered = [linspace(white(1),red(1),colorLength)',linspace(white(2),red(2),colorLength)',linspace(white(3),red(3),colorLength)'];
-            redmaroon = [linspace(red(1),maroon(1),colorLength)',linspace(red(2),maroon(2),colorLength)',linspace(red(3),maroon(3),colorLength)'];
-            whiteredmaroon = [whitered;redmaroon];
-            whiteblue = [linspace(white(1),blue(1),colorLength)',linspace(white(2),blue(2),colorLength)',linspace(white(3),blue(3),colorLength)'];
-            bluenavy = [linspace(blue(1),navy(1),colorLength)',linspace(blue(2),navy(2),colorLength)',linspace(blue(3),navy(3),colorLength)'];
-            whitebluenavy = [whiteblue; bluenavy];
-            myColors = [linspace(red(1),blue(1),colorLength)',linspace(red(2),blue(2),colorLength)',linspace(red(3),blue(3),colorLength)'];
-            redblue = abs(whiteblue+whitered)./2;
-            redwhiteblue = [flip(whitered); whiteblue];
-            whiteyellow = [linspace(white(1),yellow(1),colorLength)',linspace(white(2),yellow(2),colorLength)',linspace(white(3),yellow(3),colorLength)'];
-            yellowdarkyellow = [linspace(yellow(1),darkyellow(1),colorLength)',linspace(yellow(2),darkyellow(2),colorLength)',linspace(yellow(3),darkyellow(3),colorLength)'];
-            whitedarkyellow = [whiteyellow;yellowdarkyellow];
+            yellow2 = [254/256,254/256,98/256];
+            pink = [211/256,95/256,183/256];
+            darkpink = [141/256,45/256,113/256];
+            whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+            yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+            whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+            whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+            pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+            whitedarkpink = [whitepink;pinkdarkpink];
 
+
+            branchedColor = whitedarkpink;
+            bundledColor = whitedarkyellow2;
+            branchedColName = 'Pink';
+            bundledColName = 'Yellow';
             % Define circles
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.93:0.01:1);
+            gapsize=0.01;
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
             [Xcol,Ycol] = pol2cart(th,rad);
-            ZBranch1 = [a a a a a a a a]';
-            ZBund1 = [b b b b b b b b]';
+            Ycol1=Ycol;
+            ZBranch1 = [a a a a a a a a a a a a a a a a]';
+            ZBund1 = [b b b b b b b b b b b b b b b b]';
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
             [Xsm,Ysm] = pol2cart(th,rad);
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.83:0.01:0.9);
+            Ysm1=Ysm;
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
             [Xmid,Ymid] = pol2cart(th,rad);
 
-
-            % Concentric circles
-            % Cell 1
-            figcells=figure(16);
-            surf(Xcol,Ycol,ZBranch1);
-            view(2)
-            colormap(whitebluenavy)
-            freezeColors;
-            freezeColors(colorbar);
-            clim([0,max(b)])
-            shading interp
-            hold on;
-            surf(Xmid,Ymid,ZBund1);
-            colormap(whitedarkyellow)
-            freezeColors;
-            freezeColors(jicolorbar);
-            clim([0,max(a)])
-            shading interp
-            grid off
-            set(gca,'XTick',[], 'YTick', [])
-            % scatter(Xsm(boundC1),Ysm(boundC1),'black');
-            hold off;
-            box off;
-            set(gca,'XColor','w')
-            set(gca,'YColor','w')
+            % Make scatterplots
+            scatplot=figure(ppp);
+            clf
+            % subplot(1,2,1);
+            plot(Xa,a,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+            plot(Xa,b,'-ok','color',bundledColor(end,:),'linewidth',3);
+            plot(s,xC,'-.','color',branchedColor(end,:),'linewidth',1);
+            plot(s,yC,'-.k','color',bundledColor(end,:),'linewidth',1);
+            set(gca,'fontname','times','fontsize',20); box on;
+            lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+            lgd.NumColumns = 2;
             set(gcf,'color','w');
-            axis square
+            title('Cell 1')
+            hold off;
+
+            % Plot cell
+            allmax=12;
+            showtime=1;
+            cellplot=figure(ppp+1);
+            clf
+            range=3;
+            hold on
+            alphaData=ZBranch1;
+            surf(Xcol,Ycol,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            colormap(branchedColor)
+            cb=colorbar('Location','eastoutside');
+            freezeColors;
+            freezeColors(cb);
+            cbpos=cb.Position;
+            set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
+            set(cb,'TickLabels',{});
+            cbpos=cb.Position;
+            shading interp
+            alphaData=ZBund1;
+            surf(Xcol,Ycol,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+            colormap(bundledColor)
+            clim([0,12])
+            freezeColors;
+            jcb=jicolorbar;
+            freezeColors(jcb);
+            jcbpos=jcb.Position;
+            set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
+            shading interp
+            view(2)
+            plot3(cos(2*pi*Xa/L),sin(2*pi*Xa/L),(allmax+2)*ones(1,Na),'color','black','LineWidth',1)
+            hold off
 
 
+            xlim([-3,3])
+            ylim([-3,3])
+            set(gca,'plotBoxAspectRatio',[6 6 1]);
+            hold off
 
-            % Find median for cell 1
-            a1New = a;
-            a1New(a1New<1)=0;
-            if (a1New(1)~=0 && a1New(length(a1New))~=0)
-                zeroInd1=find(a1New==0,1,'first');
-                zeroInd2=find(a1New==0,1,'last');
-                dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-            else
-                ind1=find(a1New~=0,1,'first');
-                ind2=find(a1New~=0,1,'last');
-                dirIndex1=ceil((ind1+ind2)/2);
+            cbpos=cb.Position;
+            if showtime==1
+                if t==Nt-1
+                    timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + (Nt)*0.01,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+                else
+                    timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + (t)*0.01,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+                end
             end
-            if dirIndex1<1
-                dirIndex1=dirIndex1+101;
-            end
-            if ~isempty(dirIndex1)
+
+            if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
                 hold on;
-                quiver(0,0,Xsm(dirIndex1),Ysm(dirIndex1),0,'color',[0 0 0])
+                quiver(0,0,Xsm(dirIndexa1),Ysm(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2);
                 hold off;
             end
 
 
+            grid off
+            set(gca,'XTick',[],'YTick',[])
+            set(gca,'XColor','w')
+            set(gca,'YColor','w')
+            set(gcf,'color','w');
+            set(gcf,'Position',[209   561   682   474])
+            figure(ppp+1)
+            ohf = findobj(gcf);
+            figaxes = findobj(ohf(1), 'Type', 'axes');
+            set(figaxes(1),'Fontsize',15)
+            set(figaxes(2),'Fontsize',14)
+            camroll(90)
+
+
+            if t==1000 && savefigs==1
+                savefig(cellplot,strcat(savelocation,'_t10_Cell_',setnum,'.fig'));
+                savefig(scatplot,strcat(savelocation,'_t10_Scatter_',setnum,'.fig'));
+            end
+
+            if t==Nt-1 && savefigs==1
+                savefig(cellplot,filenameCells);
+                savefig(scatplot,filenameScatter);
+            end
+
+
         end
 
-        a1New = a;
-        a1New(a1New<0.0001)=0;
-        if (a1New(1)~=0 && a1New(length(a1New))~=0)
-            zeroInd1=find(a1New==0,1,'first');
-            zeroInd2=find(a1New==0,1,'last');
-            dirIndex1=ceil((zeroInd1+zeroInd2)/2) - 50;
-        else
-            ind1=find(a1New~=0,1,'first');
-            ind2=find(a1New~=0,1,'last');
-            dirIndex1=ceil((ind1+ind2)/2);
-        end
-        b1New = b;
-        b1New(b1New<0.0001)=0;
-        if (b1New(1)~=0 && b1New(length(b1New))~=0)
-            zeroInd1=find(b1New==0,1,'first');
-            zeroInd2=find(b1New==0,1,'last');
-            dirIndex2=ceil((zeroInd1+zeroInd2)/2) - 50;
-        else
-            ind1=find(b1New~=0,1,'first');
-            ind2=find(b1New~=0,1,'last');
-            dirIndex2=ceil((ind1+ind2)/2);
-        end
-        if ~isempty(dirIndex1) && ~isempty(dirIndex2)
-            sprintf('Polarized after %d steps', t)
-            polarize_time=polarize_time+t;
-            num_polarized=num_polarized+1;
-            break
-        end
+
     end
 
     % measure of polarized state (1 if polarized and 0 otherwise)
@@ -718,15 +722,15 @@ while (ppp<=100)
         ppp = ppp + 1;
     end
 
-    if savefigs==1
-        savefig(figcells,filenameCells);
-        savefig(scatplot,filenameScatter);
-    end
+    % if savefigs==1
+    %     savefig(figcells,filenameCells);
+    %     savefig(scatplot,filenameScatter);
+    % end
 end
 
-if num_polarized>0
-    sprintf('Average polarize time out of %d runs: %d steps',num_polarized,polarize_time/num_polarized)
-end
+% if num_polarized>0
+%     sprintf('Average polarize time out of %d runs: %d steps',num_polarized,polarize_time/num_polarized)
+% end
 
 %% Plot all particle trajectories
 % ccx = [0 0 255]/256.*ones(Nt,1);     % blue
