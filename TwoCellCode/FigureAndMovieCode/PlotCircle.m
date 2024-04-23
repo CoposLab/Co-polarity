@@ -4,10 +4,11 @@ close all;
 signal=0;
 
 addpath('./freeze_colors')
-addpath '/Users/katielevandosky/Desktop/HonorsProject/PairPolarity/SingleCellCode_Published'
+% addpath('../../PairPolarity/SingleCellCode_Published/resamplePolarityMolecules')
+addpath '/Users/katie/Everything/HonorsProject/PairPolarity/SingleCellCode_Published'
 
-for i=2:2
-    path=strcat('./vid_matfiles/misaligned/uncoupled/uncoupled',int2str(i),'.mat');
+for i=1:1
+    path=strcat('./vid_matfiles/leader_follower/racupc2/1000RacOn',int2str(i),'.mat');
 
     load(path)
     Nt=2500;
@@ -134,8 +135,6 @@ for i=2:2
         set(gcf,'color','w');
         title('Cell 1')
         hold off;
-        % keyboard
-        % pause(1.0);
 
         subplot(1,2,2); %Cell 2
         plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
@@ -435,9 +434,9 @@ for i=2:2
         rhoxvals1=(rhoxvals1)'.*cos(2*pi*Xa/L);
         rhoyvals1=(rhoyvals1)'.*sin(2*pi*Xa/L);
         plot3(rhoxvals1,rhoyvals1,(allmax+1)*ones(1,length(rhoxvals1)),'color',...
-            [bundledColor(end,:),1],'LineWidth',3)
+            [bundledColor(end,:),1],'LineWidth',3,'LineStyle','-.')
         plot3([rhoxvals1(end),rhoxvals1(1)],[rhoyvals1(end),rhoyvals1(1)],...
-            [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3)
+            [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3,'LineStyle','-.')
         % xlim([-3,3])
         % ylim([-3,3])
         % axis square
@@ -497,9 +496,9 @@ for i=2:2
                 [allmax+1,allmax+1],'color',branchedColor(end,:),'LineWidth',3)
         else
             plot3(racxvals2,racyvals2-2-(range-1),(allmax+1)*ones(1,length(racxvals2)),'color',...
-                [branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+                [branchedColor(end,:),0.5],'LineWidth',3)
             plot3([racxvals2(end),racxvals2(1)],[racyvals2(end),racyvals2(1)]-2-(range-1),...
-                [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+                [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3)
         end
         if max(yC2)>=(range+2)
             rhoxvals2=(range-1)*yC2/max(yC2)+1;
@@ -627,15 +626,15 @@ for i=2:2
         % surf(Z*Tend*end_time/Nt,Y,X,ones(size(Z,1),size(Z,2),3))
         % xplot=linspace(0,end_time/100,end_time);
         % surf(xplot,zrac1,yrac1,color1,'FaceAlpha',0.5);
-        alphadata1=abs(color1);
-        alphadata1(alphadata1>5)=max(max(alphadata1));
+        % alphadata1=abs(color1);
+        % alphadata1(alphadata1>5)=max(max(alphadata1));
         [th,time]=meshgrid((0:3.6:360)*pi/180,1:end_time);
-        surf(time,sin(th),cos(th),color1')
-        surf(time,sin(th)-2,cos(th),color2')
+        surf(flip(time),sin(th),cos(th),color1')
+        surf(flip(time),sin(th)-2,cos(th),color2')
         view(3)
         colormap([flip(bundledColor);branchedColor])
         cb=colorbar;
-        cb.Color='white';
+        % cb.Color='white';
         clim([-10,10])
 
         % surf(linspace(0,end_time/100,end_time),zcombined2,ycombined2-2,'FaceAlpha',0.5);
@@ -655,10 +654,15 @@ for i=2:2
         
         shading interp
         pbaspect([3,2,1])
-        xlabel('time')
-        set(gcf,'color','black')
-        set(gca,'color','black')
-        set(gca,'XColor','white', 'YColor', 'white', 'ZColor', 'white')
+        % xlabel('time')
+        set(gcf,'color','white')
+        set(gca,'color','white')
+        % set(gca,'XColor','white', 'YColor', 'white', 'ZColor', 'white')
+        set(gca,'XTick',[],'YTick',[],'ZTick',[])
+        box on
+        set(gca,'LineWidth',0.75)
+        % box on
+        % box('LineWidth',0.75)
 
         % view(90,0)
         % ylabel('y')
