@@ -15,15 +15,16 @@ for i=1:1
     t=Nt-1;
 
     adjacent=1;
-    squished=0;
+    squished=1;
+    shifted=0;
     racrho_dotsize=50;
 
-    make_scatplot=1;
+    make_scatplot=0;
     make_branchedbundled=0;
     make_racrho=0;
-    make_circlescatter=1;
+    make_circlescatter=0;
     make_cylinder=0;
-    make_combined=0;
+    make_combined=1;
 
     linewidth=1;
 
@@ -37,6 +38,13 @@ for i=1:1
     % posy1=posy1saved;
     % posx2=posx2saved;
     % posy2=posy2saved;
+
+    if shifted==0
+        xshift1=0*xshift1;
+        yshift1=0*yshift1;
+        xshift2=0*xshift2;
+        yshift2=0*yshift2;
+    end
 
     %Define colors
     colorLength = 50;
@@ -769,15 +777,15 @@ for i=1:1
             plot3(cos(th(1,[1:boundC1(1),boundC1(end):end]))+xshift1(t+1),...
                 sin(th(1,[1:boundC1(1),boundC1(end):end]))+yshift1(t+1),...
                 ones(1,length(th(1,[1:boundC1(1),boundC1(end):end])))*(allmax+1),...
-                'color',[0 0 0],'LineWidth',2)
+                'color',[0 0 0],'LineWidth',1)
         else
             plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),...
-                ones(1,length(th))*(allmax+1),'color',[0 0 0],'LineWidth',2)
+                ones(1,length(th))*(allmax+1),'color',[0 0 0],'LineWidth',1)
         end
         alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
         surf(Xcol,Ycol1,ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
         colormap(branchedColor)
-        clim([0,allmax/2])
+        clim([0,12])
         freezeColors;
         shading interp
         % end
@@ -786,7 +794,7 @@ for i=1:1
         alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
         surf(Xcol,Ycol1,ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
-        clim([0,allmax/2])
+        clim([0,12])
         freezeColors;
         shading interp
         % end
@@ -800,16 +808,16 @@ for i=1:1
             plot3(cos(th(1,[1:boundC2(1),boundC2(end):end]))+xshift2(t+1),...
                 sin(th(1,[1:boundC2(1),boundC2(end):end]))-2*abs(max(max(Ycol2)))-gapsize+yshift2(t+1),...
                 ones(1,length(th(1,[1:boundC2(1),boundC2(end):end])))*(allmax+1),...
-                'color',[0,0,0],'LineWidth',2)
+                'color',[0,0,0],'LineWidth',1)
         else
             plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),...
-                ones(1,length(th))*(allmax+1),'color',[0,0,0],'LineWidth',2)
+                ones(1,length(th))*(allmax+1),'color',[0,0,0],'LineWidth',1)
         end
         alphaData=ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2)));
         surf(Xcol,Ycol2-gapsize,ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
         colormap(branchedColor)
         freezeColors;
-        clim([0,allmax/2])
+        clim([0,12])
         cb=colorbar('Location','eastoutside');
         freezeColors(cb);
         cbpos=cb.Position;
@@ -822,7 +830,7 @@ for i=1:1
         alphaData=ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2)));
         surf(Xcol,Ycol2-gapsize,ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
         colormap(bundledColor)
-        clim([0,allmax/2])
+        clim([0,12])
         freezeColors;
         jcb=jicolorbar;
         freezeColors(jcb);
@@ -834,7 +842,7 @@ for i=1:1
         axis([-1 1 -3 1])
         axis equal
         set(gca,'XTick',[], 'YTick', [])
-        title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
+        % title(strcat(branchedColName, '=Branched, ', bundledColName, '=Bundled'))
 
         % flipc2 = flip(boundC2);
         % for i=1:length(boundC1)
@@ -851,13 +859,13 @@ for i=1:1
         if ~isempty(dirIndexa1) && ~isempty(dirIndexb1)
             figure(7)
             hold on;
-            quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5);
+            quiver(0,0,Xsm(dirIndexa1),Ysm1(dirIndexa1),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2);
             hold off;
         end
         if ~isempty(dirIndexa2) && ~isempty(dirIndexb2)
             figure(7)
             hold on;
-            quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',0.5)
+            quiver(0,-2*abs(max(max(Ycol2)))-gapsize,Xsm(dirIndexa2),Ysm2(dirIndexa2),0,'color',[0 0 0],'LineWidth',2,'MaxHeadSize',2)
             hold off;
         end
 
@@ -896,10 +904,11 @@ for i=1:1
             YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
             YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
         end
-        scatter3(cos(posx1(1:4:NNx1(t),t)*2*pi/L),YRac1,allmax+2,racrho_dotsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-        scatter3(cos(posx2(1:4:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,allmax+2,racrho_dotsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-        scatter3(cos(posy1(1:4:NNy1(t),t)*2*pi/L),YRho1,allmax+2,racrho_dotsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-        scatter3(cos(posy2(1:4:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,allmax+2,racrho_dotsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
+        edgecolor=[0.3 0.3 0.3];
+        scatter3(cos(posx1(1:4:NNx1(t),t)*2*pi/L),YRac1,allmax+2,racrho_dotsize,'MarkerEdgeColor',edgecolor,'MarkerFaceColor',branchedColor(end,:))
+        scatter3(cos(posx2(1:4:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,allmax+2,racrho_dotsize,'MarkerEdgeColor',edgecolor,'MarkerFaceColor',branchedColor(end,:))
+        scatter3(cos(posy1(1:4:NNy1(t),t)*2*pi/L),YRho1,allmax+2,racrho_dotsize,'MarkerEdgeColor',edgecolor,'MarkerFaceColor',bundledColor(end,:))
+        scatter3(cos(posy2(1:4:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,allmax+2,racrho_dotsize,'MarkerEdgeColor',edgecolor,'MarkerFaceColor',bundledColor(end,:))
 
         YRac1=sin(posx1(2:4:NNx1(t),t)*2*pi/L);
         YRho1=sin(posy1(2:4:NNy1(t),t)*2*pi/L);
@@ -911,10 +920,10 @@ for i=1:1
             YRac2(YRac2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
             YRho2(YRho2>Yvals2(boundC2(1)))=Yvals2(boundC2(1));
         end
-        scatter3(cos(posy1(2:4:NNy1(t),t)*2*pi/L),YRho1,allmax+2,racrho_dotsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-        scatter3(cos(posy2(2:4:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,allmax+2,racrho_dotsize,'MarkerEdgeColor',bundledColor(end,:),'MarkerFaceColor',bundledColor(end,:))
-        scatter3(cos(posx1(2:4:NNx1(t),t)*2*pi/L),YRac1,allmax+2,racrho_dotsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
-        scatter3(cos(posx2(2:4:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,allmax+2,racrho_dotsize,'MarkerEdgeColor',branchedColor(end,:),'MarkerFaceColor',branchedColor(end,:))
+        scatter3(cos(posy1(2:4:NNy1(t),t)*2*pi/L),YRho1,allmax+2,racrho_dotsize,'MarkerEdgeColor',edgecolor,'MarkerFaceColor',bundledColor(end,:))
+        scatter3(cos(posy2(2:4:NNy2(t),t)*2*pi/L),YRho2-2*abs(max(Yvals2))-gapsize,allmax+2,racrho_dotsize,'MarkerEdgeColor',edgecolor,'MarkerFaceColor',bundledColor(end,:))
+        scatter3(cos(posx1(2:4:NNx1(t),t)*2*pi/L),YRac1,allmax+2,racrho_dotsize,'MarkerEdgeColor',edgecolor,'MarkerFaceColor',branchedColor(end,:))
+        scatter3(cos(posx2(2:4:NNx2(t),t)*2*pi/L),YRac2-2*abs(max(Yvals2))-gapsize,allmax+2,racrho_dotsize,'MarkerEdgeColor',edgecolor,'MarkerFaceColor',branchedColor(end,:))
 
 
         figure(7)
