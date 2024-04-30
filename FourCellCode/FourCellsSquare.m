@@ -5,7 +5,7 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 4/17/2024
+% Last updated: 4/30/2024
 % Katie Levandosky
 % Calina Copos
 addpath('../TwoCellCode/FigureAndMovieCode/freeze_colors')
@@ -124,7 +124,7 @@ while (ppp<=1)
     sigBound3 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
 
-    pathway='uncoupled';
+    pathway='branched-bundled-promotion';
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
     numToRemove=0;
@@ -455,6 +455,7 @@ while (ppp<=1)
         open(vidObjCells);
     end
 
+    if vid==1
     %Define colors
     colorLength = 50;
     white = [1,1,1];
@@ -672,7 +673,7 @@ while (ppp<=1)
         cellsframe = getframe(figcells);
         writeVideo(vidObjCells,cellsframe);
     end
-
+    end
     
 
     %% Run simulation
@@ -724,7 +725,7 @@ while (ppp<=1)
                 Konx4(boundC4_1) = Konx4(boundC4_1).*flip(b1(boundC1_4))*1000;
                 Kony1(boundC1_4) = Kony1(boundC1_4).*flip(a4(boundC4_1))*1000;
 
-            case 'branched-bundled-crosspromotion'
+            case 'branched-bundled-promotion'
                 kb_ind=2;
                 kc_ind=2;
         end
@@ -1631,7 +1632,12 @@ while (ppp<=1)
         end
 
         %% Plot the solution(s)
-        if mod(t,tplot) == 0 || t==Nt-1
+        if vid==1
+            make_plot=(mod(t,tplot) == 0 || t==Nt-1);
+        else
+            make_plot=(t==Nt-1);
+        end
+        if make_plot
             % if t==(Nt-1)
 
             %Define colors
@@ -1654,6 +1660,8 @@ while (ppp<=1)
             bundledColor = whitedarkyellow2;
             branchedColName = 'Pink';
             bundledColName = 'Yellow';
+            linecolor=[0 0 0];
+            linewidth=1;
 
 
             % Make scatterplots

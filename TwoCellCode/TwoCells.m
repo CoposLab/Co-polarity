@@ -5,7 +5,7 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 4/17/2024
+% Last updated: 4/30/2024
 % Katie Levandosky
 % Calina Copos
 addpath('./FigureAndMovieCode/freeze_colors')
@@ -406,228 +406,229 @@ while (ppp<=1)
     end
 
     %Initial plot
-    % Define circles
-    gapsize=0.01;
-    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
-    [Xcol,Ycol] = pol2cart(th,rad);
-    Ycol1=Ycol;
-    Ycol2=Ycol;
-    Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
-    Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
-    Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
-    ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
-    ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
-    ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
-    ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2]';
-    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-    [Xsm,Ysm] = pol2cart(th,rad);
-    Ysm1=Ysm;
-    Ysm2=Ysm;
-    Ysm1(:,boundC1)=Ysm1(:,boundC1(1)*ones(1,length(boundC1)));
-    Ysm2(:,boundC2)=Ysm2(:,boundC2(1)*ones(1,length(boundC2)));
-    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
-    [Xmid,Ymid] = pol2cart(th,rad);
-
-
-    %Define colors
-    colorLength = 50;
-    white = [1,1,1];
-    darkyellow = [227/256,180/256,76/256];
-    yellow2 = [254/256,254/256,98/256];
-    pink = [211/256,95/256,183/256];
-    darkpink = [141/256,45/256,113/256];
-    whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
-    yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
-    whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
-    whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
-    pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
-    whitedarkpink = [whitepink;pinkdarkpink];
-
-
-    branchedColor = whitedarkpink;
-    bundledColor = whitedarkyellow2;
-    branchedColName = 'Pink';
-    bundledColName = 'Yellow';
-
-    % Make scatterplots
-    scatplot=figure(ppp);
-    clf
-    subplot(1,2,1); %Cell 1
-    plot(Xa,a1,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
-    plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
-    plot(s1,xC1,'-.','color',branchedColor(end,:),'linewidth',1);
-    plot(s1,yC1,'-.k','color',bundledColor(end,:),'linewidth',1);
-    set(gca,'fontname','times','fontsize',20); box on;
-    lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-    lgd.NumColumns = 2;
-    set(gcf,'color','w');
-    title('Cell 1')
-    hold off;
-
-    subplot(1,2,2); %Cell 2
-    plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
-    plot(Xa,b2,'-ok','color',bundledColor(end,:),'linewidth',3);
-    plot(s2,xC2,'-.','color',branchedColor(end,:),'linewidth',1);
-    plot(s2,yC2,'-.k','color',bundledColor(end,:),'linewidth',1);
-    set(gca,'fontname','times','fontsize',20); box on;
-    lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-    lgd.NumColumns = 2;
-    set(gcf,'color','w');
-    title('Cell 2')
-    hold off;
-
     if vid==1
-        scatframe = getframe(scatplot);
-        writeVideo(vidObjScatter,scatframe);
-    end
+        % Define circles
+        gapsize=0.01;
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
+        [Xcol,Ycol] = pol2cart(th,rad);
+        Ycol1=Ycol;
+        Ycol2=Ycol;
+        Ycol1(:,boundC1)=Ycol1(:,boundC1(1)*ones(1,length(boundC1)));
+        Ycol2(:,boundC2)=Ycol2(:,boundC2(1)*ones(1,length(boundC2)));
+        Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
+        ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
+        ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
+        ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
+        ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2]';
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
+        [Xsm,Ysm] = pol2cart(th,rad);
+        Ysm1=Ysm;
+        Ysm2=Ysm;
+        Ysm1(:,boundC1)=Ysm1(:,boundC1(1)*ones(1,length(boundC1)));
+        Ysm2(:,boundC2)=Ysm2(:,boundC2(1)*ones(1,length(boundC2)));
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.86:0.01:0.93);
+        [Xmid,Ymid] = pol2cart(th,rad);
 
 
-    % Plot cells
-    t=1;
-    allmax=12;
-    showtime=1;
-    cellsplot=figure(ppp+1);
-    clf
-    range=3;
-    hold on
-    alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
-    surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
-    colormap(branchedColor)
-    clim([0,12])
-    freezeColors;
-    shading interp
-    alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
-    surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
-    colormap(bundledColor)
-    clim([0,12])
-    freezeColors;
-    shading interp
-    view(2)
-    if max(xC1)>=(range+2)
-        racxvals1=(range-1)*xC1/max(xC1)+1;
-        racyvals1=(range-1)*xC1/max(xC1)+1;
-    else
-        racxvals1=(range-2)*xC1/max(xC1)+1;
-        racyvals1=(range-1)*xC1/max(xC1)+1;
-    end
-    racxvals1=(racxvals1)'.*cos(2*pi*Xa/L);
-    racyvals1=(racyvals1)'.*sin(2*pi*Xa/L);
-    plot3(racxvals1+xshift1(t),racyvals1+yshift1(t),(allmax+1)*ones(1,length(racxvals1)),'color',...
-        [branchedColor(end,:),1],'LineWidth',3)
-    plot3([racxvals1(end)+xshift1(t),racxvals1(1)+xshift1(t)],[racyvals1(end)+yshift1(t),racyvals1(1)+yshift1(t)],...
-        [allmax+1,allmax+1],'color',[branchedColor(end,:),1],'LineWidth',3)
-    if max(yC1)>=(range+2)
-        rhoxvals1=(range-1)*yC1/max(yC1)+1;
-        rhoyvals1=(range-1)*yC1/max(yC1)+1;
-    else
-        rhoxvals1=(range-2)*yC1/max(yC1)+1;
-        rhoyvals1=(range-2)*yC1/max(yC1)+1;
-    end
-    rhoxvals1=(rhoxvals1)'.*cos(2*pi*Xa/L);
-    rhoyvals1=(rhoyvals1)'.*sin(2*pi*Xa/L);
-    plot3(rhoxvals1+xshift1(t),rhoyvals1+yshift1(t),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
-        [bundledColor(end,:),1],'LineWidth',3)
-    plot3([rhoxvals1(end)+xshift1(t),rhoxvals1(1)+xshift1(t)],[rhoyvals1(end)+yshift1(t),rhoyvals1(1)+yshift1(t)],...
-        [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3)
-    plot3(cos(2*pi*Xa/L)+xshift1(t),sin(2*pi*Xa/L)+yshift1(t),(allmax+2)*ones(1,Na),'color','black','LineWidth',1)
-    hold off
+        %Define colors
+        colorLength = 50;
+        white = [1,1,1];
+        darkyellow = [227/256,180/256,76/256];
+        yellow2 = [254/256,254/256,98/256];
+        pink = [211/256,95/256,183/256];
+        darkpink = [141/256,45/256,113/256];
+        whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+        yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+        whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+        whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+        pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+        whitedarkpink = [whitepink;pinkdarkpink];
 
-    %cell 2
-    hold on
-    alphaData=ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2)));
-    surf(Xcol+xshift2(t),Ycol+yshift2(t)-2-(range-1),ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
-    colormap(branchedColor)
-    clim([0,12])
-    cb=colorbar('Location','eastoutside');
-    freezeColors;
-    freezeColors(cb);
-    cbpos=cb.Position;
-    % set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
-    set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
-    set(cb,'TickLabels',{});
-    cbpos=cb.Position;
-    shading interp
-    alphaData=ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2)));
-    surf(Xcol+xshift2(t),Ycol+yshift2(t)-2-(range-1),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
-    colormap(bundledColor)
-    clim([0,12])
-    freezeColors;
-    jcb=jicolorbar;
-    freezeColors(jcb);
-    jcbpos=jcb.Position;
-    set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
-    shading interp
-    view(2)
-    if max(xC2)>=(range+2)
-        racxvals2=(range-1)*xC2/max(xC2)+1;
-        racyvals2=(range-1)*xC2/max(xC2)+1;
-    else
-        racxvals2=(range-2)*xC2/max(xC2)+1;
-        racyvals2=(range-2)*xC2/max(xC2)+1;
-    end
-    racxvals2=(racxvals2)'.*cos(2*pi*Xa/L);
-    racyvals2=(racyvals2)'.*sin(2*pi*Xa/L);
-    plot3(racxvals2+xshift2(t),racyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(racxvals2)),'color',...
-        [branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
-    plot3([racxvals2(end)+xshift2(t),racxvals2(1)+xshift2(t)],[racyvals2(end)+yshift2(t),racyvals2(1)+yshift2(t)]-2-(range-1),...
-        [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
-    if max(yC2)>=(range+2)
-        rhoxvals2=(range-1)*yC2/max(yC2)+1;
-        rhoyvals2=(range-1)*yC2/max(yC2)+1;
-    else
-        rhoxvals2=(range-2)*yC2/max(yC2)+1;
-        rhoyvals2=(range-2)*yC2/max(yC2)+1;
-    end
-    rhoxvals2=(rhoxvals2)'.*cos(2*pi*Xa/L);
-    rhoyvals2=(rhoyvals2)'.*sin(2*pi*Xa/L);
-    plot3(rhoxvals2+xshift2(t),rhoyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(rhoxvals2)),'color',...
-        [bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
-    plot3([rhoxvals2(end)+xshift2(t),rhoxvals2(1)+xshift2(t)],[rhoyvals2(end)+yshift2(t),rhoyvals2(1)+yshift2(t)]-2-(range-1),...
-        [allmax+1,allmax+1],'color',[bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
-    plot(cos(2*pi*Xa/L)+xshift2(t),sin(2*pi*Xa/L)+yshift2(t)-2-(range-1),'color','black','LineWidth',1)
 
-    xlim([-3,3])
-    ylim([-8,4])
-    set(gca,'plotBoxAspectRatio',[6 12 1]);
-    hold off
+        branchedColor = whitedarkpink;
+        bundledColor = whitedarkyellow2;
+        branchedColName = 'Pink';
+        bundledColName = 'Yellow';
 
-    cbpos=cb.Position;
-    if showtime==1
-        timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + 0,'FitBoxToText','on','EdgeColor','none','FontSize',20);
-    end
+        % Make scatterplots
+        scatplot=figure(ppp);
+        clf
+        subplot(1,2,1); %Cell 1
+        plot(Xa,a1,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+        plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
+        plot(s1,xC1,'-.','color',branchedColor(end,:),'linewidth',1);
+        plot(s1,yC1,'-.k','color',bundledColor(end,:),'linewidth',1);
+        set(gca,'fontname','times','fontsize',20); box on;
+        lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+        lgd.NumColumns = 2;
+        set(gcf,'color','w');
+        title('Cell 1')
+        hold off;
 
-    if signal==1
-        [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
-        [Xsig,Ysig] = pol2cart(th,rad);
-        if t<=sigswitch_time
-            hold on;
-            scatter3(Xsig(sigBound2)+xshift2(t),Ysig(sigBound2)+yshift2(t)-2-(range-1),(allmax+3)*ones(1,length(sigBound2)),50,'black','.')
-            hold off;
+        subplot(1,2,2); %Cell 2
+        plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+        plot(Xa,b2,'-ok','color',bundledColor(end,:),'linewidth',3);
+        plot(s2,xC2,'-.','color',branchedColor(end,:),'linewidth',1);
+        plot(s2,yC2,'-.k','color',bundledColor(end,:),'linewidth',1);
+        set(gca,'fontname','times','fontsize',20); box on;
+        lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+        lgd.NumColumns = 2;
+        set(gcf,'color','w');
+        title('Cell 2')
+        hold off;
+
+        if vid==1
+            scatframe = getframe(scatplot);
+            writeVideo(vidObjScatter,scatframe);
+        end
+
+
+        % Plot cells
+        t=1;
+        allmax=12;
+        showtime=1;
+        cellsplot=figure(ppp+1);
+        clf
+        range=3;
+        hold on
+        alphaData=ZBranch1+max(0,max(max(ZBranch2))-max(max(ZBranch1)));
+        surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBranch1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+        colormap(branchedColor)
+        clim([0,12])
+        freezeColors;
+        shading interp
+        alphaData=ZBund1+max(0,max(max(ZBund2))-max(max(ZBund1)));
+        surf(Xcol+xshift1(t),Ycol+yshift1(t),ZBund1,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+        colormap(bundledColor)
+        clim([0,12])
+        freezeColors;
+        shading interp
+        view(2)
+        if max(xC1)>=(range+2)
+            racxvals1=(range-1)*xC1/max(xC1)+1;
+            racyvals1=(range-1)*xC1/max(xC1)+1;
         else
-            hold on;
-            scatter3(Xsig(sigBound1)+xshift1(t),Ysig(sigBound1)+yshift1(t),(allmax+3)*ones(1,length(sigBound1)),50,'black','.')
-            hold off;
+            racxvals1=(range-2)*xC1/max(xC1)+1;
+            racyvals1=(range-1)*xC1/max(xC1)+1;
+        end
+        racxvals1=(racxvals1)'.*cos(2*pi*Xa/L);
+        racyvals1=(racyvals1)'.*sin(2*pi*Xa/L);
+        plot3(racxvals1+xshift1(t),racyvals1+yshift1(t),(allmax+1)*ones(1,length(racxvals1)),'color',...
+            [branchedColor(end,:),1],'LineWidth',3)
+        plot3([racxvals1(end)+xshift1(t),racxvals1(1)+xshift1(t)],[racyvals1(end)+yshift1(t),racyvals1(1)+yshift1(t)],...
+            [allmax+1,allmax+1],'color',[branchedColor(end,:),1],'LineWidth',3)
+        if max(yC1)>=(range+2)
+            rhoxvals1=(range-1)*yC1/max(yC1)+1;
+            rhoyvals1=(range-1)*yC1/max(yC1)+1;
+        else
+            rhoxvals1=(range-2)*yC1/max(yC1)+1;
+            rhoyvals1=(range-2)*yC1/max(yC1)+1;
+        end
+        rhoxvals1=(rhoxvals1)'.*cos(2*pi*Xa/L);
+        rhoyvals1=(rhoyvals1)'.*sin(2*pi*Xa/L);
+        plot3(rhoxvals1+xshift1(t),rhoyvals1+yshift1(t),(allmax+1)*ones(1,length(rhoxvals1)),'color',...
+            [bundledColor(end,:),1],'LineWidth',3)
+        plot3([rhoxvals1(end)+xshift1(t),rhoxvals1(1)+xshift1(t)],[rhoyvals1(end)+yshift1(t),rhoyvals1(1)+yshift1(t)],...
+            [allmax+1,allmax+1],'color',[bundledColor(end,:),1],'LineWidth',3)
+        plot3(cos(2*pi*Xa/L)+xshift1(t),sin(2*pi*Xa/L)+yshift1(t),(allmax+2)*ones(1,Na),'color','black','LineWidth',1)
+        hold off
+
+        %cell 2
+        hold on
+        alphaData=ZBranch2+max(0,max(max(ZBranch1))-max(max(ZBranch2)));
+        surf(Xcol+xshift2(t),Ycol+yshift2(t)-2-(range-1),ZBranch2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+        colormap(branchedColor)
+        clim([0,12])
+        cb=colorbar('Location','eastoutside');
+        freezeColors;
+        freezeColors(cb);
+        cbpos=cb.Position;
+        % set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
+        set(cb,'Position',[0.9062    0.1097    0.0235    0.4077])
+        set(cb,'TickLabels',{});
+        cbpos=cb.Position;
+        shading interp
+        alphaData=ZBund2+max(0,max(max(ZBund1))-max(max(ZBund2)));
+        surf(Xcol+xshift2(t),Ycol+yshift2(t)-2-(range-1),ZBund2,'AlphaData',alphaData,'FaceAlpha','interp','FaceColor','interp');
+        colormap(bundledColor)
+        clim([0,12])
+        freezeColors;
+        jcb=jicolorbar;
+        freezeColors(jcb);
+        jcbpos=jcb.Position;
+        set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
+        shading interp
+        view(2)
+        if max(xC2)>=(range+2)
+            racxvals2=(range-1)*xC2/max(xC2)+1;
+            racyvals2=(range-1)*xC2/max(xC2)+1;
+        else
+            racxvals2=(range-2)*xC2/max(xC2)+1;
+            racyvals2=(range-2)*xC2/max(xC2)+1;
+        end
+        racxvals2=(racxvals2)'.*cos(2*pi*Xa/L);
+        racyvals2=(racyvals2)'.*sin(2*pi*Xa/L);
+        plot3(racxvals2+xshift2(t),racyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(racxvals2)),'color',...
+            [branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+        plot3([racxvals2(end)+xshift2(t),racxvals2(1)+xshift2(t)],[racyvals2(end)+yshift2(t),racyvals2(1)+yshift2(t)]-2-(range-1),...
+            [allmax+1,allmax+1],'color',[branchedColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+        if max(yC2)>=(range+2)
+            rhoxvals2=(range-1)*yC2/max(yC2)+1;
+            rhoyvals2=(range-1)*yC2/max(yC2)+1;
+        else
+            rhoxvals2=(range-2)*yC2/max(yC2)+1;
+            rhoyvals2=(range-2)*yC2/max(yC2)+1;
+        end
+        rhoxvals2=(rhoxvals2)'.*cos(2*pi*Xa/L);
+        rhoyvals2=(rhoyvals2)'.*sin(2*pi*Xa/L);
+        plot3(rhoxvals2+xshift2(t),rhoyvals2+yshift2(t)-2-(range-1),(allmax+1)*ones(1,length(rhoxvals2)),'color',...
+            [bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+        plot3([rhoxvals2(end)+xshift2(t),rhoxvals2(1)+xshift2(t)],[rhoyvals2(end)+yshift2(t),rhoyvals2(1)+yshift2(t)]-2-(range-1),...
+            [allmax+1,allmax+1],'color',[bundledColor(end,:),0.5],'LineWidth',3,'LineStyle','-.')
+        plot(cos(2*pi*Xa/L)+xshift2(t),sin(2*pi*Xa/L)+yshift2(t)-2-(range-1),'color','black','LineWidth',1)
+
+        xlim([-3,3])
+        ylim([-8,4])
+        set(gca,'plotBoxAspectRatio',[6 12 1]);
+        hold off
+
+        cbpos=cb.Position;
+        if showtime==1
+            timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + 0,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+        end
+
+        if signal==1
+            [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+            [Xsig,Ysig] = pol2cart(th,rad);
+            if t<=sigswitch_time
+                hold on;
+                scatter3(Xsig(sigBound2)+xshift2(t),Ysig(sigBound2)+yshift2(t)-2-(range-1),(allmax+3)*ones(1,length(sigBound2)),50,'black','.')
+                hold off;
+            else
+                hold on;
+                scatter3(Xsig(sigBound1)+xshift1(t),Ysig(sigBound1)+yshift1(t),(allmax+3)*ones(1,length(sigBound1)),50,'black','.')
+                hold off;
+            end
+        end
+
+        grid off
+        set(gca,'XTick',[],'YTick',[])
+        set(gca,'XColor','w')
+        set(gca,'YColor','w')
+        set(gcf,'color','w');
+        set(gcf,'Position',[209   561   682   474])
+        ohf = findobj(gcf);
+        figaxes = findobj(ohf(1), 'Type', 'axes');
+        set(figaxes(1),'Fontsize',15)
+        set(figaxes(2),'Fontsize',14)
+        camroll(90)
+
+
+        if vid==1
+            cellsframe = getframe(cellsplot);
+            writeVideo(vidObjCells,cellsframe);
         end
     end
-
-    grid off
-    set(gca,'XTick',[],'YTick',[])
-    set(gca,'XColor','w')
-    set(gca,'YColor','w')
-    set(gcf,'color','w');
-    set(gcf,'Position',[209   561   682   474])
-    ohf = findobj(gcf);
-    figaxes = findobj(ohf(1), 'Type', 'axes');
-    set(figaxes(1),'Fontsize',15)
-    set(figaxes(2),'Fontsize',14)
-    camroll(90)
-
-
-    if vid==1
-        cellsframe = getframe(cellsplot);
-        writeVideo(vidObjCells,cellsframe);
-    end
-
 
     %% Run simulation
     %
@@ -1097,7 +1098,7 @@ while (ppp<=1)
                     locRemovey1 = find(abs(posy1(:,t+1)-posx1(Kx1,t+1))<epsilon,numRhoToRemove);
                     numFoundy1 = length(locRemovey1);
                     if ~isempty(locRemovey1) && boundC1Scaled(1)<=posx1(Kx1,t+1) ...&& boundC1Scaled(end)>=posx1(Kx1,t+1)
-                        % posy1(locRemovey1,t+1)=0;
+                            % posy1(locRemovey1,t+1)=0;
                         oldcoly1 = posy1(locRemovey1,1:end); % Find the particle(s) to be removed
                         othercolsy1 = posy1(setdiff(1:Ky1,locRemovey1),1:end); % Gather other "on" particles
                         otherothercolsy1 = posy1(Ky1+1:end,1:end); % Gather "off" particles
@@ -1369,8 +1370,34 @@ while (ppp<=1)
         end
 
         % Make plots
-        if mod(t,tplot)==0 || t==Nt-1
+        if vid==1
+            make_plot=mod(t,tplot)==0 || t==Nt-1;
+        else
+            make_plot= (t==Nt-1);
+        end
+        if make_plot
             % if t==Nt-1
+
+            %Define colors
+            colorLength = 50;
+            white = [1,1,1];
+            darkyellow = [227/256,180/256,76/256];
+            yellow2 = [254/256,254/256,98/256];
+            pink = [211/256,95/256,183/256];
+            darkpink = [141/256,45/256,113/256];
+            whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+            yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+            whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+            whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+            pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+            whitedarkpink = [whitepink;pinkdarkpink];
+
+
+            branchedColor = whitedarkpink;
+            bundledColor = whitedarkyellow2;
+            branchedColName = 'Pink';
+            bundledColName = 'Yellow';
+
             % Define circles
             gapsize=0.01;
             [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);

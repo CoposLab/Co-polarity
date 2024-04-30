@@ -5,7 +5,7 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 4/17/2024
+% Last updated: 4/17/2024 
 % Katie Levandosky
 % Calina Copos
 addpath('../TwoCellCode/FigureAndMovieCode/freeze_colors')
@@ -488,233 +488,233 @@ while (ppp<=1)
     end
 
     if vid==1
-        %Define colors
-        colorLength = 50;
-        white = [1,1,1];
-        darkyellow = [227/256,180/256,76/256];
-        yellow2 = [254/256,254/256,98/256];
-        pink = [211/256,95/256,183/256];
-        darkpink = [141/256,45/256,113/256];
+    %Define colors
+    colorLength = 50;
+    white = [1,1,1];
+    darkyellow = [227/256,180/256,76/256];
+    yellow2 = [254/256,254/256,98/256];
+    pink = [211/256,95/256,183/256];
+    darkpink = [141/256,45/256,113/256];
 
-        whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
-        yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
-        whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
-        whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
-        pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
-        whitedarkpink = [whitepink;pinkdarkpink];
-
-
-        branchedColor = whitedarkpink;
-        bundledColor = whitedarkyellow2;
-        branchedColName = 'Pink';
-        bundledColName = 'Yellow';
-
-        linecolor=[0 0 0];
-        linewidth=1;
-        showtime=1;
+    whiteyellow2 = [linspace(white(1),yellow2(1),colorLength)',linspace(white(2),yellow2(2),colorLength)',linspace(white(3),yellow2(3),colorLength)'];
+    yellow2darkyellow = [linspace(yellow2(1),darkyellow(1),colorLength)',linspace(yellow2(2),darkyellow(2),colorLength)',linspace(yellow2(3),darkyellow(3),colorLength)'];
+    whitedarkyellow2 = [whiteyellow2;yellow2darkyellow];
+    whitepink = [linspace(white(1),pink(1),colorLength)',linspace(white(2),pink(2),colorLength)',linspace(white(3),pink(3),colorLength)'];
+    pinkdarkpink = [linspace(pink(1),darkpink(1),colorLength)',linspace(pink(2),darkpink(2),colorLength)',linspace(pink(3),darkpink(3),colorLength)'];
+    whitedarkpink = [whitepink;pinkdarkpink];
 
 
-        % Plot the initial condition
-        figscatter = figure(ppp);
-        subplot(1,4,1); %Cell 1
-        plot(Xa,a1,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
-        plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
-        plot(s1,xC1,'-.','color',branchedColor(end,:),'linewidth',1);
-        plot(s1,yC1,'-.k','color',bundledColor(end,:),'linewidth',1);
-        % xlim([0 10]); ylim([0 2]);
-        %title('Time = 0');
-        set(gca,'fontname','times','fontsize',20); box on;
-        lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-        lgd.NumColumns = 2;
-        set(gcf,'color','w');
-        title('Cell 1')
-        hold off;
+    branchedColor = whitedarkpink;
+    bundledColor = whitedarkyellow2;
+    branchedColName = 'Pink';
+    bundledColName = 'Yellow';
 
-        subplot(1,4,2); %Cell 2
-        plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
-        plot(Xa,b2,'-ok','color',bundledColor(end,:),'linewidth',3);
-        plot(s2,xC2,'-.','color',branchedColor(end,:),'linewidth',1);
-        plot(s2,yC2,'-.k','color',bundledColor(end,:),'linewidth',1);
-        % xlim([0 10]); ylim([0 2]);
-        %title('Time = 0');
-        set(gca,'fontname','times','fontsize',20); box on;
-        lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-        lgd.NumColumns = 2;
-        set(gcf,'color','w');
-        title('Cell 2')
-        hold off;
-
-        subplot(1,4,3); %Cell 3
-        plot(Xa,a3,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
-        plot(Xa,b3,'-ok','color',bundledColor(end,:),'linewidth',3);
-        plot(s3,xC3,'-.','color',branchedColor(end,:),'linewidth',1);
-        plot(s3,yC3,'-.k','color',bundledColor(end,:),'linewidth',1);
-        % xlim([0 10]); ylim([0 2]);
-        %title('Time = 0');
-        set(gca,'fontname','times','fontsize',20); box on;
-        lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-        lgd.NumColumns = 2;
-        set(gcf,'color','w');
-        title('Cell 3')
-        hold off;
-
-        subplot(1,4,4); %Cell 4
-        plot(Xa,a4,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
-        plot(Xa,b4,'-ok','color',bundledColor(end,:),'linewidth',3);
-        plot(s4,xC4,'-.','color',branchedColor(end,:),'linewidth',1);
-        plot(s4,yC4,'-.k','color',bundledColor(end,:),'linewidth',1);
-        % xlim([0 10]); ylim([0 2]);
-        %title('Time = 0');
-        set(gca,'fontname','times','fontsize',20); box on;
-        lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
-        lgd.NumColumns = 2;
-        set(gcf,'color','w');
-        title('Cell 4')
-        hold off;
+    linecolor=[0 0 0];
+    linewidth=1;
+    showtime=1;
 
 
+    % Plot the initial condition
+    figscatter = figure(ppp);
+    subplot(1,4,1); %Cell 1
+    plot(Xa,a1,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+    plot(Xa,b1,'-ok','color',bundledColor(end,:),'linewidth',3);
+    plot(s1,xC1,'-.','color',branchedColor(end,:),'linewidth',1);
+    plot(s1,yC1,'-.k','color',bundledColor(end,:),'linewidth',1);
+    % xlim([0 10]); ylim([0 2]);
+    %title('Time = 0');
+    set(gca,'fontname','times','fontsize',20); box on;
+    lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+    lgd.NumColumns = 2;
+    set(gcf,'color','w');
+    title('Cell 1')
+    hold off;
 
-        % Define circles
-        gapsize=0;
-        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
-        [Xcol,Ycol] = pol2cart(th,rad);
-        Ycol1=Ycol;
-        Ycol2=Ycol;
-        Ycol3=Ycol;
-        Ycol4=Ycol;
-        Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
-        Ycol3 = Ycol3 - 4*abs(max(max(Ycol3)))-gapsize;
-        Ycol4 = Ycol4 - 6*abs(max(max(Ycol4)))-gapsize;
-        ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
-        ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
-        ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
-        ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2]';
-        ZBranch3 = [a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3]';
-        ZBund3 = [b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3]';
-        ZBranch4 = [a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4]';
-        ZBund4 = [b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4]';
-        [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
-        [Xsm,Ysm] = pol2cart(th,rad);
-        Ysm1=Ysm;
-        Ysm2=Ysm;
+    subplot(1,4,2); %Cell 2
+    plot(Xa,a2,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+    plot(Xa,b2,'-ok','color',bundledColor(end,:),'linewidth',3);
+    plot(s2,xC2,'-.','color',branchedColor(end,:),'linewidth',1);
+    plot(s2,yC2,'-.k','color',bundledColor(end,:),'linewidth',1);
+    % xlim([0 10]); ylim([0 2]);
+    %title('Time = 0');
+    set(gca,'fontname','times','fontsize',20); box on;
+    lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+    lgd.NumColumns = 2;
+    set(gcf,'color','w');
+    title('Cell 2')
+    hold off;
+
+    subplot(1,4,3); %Cell 3
+    plot(Xa,a3,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+    plot(Xa,b3,'-ok','color',bundledColor(end,:),'linewidth',3);
+    plot(s3,xC3,'-.','color',branchedColor(end,:),'linewidth',1);
+    plot(s3,yC3,'-.k','color',bundledColor(end,:),'linewidth',1);
+    % xlim([0 10]); ylim([0 2]);
+    %title('Time = 0');
+    set(gca,'fontname','times','fontsize',20); box on;
+    lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+    lgd.NumColumns = 2;
+    set(gcf,'color','w');
+    title('Cell 3')
+    hold off;
+
+    subplot(1,4,4); %Cell 4
+    plot(Xa,a4,'-o','color',branchedColor(end,:),'linewidth',3); hold on;
+    plot(Xa,b4,'-ok','color',bundledColor(end,:),'linewidth',3);
+    plot(s4,xC4,'-.','color',branchedColor(end,:),'linewidth',1);
+    plot(s4,yC4,'-.k','color',bundledColor(end,:),'linewidth',1);
+    % xlim([0 10]); ylim([0 2]);
+    %title('Time = 0');
+    set(gca,'fontname','times','fontsize',20); box on;
+    lgd = legend('Branched network','Bundled network','Rac','Rho','Location','northeast');
+    lgd.NumColumns = 2;
+    set(gcf,'color','w');
+    title('Cell 4')
+    hold off;
 
 
 
-        allmax = 48;
-        t=0;
+    % Define circles
+    gapsize=0;
+    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.85:0.01:1);
+    [Xcol,Ycol] = pol2cart(th,rad);
+    Ycol1=Ycol;
+    Ycol2=Ycol;
+    Ycol3=Ycol;
+    Ycol4=Ycol;
+    Ycol2 = Ycol2 - 2*abs(max(max(Ycol2)))-gapsize;
+    Ycol3 = Ycol3 - 4*abs(max(max(Ycol3)))-gapsize;
+    Ycol4 = Ycol4 - 6*abs(max(max(Ycol4)))-gapsize;
+    ZBranch1 = [a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1 a1]';
+    ZBund1 = [b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1 b1]';
+    ZBranch2 = [a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2 a2]';
+    ZBund2 = [b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2 b2]';
+    ZBranch3 = [a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3 a3]';
+    ZBund3 = [b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3 b3]';
+    ZBranch4 = [a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4 a4]';
+    ZBund4 = [b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4 b4]';
+    [th,rad] = meshgrid((0:3.6:360)*pi/180,0.8);
+    [Xsm,Ysm] = pol2cart(th,rad);
+    Ysm1=Ysm;
+    Ysm2=Ysm;
 
 
-        % Plot cells
-        % Cell 1
-        figcells=figure(ppp+1);
-        clf
+
+    allmax = 48;
+    t=0;
+
+
+    % Plot cells
+    % Cell 1
+    figcells=figure(ppp+1);
+    clf
+    hold on;
+    surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
+    view(2)
+    colormap(branchedColor)
+    clim([0,allmax/4])
+    freezeColors;
+    shading interp
+    surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBund1,'AlphaData',ZBund1,'FaceAlpha','interp','FaceColor','interp');
+    colormap(bundledColor)
+    clim([0,allmax/4])
+    freezeColors;
+    shading interp
+    plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
+
+
+    % Cell 2
+    % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+    surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2,'FaceAlpha','interp','FaceColor','interp');
+    view(2)
+    colormap(branchedColor)
+    clim([0,allmax/4])
+    freezeColors;
+    shading interp
+    surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBund2,'AlphaData',ZBund2,'FaceAlpha','interp','FaceColor','interp');
+    colormap(bundledColor)
+    clim([0,allmax/4])
+    freezeColors;
+    shading interp
+    plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
+
+
+    % Cell 3
+    % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+    surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
+    view(2)
+    colormap(branchedColor)
+    clim([0,allmax/4])
+    freezeColors;
+    shading interp
+    surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
+    colormap(bundledColor)
+    clim([0,allmax/4])
+    freezeColors;
+    shading interp
+    plot3(cos(th(1,:))+xshift3(t+1),sin(th(1,:))-4+yshift3(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
+
+
+    % Cell 4
+    % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
+    surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
+    view(2)
+    colormap(branchedColor)
+    clim([0,allmax/4])
+    freezeColors;
+    cb=colorbar('Location','eastoutside');
+    freezeColors(cb);
+    cbpos=cb.Position;
+    set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
+    set(cb,'TickLabels',[])
+    cbpos=cb.Position;
+    shading interp
+    surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
+    colormap(bundledColor)
+    clim([0,allmax/4])
+    freezeColors;
+    jcb=jicolorbar;
+    freezeColors(jcb);
+    set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
+    shading interp
+    plot3(cos(th(1,:))+xshift4(t+1),sin(th(1,:))-6+yshift4(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
+
+    grid off
+    xlim([-2,2])
+    ylim([-10,2])
+    pbaspect([4 12 1])
+
+    hold off;
+    box off;
+    set(gca,'XColor','w')
+    set(gca,'YColor','w')
+    set(gcf,'color','w');
+
+    % Plot signal
+    if signal==1
+        [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
+        [Xsig,Ysig] = pol2cart(th,rad);
         hold on;
-        surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBranch1,'AlphaData',ZBranch1,'FaceAlpha','interp','FaceColor','interp');
-        view(2)
-        colormap(branchedColor)
-        clim([0,allmax/4])
-        freezeColors;
-        shading interp
-        surf(Xcol+xshift1(t+1),Ycol1+yshift1(t+1),ZBund1,'AlphaData',ZBund1,'FaceAlpha','interp','FaceColor','interp');
-        colormap(bundledColor)
-        clim([0,allmax/4])
-        freezeColors;
-        shading interp
-        plot3(cos(th(1,:))+xshift1(t+1),sin(th(1,:))+yshift1(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
-
-
-        % Cell 2
-        % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
-        surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBranch2,'AlphaData',ZBranch2,'FaceAlpha','interp','FaceColor','interp');
-        view(2)
-        colormap(branchedColor)
-        clim([0,allmax/4])
-        freezeColors;
-        shading interp
-        surf(Xcol+xshift2(t+1),Ycol2+yshift2(t+1),ZBund2,'AlphaData',ZBund2,'FaceAlpha','interp','FaceColor','interp');
-        colormap(bundledColor)
-        clim([0,allmax/4])
-        freezeColors;
-        shading interp
-        plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
-
-
-        % Cell 3
-        % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
-        surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBranch3,'AlphaData',ZBranch3,'FaceAlpha','interp','FaceColor','interp');
-        view(2)
-        colormap(branchedColor)
-        clim([0,allmax/4])
-        freezeColors;
-        shading interp
-        surf(Xcol+xshift3(t+1),Ycol3+yshift3(t+1),ZBund3,'AlphaData',ZBund3,'FaceAlpha','interp','FaceColor','interp');
-        colormap(bundledColor)
-        clim([0,allmax/4])
-        freezeColors;
-        shading interp
-        plot3(cos(th(1,:))+xshift3(t+1),sin(th(1,:))-4+yshift3(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
-
-
-        % Cell 4
-        % plot3(cos(th(1,:))+xshift2(t+1),sin(th(1,:))-2+yshift2(t+1),ones(1,length(th))*(allmax+1),'color',[0.5,0.5,0.5],'LineWidth',1)
-        surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBranch4,'AlphaData',ZBranch4,'FaceAlpha','interp','FaceColor','interp');
-        view(2)
-        colormap(branchedColor)
-        clim([0,allmax/4])
-        freezeColors;
-        cb=colorbar('Location','eastoutside');
-        freezeColors(cb);
-        cbpos=cb.Position;
-        set(cb,'Position',[cbpos(1)+2*cbpos(3),cbpos(2),cbpos(3),cbpos(4)/2])
-        set(cb,'TickLabels',[])
-        cbpos=cb.Position;
-        shading interp
-        surf(Xcol+xshift4(t+1),Ycol4+yshift4(t+1),ZBund4,'AlphaData',ZBund4,'FaceAlpha','interp','FaceColor','interp');
-        colormap(bundledColor)
-        clim([0,allmax/4])
-        freezeColors;
-        jcb=jicolorbar;
-        freezeColors(jcb);
-        set(jcb,'Position',[cbpos(1)+cbpos(3),cbpos(2),cbpos(3),cbpos(4)])
-        shading interp
-        plot3(cos(th(1,:))+xshift4(t+1),sin(th(1,:))-6+yshift4(t+1),ones(1,length(th))*(allmax+1),'color',linecolor,'LineWidth',linewidth)
-
-        grid off
-        xlim([-2,2])
-        ylim([-10,2])
-        pbaspect([4 12 1])
-
+        scatter(Xsig(sigBound4),Ysig(sigBound4)-6,'black','.')
         hold off;
-        box off;
-        set(gca,'XColor','w')
-        set(gca,'YColor','w')
-        set(gcf,'color','w');
+    end
 
-        % Plot signal
-        if signal==1
-            [th,rad] = meshgrid((0:3.6:360)*pi/180,1.1);
-            [Xsig,Ysig] = pol2cart(th,rad);
-            hold on;
-            scatter(Xsig(sigBound4),Ysig(sigBound4)-6,'black','.')
-            hold off;
-        end
+    if showtime==1
+        timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + 0,'FitBoxToText','on','EdgeColor','none','FontSize',20);
+    end
 
-        if showtime==1
-            timebox=annotation('textbox', [0.75, cbpos(2), 0.1, 0.05], 'String', "t = " + 0,'FitBoxToText','on','EdgeColor','none','FontSize',20);
-        end
+    ohf = findobj(gcf);
+    figaxes = findobj(ohf(1), 'Type', 'axes');
+    set(figaxes(1),'Fontsize',15)
+    set(figaxes(2),'Fontsize',14)
+    camroll(90)
 
-        ohf = findobj(gcf);
-        figaxes = findobj(ohf(1), 'Type', 'axes');
-        set(figaxes(1),'Fontsize',15)
-        set(figaxes(2),'Fontsize',14)
-        camroll(90)
-
-        if vid==1
-            scatterframe = getframe(figscatter);
-            writeVideo(vidObjScatter,scatterframe);
-            cellsframe = getframe(figcells);
-            writeVideo(vidObjCells,cellsframe);
-        end
+    if vid==1
+        scatterframe = getframe(figscatter);
+        writeVideo(vidObjScatter,scatterframe);
+        cellsframe = getframe(figcells);
+        writeVideo(vidObjCells,cellsframe);
+    end
     end
 
 
@@ -1676,9 +1676,6 @@ while (ppp<=1)
             bundledColor = whitedarkyellow2;
             branchedColName = 'Pink';
             bundledColName = 'Yellow';
-            linecolor=[0 0 0];
-            linewidth=1;
-            showtime=1;
 
 
             % Plot the initial condition

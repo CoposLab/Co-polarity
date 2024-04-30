@@ -5,7 +5,7 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 4/30/2024
+% Last updated: 4/19/2024
 % Katie Levandosky
 % Calina Copos
 addpath('../TwoCellCode/FigureAndMovieCode/freeze_colors')
@@ -36,11 +36,10 @@ while (ppp<=1)
     end
 
     if vid==1
-        vidObjScatter=VideoWriter(strcat(savelocation,'ScatterVid_',setnum,'.mp4'),'MPEG-4');
-        vidObjCell=VideoWriter(strcat(savelocation,'CellVid_',setnum,'.mp4'),'MPEG-4');
+        vidObj=VideoWriter(strcat(savelocation,'Video_',setnum,'.mp4'),'MPEG-4');
     end
 
-    clearvars -except counter_ppp vid vidObjScatter vidObjCell ppp vidObjCol vidObjRR ...
+    clearvars -except counter_ppp vid vidObj ppp vidObjCol vidObjRR ...
         savefigs filenameCells filenameScatter polarize_time num_polarized...
         savelocation setnum
 
@@ -308,10 +307,8 @@ while (ppp<=1)
         camroll(90)
 
         if vid==1
-            scatframe = getframe(scatplot);
-            writeVideo(vidObjScatter,scatframe);
             cellframe = getframe(cellplot);
-            writeVideo(vidObjCell,cellframe);
+            writeVideo(vidObj,cellframe);
         end
     end
 
@@ -328,7 +325,33 @@ while (ppp<=1)
         %% Run biochemisty
         [Konx,Kony,Kfbx,Kfby,Koffx,Koffy] = spatialrates(ron,rfb,roff,a,b,s,beta,cond,[]); % set rates
 
-        
+        if t==1000
+            resetrho=1;
+            sprintf('%d, %d',NNy(t), K2)
+            if K2>20
+                NNy(t+1)=20;
+                posy(21:end,t+1)=0;
+                K2=NNy(t+1);
+            else
+                NNy(t+1)=NNy(t);
+                posy(:,t+1)=posy(:,t);
+                K2=NNy(t+1);
+            end
+            Kony=0*Kony;
+            Koffy=0*Koffy;
+            Kfby=0*Kfby;
+
+        elseif t>1000
+            % sprintf('%d, %d',NNy(t), K2)
+            
+            NNy(t+1)=NNy(t);
+            posy(:,t+1)=posy(:,t);
+            K2=NNy(t+1);
+
+            Kony=0*Kony;
+            Koffy=0*Koffy;
+            Kfby=0*Kfby;
+        end
 
         if((t-1)*dt<Tx(rxn_count_x))
             NNx(t+1) = X(rxn_count_x-1);
@@ -551,12 +574,7 @@ while (ppp<=1)
         end
 
         %% Plot the solution(s)
-        if vid==1
-            make_plot=(mod(t,tplot) == 0 || t==Nt-1);
-        else
-            make_plot= (t==Nt-1);
-        end
-        if make_plot
+        if mod(t,tplot) == 0 || t==Nt-1 || t==10
             % if t==(Nt-1)
             %Define colors
             colorLength = 50;
@@ -681,13 +699,6 @@ while (ppp<=1)
             if t==Nt-1 && savefigs==1
                 savefig(cellplot,filenameCells);
                 savefig(scatplot,filenameScatter);
-            end
-
-            if vid==1
-                scatframe = getframe(scatplot);
-                writeVideo(vidObjScatter,scatframe);
-                cellframe = getframe(cellplot);
-                writeVideo(vidObjCell,cellframe);
             end
 
 
