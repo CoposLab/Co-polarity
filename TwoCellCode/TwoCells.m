@@ -26,11 +26,11 @@ res_counters = [0,0,0,0,0,0,0]; %[coalign, collision, 1NP, 2NP, no, LF, dist. ef
 counter_ppp = 1;
 ppp = 1;
 
-while (ppp<=1)
+while (ppp<=100)
     close all;
-    savefigs=0;
+    savefigs=1;
     setnum=int2str(ppp);
-    savelocation='';
+    savelocation='./simulation_results/results_celldifference/10RacOn_10RhoOn_allC2/rhodownc1_racdownc2/1000RhoOff_1000RacOff';
     if savefigs==1
         filenameCells=strcat(savelocation,'Cells_',setnum);
         filenameScatter=strcat(savelocation,'Scatter_',setnum);
@@ -135,7 +135,7 @@ while (ppp<=1)
     % 'racupc1-rhoupc2-concdependent', 'rhoupc1-rhodownc2-forcedependent',
     % 'bundledupc1-branchedupc2', 'branched-bundled-crosspromotion',
     % 'ractorho-antagonism'
-    pathway='racupc1-rhoupc2';
+    pathway='uncoupled';
 
 
 
@@ -641,6 +641,10 @@ while (ppp<=1)
         [Konx1,Kony1,Kfbx1,Kfby1,Koffx1,Koffy1] = spatialrates(ron,rfb,roff,a1,b1,s1,beta,cond,boundC1); % set rates
         [Konx2,Kony2,Kfbx2,Kfby2,Koffx2,Koffy2] = spatialrates(ron,rfb,roff,a2,b2,s2,beta,cond,boundC2);
 
+        Konx2=Konx2*10;
+        Kony2=Kony2*10;
+        Koffy1(boundC1)=Koffy1(boundC1)*1000;
+        Koffx2(boundC2)=Koffx2(boundC2)*1000;
 
         % Add external signal for cell 2
         % this works
