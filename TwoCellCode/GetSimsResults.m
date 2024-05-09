@@ -2,7 +2,7 @@
 
 set(0,'DefaultFigureVisible','off')
 
-filename = './simulation_results/results_nosignal/uncoupled2/uncoupled';
+filename = './simulation_results/results_celldifference/1kcc_1kdd_allC2/rhodownc1_racdownc2/1000RhoOff_1000RacOff';
 maxnum=100;
 
 angle=pi/4;
