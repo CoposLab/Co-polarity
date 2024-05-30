@@ -76,9 +76,9 @@ while (ppp<=1)
     % Set polarity protein parameters
     %
     N       = 200;                  % total number of molecules in the cell (conserved)
-    ron     = 0.001;                            % spontaneous association
+    ron     = 0.001;                % spontaneous association
     rfb     = 1.0;                  % enhanced association
-    roff    = 0.09;                  % disaassociation
+    roff    = 0.9;                  % disaassociation
     D       = Da;                   % diffusion coefficient for membrane-bound particles
 
     % Set feedback (or coupling) strength
