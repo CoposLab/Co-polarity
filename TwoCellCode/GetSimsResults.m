@@ -7,8 +7,8 @@ maxnum=100;
 
 angle=pi/4;
 
-% siglocation = 5*pi/4; % cell 2 signal location
-siglocation = pi/4; % cell 1 signal location
+siglocation = 5*pi/4; % cell 2 signal location
+% siglocation = pi/4; % cell 1 signal location
 sigper = 0.4;
 
 
@@ -208,21 +208,9 @@ for i=1:maxnum
         end
     end
 
-    % if isempty(dirIndexa1) && max(b1)>1 %bundled takes over cell 1
-    %     countbund1=countbund1+1;
-    % end
-    % if isempty(dirIndexa2) && max(b2)>1 %bundled takes over cell 2
-    %     countbund2=countbund2+1;
-    % end
-
 end
 toc
 sprintf(['%d yes, %d strong no, %d 1NP, %d 2NP\nNumber leader/follower: %d\n' ...
     'Number dist. effort: %d\nC1 Polarized: %d\nC2 polarized: %d\nBoth polarized: %d\n' ...
     'Number CW: %d, Number CCW: %d'], ...
     counteryes, countersn, counter1np, counter2np, counterlf,counterdist,signal_polarized_c1,signal_polarized_c2,both_sig_pol,countcw,countccw)
-
-% sprintf('Number where bundled took over cell 1: %d\nNumber where bundled took over cell 2: %d', countbund1, countbund2)
-
-% sprintf('Number leader/follower: %d',counterlf)
-% sprintf('Number leader/follower np: %d', counterlf2)
