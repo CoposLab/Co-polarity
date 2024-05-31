@@ -123,7 +123,8 @@ while (ppp<=1)
     sigBound1 = (floor((Na-1)*3/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*3/8 + floor((Na-1)*sigper/2)))+1;
     sigBound3 = (floor((Na-1)*5/8 - floor((Na-1)*sigper/2)))+1:(floor((Na-1)*5/8 + floor((Na-1)*sigper/2)))+1;
 
-
+    % options: uncoupled, alt-racup-rhoup, alt-racup-rhoup-forcedependent,
+    % branched-bundled-promotion
     pathway='branched-bundled-promotion';
 
     epsilon=0.5; % distance to detect other molecules (finding nearby rac/rho to remove)
