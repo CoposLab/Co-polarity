@@ -5,7 +5,7 @@
 % Mechanics -- two actin networks: branched (a) and contractile (b)
 % Polarity proteins : Rac (X) and Rho (Y)
 %
-% Last updated: 4/30/2024
+% Last updated: 5/31/2024
 % Katie Levandosky
 % Calina Copos
 addpath('./FigureAndMovieCode/freeze_colors')
@@ -1341,6 +1341,7 @@ while (ppp<=1)
             % Calculate difference in direction angles
             angTolerance=pi/4;
             strongAngTolerance=pi/5;
+            supracellular='No';
             if (isempty(dirIndexa1) || isempty(dirIndexb1)) && (isempty(dirIndexa2) || isempty(dirIndexb2))
                 samedirection='2NP';
                 outcome='Non-polarized';
@@ -1363,9 +1364,11 @@ while (ppp<=1)
                     samedirection='no';
                     outcome='No alignment';
                 end
+                if xor(abs(medang1-3*pi/2)<pi/4, abs(medang2-pi/2)<pi/4) %supracellular
+                    supracellular='Yes';
+                end
             end
-            % sprintf('Median angle difference: %d\nSame direction? %s',angdiff,samedirection)
-            sprintf('Angle difference: %d\nOutcome: %s',angdiff,outcome);
+            sprintf('Angle difference: %d radians\nOutcome: %s\nSupracellular: %s',angdiff,outcome,supracellular)
         end
 
         % Make plots
