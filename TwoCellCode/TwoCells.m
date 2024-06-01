@@ -8,8 +8,7 @@
 % Last updated: 5/31/2024
 % Katie Levandosky
 % Calina Copos
-addpath('./FigureAndMovieCode/freeze_colors')
-addpath('../SingleCellCode_Published')
+addpath('./freeze_colors')
 
 clear;
 close all;
