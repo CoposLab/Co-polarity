@@ -1,4 +1,4 @@
-To run the code for polarity establishmed in a pair of cells, open MATLAB and enter the command >> TwoCells. 
+To run the code for polarity establishment in a pair of cells, open MATLAB and enter the command >> TwoCells. 
 
 The code in its current state will generate an instance of a pair of cells that interact via Rho signaling at the cell-cell region. The specific pathway of intercellular interaction is one of four asymmetric interactions which involves elevated Rac binding rate in cell 1 and simulatenously, elevated Rho binding rate in cell 2.
 
