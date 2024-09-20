@@ -5,3 +5,5 @@ The code in its current state will generate an instance of a pair of cells that 
 To run the code for four cells in a linear arrangement, open MATLAB and enter the command >> FourCellsLine. The code in its current state will generate an instance of four cells in a linear arrangement, with alternating elevated Rac binding rates and elevated Rho binding rates at the intercellular regions.
 To run the code for four cells in a square arrangement, open MATLAB and enter the command >> FourCellsSquare. The code in its current state will generate an instance of Fig.7b.
 In each of these cases, by changing the “pathway” parameter to one of the options listed in the code, other communication pathways may be implemented
+
+There is an associated Zenodo record: https://zenodo.org/records/13716626
